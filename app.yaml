@@ -1,0 +1,84 @@
+databases:
+  - engine: PG
+    name: db
+    version: "12"
+envs:
+  - key: DATABASE_URL
+    scope: RUN_AND_BUILD_TIME
+    value: ${db.DATABASE_URL}
+  - key: SECRET_KEY
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:FIMGgO/awSsCAT437sOk950g1wmufuUG:n6SzGjSsIAkI3qRlu5ZzcJ5mo5g5Oej5pTY0J3vqtaWH85uR797Yugbx6HiFDk7jn1xsnHMmMkIr1FfBXCoRk60ATQtpfZy0Nz9WTNcMliM=]
+  - key: WAGTAILTRANSFER_SECRET_KEY
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:GhdBCFA051s7IV8uNtXb8cKUcbaaWv4W:somhV3zt4xMA46SiEDZoCeRNyugRy7FASV04g29mAoeGlqBjqxy1Qo51dCUqR/poq1wMaqfY+f2QRojOFbcrs7LMIoTC3Wg3CxTEilXrazs=]
+  - key: MAILGUN_API_KEY
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:/F0QGCWt0G3oBvjME5hDW1S8IWpc56lj:jyzrWh8s4B1qKT3FIKtvhVmqcmagftgW2Iw6jciswK1hTOw47bRsCiZEwlBcecu9wshM2EygoTCMa29DzpYhBhvu]
+  - key: BASE_URL
+    scope: RUN_AND_BUILD_TIME
+    value: ${_self.PUBLIC_URL}
+  - key: AWS_ACCESS_KEY_ID
+    scope: RUN_AND_BUILD_TIME
+    value: TDHP4OQHJN7WGLOSZQWE
+  - key: AWS_SECRET_ACCESS_KEY
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:BSSYU65Cq1EMhFZiZ9RlxzL690YW2mKZ:rjKCDLdUwmbCAnIOUbIEPZBI9MD5NgfwsTh1/1E+H/wHtWmcdBuGeAm7tIzVef0BNSqnvNzlWlmDJEU=]
+  - key: AWS_S3_REGION_NAME
+    scope: RUN_AND_BUILD_TIME
+    value: fra1
+  - key: AWS_STORAGE_BUCKET_NAME
+    scope: RUN_AND_BUILD_TIME
+    value: smartforests
+  - key: AWS_S3_ENDPOINT_URL
+    scope: RUN_AND_BUILD_TIME
+    value: https://fra1.digitaloceanspaces.com
+  - key: MEDIA_URL
+    scope: RUN_AND_BUILD_TIME
+    value: https://smartforests.ams3.cdn.digitaloceanspaces.com/
+  - key: MAILGUN_API_URL
+    scope: RUN_AND_BUILD_TIME
+    value: https://api.eu.mailgun.net/v3
+  - key: MAILGUN_SENDER_DOMAIN
+    scope: RUN_AND_BUILD_TIME
+    value: commonknowledge.dev
+jobs:
+  - dockerfile_path: Dockerfile
+    github:
+      branch: main
+      deploy_on_push: true
+      repo: planetarypraxis/smartforests
+    instance_count: 1
+    instance_size_slug: basic-xs
+    kind: PRE_DEPLOY
+    name: release
+    run_command: pipenv run bash .bin/release.sh
+name: smartforests
+region: fra
+services:
+  - dockerfile_path: Dockerfile
+    github:
+      branch: main
+      deploy_on_push: true
+      repo: planetarypraxis/smartforests
+    http_port: 8080
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    name: server
+    routes:
+      - path: /
+    run_command: pipenv run gunicorn --worker-tmp-dir /dev/shm smartforests.wsgi
+static_sites:
+  - dockerfile_path: Dockerfile
+    github:
+      branch: main
+      deploy_on_push: true
+      repo: planetarypraxis/smartforests
+    name: staticfiles
+    output_dir: /app/static
+    routes:
+      - path: /static
