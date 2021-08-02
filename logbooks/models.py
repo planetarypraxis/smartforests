@@ -69,26 +69,10 @@ class LogbookIndexPage(ChildListMixin, Page):
     subpage_types = ['logbooks.LogbookPage']
 
 
-class LogbookPageManager(PageManager):
-
-    # def related_stories(self, logbook):
-    #     tags = logbook.tags.all()
-    #     print(tags)
-    #     matches = StoryPage.objects.filter(
-    #         tags__in=tags).live().annotate(Count('title'))
-    #     print(matches)
-    #     related = matches.order_by('-title__count')
-    #     return related
-
-    pass
-
-
 class LogbookPage(Page):
     parent_page_types = ['logbooks.LogbookIndexPage']
     subpage_types = []
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
-
-    objects = LogbookPageManager()
 
     content_panels = [
         FieldPanel('title', classname="full title"),
@@ -96,14 +80,14 @@ class LogbookPage(Page):
     ]
 
     def related_stories(self):
-        print("related_stories")
         tags = self.tags.all()
         print(tags)
-        matches = StoryPage.objects.filter(
-            tags__in=tags).live().annotate(Count('title'))
+        matches = StoryPage.objects.filter(tags__in=tags).live()
         print(matches)
-        related = matches.order_by('-title__count')
-        return related
+        # .annotate(Count('title'))
+        # print(matches)
+        # related = matches.order_by('-title__count')
+        return matches
 
 
 class Tag():

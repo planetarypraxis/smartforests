@@ -1,5 +1,5 @@
 {{logbook.related_stories}}
-{% with story_count=logbook.specific.related_stories|length %}
+{% with story_count=logbook.related_stories|length %}
 <article>
   <h2>{{ logbook.title }}</h2>
   <p>{{story_count}} stor{{ story_count|pluralize:"y,ies" }}</p>
@@ -8,10 +8,10 @@
     <!-- If there are multiple stories with images, show a Spotify-style grid -->
     <div style="display: grid;">
       <!-- Album cover is made up of a grid of logbook's stories' images, if any -->
-      {% for story in logbook.specific.related_stories %}
-        {% if story.specific.cover_image %}
+      {% for story in logbook.related_stories %}
+        {% if story.cover_image %}
           Something here
-          {{ story.specific.cover_image }}
+          {{ story.cover_image }}
         {% endif %}
       {% endfor %}
     </div>
