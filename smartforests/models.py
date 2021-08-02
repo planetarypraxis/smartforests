@@ -11,7 +11,15 @@ class User(AbstractUser):
 class CmsImage(AbstractImage):
     import_ref = models.CharField(max_length=1024, null=True, blank=True)
 
-    admin_form_fields = Image.admin_form_fields
+    # Making blank / null explicit because you *really* need alt text
+    alt_text = models.CharField(
+        max_length=1024, blank=False, null=False, default="", help_text="Describe this image as literally as possible. If you can close your eyes, have someone read the alt text to you, and imagine a reasonably accurate version of the image, you're on the right track.")
+
+    admin_form_fields = (
+        'file',
+        'alt_text',
+        'title',
+    )
 
 
 class ImageRendition(AbstractRendition):

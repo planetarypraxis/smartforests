@@ -28,6 +28,7 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 INSTALLED_APPS = [
     'smartforests',
     'home',
+    'logbooks',
     'search',
 
     'commonknowledge.bootstrap',
@@ -202,6 +203,8 @@ WAGTAILSEARCH_BACKENDS = {
         'AUTO_UPDATE': True,
     }
 }
+
+THUMBNAIL_ENGINE = 'sorl.thumbnail.engines.wand_engine.Engine'
 
 # Rest settings
 

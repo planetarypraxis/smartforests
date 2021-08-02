@@ -15,4 +15,4 @@ ARG NODE_VERSION="lts/*"
 RUN if [ "${INSTALL_NODE}" = "true" ]; then su vscode -c "umask 0002 && . /usr/local/share/nvm/nvm.sh && nvm install ${NODE_VERSION} 2>&1"; fi
 
 # Install system dependencies
-RUN curl https://raw.githubusercontent.com/commonknowledge/do-app-baseimage-django-node/main/.bin/prepare.sh | /bin/bash
+RUN curl https://raw.githubusercontent.com/planetarypraxis/do-app-baseimage-django-node/main/.bin/prepare.sh | /bin/bash

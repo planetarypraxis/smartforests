@@ -92,15 +92,15 @@ module.exports = {
   plugins: [
     ...(isProduction
       ? [
-          new MiniCssExtractPlugin({
-            filename: "[name].css",
-            chunkFilename: "[id].css",
-          }),
-          new BundleTracker({
-            path: __dirname,
-            filename: "./dist/webpack-stats.json",
-          }),
-        ]
+        new MiniCssExtractPlugin({
+          filename: "[name].css",
+          chunkFilename: "[id].css",
+        }),
+        new BundleTracker({
+          path: __dirname,
+          filename: "./dist/webpack-stats.json",
+        }),
+      ]
       : []),
   ],
 

@@ -5,7 +5,7 @@ from commonknowledge.helpers import safe_to_int
 
 class ChildListMixin:
     def get_child_list_queryset(self):
-        return self.get_children()
+        return self.get_children().specific()
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
