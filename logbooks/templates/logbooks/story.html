@@ -1,0 +1,23 @@
+{% load wagtailimages_tags wagtailcore_tags %}
+<article>
+  <aside>
+    <!-- <span>Added by ...</span> -->
+    <time datetime="{{ story.published_at|date:"Y-m-d" }}">
+      {{ story.published_at|date:"dd MMM yyyy" }}
+    </time>
+    <!-- Location -->
+  </aside>
+  <header>
+    <a href="{{ story.url }}">{{ story.title }}</a>
+  </header>
+  {% for block in story.body %}
+      <section class="block-{{ block.block_type }}">
+          {% include_block block %}
+      </section>
+  {% endfor %}
+  <footer>
+    {% for tag in story.tags.all %}
+      {% include 'logbooks/tag_label.html' with tag=tag %}
+    {% endfor %}
+  </footer>
+</article>

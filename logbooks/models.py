@@ -42,6 +42,27 @@ class StoryIndexPage(ChildListMixin, Page):
     subpage_types = ['logbooks.StoryPage']
 
 
+class QuoteBlock(blocks.StructBlock):
+    text = blocks.RichTextBlock(features=['bold', 'italic', 'link'])
+    author = blocks.CharBlock(required=False)
+    title = blocks.CharBlock(required=False)
+    date = blocks.DateBlock(required=False)
+    link = blocks.URLBlock(required=False)
+
+    class Meta:
+        template = 'logbooks/story_blocks/quote.html'
+        icon = 'quote'
+
+
+class ImageBlock(blocks.StructBlock):
+    image = ImageChooserBlock(required=False)
+    caption = blocks.CharBlock()
+
+    class Meta:
+        template = 'logbooks/story_blocks/image.html'
+        icon = 'image'
+
+
 class StoryPage(Page):
     parent_page_types = ['logbooks.StoryIndexPage']
     subpage_types = []
@@ -51,18 +72,9 @@ class StoryPage(Page):
     body = StreamField([
         ('text', blocks.RichTextBlock(features=[
          'h3', 'bold', 'italic', 'link', 'ol', 'ul'])),
-        ('quote', blocks.StructBlock([
-            ('text', blocks.RichTextBlock(
-                features=['bold', 'italic', 'link'])),
-            ('author', blocks.CharBlock(required=False)),
-            ('date', blocks.DateBlock(required=False)),
-            ('link', blocks.URLBlock(required=False)),
-        ])),
+        ('quote', QuoteBlock()),
         ('embed', blocks.RichTextBlock(features=['embed'])),
-        ('image', blocks.StructBlock([
-            ('image', ImageChooserBlock()),
-            ('caption', blocks.CharBlock()),
-        ])),
+        ('image', ImageBlock()),
     ])
 
     content_panels = Page.content_panels + [
