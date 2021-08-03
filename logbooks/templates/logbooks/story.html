@@ -11,9 +11,13 @@
     <a href="{{ story.url }}">{{ story.title }}</a>
   </header>
   {% for block in story.body %}
-      <section class="block-{{ block.block_type }}">
-          {% include_block block %}
-      </section>
+      {% if block.block_type == 'text' or block.block_type == 'embed' %}
+          <div>{{ block.value|richtext }}</div>
+      {% else %}
+        <section class="block-{{ block.block_type }}">
+            {% include_block block %}
+        </section>
+      {% endif %}
   {% endfor %}
   <footer>
     {% for tag in story.tags.all %}
