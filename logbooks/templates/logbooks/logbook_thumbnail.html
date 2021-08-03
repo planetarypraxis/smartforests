@@ -1,11 +1,12 @@
 {% with story_count=logbook.related_stories|length %}
+
 <article>
   <h2>{{ logbook.title }}</h2>
   <p>{{story_count}} stor{{ story_count|pluralize:"y,ies" }}</p>
   {% if story_count %}
     <!-- If there is one story with an image show the image -->
     <!-- If there are multiple stories with images, show a Spotify-style grid -->
-    <div style="display: grid;">
+    <div class="">
       <!-- Album cover is made up of a grid of logbook's stories' images, if any -->
       {% for story in logbook.related_stories %}
         {% if story.cover_image %}
@@ -16,4 +17,5 @@
     </div>
   {% endif %}
 </article>
+
 {% endwith %}
