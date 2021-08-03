@@ -13,6 +13,7 @@ from wagtail.core.fields import RichTextField
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.core import blocks
 from wagtail.contrib.settings.models import BaseSetting, register_setting
+from smartforests.models import CmsImage
 
 
 # Should these just be pages?
@@ -20,6 +21,7 @@ from wagtail.contrib.settings.models import BaseSetting, register_setting
 class AtlasTag(TaggedItemBase):
     content_object = ParentalKey(
         Page, related_name='tagged_items', on_delete=models.CASCADE)
+
 
 # CMS settings for canonical index pages
 @register_setting
@@ -69,13 +71,11 @@ class StoryPage(Page):
     ]
 
     def cover_image(self):
-        # We'll use this for the logbook album view
-        # Look in self.body for an image and pull out the first one
-        for block in self.body.stream_data:
-            print(block['type'], block)
-            if block['type'] == 'imageBlock':
-                return block
-        pass
+        # Find the first image in this story
+        for block in self.body:
+            if block.block_type == 'image':
+                image: CmsImage = block.value.get('image')
+                return image
 
 
 class LogbookIndexPage(ChildListMixin, Page):
