@@ -1,4 +1,4 @@
-{% load static wagtailuserbar ckdjango_tags ckwagtail_tags %}
+{% load static wagtailuserbar ckdjango_tags ckwagtail_tags menu_tags %}
 
 <!DOCTYPE html>
 <html class="no-js" lang="en">
@@ -34,18 +34,7 @@
 
         {% block body %}
         {% block header %}
-        <nav class="navbar navbar-expand py-4 navbar-light">
-            <div class="container align-items-end">
-                <a class="navbar-brand" href="/">
-                </a>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <span class="flex-grow-1"></span>
-
-                {% menubar %}
-                </div>
-            </div>
-        </nav>
+        {% main_menu max_levels=1 template="menus/header.html" %}
         {% endblock %}
 
         {% block content %}
@@ -69,10 +58,7 @@
                     </div>
 
                     <div class="col d-flex flex-column flex-md-row align-items-start align-items-md-start justify-content-end">
-                        <div class="mb-3">
-                            <a class="d-block d-md-inline-block me-3" href="#">Accessibility</a>
-                            <a class="d-block d-md-inline-block me-3" href="#">Privacy policy</a>
-                        </div>
+                        {% flat_menu 'footer' max_levels=1 show_menu_heading=False template="menus/footer.html" %}
 
                         <div>
                             Site by <a target="_blank" href="https://commonknowledge.coop">Common Knowledge</a>

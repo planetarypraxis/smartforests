@@ -38,6 +38,7 @@ class ImportantPages(BaseSetting):
 
 
 class StoryIndexPage(ChildListMixin, Page):
+    show_in_menus_default = True
     parent_page_types = ['home.HomePage']
     subpage_types = ['logbooks.StoryPage']
 
@@ -64,6 +65,7 @@ class ImageBlock(blocks.StructBlock):
 
 
 class StoryPage(Page):
+    show_in_menus_default = True
     parent_page_types = ['logbooks.StoryIndexPage']
     subpage_types = []
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
@@ -91,11 +93,13 @@ class StoryPage(Page):
 
 
 class LogbookIndexPage(ChildListMixin, Page):
+    show_in_menus_default = True
     parent_page_types = ['home.HomePage']
     subpage_types = ['logbooks.LogbookPage']
 
 
 class LogbookPage(Page):
+    show_in_menus_default = True
     parent_page_types = ['logbooks.LogbookIndexPage']
     subpage_types = []
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)

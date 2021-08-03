@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "a1566411aabf5e437c5fac297520e9a9c4a6008da054bbb317a951c27c52f681"
+            "sha256": "d30022544f62f2cf8bcd7a55885596cf8c8082a372a788ae3b0692486882b499"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -111,6 +111,14 @@
             "index": "pypi",
             "version": "==8.4"
         },
+        "django-cogwheels": {
+            "hashes": [
+                "sha256:197bd05e7114403d7301214b3f8a371c4fb6039cf21c811f099438b167b5ed21",
+                "sha256:848a4d9f2c96c582a4a4f2e7c276dfd95ab3905748cae13bb7c4b365a6717e94"
+            ],
+            "markers": "python_version >= '3.4'",
+            "version": "==0.3"
+        },
         "django-filter": {
             "hashes": [
                 "sha256:84e9d5bb93f237e451db814ed422a3a625751cbc9968b484ecc74964a8696b06",
@@ -192,11 +200,11 @@
         },
         "faker": {
             "hashes": [
-                "sha256:771b21ab55924867ac865f4b0c2f547c200172293b1056be16289584ef1215cb",
-                "sha256:f27a2a5c34042752f9d5fea2a9667aed5265d7d7bdd5ce83bc03b2f8a540d148"
+                "sha256:3e737576ff50cd98dfed643d6b3fd63194eca9df00e7f595960fe7da5220723d",
+                "sha256:b9e81e9da3dda3ac54189e034cfb943de576a259caeb226ccab43fcbcf6a7891"
             ],
             "index": "pypi",
-            "version": "==8.10.3"
+            "version": "==8.11.0"
         },
         "gunicorn": {
             "hashes": [
@@ -533,6 +541,11 @@
             ],
             "index": "pypi",
             "version": "==0.8.2"
+        },
+        "wagtailmenus": {
+            "editable": true,
+            "git": "https://github.com/rkhleics/wagtailmenus.git",
+            "ref": "b0a6acb281227c93b3b4f11265366da0dada4248"
         },
         "webencodings": {
             "hashes": [

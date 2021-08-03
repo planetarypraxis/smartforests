@@ -1,0 +1,7 @@
+{% load menu_tags %}
+
+<div class="mb-3">
+  {% for item in menu_items %}
+    <a class="d-block d-md-inline-block me-3" href="{{ item.href }}">{{ item.text }}</a>
+  {% endfor %}
+</div>

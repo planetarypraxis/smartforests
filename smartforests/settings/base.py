@@ -66,6 +66,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'wagtail.contrib.modeladmin',
+    'wagtailmenus',
 ]
 
 MIDDLEWARE = [
@@ -96,6 +99,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'wagtail.contrib.settings.context_processors.settings',
+                'wagtailmenus.context_processors.wagtailmenus',
             ],
         },
     },
@@ -207,6 +211,10 @@ WAGTAILSEARCH_BACKENDS = {
 }
 
 THUMBNAIL_ENGINE = 'sorl.thumbnail.engines.wand_engine.Engine'
+
+WAGTAILMENUS_FLAT_MENUS_HANDLE_CHOICES = (
+    ('footer', 'Footer'),
+)
 
 # Rest settings
 
