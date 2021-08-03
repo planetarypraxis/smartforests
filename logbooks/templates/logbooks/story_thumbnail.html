@@ -1,8 +1,10 @@
 {% load wagtailimages_tags %}
 <article>
+  {% if story.cover_image %}
   <div>
     {% image story.cover_image max-400x400 %}
   </div>
+  {% endif %}
   <div>
     {% for tag in story.tags.all %}
       {% include 'logbooks/tag_label.html' with tag=tag %}
