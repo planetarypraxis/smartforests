@@ -80,16 +80,7 @@ class LogbookPage(Page):
     ]
 
     def related_stories(self):
-        tags = self.tags.all()
-        print(tags)
-        matches = StoryPage.objects.filter(tags__in=tags).live()
-        print(matches)
-        # .annotate(Count('title'))
-        # print(matches)
-        # related = matches.order_by('-title__count')
-        return matches
+        logbooks = LogbookPage.objects.filter(
+            tagged_items__tag__in=self.tags.all()).live().distinct()
 
-
-class Tag():
-    # description = string
-    pass
+        return logbooks.annotate(Count('title')).order_by('-title__count')
