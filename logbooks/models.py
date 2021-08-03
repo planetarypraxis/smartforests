@@ -7,11 +7,12 @@ from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
 from wagtail.snippets.models import register_snippet
 from commonknowledge.wagtail.models import ChildListMixin
-from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel, StreamFieldPanel
 from wagtail.core.fields import StreamField
 from wagtail.core.fields import RichTextField
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.core import blocks
+from wagtail.contrib.settings.models import BaseSetting, register_setting
 
 
 # Should these just be pages?
@@ -19,6 +20,19 @@ from wagtail.core import blocks
 class AtlasTag(TaggedItemBase):
     content_object = ParentalKey(
         Page, related_name='tagged_items', on_delete=models.CASCADE)
+
+# CMS settings for canonical index pages
+@register_setting
+class ImportantPages(BaseSetting):
+    logbooks_index_page = models.ForeignKey(
+        'logbooks.LogbookIndexPage', null=True, on_delete=models.SET_NULL, related_name='+')
+    stories_index_page = models.ForeignKey(
+        'logbooks.StoryIndexPage', null=True, on_delete=models.SET_NULL, related_name='+')
+
+    panels = [
+        PageChooserPanel('logbooks_index_page'),
+        PageChooserPanel('stories_index_page'),
+    ]
 
 
 class StoryIndexPage(Page):
