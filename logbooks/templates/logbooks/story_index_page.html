@@ -9,7 +9,7 @@
     <main class="col-8">
       <h1>{{story_count}} stor{{ story_count|pluralize:"y,ies" }}</h1>
 
-      <div {% infinite_scroll_container item_selector='article' %}>
+      <div>
         {% for story in child_list_page %}
           {% include "logbooks/story_thumbnail.html" with story=story %}
         {% endfor %}
