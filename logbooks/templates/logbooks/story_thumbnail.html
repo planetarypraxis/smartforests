@@ -1,0 +1,9 @@
+{% load wagtailimages_tags %}
+<article>
+  <!--  story.cover_image }} -->
+  {% image story.cover_image max-400x400 %}
+  {% for tag in story.tags.all %}
+    {% include 'logbooks/tag_label.html' with tag=tag %}
+  {% endfor %}
+  <div>{{ story.title }}</div>
+</article>

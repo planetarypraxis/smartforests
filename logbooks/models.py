@@ -37,7 +37,7 @@ class ImportantPages(BaseSetting):
     ]
 
 
-class StoryIndexPage(Page):
+class StoryIndexPage(ChildListMixin, Page):
     parent_page_types = ['home.HomePage']
     subpage_types = ['logbooks.StoryPage']
 
