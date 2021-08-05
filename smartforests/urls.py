@@ -1,3 +1,4 @@
+import debug_toolbar
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf.urls.static import static
 from django.conf import settings
@@ -22,6 +23,7 @@ urlpatterns = [
 
     path('search/', search_views.SearchView.as_view(), name='search'),
     path('api/', include(rest.get_urls())),
+    path('__debug__/', include(debug_toolbar.urls)),
 ]
 
 

@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'webpack_loader',
     "anymail",
     "rest_framework",
+    'debug_toolbar',
 
     'django.contrib.gis',
     'django.contrib.admin',
@@ -72,6 +73,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -245,3 +248,7 @@ LOGGING = {
         },
     },
 }
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]

@@ -28,3 +28,4 @@ django-import-export = "*"
 django-storages = "*"
 faker = "*"
 wagtailmenus = {editable = true, git = "https://github.com/rkhleics/wagtailmenus.git"}
+django-debug-toolbar = "*"
