@@ -11,11 +11,11 @@
 
 <div class="container-fluid">
   <div 
-    class="row gx-3 gy-4"
+    class="row gx-4 gy-4 my-5"
     data-masonry='{"percentPosition": true }'
   >
     {% for logbook in child_list_page %}
-      <a href="{{logbook.url}}" class="col-6 col-md-4 col-lg-3 logbook-thumbnail">
+      <a href="{{logbook.url}}" class="col-6 col-md-4 col-lg-3 logbook-thumbnail link-reset">
         {{logbook.thumbnail_content}}
       </a>
     {% endfor %}

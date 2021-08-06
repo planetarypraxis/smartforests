@@ -82,13 +82,13 @@ class Command(BaseCommand):
             return (type, block_generators[type]())
 
         def populate_logbook(logbook: LogbookPage):
-            apply_tags(logbook)
+            apply_tags(logbook, 5)
             logbook.save()
 
         def populate_story(story: StoryPage):
             story.body = [generate_story_block()
                           for _ in range(random_distribution())]
-            apply_tags(story)
+            apply_tags(story, 5)
 
             story.save()
 
