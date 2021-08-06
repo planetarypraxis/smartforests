@@ -16,15 +16,20 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='LogbookPageIndex',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('metadata', models.JSONField(blank=True, default=dict)),
-                ('thumbnail_image', models.ImageField(blank=True, null=True, upload_to='')),
-                ('page', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='index_entry', to='wagtailcore.page')),
-                ('related_page_indexes', models.ManyToManyField(related_name='related_to_page_indexes', to='logbooks.LogbookPageIndex')),
+                ('thumbnail_image', models.ImageField(
+                    blank=True, null=True, upload_to='')),
+                ('page', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='index_entry', to='wagtailcore.page')),
+                ('related_page_indexes', models.ManyToManyField(
+                    related_name='related_to_page_indexes', to='logbooks.LogbookPageIndex')),
             ],
         ),
         migrations.AddIndex(
             model_name='logbookpageindex',
-            index=django.contrib.postgres.indexes.GinIndex(fields=['metadata'], name='logbooks_lo_metadat_c0ce4b_gin'),
+            index=django.contrib.postgres.indexes.GinIndex(
+                fields=['metadata'], name='logbooks_lo_metadat_c0ce4b_gin'),
         ),
     ]

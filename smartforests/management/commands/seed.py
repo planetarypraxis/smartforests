@@ -87,7 +87,7 @@ class Command(BaseCommand):
 
         def populate_story(story: StoryPage):
             story.body = [generate_story_block()
-                          for _ in range(randint(0, 5) ** 2)]
+                          for _ in range(random_distribution())]
             apply_tags(story)
 
             story.save()
@@ -110,3 +110,8 @@ class Command(BaseCommand):
             else:
                 for story in get_children_of_type(index, StoryPage):
                     populate_story(story)
+
+
+def random_distribution():
+    # Get a nice distribition for a story length
+    return int(randint(0, 7) ** 2 / 6)
