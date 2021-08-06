@@ -15,20 +15,17 @@ def generate_thumbnail(images, fileslug):
     if num_images == 0:
         return None
 
-    # Only one image, no need to do any processing
-    elif num_images == 1:
-        return images[0]
-
-    # If 2 images, we don't need a perfect square, so derive the aspect ratio from the constituent images
-    elif num_images == 2:
+    # If 1 or 2 images, we don't need a perfect square, so derive the aspect ratio from the constituent images
+    # so that we get a bit of variation
+    elif num_images <= 2:
         dims = {
-            'rows': 2,
+            'rows': num_images,
             'cols': 1,
-            'width': sum((get_aspect_ratio(img) for img in images)) / 2 * 400,
-            'height': 400
+            'width': 400,
+            'height': int(400 / calculate_aspect_ratio(images))
         }
 
-    # If 2 more, we want to enforce a power of 2 number of images to produce a square and not have too many
+    # If more, we want to enforce a power of 2 number of images to produce a square and not have too many
     else:
         image_dims = min(int(sqrt(num_images)),
                          MAX_IMAGE_GRID_DIMENSION)
@@ -44,4 +41,14 @@ def generate_thumbnail(images, fileslug):
         filename=f'{fileslug}.jpeg',
         format='JPEG',
         **dims
+    )
+
+
+def calculate_aspect_ratio(images):
+    raw_aspect_ratio = sum(map(get_aspect_ratio, images)) / len(images)
+
+    # Not too wide, not too tall...
+    return min(
+        max(raw_aspect_ratio, 0.5),
+        1.5
     )
