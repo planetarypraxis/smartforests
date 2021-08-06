@@ -1,15 +1,26 @@
 // Colors
-$body-bg: #FBFBFB;
-$primary: #0088CB;
-$secondary: #727272;
-$panel: #ECF0F1;
-$primary-hover-light: #02808b1a;
-$brand1: #E10001;
+$dark-green: #043003;
+$mid-green: #026302;
+$bright-green: #25ED08;
+$yellow: #FFFF9B;
+$soft-green: #C7EAC6;
+$grey: #929292;
+$light-grey: #C5C5C5;
+
+$body-bg: #F9F9F9;
+$primary: $mid-green;
+$secondary: $grey;
+$primary-hover-light: $light-grey;
 $custom-colors: (
-  'panel': $panel,
-  'brand1': $brand1
+  dark-green: $dark-green,
+  mid-green: $mid-green,
+  bright-green: $bright-green,
+  yellow: $yellow,
+  soft-green: $soft-green,
+  grey: $grey,
+  light-grey: $light-grey,
 );
-$dark: #333333;
+$dark: $dark-green;
 
 // Card
 $card-border-width: 0;
@@ -37,6 +48,23 @@ $container-max-widths: (
   xl: 1126px,
   xxl: 1126px
 );
+
+
+// Fonts
+
+@font-face {
+  font-family: 'MarrSans';
+  font-weight: 400;
+  src: url('../fonts/MarrSans-Regular.ttf')  format('truetype');
+}
+@font-face {
+  font-family: 'MarrSans';
+  font-weight: 500;
+  src: url('../fonts/MarrSans-Medium.ttf')  format('truetype');
+}
+
+$font-family-monospace: Monaco, SFMono-Regular, Menlo, Consolas, "Liberation Mono", "Courier New", monospace;
+$font-family-sans-serif: MarrSans, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
 
 // Merge with bootstrap
