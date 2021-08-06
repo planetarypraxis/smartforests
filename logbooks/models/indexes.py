@@ -37,11 +37,12 @@ class LogbookPageIndex(models.Model):
     thumbnail_image = models.ImageField(null=True, blank=True)
 
     def save(self, *args, regenerate_thumbnails=True, **kwargs):
+        super().save(*args, **kwargs)
+
         if regenerate_thumbnails and hasattr(self.page.specific, 'regenerate_thumbnail'):
             self.thumbnail_image = self.page.specific.regenerate_thumbnail(
                 self)
-
-        super().save(*args, **kwargs)
+            self.save(regenerate_thumbnails=False)
 
     @staticmethod
     def get_for_instance(instance: Page):
@@ -85,7 +86,14 @@ class LogbookPageIndex(models.Model):
         )
 
     def get_related_pages(self, **filter):
-        return (index_entry.page.specific for index_entry in self.related_page_indexes.filter(**filter).select_related('page'))
+        '''
+        Return a queryset for a filtered subset of pages related to this one.
+        Returns the concrete page type, not the index entry.
+        '''
+        query = {'metadata__' + key: value for key, value in filter.items()}
+
+        pages = self.related_page_indexes.filter(**query)
+        return Page.objects.filter(index_entry__in=pages).specific()
 
     def update_tags(self, page):
         '''

@@ -1,0 +1,9 @@
+{% load wagtailimages_tags %}
+
+<div class="card">
+  <img width="{{self.thumbnail_image.width}}" height="{{self.thumbnail_image.height}}" src="{{self.thumbnail_image.url}}" class="img-fluid">
+  
+  <div class="position-absolute top-0 start-0 w-100 h-100 p-3 text-white link-reset overlay">
+    {{self.title}}
+  </div>
+</div>

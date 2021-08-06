@@ -71,6 +71,10 @@ class ImageBlock(blocks.StructBlock):
 
 
 class StoryPage(Page):
+    @classmethod
+    def content_type_id(cls):
+        return ContentType.objects.get_for_model(cls).id
+
     objects = IndexedPageManager()
     show_in_menus_default = True
     parent_page_types = ['logbooks.StoryIndexPage']
@@ -91,12 +95,36 @@ class StoryPage(Page):
         StreamFieldPanel('body'),
     ]
 
+    def regenerate_thumbnail(self, *args):
+        return generate_thumbnail(self.images(), fileslug=f'storythumbnail_{self.slug}')
+
     def cover_image(self):
-        # Find the first image in this story
-        for block in self.body:
-            if block.block_type == 'image':
-                image: CmsImage = block.value.get('image')
-                return image
+        images = self.images()
+        return None if len(images) == 0 else images[0]
+
+    def images(self):
+        return tuple(
+            block.value.get('image')
+            for block in self.body
+            if block.block_type == 'image'
+            and block.value.get('image')
+        )
+
+    @property
+    def thumbnail_image(self):
+        if self.index_entry and self.index_entry.thumbnail_image:
+            return self.index_entry.thumbnail_image
+
+    def thumbnail_content(self):
+        if self.thumbnail_image is None:
+            return render_to_string('logbooks/thumbnails/story_no_image.html', {
+                'self': self
+            })
+
+        return render_to_string('logbooks/thumbnails/story_images.html', {
+            'self': self,
+            'thumbnail_images': self.thumbnail_image,
+        })
 
 
 class LogbookIndexPage(ChildListMixin, Page):
@@ -105,7 +133,7 @@ class LogbookIndexPage(ChildListMixin, Page):
     subpage_types = ['logbooks.LogbookPage']
 
 
-class LogbookPage(Page):
+class LogbookPage(ChildListMixin, Page):
     objects = IndexedPageManager()
     show_in_menus_default = True
     parent_page_types = ['logbooks.LogbookIndexPage']
@@ -117,6 +145,9 @@ class LogbookPage(Page):
         FieldPanel('tags'),
     ]
 
+    def get_child_list_queryset(self):
+        return self.index_entry.get_related_pages(content_type=StoryPage.content_type_id())
+
     @property
     def thumbnail_image(self):
         if self.index_entry and self.index_entry.thumbnail_image:
@@ -124,7 +155,7 @@ class LogbookPage(Page):
 
     def regenerate_thumbnail(self, index_data):
         stories = index_data.get_related_pages(
-            metadata__content_type=ContentType.objects.get_for_model(
+            content_type=ContentType.objects.get_for_model(
                 StoryPage).id
         )
 
