@@ -22,6 +22,15 @@
       "django": true
     },
     {
+      "name": "Python: Regenerate logbook index",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/manage.py",
+      "args": ["reindex_logbooks"],
+      "justMyCode": true,
+      "django": true
+    },
+    {
       "name": "Python: Seed",
       "type": "python",
       "request": "launch",
