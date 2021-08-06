@@ -6,6 +6,7 @@ from django.core.management.base import BaseCommand
 from django.core.files.temp import NamedTemporaryFile
 from django.db import transaction
 from wagtail.core.rich_text import RichText
+from commonknowledge.wagtail.helpers import get_children_of_type
 
 from faker import Faker, providers
 import requests
@@ -80,20 +81,32 @@ class Command(BaseCommand):
 
             return (type, block_generators[type]())
 
-        for index in LogbookIndexPage.objects.all():
-            for _ in range(100):
-                logbook = LogbookPage(title=fake.sentence())
-                index.add_child(instance=logbook)
-                apply_tags(logbook)
+        def populate_logbook(logbook: LogbookPage):
+            apply_tags(logbook)
+            logbook.save()
 
-                logbook.save()
+        def populate_story(story: StoryPage):
+            story.body = [generate_story_block()
+                          for _ in range(randint(0, 5) ** 2)]
+            apply_tags(story)
+
+            story.save()
+
+        for index in LogbookIndexPage.objects.all():
+            if index.is_leaf():
+                for _ in range(100):
+                    logbook = LogbookPage(title=fake.sentence())
+                    index.add_child(instance=logbook)
+                    populate_logbook(logbook)
+            else:
+                for logbook in get_children_of_type(index, LogbookPage):
+                    populate_logbook(logbook)
 
         for index in StoryIndexPage.objects.all():
-            for _ in range(100):
-                story = StoryPage(title=fake.sentence())
-                story.body = [generate_story_block()
-                              for _ in range(randint(0, 20))]
-                apply_tags(story)
-                index.add_child(instance=story)
-
-                story.save()
+            if index.is_leaf():
+                for _ in range(100):
+                    story = StoryPage(title=fake.sentence())
+                    index.add_child(instance=story)
+            else:
+                for story in get_children_of_type(index, StoryPage):
+                    populate_story(story)

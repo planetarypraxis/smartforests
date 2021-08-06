@@ -23,3 +23,21 @@
 .flex-basis-0 {
   flex-basis: 0;
 }
+
+.img-grid-1 {
+  width: 100%;
+}
+.img-grid-2 {
+  @extend .ratio;
+  --bs-aspect-ratio: 0.5;
+  width: 100%;
+}
+.img-grid-3 {
+  @extend .ratio;
+  --bs-aspect-ratio: 1;
+  width: 33.33%;
+}
+.img-grid-4 {
+  --bs-aspect-ratio: 1;
+  width: 25%;
+}
