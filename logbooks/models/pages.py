@@ -1,3 +1,5 @@
+from commonknowledge.wagtail.helpers import get_children_of_type
+from logbooks.models.helpers import group_by_title
 from logbooks.thumbnail import generate_thumbnail
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
@@ -5,7 +7,7 @@ from wagtail.core.models import Page, PageManager
 from django.template.loader import render_to_string
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
-from taggit.models import TaggedItemBase
+from taggit.models import TaggedItemBase, Tag
 from wagtail.snippets.models import register_snippet
 from commonknowledge.wagtail.models import ChildListMixin
 from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel, StreamFieldPanel
@@ -13,6 +15,7 @@ from wagtail.core.fields import StreamField
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.core import blocks
 from wagtail.contrib.settings.models import BaseSetting, register_setting
+from commonknowledge.django.cache import django_cached_model
 
 from smartforests.models import CmsImage
 
@@ -128,9 +131,29 @@ class StoryPage(Page):
 
 
 class LogbookIndexPage(ChildListMixin, Page):
+    page_size = 50
     show_in_menus_default = True
     parent_page_types = ['home.HomePage']
     subpage_types = ['logbooks.LogbookPage']
+
+    def get_child_list_queryset(self, request):
+        from .indexes import LogbookPageIndex
+
+        tag_filter = request.GET.get('filter', None)
+        filter = {}
+
+        if tag_filter is not None:
+            try:
+                tag = Tag.objects.get(slug=tag_filter)
+                filter['tags__contains'] = tag.id
+            except Tag.DoesNotExist:
+                pass
+
+        return LogbookPageIndex.filter_pages(**filter)
+
+    @django_cached_model('logbooks.LogbookIndexPage.relevant_tags')
+    def relevant_tags(self):
+        return group_by_title(Tag.objects.filter(logbooks_atlastag_items__isnull=False).distinct(), key='name')
 
 
 class LogbookPage(ChildListMixin, Page):
@@ -142,11 +165,18 @@ class LogbookPage(ChildListMixin, Page):
 
     content_panels = [
         FieldPanel('title', classname="full title"),
+
         FieldPanel('tags'),
     ]
 
-    def get_child_list_queryset(self):
-        return self.index_entry.get_related_pages(content_type=StoryPage.content_type_id())
+    def get_child_list_queryset(self, request):
+        tag_filter = request.GET.get('filter', None)
+        filter = {}
+
+        if tag_filter is not None:
+            filter['tags__contains'] = tag_filter
+
+        return self.index_entry.get_related_pages(content_type=StoryPage.content_type_id(), **filter)
 
     @property
     def thumbnail_image(self):

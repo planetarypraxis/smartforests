@@ -1,4 +1,5 @@
 from django.core.cache import cache
+from django.db.models import QuerySet
 
 
 def django_cached(ns, get_key=None, ttl=500):
@@ -11,6 +12,9 @@ def django_cached(ns, get_key=None, ttl=500):
             hit = cache.get(key)
             if hit is None:
                 hit = fn(*args, **kwargs)
+                if isinstance(hit, QuerySet):
+                    # Caching a QuerySet does _not_ do what you might think it does!
+                    hit = tuple(hit)
                 cache.set(key, hit, ttl)
 
             return hit

@@ -3,14 +3,17 @@
 
 {% block content %}
 
-<header class="container">
+<div class="container-fluid py-4">
   <div class="row">
-    <h1 class="col">Logbooks</h1>
+    <div class="col-2">
+      {% include "logbooks/include/filters.html" with tags=self.relevant_tags %}
+    </div>
+    <div class="col-10">
+      <h1 class="col mb-4">Logbooks</h1>
+      {% include "logbooks/include/masonry.html" with contents=child_list_page %}
+    </div>
   </div>
-</header>
-
-
-{% include "logbooks/include/masonry.html" with contents=child_list_page %}
+</div>
 
 {% endblock %}
 

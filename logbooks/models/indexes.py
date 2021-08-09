@@ -1,6 +1,6 @@
 from functools import reduce
 from django.contrib.contenttypes.models import ContentType
-from logbooks.models.pages import LogbookPage, StoryPage
+from logbooks.models.pages import LogbookIndexPage, LogbookPage, StoryPage
 from django.dispatch import receiver
 from django.db import models
 from django.db.models.signals import post_save
@@ -85,15 +85,16 @@ class LogbookPageIndex(models.Model):
                 related_type).id,
         )
 
+    @staticmethod
+    def filter_pages(**filter):
+        return LogbookPageIndex._metadata_query(filter, start=LogbookPageIndex.objects)
+
     def get_related_pages(self, **filter):
         '''
         Return a queryset for a filtered subset of pages related to this one.
         Returns the concrete page type, not the index entry.
         '''
-        query = {'metadata__' + key: value for key, value in filter.items()}
-
-        pages = self.related_page_indexes.filter(**query)
-        return Page.objects.filter(index_entry__in=pages).specific()
+        return LogbookPageIndex._metadata_query(filter, start=self.related_page_indexes)
 
     def update_tags(self, page):
         '''
@@ -119,6 +120,13 @@ class LogbookPageIndex(models.Model):
 
         self.related_page_indexes.set(
             self.get_related_page_indexes(related_type))
+
+    @staticmethod
+    def _metadata_query(filter, start):
+        query = {'metadata__' + key: value for key, value in filter.items()}
+        pages = start.filter(**query)
+
+        return Page.objects.filter(index_entry__in=pages).specific()
 
 
 def or_all(terms):

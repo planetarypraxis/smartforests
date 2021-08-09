@@ -9,17 +9,19 @@
       <a href="{{child.url}}" class="grid__item link-reset">
         {{child.thumbnail_content}}
       </a>
+    {% empty %}
+      <div>Nothing found</div>
     {% endfor %}
   </main>
 </div>
 
-<div class="d-flex flex-row mt-4 justify-content-center page-load-status">
+<!-- <div class="d-flex flex-row mt-4 justify-content-center page-load-status">
   <div class="col-auto">
     <div class="spinner-grow" role="status">
       <span class="visually-hidden">Loading...</span>
     </div>
   </div>
-</div>
+</div> -->
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {

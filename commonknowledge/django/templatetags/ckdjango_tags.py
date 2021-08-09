@@ -39,3 +39,12 @@ def infinite_scroll_container(context, item_selector='iscroll_item', **kwargs):
     }
 
     return mark_safe(f'data-infinite-scroll=\'{json.dumps(config)}\'')
+
+
+@register.simple_tag(takes_context=True)
+def qs_link(context, key, value, **kwargs):
+    request: HttpRequest = context.get('request')
+
+    params = request.GET.dict()
+    params[key] = value
+    return request.path + '?' + parse.urlencode(params)
