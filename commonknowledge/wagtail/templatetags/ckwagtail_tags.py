@@ -1,3 +1,5 @@
+from urllib import parse
+
 from wagtail.core.models import Site
 from django import template
 
@@ -16,3 +18,12 @@ def menubar(context, **kwargs):
     kwargs['request'] = context.get('request')
 
     return kwargs
+
+
+@register.simple_tag(takes_context=True)
+def next_page_path(context):
+    request = context['request']
+    params = request.GET.dict()
+    params['page'] = '{{#}}'
+    return request.path + '?' + \
+        parse.urlencode(params).replace('%7B%7B%23%7D%7D', '{{#}}')

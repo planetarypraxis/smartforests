@@ -24,24 +24,6 @@
   flex-basis: 0;
 }
 
-.img-grid-1 {
-  width: 100%;
-}
-.img-grid-2 {
-  @extend .ratio;
-  --bs-aspect-ratio: 0.5;
-  width: 100%;
-}
-.img-grid-3 {
-  @extend .ratio;
-  --bs-aspect-ratio: 1;
-  width: 33.33%;
-}
-.img-grid-4 {
-  --bs-aspect-ratio: 1;
-  width: 25%;
-}
-
 .overlay-bg {
   position: absolute;
   width: 100%;
@@ -49,4 +31,55 @@
   background: $dark-green;
   mix-blend-mode: multiply;
   opacity: 0.5;
+}
+
+
+/** Masonry grid **/
+
+.grid__wrapper {
+  max-width: 100%;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+
+$grid-gutter: map-get($spacers, 4);
+.grid {
+  margin-right: #{-$grid-gutter};
+
+  &.are-images-unloaded {
+    opacity: 0;
+  }
+
+  &.are-images-unloaded .image-grid__item {
+    opacity: 0;
+  }
+}
+
+.grid__item,
+.grid__col-sizer {
+  width: calc(50% - #{$grid-gutter * (1 / 2)});
+
+  @include media-breakpoint-up(md) {
+    width: calc(33% - #{$grid-gutter * (2 / 3)});
+  }
+  @include media-breakpoint-up(lg)  {
+    width: calc(25% - #{$grid-gutter * (3 / 4)});
+  }
+  @include media-breakpoint-up(xl) {
+    width: calc(20% - #{$grid-gutter * (4 / 5)});
+  }
+}
+
+.grid__gutter-sizer { width: $grid-gutter; }
+
+.grid__item {
+  display: block;
+  margin-bottom: $grid-gutter;
+  float: left;
+}
+
+.page-load-status {
+  padding-top: $grid-gutter;
+  display: none;
 }

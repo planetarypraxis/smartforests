@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load ckdjango_tags %}
+{% load ckdjango_tags ckbootstrap_tags %}
 
 {% block content %}
 
@@ -9,18 +9,9 @@
   </div>
 </header>
 
-<div class="container-fluid">
-  <div 
-    class="row gx-4 gy-4 my-5"
-    data-masonry='{"percentPosition": true }'
-  >
-    {% for logbook in child_list_page %}
-      <a href="{{logbook.url}}" class="col-6 col-md-4 col-lg-3 logbook-thumbnail link-reset">
-        {{logbook.thumbnail_content}}
-      </a>
-    {% endfor %}
-  </div>
-</div>
+
+{% include "logbooks/include/masonry.html" with contents=child_list_page %}
+
 
 {% endblock %}
 
@@ -29,5 +20,6 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D" crossorigin="anonymous" async></script>
+<script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/masonry-layout@4/dist/masonry.pkgd.min.js" crossorigin="anonymous"></script>
 {% endblock %}
