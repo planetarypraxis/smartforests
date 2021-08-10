@@ -77,10 +77,18 @@ class LogbookPageIndex(models.Model):
         idx.save()
 
     def get_related_page_indexes(self, related_type):
+        tag_query = or_all(
+            models.Q(metadata__tags__contains=tag)
+            for tag
+            in self.metadata.get('tags', [])
+        )
+
+        if tag_query is None:
+            return LogbookPageIndex.objects.none()
+
         return LogbookPageIndex.objects.filter(
             ~models.Q(page=self.page),
-            or_all(models.Q(metadata__tags__contains=tag)
-                   for tag in self.metadata.get('tags', [])),
+            tag_query,
             metadata__content_type=ContentType.objects.get_for_model(
                 related_type).id,
         )
@@ -101,7 +109,8 @@ class LogbookPageIndex(models.Model):
         Update the index's tag ids from the main model.
         '''
         self.metadata['tags'] = list(
-            tag.id for tag in page.tags.all())
+            tag.id for tag in page.tags.all()
+        )
         self.save()
 
     def update_pages_related_to(self, related_type):
@@ -131,6 +140,9 @@ class LogbookPageIndex(models.Model):
 
 def or_all(terms):
     terms = tuple(terms)
+    if len(terms) == 0:
+        return None
+
     q = terms[0]
     for term in terms[1:]:
         q = q | term
