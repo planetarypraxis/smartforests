@@ -17,9 +17,17 @@ from logbooks.models import LogbookIndexPage, LogbookPage, StoryIndexPage, Story
 class Command(BaseCommand):
     help = 'Seed the forest'
 
+    def add_arguments(self, parser):
+        parser.add_argument('--storysize', dest='storysize', type=int,
+                            help='Control the size distribution of stories')
+
     @transaction.atomic
     def handle(self, *args, **options):
         fake = Faker()
+
+        def random_distribution():
+            # Get a nice distribition for a story length
+            return int(randint(0, options.get('storysize', 7)) ** 2 / 5)
 
         # https://faker.readthedocs.io/en/master/providers.html
         fake.add_provider(providers.internet)
@@ -110,8 +118,3 @@ class Command(BaseCommand):
             else:
                 for story in get_children_of_type(index, StoryPage):
                     populate_story(story)
-
-
-def random_distribution():
-    # Get a nice distribition for a story length
-    return int(randint(0, 7) ** 2 / 6)
