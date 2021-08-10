@@ -42,10 +42,35 @@
   overflow-x: hidden;
 }
 
-
-$grid-gutter: map-get($spacers, 4);
 .grid {
-  margin-right: #{-$grid-gutter};
+  --grid__gutter: #{map-get($spacers, 4)};
+  --grid__columns: 2;
+  
+  margin-right: calc(var(--grid__gutter, 0px) * calc(-1 / var(--grid__columns, 2)));
+
+  @include media-breakpoint-up(md) {
+    --grid__columns: 3;
+
+    &.compact {
+      --grid__columns: 2;
+    }
+  }
+
+  @include media-breakpoint-up(lg)  {
+    --grid__columns: 4;
+
+    &.compact {
+      --grid__columns: 3;
+    }
+  }
+
+  @include media-breakpoint-up(xl) {
+    --grid__columns: 5;
+
+    &.compact {
+      --grid__columns: 4;
+    }
+  }
 
   &.are-images-unloaded {
     opacity: 0;
@@ -58,28 +83,21 @@ $grid-gutter: map-get($spacers, 4);
 
 .grid__item,
 .grid__col-sizer {
-  width: calc(50% - #{$grid-gutter * (1 / 2)});
-
-  @include media-breakpoint-up(md) {
-    width: calc(33% - #{$grid-gutter * (2 / 3)});
-  }
-  @include media-breakpoint-up(lg)  {
-    width: calc(25% - #{$grid-gutter * (3 / 4)});
-  }
-  @include media-breakpoint-up(xl) {
-    width: calc(20% - #{$grid-gutter * (4 / 5)});
-  }
+  width: calc(
+    calc(100% / var(--grid__columns, 2)) -
+    calc(var(--grid__gutter, 0px) * calc(calc(var(--grid__columns, 2) - 1) / var(--grid__columns, 2)))
+  );
 }
 
-.grid__gutter-sizer { width: $grid-gutter; }
+.grid__gutter-sizer { width: var(--grid__gutter, 0px); }
 
 .grid__item {
   display: block;
-  margin-bottom: $grid-gutter;
+  margin-bottom: var(--grid__gutter, 0px);
   float: left;
 }
 
 .page-load-status {
-  padding-top: $grid-gutter;
+  padding-top: var(--grid__gutter, 0px);
   display: none;
 }

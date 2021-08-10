@@ -1,9 +1,12 @@
 {% load ckwagtail_tags %}
 
 <div class="grid__wrapper">
-  <main class="grid are-images-unloaded">
+  <main class="grid are-images-unloaded {{class}}">
     <div class="grid__col-sizer"></div>
     <div class="grid__gutter-sizer"></div>
+    {% if not contents.has_next %}
+      <div class="d-none" data-lastpage="1"></div>
+    {% endif %}
     
     {% for child in contents %}
       <a href="{{child.url}}" class="grid__item link-reset">
@@ -15,13 +18,15 @@
   </main>
 </div>
 
-<!-- <div class="d-flex flex-row mt-4 justify-content-center page-load-status">
+{% if contents.has_next %}
+<div class="d-flex flex-row mt-4 justify-content-center page-load-status">
   <div class="col-auto">
     <div class="spinner-grow" role="status">
       <span class="visually-hidden">Loading...</span>
     </div>
   </div>
-</div> -->
+</div>
+{% endif %}
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
@@ -56,6 +61,7 @@
       append: '.grid__item',
       outlayer: msnry,
       status: '.page-load-status',
+      checkLastPage: '[data-lastpage]'
     });
   })
 </script>
