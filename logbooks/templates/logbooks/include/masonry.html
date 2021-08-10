@@ -29,39 +29,44 @@
 {% endif %}
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const $grid = $('.grid').masonry({
-      itemSelector: 'none', // select none at first
-      columnWidth: '.grid__col-sizer',
-      gutter: '.grid__gutter-sizer',
-      percentPosition: true,
-      history: false,
-      stagger: 30,
-      // nicer reveal transition
-      visibleStyle: { transform: 'translateY(0)', opacity: 1 },
-      hiddenStyle: { transform: 'translateY(100px)', opacity: 0 },
-    });
+  // TODO: Pull this out into a js file. Turbo seems to re-run inline scripts on page transitions.
+  if (!window.masonryListenerAttached) {
+    window.masonryListenerAttached = true
 
-    // get Masonry instance
-    const msnry = $grid.data('masonry');
+    document.documentElement.addEventListener('turbo:load', () => {
+      const $grid = $('.grid').masonry({
+        itemSelector: 'none', // select none at first
+        columnWidth: '.grid__col-sizer',
+        gutter: '.grid__gutter-sizer',
+        percentPosition: true,
+        history: false,
+        stagger: 30,
+        // nicer reveal transition
+        visibleStyle: { transform: 'translateY(0)', opacity: 1 },
+        hiddenStyle: { transform: 'translateY(100px)', opacity: 0 },
+      });
 
-    // initial items reveal
-    $grid.imagesLoaded( function() {
-      $grid.removeClass('are-images-unloaded');
-      $grid.masonry( 'option', { itemSelector: '.grid__item' });
-      const $items = $grid.find('.grid__item');
-      $grid.masonry( 'appended', $items );
-    });
+      // get Masonry instance
+      const msnry = $grid.data('masonry');
 
-    //-------------------------------------//
-    // init Infinte Scroll
+      // initial items reveal
+      $grid.imagesLoaded( function() {
+        $grid.removeClass('are-images-unloaded');
+        $grid.masonry( 'option', { itemSelector: '.grid__item' });
+        const $items = $grid.find('.grid__item');
+        $grid.masonry( 'appended', $items );
+      });
 
-    $grid.infiniteScroll({
-      path: "{% next_page_path %}",
-      append: '.grid__item',
-      outlayer: msnry,
-      status: '.page-load-status',
-      checkLastPage: '[data-lastpage]'
-    });
-  })
+      //-------------------------------------//
+      // init Infinte Scroll
+
+      $grid.infiniteScroll({
+        path: "{% next_page_path %}",
+        append: '.grid__item',
+        outlayer: msnry,
+        status: '.page-load-status',
+        checkLastPage: '[data-lastpage]'
+      });
+    })
+  }
 </script>
