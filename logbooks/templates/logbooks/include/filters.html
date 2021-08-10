@@ -1,16 +1,21 @@
 {% load ckdjango_tags %}
 
-<h3 class="fw-bold">Tags</h3>
-
-
-{% for letter, tags in tags %}
-
-<h4 class="fw-normal font-monospace small mb-0">{{letter}}</h4>
-<div class="font-monospace ps-3 small mb-2">
-  {% for tag in tags %}
-    <a class="text-capitalize d-block" href="{% qs_link 'filter' tag.slug %}">
-      {{tag}}
-    </a>
+<div class="p-3">
+  <h3 class="fw-bold">Tags</h3>
+  
+  
+  {% for letter, tags in tags %}
+  
+  <h4 class="fw-normal font-monospace small mb-0">{{letter}}</h4>
+  <div class="font-monospace pb-3 small">
+    {% for tag in tags %}
+      <div>
+        <a class="text-capitalize badge rounded-pill bg-white m-1 p-1 link-reset" href="{% qs_link 'filter' tag.slug %}">
+          {{tag}}
+        </a>
+      </div>
+    {% endfor %}
+  </div>
   {% endfor %}
+  
 </div>
-{% endfor %}
