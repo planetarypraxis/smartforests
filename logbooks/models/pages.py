@@ -1,3 +1,4 @@
+from django.db.models.fields import CharField
 from commonknowledge.wagtail.helpers import get_children_of_type
 from logbooks.models.helpers import group_by_title
 from logbooks.thumbnail import generate_thumbnail
@@ -10,12 +11,13 @@ from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase, Tag
 from wagtail.snippets.models import register_snippet
 from commonknowledge.wagtail.models import ChildListMixin
-from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel, StreamFieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.core import blocks
 from wagtail.contrib.settings.models import BaseSetting, register_setting
 from commonknowledge.django.cache import django_cached_model
+from django.contrib.gis.db import models as geo
 
 from smartforests.models import CmsImage
 
@@ -83,6 +85,8 @@ class StoryPage(Page):
     parent_page_types = ['logbooks.StoryIndexPage']
     subpage_types = []
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
+    geographical_location = CharField(max_length=250, null=True, blank=True)
+    coordinates = geo.PointField(null=True, blank=True)
 
     # Streamfield of options here
     body = StreamField([
@@ -95,6 +99,14 @@ class StoryPage(Page):
 
     content_panels = Page.content_panels + [
         FieldPanel('tags'),
+        MultiFieldPanel(
+            [
+                FieldPanel('geographical_location'),
+                FieldPanel('coordinates')
+            ],
+            heading="Geographical data",
+            classname="collapsible collapsed"
+        ),
         StreamFieldPanel('body'),
     ]
 
@@ -118,7 +130,7 @@ class StoryPage(Page):
         if self.index_entry and self.index_entry.thumbnail_image:
             return self.index_entry.thumbnail_image
 
-    def thumbnail_content(self):
+    def thumbnail_content_html(self):
         if self.thumbnail_image is None:
             return render_to_string('logbooks/thumbnails/story_no_image.html', {
                 'self': self
@@ -127,6 +139,11 @@ class StoryPage(Page):
         return render_to_string('logbooks/thumbnails/story_images.html', {
             'self': self,
             'thumbnail_images': self.thumbnail_image,
+        })
+
+    def content_html(self):
+        return render_to_string('logbooks/story.html', {
+            'self': self
         })
 
 

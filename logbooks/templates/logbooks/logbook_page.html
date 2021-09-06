@@ -2,23 +2,31 @@
 {% load ckdjango_tags ckbootstrap_tags wagtailcore_tags %}
 
 {% block content %}
+<main class='container-fluid mt-5' style='max-width: 680px;'>
+  <div class='row row-cols-1 gy-5 gx-0'>
+    <header class='col'>
+      <h1>{{self.title}}</h1>
+      <div>
+        {{self.description|richtext}}
+      </div>
+      <div>
+        {% for tag in self.tags.all %}
+          {% include 'logbooks/tag_label.html' with tag=tag %}
+        {% endfor %}
+      </div>
+    </header>
 
-<header class="container">
-  <div class="row">
-    <h1 class="col">{{self.title}}</h1>
+    <section class='col container gx-0'>
+      <div class='row row-cols-1 gx-0 gy-5'>
+      {% for entry in child_list_page %}
+        <div class="col">
+          {{entry.content_html}}
+        </div>
+      {% endfor %}
+      </div>
+    </section>
   </div>
-  <div>
-    {{self.description|richtext}}
-  </div>
-  <div>
-    {% for tag in self.tags.all %}
-      {% include 'logbooks/tag_label.html' with tag=tag %}
-    {% endfor %}
-  </div>
-</header>
-
-{% include "logbooks/include/masonry.html" with contents=child_list_page %}
-
+</main>
 {% endblock %}
 
 <!-- The masonary component doesn't get on with the flex: 1 we usually stick at the bottom of the page -->

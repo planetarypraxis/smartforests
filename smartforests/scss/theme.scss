@@ -1,13 +1,13 @@
 // Colors
 $dark-green: #043003;
 $mid-green: #026302;
-$bright-green: #25ED08;
-$yellow: #FFFF9B;
-$soft-green: #C7EAC6;
-$grey: #929292;
-$light-grey: #C5C5C5;
+$bright-green: #25ed08;
+$yellow: #ffff9b;
+$soft-green: #c7eac6;
+$grey: #545454;
+$light-grey: #c5c5c5;
 
-$body-bg: #F9F9F9;
+$body-bg: #f9f9f9;
 $primary: $mid-green;
 $secondary: $grey;
 $primary-hover-light: $light-grey;
@@ -46,28 +46,49 @@ $container-max-widths: (
   md: 755px,
   lg: 755px,
   xl: 1126px,
-  xxl: 1126px
+  xxl: 1126px,
 );
-
 
 // Fonts
 
 @font-face {
-  font-family: 'MarrSans';
+  font-family: "MarrSans";
   font-weight: 400;
-  src: url('../fonts/MarrSans-Regular.ttf')  format('truetype');
+  src: url("../fonts/MarrSans-Regular.ttf") format("truetype");
 }
 @font-face {
-  font-family: 'MarrSans';
+  font-family: "MarrSans";
   font-weight: 500;
-  src: url('../fonts/MarrSans-Medium.ttf')  format('truetype');
+  src: url("../fonts/MarrSans-Medium.ttf") format("truetype");
 }
 
+$font-size-root: 18px;
+$font-size-base: 1rem;
 $font-weight-bold: 500;
 
-$font-family-monospace: Monaco, SFMono-Regular, Menlo, Consolas, "Liberation Mono", "Courier New", monospace;
-$font-family-sans-serif: MarrSans, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+$h1-font-size: $font-size-base * 2.5;
+$h2-font-size: $font-size-base * 2;
+$h3-font-size: $font-size-base * 1.75;
+$h4-font-size: $font-size-base * 1.5;
+$h5-font-size: $font-size-base * 1.25;
+$h6-font-size: $font-size-base;
 
+$font-sizes: (
+  1: $h1-font-size,
+  2: $h2-font-size,
+  3: $h3-font-size,
+  4: $h4-font-size,
+  5: $h5-font-size,
+  6: $h6-font-size,
+  7: $font-size-base * 0.75,
+  8: $font-size-base * 0.5,
+);
+
+$font-family-monospace: Monaco, SFMono-Regular, Menlo, Consolas,
+  "Liberation Mono", "Courier New", monospace;
+$font-family-sans-serif: MarrSans, system-ui, "Segoe UI", Roboto,
+  "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+  "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
 // Merge with bootstrap
 @import "~bootstrap/scss/functions";

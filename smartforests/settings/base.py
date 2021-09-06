@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     'webpack_loader',
     "anymail",
     "rest_framework",
-    'debug_toolbar',
+    # 'debug_toolbar',
 
     'django.contrib.gis',
     'django.contrib.admin',
@@ -73,7 +73,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
