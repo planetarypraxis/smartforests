@@ -7,13 +7,17 @@
   <div class="row">
     <div class="col-2"></div>
     <main class="col-8">
-      <h1>{{story_count}} stor{{ story_count|pluralize:"y,ies" }}</h1>
+      <h1 class='mb-5'>{{story_count}} stor{{ story_count|pluralize:"y,ies" }}</h1>
 
-      <div>
-        {% for story in child_list_page %}
-          {% include "logbooks/story_thumbnail.html" with story=story %}
+      <section class='col container gx-0'>
+        <div class='row row-cols-1 gx-0 gy-5'>
+        {% for entry in child_list_page %}
+          <div class="col">
+            {{entry.content_html}}
+          </div>
         {% endfor %}
-      </div>
+        </div>
+      </section>
 
     </main>
     <div class="col-2"></div>
