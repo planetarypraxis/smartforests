@@ -11,7 +11,7 @@ from taggit.models import TaggedItemBase, Tag
 from wagtail.snippets.models import register_snippet
 from commonknowledge.wagtail.models import ChildListMixin
 from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel, StreamFieldPanel
-from wagtail.core.fields import StreamField
+from wagtail.core.fields import RichTextField, StreamField
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.core import blocks
 from wagtail.contrib.settings.models import BaseSetting, register_setting
@@ -162,10 +162,11 @@ class LogbookPage(ChildListMixin, Page):
     parent_page_types = ['logbooks.LogbookIndexPage']
     subpage_types = []
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
+    description = RichTextField()
 
     content_panels = [
         FieldPanel('title', classname="full title"),
-
+        FieldPanel('description'),
         FieldPanel('tags'),
     ]
 

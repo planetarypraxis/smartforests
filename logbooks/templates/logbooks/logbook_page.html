@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load ckdjango_tags ckbootstrap_tags %}
+{% load ckdjango_tags ckbootstrap_tags wagtailcore_tags %}
 
 {% block content %}
 
@@ -7,11 +7,12 @@
   <div class="row">
     <h1 class="col">{{self.title}}</h1>
   </div>
+  <div>
+    {{self.description|richtext}}
+  </div>
 </header>
 
-
 {% include "logbooks/include/masonry.html" with contents=child_list_page %}
-
 
 {% endblock %}
 
