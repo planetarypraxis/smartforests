@@ -10,6 +10,11 @@
   <div>
     {{self.description|richtext}}
   </div>
+  <div>
+    {% for tag in self.tags.all %}
+      {% include 'logbooks/tag_label.html' with tag=tag %}
+    {% endfor %}
+  </div>
 </header>
 
 {% include "logbooks/include/masonry.html" with contents=child_list_page %}
