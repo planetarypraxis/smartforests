@@ -9,7 +9,18 @@
       {% include "logbooks/include/filters.html" with tags=self.relevant_tags %}
     </div>
     <div class="col">
-      <h1 class="col mb-4">Logbooks</h1>
+      <div class="mb-5">
+        <h1 class="col">Logbooks</h1>
+        <div>
+          {% if tag_filter %}
+          <div
+            class="font-monospace text-uppercase badge rounded-pill m-1 p-1 link-reset bg-white fs-7"
+          >
+            {{ tag_filter }}
+          </div>
+          {% endif %}
+        </div>
+      </div>
       {% include "logbooks/include/masonry.html" with contents=child_list_page class="compact" %}
     </div>
   </div>
