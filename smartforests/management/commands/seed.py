@@ -126,7 +126,9 @@ class Command(BaseCommand):
                 for _ in range(options.get('logbooks')):
                     logbook = LogbookPage(
                         title=fake.sentence(),
-                        description=fake.paragraph()
+                        description=fake.paragraph(),
+                        first_published_at=fake.past_datetime(
+                            start_date='-60d')
                     )
                     index.add_child(instance=logbook)
                     populate_logbook(logbook)
@@ -137,7 +139,11 @@ class Command(BaseCommand):
         for index in StoryIndexPage.objects.all():
             if index.is_leaf():
                 for _ in range(options.get('stories')):
-                    story = StoryPage(title=fake.sentence())
+                    story = StoryPage(
+                        title=fake.sentence(),
+                        first_published_at=fake.past_datetime(
+                            start_date='-60d')
+                    )
                     index.add_child(instance=story)
                     populate_story(story)
             else:
