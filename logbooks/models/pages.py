@@ -91,9 +91,11 @@ class StoryPage(Page):
     # Streamfield of options here
     body = StreamField([
         ('text', blocks.RichTextBlock(features=[
-         'h3', 'bold', 'italic', 'link', 'ol', 'ul'])),
+            'h3', 'bold', 'italic', 'link', 'ol', 'ul'
+        ], template='logbooks/story_blocks/text.html')),
         ('quote', QuoteBlock()),
-        ('embed', blocks.RichTextBlock(features=['embed'])),
+        ('embed', blocks.RichTextBlock(features=[
+         'embed'], template='logbooks/story_blocks/text.html')),
         ('image', ImageBlock()),
     ])
 
