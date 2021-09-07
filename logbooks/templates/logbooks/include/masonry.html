@@ -10,7 +10,7 @@
     
     {% for child in contents %}
       <a href="{{child.url}}" class="grid__item link-reset">
-        {{child.thumbnail_content_html}}
+        {{child.thumbnail_content}}
       </a>
     {% empty %}
       <div>Nothing found</div>

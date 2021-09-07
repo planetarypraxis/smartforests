@@ -169,7 +169,8 @@ class LogbookIndexPage(ChildListMixin, Page):
             except Tag.DoesNotExist:
                 pass
 
-        return LogbookPageIndex.filter_pages(**filter).specific()
+        return LogbookPageIndex.filter_pages(
+            **filter, content_type=LogbookPage.content_type_id()).specific()
 
     @django_cached_model('logbooks.LogbookIndexPage.relevant_tags')
     def relevant_tags(self):
@@ -183,6 +184,10 @@ class LogbookIndexPage(ChildListMixin, Page):
 
 
 class LogbookPage(ChildListMixin, Page):
+    @classmethod
+    def content_type_id(cls):
+        return ContentType.objects.get_for_model(cls).id
+
     objects = IndexedPageManager()
     show_in_menus_default = True
     parent_page_types = ['logbooks.LogbookIndexPage']
