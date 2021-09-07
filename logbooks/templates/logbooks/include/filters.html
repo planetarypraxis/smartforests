@@ -32,7 +32,6 @@
 </div>
 <script>
   const toggleFilters = document.getElementById('filter-toggle');
-  
   const filterControls = document.getElementById('filter-controls');
 
   const openSVG = document.getElementById('open-svg');
@@ -46,13 +45,15 @@
     filtersOpen = ! filtersOpen;
 
     if (filtersOpen === false) {
-      filterControls.classList.add('d-none');
+      filterControls.classList.add('d-none')
+      
       openSVG.classList.remove('d-none');
       closeSVG.classList.add('d-none');
       return;
     }
     
     filterControls.classList.remove('d-none');
+    
     closeSVG.classList.remove('d-none');
     openSVG.classList.add('d-none');
   });
