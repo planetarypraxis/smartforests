@@ -7,8 +7,12 @@
     <header class='col row mt-0 gy-3 gx-0'>
       <h1 class='mt-6'>{{self.title}}</h1>
       <div>
+        <span class='fs-7 align-baseline'>Stories tagged</span>
         {% for tag in self.tags.all %}
           {% include 'logbooks/tag_label.html' with tag=tag %}
+          {% if not forloop.last %}
+            <span class='fs-7 align-baseline'>or</span>
+          {% endif %}
         {% endfor %}
       </div>
       {% if self.description %}
