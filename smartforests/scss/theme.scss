@@ -63,13 +63,14 @@ $container-max-widths: (
 }
 
 $font-size-root: 18px;
+$line-height-base: 1.4;
 $font-size-base: 1rem;
 $font-weight-bold: 500;
 
 $h1-font-size: $font-size-base * 2.5;
 $h2-font-size: $font-size-base * 2;
-$h3-font-size: $font-size-base * 1.75;
-$h4-font-size: $font-size-base * 1.5;
+$h3-font-size: $font-size-base * 1.666;
+$h4-font-size: $font-size-base * 1.333;
 $h5-font-size: $font-size-base * 1.25;
 $h6-font-size: $font-size-base;
 
@@ -80,8 +81,7 @@ $font-sizes: (
   4: $h4-font-size,
   5: $h5-font-size,
   6: $h6-font-size,
-  7: $font-size-base * 0.75,
-  8: $font-size-base * 0.5,
+  7: $font-size-base * 0.66,
 );
 
 $font-family-monospace: Monaco, SFMono-Regular, Menlo, Consolas,
@@ -99,8 +99,8 @@ $spacers: (
   3: 20px,
   4: 30px,
   5: 40px,
-  6: 50px,
-  7: 90px,
+  6: 80px,
+  7: 100px,
 );
 
 // Merge with Bootstrap

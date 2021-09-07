@@ -60,3 +60,7 @@
     @extend .text-white;
   }
 }
+
+.child-mb-0 > *:last-child {
+  margin-bottom: 0;
+}

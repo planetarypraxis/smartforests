@@ -2,22 +2,24 @@
 {% load ckdjango_tags ckbootstrap_tags wagtailcore_tags %}
 
 {% block content %}
-<main class='container-fluid mt-5' style='max-width: 680px;'>
-  <div class='row row-cols-1 gy-5 gx-0'>
-    <header class='col'>
-      <h1>{{self.title}}</h1>
-      <div>
-        {{self.description|richtext}}
-      </div>
+<main class='container-fluid' style='max-width: 680px;'>
+  <div class='row row-cols-1 gx-0'>
+    <header class='col row mt-0 gy-3 gx-0'>
+      <h1 class='mt-6'>{{self.title}}</h1>
       <div>
         {% for tag in self.tags.all %}
           {% include 'logbooks/tag_label.html' with tag=tag %}
         {% endfor %}
       </div>
+      {% if self.description %}
+      <div class='border-start border-dark ps-3 child-mb-0 lh-base'>
+        {{self.description|richtext}}
+      </div>
+      {% endif %}
     </header>
 
-    <section class='col container gx-0'>
-      <div class='row row-cols-1 gx-0 gy-5'>
+    <section class='col container gx-0 py-6'>
+      <div class='row row-cols-1 gx-0 gy-6'>
       {% for entry in child_list_page %}
         <div class="col">
           {{entry.content_html}}
