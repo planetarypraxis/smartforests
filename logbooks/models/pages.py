@@ -172,6 +172,12 @@ class LogbookIndexPage(ChildListMixin, Page):
     def relevant_tags(self):
         return group_by_title(Tag.objects.filter(logbooks_atlastag_items__isnull=False).distinct(), key='name')
 
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context['tag_filter'] = request.GET.get('filter', None)
+
+        return context
+
 
 class LogbookPage(ChildListMixin, Page):
     objects = IndexedPageManager()

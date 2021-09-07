@@ -12,14 +12,13 @@
   </div>
   <div id="filter-controls">
     <h3 class="fw-bold">Tags</h3>
-    
     {% for letter, tags in tags %}
       <h4 class="fw-normal font-monospace fs-7 mb-0">{{letter}}</h4>
       <div class="font-monospace pb-3 fs-7">
         {% for tag in tags %}
           <div>
             <a
-              class="text-capitalize badge rounded-pill bg-white m-1 p-1 link-reset"
+              class="text-capitalize badge rounded-pill m-1 p-1 link-reset {% if tag_filter == tag.slug %}bg-dark-green text-white{% else %}bg-white{% endif %}"
               href="{% qs_link 'filter' tag.slug %}"
             >
               {{tag}}
@@ -31,7 +30,7 @@
   </div>
 </div>
 <script>
-  const toggleFilters = document.getElementById('filter-toggle');
+  const filterToggle = document.getElementById('filter-toggle');
   const filterControls = document.getElementById('filter-controls');
 
   const openSVG = document.getElementById('open-svg');
@@ -39,7 +38,7 @@
 
   let filtersOpen = true;
   
-  toggleFilters.addEventListener('click', (event)=> {
+  filterToggle.addEventListener('click', (event)=> {
     event.preventDefault();
     
     filtersOpen = ! filtersOpen;
