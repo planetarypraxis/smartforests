@@ -45,13 +45,13 @@
         {% endblock %}
         {% endblock %}
 
-        <div class="bg-panel">
-            <footer class="container py-5 fs-6 text">
+        <div class="bg-panel bg-dark-green text-white">
+            <footer class="container py-5 fs-6 text links-white">
                 <div class="row">
                     <div class="col-8 d-flex flex-column flex-md-row align-items-start">
                         <div class="mb-3 me-3">
                             <p>
-                                &copy; Planetary Praxis {% now "Y" %}
+                                &copy; <a target="_blank" target="_blank" rel="noopener noreferrer" href="https://planetarypraxis.org/">Planetary Praxis</a> {% now "Y" %}
                             </p>
                         </div>
                     </div>
@@ -60,7 +60,7 @@
                         {% flat_menu 'footer' max_levels=1 show_menu_heading=False template="menus/footer.html" %}
 
                         <div>
-                            Site by <a target="_blank" href="https://commonknowledge.coop">Common Knowledge</a>
+                            Site by <a target="_blank" target="_blank" rel="noopener noreferrer" href="https://commonknowledge.coop">Common Knowledge</a>
                         </div>
                     </div>
                 </div>

@@ -54,3 +54,9 @@
 .h-48px {
   height: 48px;
 }
+
+.links-white {
+  a {
+    @extend .text-white;
+  }
+}
