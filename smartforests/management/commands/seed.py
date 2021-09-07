@@ -7,6 +7,7 @@ from django.core.files.temp import NamedTemporaryFile
 from django.db import transaction
 from wagtail.core.rich_text import RichText
 from commonknowledge.wagtail.helpers import get_children_of_type
+from datetime import datetime
 
 from faker import Faker, providers
 import requests
@@ -88,9 +89,13 @@ class Command(BaseCommand):
             x.tags.set(*selected_tags)
 
         block_generators = {
-            'text': lambda: RichText(f'<p>{fake.paragraphs(2)}</p>'),
+            'text': lambda: RichText(f'<p>{" ".join(fake.paragraphs(4))}</p>'),
             'quote': lambda: {
-                'text': RichText(f'<p>{fake.sentence()}</p>')
+                'text': RichText(f'<p>{fake.sentence()}</p>'),
+                'author': fake.name(),
+                'title': fake.sentence(),
+                'date': datetime.now(),
+                'link': '/'
             },
             'image': lambda: {
                 'image': get_image(randint(100, 200)),
