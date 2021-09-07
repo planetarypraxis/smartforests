@@ -1,20 +1,22 @@
 {% load menu_tags %}
 
-<nav class="navbar navbar-expand-lg navbar-light bg-warning">
-    <div class="container-fluid align-items-end">
-        <a class="navbar-brand" href="/">Smart Forests</a>
+<nav class="navbar navbar-expand-lg navbar-light bg-warning opacity-8 h-48px">
+    <div class="container-fluid">
+        <a class="text-dark-green fw-normal text-decoration-none" href="/">Smart Forests</a>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class='navbar-nav mr-auto'>
-            {% for item in menu_items %}
-                <li class="nav-item {{ item.active_class }}">
-                    <a class='nav-link' href="{{ item.href }}">{{ item.text }}</a>
-                    <!-- {% if item.has_children_in_menu %}
-                        {% sub_menu item %}
-                    {% endif %} -->
-                </li>
-            {% endfor %}
-          </ul>
+        <div>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class='navbar-nav mr-auto'>
+                {% for item in menu_items %}
+                    <li class="nav-item {{ item.active_class }}">
+                        <a class='nav-link text-dark-green fw-normal' href="{{ item.href }}">{{ item.text }}</a>
+                        <!-- {% if item.has_children_in_menu %}
+                            {% sub_menu item %}
+                        {% endif %} -->
+                    </li>
+                {% endfor %}
+              </ul>
+            </div>
         </div>
     </div>
 </nav>
