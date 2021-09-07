@@ -30,30 +30,34 @@
   </div>
 </div>
 <script>
-  const filterToggle = document.getElementById('filter-toggle');
-  const filterControls = document.getElementById('filter-controls');
+  // TODO: Pull this out into a js file. Turbo seems to re-run inline scripts on page transitions.
+  if (!window.toggleListenerAttached) {
+    window.toggleListenerAttached = true;
+    const filterToggle = document.getElementById('filter-toggle');
+    const filterControls = document.getElementById('filter-controls');
 
-  const openSVG = document.getElementById('open-svg');
-  const closeSVG = document.getElementById('close-svg');
+    const openSVG = document.getElementById('open-svg');
+    const closeSVG = document.getElementById('close-svg');
 
-  let filtersOpen = true;
-  
-  filterToggle.addEventListener('click', (event)=> {
-    event.preventDefault();
+    let filtersOpen = true;
     
-    filtersOpen = ! filtersOpen;
-
-    if (filtersOpen === false) {
-      filterControls.classList.add('d-none')
+    filterToggle.addEventListener('click', (event)=> {
+      event.preventDefault();
       
-      openSVG.classList.remove('d-none');
-      closeSVG.classList.add('d-none');
-      return;
-    }
-    
-    filterControls.classList.remove('d-none');
-    
-    closeSVG.classList.remove('d-none');
-    openSVG.classList.add('d-none');
-  });
+      filtersOpen = ! filtersOpen;
+
+      if (filtersOpen === false) {
+        filterControls.classList.add('d-none')
+        
+        openSVG.classList.remove('d-none');
+        closeSVG.classList.add('d-none');
+        return;
+      }
+      
+      filterControls.classList.remove('d-none');
+      
+      closeSVG.classList.remove('d-none');
+      openSVG.classList.add('d-none');
+    });
+  }
 </script>
