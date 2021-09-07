@@ -6,5 +6,8 @@
   <div class="overlay-bg"></div>
   <div class="position-absolute fw-bold top-0 start-0 w-100 h-100 p-3 text-white link-reset">
     {{self.title}}
+    <time class="d-block font-monospace opacity-8 text-uppercase small"  datetime="{{ self.first_published_at|date:"Y-m-d" }}">
+      {{ self.first_published_at|date:"d E Y" }}
+    </time>
   </div>
 </div>
