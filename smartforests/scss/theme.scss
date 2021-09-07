@@ -50,12 +50,12 @@ $container-max-widths: (
 );
 
 // Fonts
-
 @font-face {
   font-family: "MarrSans";
   font-weight: 400;
   src: url("../fonts/MarrSans-Regular.ttf") format("truetype");
 }
+
 @font-face {
   font-family: "MarrSans";
   font-weight: 500;
@@ -90,7 +90,20 @@ $font-family-sans-serif: MarrSans, system-ui, "Segoe UI", Roboto,
   "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
   "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
-// Merge with bootstrap
+// Spacers
+$spacer: 1rem;
+$spacers: (
+  0: 0,
+  1: 5px,
+  2: 10px,
+  3: 20px,
+  4: 30px,
+  5: 40px,
+  6: 50px,
+  7: 90px,
+);
+
+// Merge with Bootstrap
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
 

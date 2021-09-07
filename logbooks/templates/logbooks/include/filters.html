@@ -1,21 +1,59 @@
 {% load ckdjango_tags %}
 
 <div class="p-3 mt-5">
-  <h3 class="fw-bold">Tags</h3>
-  
-  {% for letter, tags in tags %}
-    <h4 class="fw-normal font-monospace fs-7 mb-0">{{letter}}</h4>
-    <div class="font-monospace pb-3 fs-7">
-      {% for tag in tags %}
-        <div>
-          <a
-            class="text-capitalize badge rounded-pill bg-white m-1 p-1 link-reset"
-            href="{% qs_link 'filter' tag.slug %}"
-          >
-            {{tag}}
-          </a>
-        </div>
-      {% endfor %}
-    </div>
-  {% endfor %}
+  <div class="mb-7">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" id="close-svg">
+      <path d="M7.00033 2.33334L7.82283 3.15584L4.56783 6.41668H11.667V7.58334H4.56783L7.82283 10.8442L7.00033 11.6667L2.33366 7.00001L7.00033 2.33334Z" fill="#043003"/>
+    </svg>
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" class="d-none" id="open-svg">
+      <path d="M7.00016 2.33334L6.17766 3.15584L9.43266 6.41668H2.3335V7.58334H9.43266L6.17766 10.8442L7.00016 11.6667L11.6668 7.00001L7.00016 2.33334Z" fill="#043003"/>
+    </svg>
+    <a href="" id="filter-toggle">Filters</a>
+  </div>
+  <div id="filter-controls">
+    <h3 class="fw-bold">Tags</h3>
+    
+    {% for letter, tags in tags %}
+      <h4 class="fw-normal font-monospace fs-7 mb-0">{{letter}}</h4>
+      <div class="font-monospace pb-3 fs-7">
+        {% for tag in tags %}
+          <div>
+            <a
+              class="text-capitalize badge rounded-pill bg-white m-1 p-1 link-reset"
+              href="{% qs_link 'filter' tag.slug %}"
+            >
+              {{tag}}
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
 </div>
+<script>
+  const toggleFilters = document.getElementById('filter-toggle');
+  
+  const filterControls = document.getElementById('filter-controls');
+
+  const openSVG = document.getElementById('open-svg');
+  const closeSVG = document.getElementById('close-svg');
+
+  let filtersOpen = true;
+  
+  toggleFilters.addEventListener('click', (event)=> {
+    event.preventDefault();
+    
+    filtersOpen = ! filtersOpen;
+
+    if (filtersOpen === false) {
+      filterControls.classList.add('d-none');
+      openSVG.classList.remove('d-none');
+      closeSVG.classList.add('d-none');
+      return;
+    }
+    
+    filterControls.classList.remove('d-none');
+    closeSVG.classList.remove('d-none');
+    openSVG.classList.add('d-none');
+  });
+</script>
