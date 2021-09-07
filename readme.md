@@ -49,6 +49,7 @@ They both run .bin in ./.bin to configure their environments and install depende
 ### Seed content
 
 ```
-python manage.py seed --storysize=2
-
+python manage.py seed
 ```
+
+Run `python manage.py seed --help` or check [source file](./smartforests/management/commands/seed.py) for options.
