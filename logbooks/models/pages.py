@@ -115,7 +115,6 @@ class StoryPage(Page):
                 FieldPanel('coordinates')
             ],
             heading="Geographical data",
-            classname="collapsible collapsed"
         ),
         StreamFieldPanel('body'),
     ]
