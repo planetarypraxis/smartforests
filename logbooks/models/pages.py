@@ -77,6 +77,10 @@ class ImageBlock(blocks.StructBlock):
 
 
 class StoryPage(Page):
+    class Meta:
+        verbose_name = "Logbook Entry"
+        verbose_name_plural = "Logbook Entries"
+
     @classmethod
     def content_type_id(cls):
         return ContentType.objects.get_for_model(cls).id
