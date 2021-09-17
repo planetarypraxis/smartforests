@@ -50,6 +50,9 @@ class ImportantPages(BaseSetting):
 
 
 class StoryIndexPage(ChildListMixin, Page):
+    class Meta:
+        verbose_name = "Logbook entries index page"
+
     show_in_menus_default = True
     parent_page_types = ['home.HomePage']
     subpage_types = ['logbooks.StoryPage']
