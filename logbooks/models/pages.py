@@ -201,6 +201,8 @@ class LogbookPage(ChildListMixin, Page):
     subpage_types = []
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
     description = RichTextField()
+    geographical_location = CharField(max_length=250, null=True, blank=True)
+    coordinates = geo.PointField(null=True, blank=True)
 
     content_panels = [
         FieldPanel('title', classname="full title"),
