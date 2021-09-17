@@ -2,10 +2,14 @@
 <article class='row row-cols-1 gy-2'>
   <header class='col'>
     <section class='caption text-grey fw-lighter'>
-      <div>Added by {{ self.owner }}</div>
-      <time class='d-block'  datetime="{{ self.first_published_at|date:"Y-m-d" }}">
-        {{ self.first_published_at|date:"d E Y" }}
-      </time>
+      <div class="d-flex">
+        <div class="mr-3">
+          Added by {% if self.owner.first_name and self.owner.last_name %}{{ self.owner.first_name }} {{ self.owner.last_name }}{% else %}{{ self.owner }}{% endif %}
+        </div>
+        <time datetime="{{ self.first_published_at|date:"Y-m-d" }}">
+          {{ self.first_published_at|date:"d E Y" }}
+        </time>
+      </div>
       {% if self.geographical_location %}
         <div>{{ self.geographical_location }}</div>
       {% endif %}

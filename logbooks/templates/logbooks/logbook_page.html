@@ -20,6 +20,15 @@
         {{self.description|richtext}}
       </div>
       {% endif %}
+      <section class='caption text-grey fw-lighter'>
+        <div>Added by {% if self.owner.first_name and self.owner.last_name %}{{ self.owner.first_name }} {{ self.owner.last_name }}{% else %}{{ self.owner }}{% endif %}</div>
+        <time class='d-block'  datetime="{{ self.first_published_at|date:"Y-m-d" }}">
+          Last edited {{ self.last_published_at|date:"d E Y" }}
+        </time>
+        {% if self.geographical_location %}
+          <div>{{ self.geographical_location }}</div>
+        {% endif %}
+      </section>
     </header>
 
     <section class='col container gx-0 py-6'>
@@ -35,7 +44,7 @@
 </main>
 {% endblock %}
 
-<!-- The masonary component doesn't get on with the flex: 1 we usually stick at the bottom of the page -->
+<!-- The Masonry component doesn't get on with the flex: 1 we usually stick at the bottom of the page -->
 {% block spacer %}
 {% endblock %}
 
