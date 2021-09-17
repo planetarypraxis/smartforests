@@ -135,7 +135,7 @@ class LogbookPageIndex(models.Model):
         query = {'metadata__' + key: value for key, value in filter.items()}
         pages = start.filter(**query)
 
-        return Page.objects.filter(index_entry__in=pages).specific()
+        return Page.objects.filter(index_entry__in=pages)
 
 
 def or_all(terms):

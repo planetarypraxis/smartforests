@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db.models.fields import CharField
 from commonknowledge.wagtail.helpers import get_children_of_type
 from logbooks.models.helpers import group_by_title
@@ -91,9 +92,11 @@ class StoryPage(Page):
     # Streamfield of options here
     body = StreamField([
         ('text', blocks.RichTextBlock(features=[
-         'h3', 'bold', 'italic', 'link', 'ol', 'ul'])),
+            'h3', 'bold', 'italic', 'link', 'ol', 'ul'
+        ], template='logbooks/story_blocks/text.html')),
         ('quote', QuoteBlock()),
-        ('embed', blocks.RichTextBlock(features=['embed'])),
+        ('embed', blocks.RichTextBlock(features=[
+         'embed'], template='logbooks/story_blocks/text.html')),
         ('image', ImageBlock()),
     ])
 
@@ -166,7 +169,8 @@ class LogbookIndexPage(ChildListMixin, Page):
             except Tag.DoesNotExist:
                 pass
 
-        return LogbookPageIndex.filter_pages(**filter)
+        return LogbookPageIndex.filter_pages(
+            **filter, content_type=LogbookPage.content_type_id()).specific()
 
     @django_cached_model('logbooks.LogbookIndexPage.relevant_tags')
     def relevant_tags(self):
@@ -180,6 +184,10 @@ class LogbookIndexPage(ChildListMixin, Page):
 
 
 class LogbookPage(ChildListMixin, Page):
+    @classmethod
+    def content_type_id(cls):
+        return ContentType.objects.get_for_model(cls).id
+
     objects = IndexedPageManager()
     show_in_menus_default = True
     parent_page_types = ['logbooks.LogbookIndexPage']
@@ -200,7 +208,10 @@ class LogbookPage(ChildListMixin, Page):
         if tag_filter is not None:
             filter['tags__contains'] = tag_filter
 
-        return self.index_entry.get_related_pages(content_type=StoryPage.content_type_id(), **filter)
+        stories = self.index_entry.get_related_pages(
+            content_type=StoryPage.content_type_id(), **filter).order_by('-first_published_at').specific()
+
+        return stories
 
     @property
     def thumbnail_image(self):
@@ -211,7 +222,7 @@ class LogbookPage(ChildListMixin, Page):
         stories = index_data.get_related_pages(
             content_type=ContentType.objects.get_for_model(
                 StoryPage).id
-        )
+        ).specific()
 
         images = tuple(
             x.cover_image() for x in stories if x.cover_image() is not None)
