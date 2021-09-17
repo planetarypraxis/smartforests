@@ -200,6 +200,7 @@ class LogbookPage(ChildListMixin, Page):
     subpage_types = []
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
     description = RichTextField()
+
     geographical_location = CharField(max_length=250, null=True, blank=True)
     coordinates = geo.PointField(null=True, blank=True)
 
@@ -207,6 +208,13 @@ class LogbookPage(ChildListMixin, Page):
         FieldPanel('title', classname="full title"),
         FieldPanel('description'),
         FieldPanel('tags'),
+        MultiFieldPanel(
+            [
+                FieldPanel('geographical_location'),
+                FieldPanel('coordinates')
+            ],
+            heading="Geographical data",
+        ),
     ]
 
     def get_child_list_queryset(self, request):
