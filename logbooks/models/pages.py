@@ -41,7 +41,7 @@ class ImportantPages(BaseSetting):
     logbooks_index_page = models.ForeignKey(
         'logbooks.LogbookIndexPage', null=True, on_delete=models.SET_NULL, related_name='+')
     stories_index_page = models.ForeignKey(
-        'logbooks.StoryIndexPage', null=True, on_delete=models.SET_NULL, related_name='+')
+        'logbooks.StoryIndexPage', null=True, on_delete=models.SET_NULL, related_name='+', verbose_name="Logbook Entries Index Page")
 
     panels = [
         PageChooserPanel('logbooks_index_page'),
@@ -77,6 +77,10 @@ class ImageBlock(blocks.StructBlock):
 
 
 class StoryPage(Page):
+    class Meta:
+        verbose_name = "Logbook Entry"
+        verbose_name_plural = "Logbook Entries"
+
     @classmethod
     def content_type_id(cls):
         return ContentType.objects.get_for_model(cls).id
