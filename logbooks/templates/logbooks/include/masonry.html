@@ -31,42 +31,57 @@
 <script>
   // TODO: Pull this out into a js file. Turbo seems to re-run inline scripts on page transitions.
   if (!window.masonryListenerAttached) {
-    window.masonryListenerAttached = true
+    window.masonryListenerAttached = true;
+    
+    const checkMasonryLoadedAndSetup = () => {
+      const setupMasonryGrid = () => {
+        const $grid = $('.grid').masonry({
+          itemSelector: 'none', // select none at first
+          columnWidth: '.grid__col-sizer',
+          gutter: '.grid__gutter-sizer',
+          percentPosition: true,
+          history: false,
+          stagger: 30,
+          // nicer reveal transition
+          visibleStyle: { transform: 'translateY(0)', opacity: 1 },
+          hiddenStyle: { transform: 'translateY(100px)', opacity: 0 },
+        });
 
-    document.documentElement.addEventListener('turbo:load', () => {
-      const $grid = $('.grid').masonry({
-        itemSelector: 'none', // select none at first
-        columnWidth: '.grid__col-sizer',
-        gutter: '.grid__gutter-sizer',
-        percentPosition: true,
-        history: false,
-        stagger: 30,
-        // nicer reveal transition
-        visibleStyle: { transform: 'translateY(0)', opacity: 1 },
-        hiddenStyle: { transform: 'translateY(100px)', opacity: 0 },
-      });
+        // get Masonry instance
+        const msnry = $grid.data('masonry');
 
-      // get Masonry instance
-      const msnry = $grid.data('masonry');
+        // initial items reveal
+        $grid.imagesLoaded( function() {
+          $grid.removeClass('are-images-unloaded');
+          $grid.masonry( 'option', { itemSelector: '.grid__item' });
+          const $items = $grid.find('.grid__item');
+          $grid.masonry( 'appended', $items );
+        });
 
-      // initial items reveal
-      $grid.imagesLoaded( function() {
-        $grid.removeClass('are-images-unloaded');
-        $grid.masonry( 'option', { itemSelector: '.grid__item' });
-        const $items = $grid.find('.grid__item');
-        $grid.masonry( 'appended', $items );
-      });
+        //-------------------------------------//
+        // init Infinte Scroll
 
-      //-------------------------------------//
-      // init Infinte Scroll
+        $grid.infiniteScroll({
+          path: "{% next_page_path %}",
+          append: '.grid__item',
+          outlayer: msnry,
+          status: '.page-load-status',
+          checkLastPage: '[data-lastpage]'
+        });
+      }
 
-      $grid.infiniteScroll({
-        path: "{% next_page_path %}",
-        append: '.grid__item',
-        outlayer: msnry,
-        status: '.page-load-status',
-        checkLastPage: '[data-lastpage]'
-      });
-    })
+      if (! $().masonry) {
+        window.masonryListenerAttached = false;
+        console.log('Masonry not yet loaded, waiting');
+        
+        window.setTimeout(checkMasonryLoadedAndSetup, 200);
+        return;
+      } else {
+        console.log('Masonry loaded');
+        setupMasonryGrid();
+      }
+    }
+
+    document.documentElement.addEventListener('turbo:load', checkMasonryLoadedAndSetup)
   }
 </script>
