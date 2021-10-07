@@ -1,6 +1,6 @@
 from functools import reduce
 from django.contrib.contenttypes.models import ContentType
-from logbooks.models.pages import LogbookIndexPage, LogbookPage, StoryPage
+from logbooks.models.pages import LogbookIndexPage, LogbookPage, LogbookEntryPage
 from django.dispatch import receiver
 from django.db import models
 from django.db.models.signals import post_save
@@ -57,8 +57,8 @@ class LogbookPageIndex(models.Model):
         return idx
 
     @staticmethod
-    @receiver(post_save, sender=StoryPage)
-    def handle_story_updated(sender, instance: StoryPage, *args, **kwargs):
+    @receiver(post_save, sender=LogbookEntryPage)
+    def handle_story_updated(sender, instance: LogbookEntryPage, *args, **kwargs):
         idx = LogbookPageIndex.get_for_instance(instance)
 
         idx.update_tags(instance)
@@ -68,12 +68,12 @@ class LogbookPageIndex(models.Model):
 
     @staticmethod
     @receiver(post_save, sender=LogbookPage)
-    def handle_logbook_updated(sender, instance: StoryPage, *args, **kwargs):
+    def handle_logbook_updated(sender, instance: LogbookEntryPage, *args, **kwargs):
         idx = LogbookPageIndex.get_for_instance(instance)
 
         idx.update_tags(instance)
-        idx.update_pages_related_to(StoryPage)
-        idx.update_related_pages(StoryPage)
+        idx.update_pages_related_to(LogbookEntryPage)
+        idx.update_related_pages(LogbookEntryPage)
         idx.save()
 
     def get_related_page_indexes(self, related_type):

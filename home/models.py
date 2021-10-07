@@ -10,7 +10,7 @@ from commonknowledge.wagtail.models import ChildListMixin
 class HomePage(ChildListMixin, Page):
     show_in_menus_default = True
     subpage_types = [
-        'logbooks.StoryIndexPage',
+        'stories.StoryIndexPage',
         'logbooks.LogbookIndexPage',
         'home.InformationPage'
     ]

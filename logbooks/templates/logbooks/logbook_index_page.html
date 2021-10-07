@@ -6,7 +6,7 @@
 <div class="container-fluid py-4">
   <div class="row">
     <div class="col-4 col-md-3 col-lg-2">
-      {% include "logbooks/include/filters.html" with tags=self.relevant_tags %}
+      {% include "include/filters.html" with tags=self.relevant_tags %}
     </div>
     <div class="col">
       <div class="mb-5">
@@ -21,7 +21,7 @@
           {% endif %}
         </div>
       </div>
-      {% include "logbooks/include/masonry.html" with contents=child_page_list class="compact" %}
+      {% include "include/masonry.html" with contents=child_page_list class="compact" %}
     </div>
   </div>
 </div>

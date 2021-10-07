@@ -1,7 +1,34 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from wagtail.images.models import AbstractImage, AbstractRendition, Image
+from wagtail.images.models import AbstractImage, AbstractRendition
 from wagtail.documents.models import Document, AbstractDocument
+from wagtail.contrib.settings.models import BaseSetting, register_setting
+from wagtail.admin.edit_handlers import PageChooserPanel
+from wagtail.snippets.models import register_snippet
+from modelcluster.fields import ParentalKey
+from taggit.models import TaggedItemBase
+from wagtail.snippets.models import register_snippet
+from wagtail.core.models import Page
+
+
+@register_snippet
+class AtlasTag(TaggedItemBase):
+    content_object = ParentalKey(
+        Page, related_name='tagged_items', on_delete=models.CASCADE)
+
+
+# CMS settings for canonical index pages
+@register_setting
+class ImportantPages(BaseSetting):
+    logbooks_index_page = models.ForeignKey(
+        'logbooks.LogbookIndexPage', null=True, on_delete=models.SET_NULL, related_name='+')
+    stories_index_page = models.ForeignKey(
+        'stories.StoryIndexPage', null=True, on_delete=models.SET_NULL, related_name='+')
+
+    panels = [
+        PageChooserPanel('logbooks_index_page'),
+        PageChooserPanel('stories_index_page'),
+    ]
 
 
 class User(AbstractUser):

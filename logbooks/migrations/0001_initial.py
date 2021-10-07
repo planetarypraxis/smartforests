@@ -22,9 +22,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='AtlasTag',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('content_object', modelcluster.fields.ParentalKey(on_delete=django.db.models.deletion.CASCADE, related_name='tagged_items', to='wagtailcore.page')),
-                ('tag', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='logbooks_atlastag_items', to='taggit.tag')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
+                ('content_object', modelcluster.fields.ParentalKey(
+                    on_delete=django.db.models.deletion.CASCADE, related_name='tagged_items', to='wagtailcore.page')),
+                ('tag', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='smartforests_atlastag_items', to='taggit.tag')),
             ],
             options={
                 'abstract': False,
@@ -33,7 +36,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='LogbookIndexPage',
             fields=[
-                ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
+                ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE,
+                 parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
             ],
             options={
                 'abstract': False,
@@ -43,7 +47,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='StoryIndexPage',
             fields=[
-                ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
+                ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE,
+                 parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
             ],
             options={
                 'abstract': False,
@@ -53,9 +58,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='StoryPage',
             fields=[
-                ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
-                ('body', wagtail.core.fields.StreamField([('text', wagtail.core.blocks.RichTextBlock(features=['h3', 'bold', 'italic', 'link', 'ol', 'ul'])), ('quote', wagtail.core.blocks.StructBlock([('text', wagtail.core.blocks.RichTextBlock(features=['bold', 'italic', 'link'])), ('author', wagtail.core.blocks.CharBlock(required=False)), ('date', wagtail.core.blocks.DateBlock(required=False)), ('link', wagtail.core.blocks.URLBlock(required=False))])), ('embed', wagtail.core.blocks.RichTextBlock(features=['embed'])), ('image', wagtail.core.blocks.StructBlock([('caption', wagtail.core.blocks.CharBlock()), ('image', wagtail.images.blocks.ImageChooserBlock())]))])),
-                ('tags', modelcluster.contrib.taggit.ClusterTaggableManager(blank=True, help_text='A comma-separated list of tags.', through='logbooks.AtlasTag', to='taggit.Tag', verbose_name='Tags')),
+                ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE,
+                 parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
+                ('body', wagtail.core.fields.StreamField([('text', wagtail.core.blocks.RichTextBlock(features=['h3', 'bold', 'italic', 'link', 'ol', 'ul'])), ('quote', wagtail.core.blocks.StructBlock([('text', wagtail.core.blocks.RichTextBlock(features=['bold', 'italic', 'link'])), ('author', wagtail.core.blocks.CharBlock(required=False)), (
+                    'date', wagtail.core.blocks.DateBlock(required=False)), ('link', wagtail.core.blocks.URLBlock(required=False))])), ('embed', wagtail.core.blocks.RichTextBlock(features=['embed'])), ('image', wagtail.core.blocks.StructBlock([('caption', wagtail.core.blocks.CharBlock()), ('image', wagtail.images.blocks.ImageChooserBlock())]))])),
+                ('tags', modelcluster.contrib.taggit.ClusterTaggableManager(
+                    blank=True, help_text='A comma-separated list of tags.', through='logbooks.AtlasTag', to='taggit.Tag', verbose_name='Tags')),
             ],
             options={
                 'abstract': False,
@@ -65,8 +73,10 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='LogbookPage',
             fields=[
-                ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
-                ('tags', modelcluster.contrib.taggit.ClusterTaggableManager(blank=True, help_text='A comma-separated list of tags.', through='logbooks.AtlasTag', to='taggit.Tag', verbose_name='Tags')),
+                ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE,
+                 parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
+                ('tags', modelcluster.contrib.taggit.ClusterTaggableManager(
+                    blank=True, help_text='A comma-separated list of tags.', through='logbooks.AtlasTag', to='taggit.Tag', verbose_name='Tags')),
             ],
             options={
                 'abstract': False,

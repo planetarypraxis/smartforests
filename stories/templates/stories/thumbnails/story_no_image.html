@@ -1,0 +1,8 @@
+<div class="card">
+  <div class="card-body">
+    <div class="fw-bold">{{self.title}}</div>
+    <time class="d-block font-monospace opacity-8 text-uppercase small"  datetime="{{ self.first_published_at|date:"Y-m-d" }}">
+      {{ self.first_published_at|date:"d E Y" }}
+    </time>
+  </div>
+</div>

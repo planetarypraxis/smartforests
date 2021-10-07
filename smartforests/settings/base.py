@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'smartforests',
     'home',
     'logbooks',
+    'stories',
     'search',
 
     'commonknowledge.bootstrap',
