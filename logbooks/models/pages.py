@@ -86,7 +86,6 @@ class StoryPage(Page):
     class Meta:
         verbose_name = "Logbook Entry"
         verbose_name_plural = "Logbook Entries"
-        ordering = ['first_published_at']
 
     @classmethod
     def content_type_id(cls):
