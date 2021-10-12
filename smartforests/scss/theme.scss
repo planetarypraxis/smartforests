@@ -2,6 +2,8 @@
 $dark-green: #043003;
 $mid-green: #026302;
 $bright-green: #25ed08;
+$faded-green: #71B340;
+
 $yellow: #ffff9b;
 $soft-green: #c7eac6;
 $grey: #545454;
@@ -15,6 +17,7 @@ $custom-colors: (
   dark-green: $dark-green,
   mid-green: $mid-green,
   bright-green: $bright-green,
+  faded-green: $faded-green,
   yellow: $yellow,
   soft-green: $soft-green,
   grey: $grey,
@@ -89,6 +92,7 @@ $font-family-monospace: Monaco, SFMono-Regular, Menlo, Consolas,
 $font-family-sans-serif: MarrSans, system-ui, "Segoe UI", Roboto,
   "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
   "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+$font-family-serif: Georgia, Times, "Times New Roman", serif;
 
 // Spacers
 $spacer: 1rem;
