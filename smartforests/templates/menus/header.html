@@ -2,23 +2,8 @@
 
 <nav class="navbar navbar-expand-lg navbar-light h-48px bg-faded-yellow">
     <div class="container-fluid">
-        <a class="text-black fw-normal text-decoration-none font-serif d-flex align-items-center" href="/">
+        <a class="navbar-brand text-black fw-normal text-decoration-none font-serif d-flex align-items-center" href="/">
             <span>Smart</span><span class="logo-text text-faded-green"></span><span>Forests</span>
         </a>
-
-        <div>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav mr-auto">
-                {% for item in menu_items %}
-                    <li class="nav-item {{ item.active_class }}">
-                        <a class="nav-link text-dark-green fw-normal" href="{{ item.href }}">{{ item.text }}</a>
-                        <!-- {% if item.has_children_in_menu %}
-                            {% sub_menu item %}
-                        {% endif %} -->
-                    </li>
-                {% endfor %}
-              </ul>
-            </div>
-        </div>
     </div>
 </nav>
