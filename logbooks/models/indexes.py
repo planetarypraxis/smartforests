@@ -61,7 +61,6 @@ class LogbookPageIndex(models.Model):
     def handle_story_updated(sender, instance: LogbookEntryPage, *args, **kwargs):
         idx = LogbookPageIndex.get_for_instance(instance)
 
-        idx.update_tags(instance)
         idx.update_pages_related_to(LogbookPage)
         idx.update_related_pages(LogbookPage)
         idx.save()

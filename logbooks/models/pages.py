@@ -19,6 +19,7 @@ from wagtail.core import blocks
 from wagtail.contrib.settings.models import BaseSetting, register_setting
 from commonknowledge.django.cache import django_cached_model
 from django.contrib.gis.db import models as geo
+from smartforests.models import AtlasTag
 
 
 class IndexedPageManager(PageManager):
@@ -34,7 +35,7 @@ class QuoteBlock(blocks.StructBlock):
     link = blocks.URLBlock(required=False)
 
     class Meta:
-        template = 'stories/story_blocks/quote.html'
+        template = 'logbooks/entry_blocks/quote.html'
         icon = 'quote'
 
 
@@ -43,14 +44,13 @@ class ImageBlock(blocks.StructBlock):
     caption = blocks.CharBlock()
 
     class Meta:
-        template = 'logbooks/story_blocks/image.html'
+        template = 'logbooks/entry_blocks/image.html'
         icon = 'image'
 
 
 class LogbookIndexPage(ChildListMixin, Page):
     page_size = 50
     show_in_menus_default = True
-    parent_page_types = ['home.HomePage']
     subpage_types = ['logbooks.LogbookPage']
 
     def get_child_list_queryset(self, request):
@@ -80,16 +80,16 @@ class LogbookIndexPage(ChildListMixin, Page):
         return context
 
 
-class LogbookPage(ChildListMixin, Page):
+class LogbookPage(Page):
     @classmethod
     def content_type_id(cls):
         return ContentType.objects.get_for_model(cls).id
 
     objects = IndexedPageManager()
     show_in_menus_default = True
-    parent_page_types = ['logbooks.LogbookIndexPage']
     subpage_types = ['logbooks.LogbookEntryPage']
     description = RichTextField()
+    tags = ClusterTaggableManager(through=AtlasTag, blank=True)
 
     geographical_location = CharField(max_length=250, null=True, blank=True)
     coordinates = geo.PointField(null=True, blank=True)
@@ -97,6 +97,7 @@ class LogbookPage(ChildListMixin, Page):
     content_panels = [
         FieldPanel('title', classname="full title"),
         FieldPanel('description'),
+        FieldPanel('tags'),
         MultiFieldPanel(
             [
                 FieldPanel('geographical_location'),
@@ -112,13 +113,10 @@ class LogbookPage(ChildListMixin, Page):
             return self.index_entry.thumbnail_image
 
     def regenerate_thumbnail(self, index_data):
-        stories = index_data.get_related_pages(
-            content_type=ContentType.objects.get_for_model(
-                LogbookEntryPage).id
-        ).specific()
+        entries = self.get_children().specific()
 
         images = tuple(
-            x.cover_image() for x in stories if x.cover_image() is not None)
+            x.cover_image() for x in entries if x.cover_image() is not None)
 
         return generate_thumbnail(images, fileslug=f'logbookthumbnail_{self.slug}')
 
@@ -145,7 +143,6 @@ class LogbookEntryPage(Page):
 
     objects = IndexedPageManager()
     show_in_menus_default = False
-    parent_page_types = ['logbooks.LogbookPage']
     subpage_types = []
     geographical_location = CharField(max_length=250, null=True, blank=True)
     coordinates = geo.PointField(null=True, blank=True)
@@ -154,14 +151,15 @@ class LogbookEntryPage(Page):
     body = StreamField([
         ('text', blocks.RichTextBlock(features=[
             'h3', 'bold', 'italic', 'link', 'ol', 'ul'
-        ], template='logbooks/story_blocks/text.html')),
+        ], template='logbooks/entry_blocks/text.html')),
         ('quote', QuoteBlock()),
         ('embed', blocks.RichTextBlock(features=[
-         'embed'], template='logbooks/story_blocks/text.html')),
+         'embed'], template='logbooks/entry_blocks/text.html')),
         ('image', ImageBlock()),
     ])
 
     content_panels = Page.content_panels + [
+        StreamFieldPanel('body'),
         MultiFieldPanel(
             [
                 FieldPanel('geographical_location'),
@@ -169,7 +167,6 @@ class LogbookEntryPage(Page):
             ],
             heading="Geographical data",
         ),
-        StreamFieldPanel('body'),
     ]
 
     def regenerate_thumbnail(self, *args):
@@ -204,6 +201,7 @@ class LogbookEntryPage(Page):
         })
 
     def content_html(self):
-        return render_to_string('logbooks/story.html', {
+        print(self.title)
+        return render_to_string('logbooks/logbook_entry.html', {
             'self': self
         })

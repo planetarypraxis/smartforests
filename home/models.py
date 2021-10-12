@@ -14,13 +14,12 @@ class HomePage(ChildListMixin, Page):
         'logbooks.LogbookIndexPage',
         'home.InformationPage'
     ]
-    pass
 
 
 class InformationPage(Page):
     show_in_menus_default = True
-    parent_page_types = [
-        'home.HomePage',
+
+    subpage_types = [
         'home.InformationPage'
     ]
 

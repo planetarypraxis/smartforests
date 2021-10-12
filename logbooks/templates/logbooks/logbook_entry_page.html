@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% load ckdjango_tags %}
+
+{% block content %}
+{% include 'logbooks/logbook_entry.html' with entry=page %}
+{% endblock %}

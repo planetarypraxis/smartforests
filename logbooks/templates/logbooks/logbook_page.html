@@ -7,7 +7,6 @@
     <header class='col row mt-0 gy-3 gx-0'>
       <h1 class='mt-6'>{{self.title}}</h1>
       <div>
-        <span class='fs-7 align-baseline'>Entries tagged</span>
         {% for tag in self.tags.all %}
           {% include 'logbooks/tag_label.html' with tag=tag %}
           {% if not forloop.last %}
@@ -33,9 +32,9 @@
 
     <section class='col container gx-0 py-6'>
       <div class='row row-cols-1 gx-0 gy-6'>
-      {% for entry in child_page_list %}
+      {% for entry in self.get_children %}
         <div class="col">
-          {{entry.content_html}}
+          {% include 'logbooks/logbook_entry.html' with entry=entry %}
         </div>
       {% endfor %}
       </div>

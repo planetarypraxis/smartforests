@@ -32,7 +32,6 @@ class StoryIndexPage(ChildListMixin, Page):
         verbose_name = "Stories index page"
 
     show_in_menus_default = True
-    parent_page_types = ['home.HomePage']
     subpage_types = ['stories.StoryPage']
 
 
@@ -68,10 +67,11 @@ class StoryPage(Page):
 
     objects = IndexedPageManager()
     show_in_menus_default = False
-    parent_page_types = ['stories.StoryIndexPage']
     subpage_types = []
     geographical_location = CharField(max_length=250, null=True, blank=True)
     coordinates = geo.PointField(null=True, blank=True)
+    tags = ClusterTaggableManager(through=AtlasTag, blank=True)
+    description = RichTextField()
 
     # Streamfield of options here
     body = StreamField([
@@ -85,14 +85,16 @@ class StoryPage(Page):
     ])
 
     content_panels = Page.content_panels + [
+        FieldPanel('description'),
+        FieldPanel('tags'),
+        StreamFieldPanel('body'),
         MultiFieldPanel(
             [
                 FieldPanel('geographical_location'),
                 FieldPanel('coordinates')
             ],
             heading="Geographical data",
-        ),
-        StreamFieldPanel('body'),
+        )
     ]
 
     def regenerate_thumbnail(self, *args):

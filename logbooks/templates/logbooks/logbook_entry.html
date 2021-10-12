@@ -4,24 +4,24 @@
     <section class='caption text-grey fw-lighter'>
       <div class="d-flex">
         <div class="mr-3">
-          Added by {% if self.owner.first_name and self.owner.last_name %}{{ self.owner.first_name }} {{ self.owner.last_name }}{% else %}{{ self.owner }}{% endif %}
+          Added by {% if entry.owner.first_name and entry.owner.last_name %}{{ entry.owner.first_name }} {{ entry.owner.last_name }}{% else %}{{ entry.owner }}{% endif %}
         </div>
-        <time datetime="{{ self.first_published_at|date:"Y-m-d" }}">
-          {{ self.first_published_at|date:"d E Y" }}
+        <time datetime="{{ entry.first_published_at|date:"Y-m-d" }}">
+          {{ entry.first_published_at|date:"d E Y" }}
         </time>
       </div>
-      {% if self.geographical_location %}
-        <div>{{ self.geographical_location }}</div>
+      {% if entry.geographical_location %}
+        <div>{{ entry.geographical_location }}</div>
       {% endif %}
     </section>
   </header>
-  <h3 class='fs-4 fw-bolder'><a href="{{ self.url }}" class='text-reset text-decoration-none'>
-    {{ self.title }}
+  <h3 class='fs-4 fw-bolder'><a href="{{ entry.url }}" class='text-reset text-decoration-none'>
+    {{ entry.title }}
   </a></h3>
   <section class='row gy-3 my-0'>
-  {% for block in self.body %}  
-      {% with next_block=self.body|next:forloop.counter0 %}
-      {% with previous_block=self.body|previous:forloop.counter0 %}
+  {% for block in entry.body %}  
+      {% with next_block=entry.body|next:forloop.counter0 %}
+      {% with previous_block=entry.body|previous:forloop.counter0 %}
       <section class="
         block-{{ block.block_type }}
         col
@@ -43,7 +43,7 @@
   {% endfor %}
   </section>
   <footer class='col'>
-    {% for tag in self.tags.all %}
+    {% for tag in entry.tags.all %}
       {% include 'logbooks/tag_label.html' with tag=tag %}
     {% endfor %}
   </footer>
