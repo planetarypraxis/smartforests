@@ -19,7 +19,6 @@ from wagtail.core import blocks
 from wagtail.contrib.settings.models import BaseSetting, register_setting
 from commonknowledge.django.cache import django_cached_model
 from django.contrib.gis.db import models as geo
-from smartforests.models import AtlasTag
 
 
 class IndexedPageManager(PageManager):
@@ -90,7 +89,6 @@ class LogbookPage(ChildListMixin, Page):
     show_in_menus_default = True
     parent_page_types = ['logbooks.LogbookIndexPage']
     subpage_types = ['logbooks.LogbookEntryPage']
-    tags = ClusterTaggableManager(through=AtlasTag, blank=True)
     description = RichTextField()
 
     geographical_location = CharField(max_length=250, null=True, blank=True)
@@ -99,7 +97,6 @@ class LogbookPage(ChildListMixin, Page):
     content_panels = [
         FieldPanel('title', classname="full title"),
         FieldPanel('description'),
-        FieldPanel('tags'),
         MultiFieldPanel(
             [
                 FieldPanel('geographical_location'),
@@ -139,8 +136,8 @@ class LogbookPage(ChildListMixin, Page):
 
 class LogbookEntryPage(Page):
     class Meta:
-        verbose_name = "Story"
-        verbose_name_plural = "Stories"
+        verbose_name = "Logbook Entry"
+        verbose_name_plural = "Logbook Entries"
 
     @classmethod
     def content_type_id(cls):
