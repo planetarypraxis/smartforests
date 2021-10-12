@@ -89,8 +89,17 @@
 
 .logo-text {
   font-family: Arial;
+  font-size: 36px;
   font-style: normal;
   font-weight: normal;
+}
+
+.logo-text::before {
+  display: inline-block;
+  height: 100%;
+  vertical-align: baseline;
+  content: ' ◍ ';
+  vertical-align: -0.1em;
 }
 
 .text-black {
