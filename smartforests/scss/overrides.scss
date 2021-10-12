@@ -75,17 +75,15 @@ h4 {
   font-size: 12px;
 }
 
-.nav-link {
-  font-weight: bold;
-  color: $secondary;
-  padding: 0 !important;
-
-  &.active {
-    color: $dark;
-    border-bottom: 2px solid $primary;
-  }
+.nav-link:hover {
+  text-decoration: underline;
 }
 
 .turbo-progress-bar {
   background: $dark-green;
+}
+
+.dropdown-toggle.show {
+  @extend .shadow-sm;
+  background-color: $off-white;
 }
