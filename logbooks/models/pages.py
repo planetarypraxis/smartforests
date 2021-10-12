@@ -15,6 +15,7 @@ from commonknowledge.wagtail.models import ChildListMixin
 from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.images.blocks import ImageChooserBlock
+from wagtail.embeds.blocks import EmbedBlock
 from wagtail.core import blocks
 from wagtail.contrib.settings.models import BaseSetting, register_setting
 from commonknowledge.django.cache import django_cached_model
@@ -102,8 +103,7 @@ class StoryPage(Page):
             'h3', 'bold', 'italic', 'link', 'ol', 'ul'
         ], template='logbooks/story_blocks/text.html')),
         ('quote', QuoteBlock()),
-        ('embed', blocks.RichTextBlock(features=[
-         'embed'], template='logbooks/story_blocks/text.html')),
+        ('embed', EmbedBlock(template='logbooks/story_blocks/embed.html')),
         ('image', ImageBlock()),
     ])
 
