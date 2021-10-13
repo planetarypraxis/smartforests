@@ -2,27 +2,27 @@
 {% load ckdjango_tags ckbootstrap_tags wagtailcore_tags %}
 
 {% block content %}
-<main class='container-fluid' style='max-width: 680px;'>
-  <div class='row row-cols-1 gx-0'>
-    <header class='col row mt-0 gy-3 gx-0'>
-      <h1 class='mt-6'>{{self.title}}</h1>
+<main class="container-fluid" style="max-width: 680px;">
+  <div class="row row-cols-1 gx-0">
+    <header class="col row mt-0 gy-3 gx-0">
+      <h1 class="mt-6">{{self.title}}</h1>
       <div>
-        <span class='fs-7 align-baseline'>Entries tagged</span>
+        <span class="fs-7 align-baseline">Entries tagged</span>
         {% for tag in self.tags.all %}
-          {% include 'logbooks/tag_label.html' with tag=tag %}
+          {% include "logbooks/tag_label.html" with tag=tag %}
           {% if not forloop.last %}
-            <span class='fs-7 align-baseline'>or</span>
+            <span class="fs-7 align-baseline">or</span>
           {% endif %}
         {% endfor %}
       </div>
       {% if self.description %}
-      <div class='border-start border-dark ps-3 child-mb-0 lh-base'>
+      <div class="border-start border-dark ps-3 child-mb-0 lh-base">
         {{self.description|richtext}}
       </div>
       {% endif %}
-      <section class='caption text-grey fw-lighter'>
+      <section class="caption text-grey fw-lighter">
         <div>Added by {% if self.owner.first_name and self.owner.last_name %}{{ self.owner.first_name }} {{ self.owner.last_name }}{% else %}{{ self.owner }}{% endif %}</div>
-        <time class='d-block'  datetime="{{ self.first_published_at|date:"Y-m-d" }}">
+        <time class="d-block"  datetime="{{ self.first_published_at|date:"Y-m-d" }}">
           Last edited {{ self.last_published_at|date:"d E Y" }}
         </time>
         {% if self.geographical_location %}
@@ -31,8 +31,8 @@
       </section>
     </header>
 
-    <section class='col container gx-0 py-6'>
-      <div class='row row-cols-1 gx-0 gy-6'>
+    <section class="col container gx-0 py-6">
+      <div class="row row-cols-1 gx-0 gy-6">
       {% for entry in child_page_list %}
         <div class="col">
           {{entry.content_html}}
