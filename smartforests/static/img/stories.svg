@@ -1,5 +1,5 @@
-<svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg">
-<circle cx="14.1421" cy="14.1422" r="9" transform="rotate(-45 14.1421 14.1422)" stroke="#71B340" stroke-width="2"/>
-<line x1="8.07136" y1="8.07109" x2="20.7993" y2="20.799" stroke="#71B340" stroke-width="2"/>
-<line x1="8.07121" y1="20.2132" x2="20.7991" y2="7.48532" stroke="#71B340" stroke-width="2"/>
+<svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="10.1421" cy="10.1421" r="9" transform="rotate(-45 10.1421 10.1421)" stroke="#71B340" stroke-width="2"/>
+<line x1="4.07136" y1="4.07109" x2="16.7993" y2="16.799" stroke="#71B340" stroke-width="2"/>
+<line x1="4.07121" y1="16.2132" x2="16.7991" y2="3.48526" stroke="#71B340" stroke-width="2"/>
 </svg>
