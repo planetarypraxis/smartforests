@@ -1,4 +1,4 @@
-{% load menu_tags %}
+{% load menu_tags static %}
 
 <nav class="navbar navbar-expand-lg navbar-light h-48px bg-faded-yellow">
     <div class="container-fluid">
@@ -15,10 +15,30 @@
                   Overview
                 </a>
                 <ul class="dropdown-menu border-0 mt-0 bg-off-white shadow-sm" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item text-dark-green" href="#">Logbooks</a></li>
-                  <li><a class="dropdown-item text-dark-green" href="#">Stories</a></li>
-                  <li><a class="dropdown-item text-dark-green" href="#">Radio</a></li>
-                  <li><a class="dropdown-item text-dark-green" href="#">Map</a></li>
+                  <li>
+                    <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="#">
+                        <span>Logbooks</span>
+                        <img src="{% static "/img/logbooks.svg" %}" />
+                    </a>
+                  </li>
+                  <li>
+                      <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="#">
+                          <span>Stories</span>
+                          <img src="{% static "/img/stories.svg" %}" />
+                      </a>
+                  </li>
+                  <li>
+                      <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="#">
+                        <span>Radio</span>
+                        <img src="{% static "/img/radio.svg" %}" />
+                      </a>
+                  </li>
+                  <li>
+                      <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="#">
+                        <span>Map</span>
+                        <img src="{% static "/img/map.svg" %}" />
+                      </a>
+                  </li>
                   <li><a class="dropdown-item text-dark-green" href="#">Contributors</a></li>
                   <li><a class="dropdown-item text-dark-green" href="#">About</a></li>
                 </ul>
