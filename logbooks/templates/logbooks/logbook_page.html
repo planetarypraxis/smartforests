@@ -11,26 +11,7 @@
         {{self.description|richtext}}
       </div>
       {% endif %}
-      <section class='caption text-grey fw-lighter'>
-        <div>Added by {% if self.owner.first_name and self.owner.last_name %}{{ self.owner.first_name }} {{ self.owner.last_name }}{% else %}{{ self.owner }}{% endif %}</div>
-        <time class='d-block'  datetime="{{ self.first_published_at|date:"Y-m-d" }}">
-          Last edited {{ self.last_published_at|date:"d E Y" }}
-        </time>
-        {% if self.geographical_location %}
-          <div>{{ self.geographical_location }}</div>
-        {% endif %}
-      </section>
-      <div>
-        <span class="fs-7 align-baseline">Showing entries tagged</span>
-        {% for tag in self.tags.all %}
-          {% include "logbooks/tag_label.html" with tag=tag %}
-          {% if not forloop.last %}
-            <span class="fs-7 align-baseline">or</span>
-          {% endif %}
-        {% endfor %}
-      </div>
     </header>
-
     <section class="col container gx-0 py-7">
       <div class="row row-cols-1 gx-0 gy-6">
       {% for entry in child_page_list %}
