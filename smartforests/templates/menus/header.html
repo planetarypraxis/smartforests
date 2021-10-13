@@ -3,7 +3,9 @@
 <nav class="navbar navbar-expand-lg navbar-light h-48px bg-faded-yellow">
     <div class="container-fluid">
         <a class="navbar-brand text-black fw-normal text-decoration-none font-serif d-flex align-items-center" href="/">
-            <span>Smart</span><span class="logo-text text-faded-green"></span><span>Forests</span>
+            <div class="d-flex align-items-center">
+                <span>Smart</span><span class="logo-text text-faded-green"></span><span>Forests</span>
+            </div>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -59,6 +61,10 @@
                 </ul>
                 <a class="btn btn-outline" href="#">
                     Login
+                </a>
+                <a class="btn btn-outline" href="#">
+                    <span>Search</span>
+                    <img class="ms-2 align-baseline" src="{% static "/img/search.svg" %}"/>
                 </a>
             </div>
         </div>
