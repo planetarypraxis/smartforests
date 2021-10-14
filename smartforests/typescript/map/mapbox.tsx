@@ -6,15 +6,20 @@ import mapboxgl from 'mapbox-gl';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Fragment, useContext, useEffect, useRef, useState } from 'react';
+import { useWagtailSearch } from '../wagtail';
+import { SmartForest } from './types';
 
-export function MapVisual({ className }: { className?: string }) {
-  const mapContainerRef = useRef<HTMLDivElement>(null)
+export function MapVisual() {
   const [viewport, setViewport] = useState({
     latitude: 0,
     longitude: 0,
     zoom: 2,
     bearing: 0,
     pitch: 0
+  })
+
+  const results = useWagtailSearch<SmartForest.LogbookPage>({
+    type: 'logbooks.LogbookPage',
   })
 
   return (
@@ -39,7 +44,7 @@ export function MapVisual({ className }: { className?: string }) {
         <GeocodeControl position='top-left' accessToken={process.env.MAPBOX_API_PUBLIC_TOKEN} />
       </MapGL>
       <div className='position-absolute bottom-0 end-0 me-3 mb-5 p-4 bg-white opacity-75'>
-        <pre className='font-monospace mono monospace'>{JSON.stringify(viewport, null, 2)}</pre>
+        <pre className='font-monospace mono monospace'>{JSON.stringify(results.data, null, 2)}</pre>
       </div>
     </Fragment>
   )
