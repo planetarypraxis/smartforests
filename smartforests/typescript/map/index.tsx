@@ -2,12 +2,30 @@ import React from 'react'
 import { render } from 'react-dom'
 import { Provider as StateContext } from 'jotai';
 import { MapVisual } from './mapbox';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+import { AtlasPage } from './pages';
 
 function MapApp() {
   return (
-    <StateContext>
-      <MapVisual />
-    </StateContext>
+    <Router>
+      <StateContext>
+        <MapVisual />
+        <Route path='/map/:type/:pageId'>
+          <div className='position-absolute top-0 end-0 h-100 bg-white overflow-auto' style={{
+            width: 360,
+            boxShadow: '0px 0px 20px 0px #02630233'
+          }}>
+            <Link to='/map'>&larr; Map</Link>
+            <AtlasPage />
+          </div>
+        </Route>
+      </StateContext>
+    </Router>
   )
 }
 
