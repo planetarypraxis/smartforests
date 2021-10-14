@@ -1,6 +1,8 @@
-from datetime import datetime
+from commonknowledge.helpers import get_path
+from wagtail.search import index
 from django.db.models.fields import CharField
 from commonknowledge.wagtail.helpers import get_children_of_type
+from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin, StreamfieldIndexer, StructIndexer, TextIndexer
 from logbooks.models.helpers import group_by_title
 from logbooks.models.serializers import LogbookCoordinatesSerializer, StoryCoordinatesSerializer, UserSerializer
 from logbooks.thumbnail import generate_thumbnail
@@ -86,7 +88,7 @@ class ImageBlock(blocks.StructBlock):
         icon = 'image'
 
 
-class StoryPage(Page):
+class StoryPage(IndexedStreamfieldMixin, Page):
     class Meta:
         verbose_name = "Logbook Entry"
         verbose_name_plural = "Logbook Entries"
@@ -138,6 +140,17 @@ class StoryPage(Page):
             revision.user
             for revision in PageRevision.objects.filter(page=self)
         ] + [[self.owner]]))
+
+    search_fields = IndexedStreamfieldMixin.search_fields + Page.search_fields
+
+    streamfield_indexer = StreamfieldIndexer(
+        quote=StructIndexer(
+            title=TextIndexer(),
+            author=TextIndexer(),
+            text=TextIndexer(),
+        ),
+        _default=TextIndexer(),
+    )
 
     def regenerate_thumbnail(self, *args):
         return generate_thumbnail(self.images(), fileslug=f'storythumbnail_{self.slug}')
