@@ -10,6 +10,10 @@ envs:
     scope: RUN_AND_BUILD_TIME
     type: SECRET
     value: EV[1:FIMGgO/awSsCAT437sOk950g1wmufuUG:n6SzGjSsIAkI3qRlu5ZzcJ5mo5g5Oej5pTY0J3vqtaWH85uR797Yugbx6HiFDk7jn1xsnHMmMkIr1FfBXCoRk60ATQtpfZy0Nz9WTNcMliM=]
+  # 200MB maximum upload image size
+  - key: WAGTAILIMAGES_MAX_UPLOAD_SIZE
+    scope: RUN_AND_BUILD_TIME
+    value: 209715200
   - key: WAGTAILTRANSFER_SECRET_KEY
     scope: RUN_AND_BUILD_TIME
     type: SECRET
