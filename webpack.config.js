@@ -8,10 +8,15 @@ const isProduction = process.env.NODE_ENV === "production";
 module.exports = {
   mode: isProduction ? "production" : "development",
   entry: {
-    main: ["./smartforests/scss/index.scss"],
+    main: [
+      "./smartforests/scss/index.scss",
+      "./smartforests/typescript/index.tsx"
+    ],
   },
   devtool: isProduction ? "eval-source-map" : false,
-
+  resolve: {
+    extensions: ['.ts', '.tsx', '.scss', '...']
+  },
   module: {
     rules: [
       {
@@ -19,7 +24,7 @@ module.exports = {
         type: "asset/resource",
       },
       {
-        test: /\.jsx?/,
+        test: /\.(tsx?|jsx?)$/i,
         use: [
           {
             loader: "babel-loader",

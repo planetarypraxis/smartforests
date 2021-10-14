@@ -7,23 +7,29 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
+    "@babel/core": "^7.14.3",
+    "@babel/plugin-transform-react-jsx": "^7.14.9",
+    "@babel/preset-env": "^7.15.8",
+    "@babel/preset-react": "^7.14.5",
+    "@babel/preset-typescript": "^7.15.0",
     "autoprefixer": "^10.2.5",
+    "babel-loader": "^8.2.2",
     "bootstrap": "^5.0.1",
+    "core-js": "3",
     "css-loader": "^5.2.5",
     "mini-css-extract-plugin": "^1.6.0",
     "node-sass": "^6.0.0",
     "postcss-loader": "^5.3.0",
     "sass-loader": "^11.1.1",
     "style-loader": "^2.0.0",
+    "typescript": "^4.4.4",
     "webpack": "^5.37.1",
     "webpack-bundle-tracker": "^1.0.0",
     "webpack-cli": "^4.7.0",
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "@babel/core": "^7.14.3",
-    "@babel/preset-react": "^7.13.13",
-    "babel-loader": "^8.2.2",
+    "@hotwired/turbo": "^7.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   }
