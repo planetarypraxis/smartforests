@@ -5,34 +5,43 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import mapboxgl from 'mapbox-gl';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { Fragment, useContext, useEffect, useRef, useState } from 'react';
 
 export function MapVisual({ className }: { className?: string }) {
   const mapContainerRef = useRef<HTMLDivElement>(null)
   const [viewport, setViewport] = useState({
     latitude: 0,
     longitude: 0,
-    zoom: 2
+    zoom: 2,
+    bearing: 0,
+    pitch: 0
   })
 
   return (
-    <div ref={mapContainerRef} className={className}>
+    <Fragment>
       <MapGL
         accessToken={process.env.MAPBOX_API_PUBLIC_TOKEN}
-        mapStyle='mapbox://styles/smartforests/ckuquky9r2o3v18lkxddvri76'
-        style={{ width: '100%', height: '80vh' }}
+        mapStyle='mapbox://styles/smartforests/ckuquky9r2o3v18lkxddvri76/draft?v2'
+        style={{ width: '100%', height: '100%' }}
         viewportChangeMethod='flyTo'
         {...viewport}
-        onViewportChange={setViewport}
+        onViewportChange={viewport => setViewport({
+          ...viewport,
+          // no 3D controls
+          bearing: 0,
+          pitch: 0,
+        })}
+        minZoom={2}
+        maxZoom={6}
       >
-        {/* <NavigationControl showCompass showZoom position='top-left' />
-        <GeolocateControl position='top-left' /> */}
+        {/* <NavigationControl showCompass showZoom position='top-left' /> */}
+        {/* <GeolocateControl position='top-left' /> */}
         <GeocodeControl position='top-left' accessToken={process.env.MAPBOX_API_PUBLIC_TOKEN} />
       </MapGL>
       <div className='position-absolute bottom-0 end-0 me-3 mb-5 p-4 bg-white opacity-75'>
         <pre className='font-monospace mono monospace'>{JSON.stringify(viewport, null, 2)}</pre>
       </div>
-    </div>
+    </Fragment>
   )
 }
 

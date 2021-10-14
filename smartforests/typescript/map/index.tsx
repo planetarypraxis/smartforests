@@ -6,9 +6,7 @@ import { MapVisual } from './mapbox';
 function MapApp() {
   return (
     <StateContext>
-      <div style={{ position: 'relative' }}>
-        <MapVisual />
-      </div>
+      <MapVisual />
     </StateContext>
   )
 }
