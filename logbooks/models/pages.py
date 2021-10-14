@@ -255,3 +255,12 @@ class LogbookPage(ChildListMixin, Page):
             'self': self,
             'thumbnail_images': self.thumbnail_image,
         })
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+
+        if self.coordinates:
+            context['latitude'] = self.coordinates.coords[1]
+            context['longitude'] = self.coordinates.coords[0]
+
+        return context
