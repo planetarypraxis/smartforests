@@ -234,10 +234,12 @@ class LogbookPage(ChildListMixin, Page):
         if self.index_entry and self.index_entry.thumbnail_image:
             return self.index_entry.thumbnail_image
 
+    @property
     def longitude(self):
         if self.coordinates:
             return self.coordinates.coords[0]
 
+    @property
     def latitude(self):
         if self.coordinates:
             return self.coordinates.coords[1]
