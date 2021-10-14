@@ -17,15 +17,12 @@
         <h3>Contributors</h3>
         <a>{% if self.owner.first_name and self.owner.last_name %}{{ self.owner.first_name }} {{ self.owner.last_name }}{% else %}{{ self.owner }}{% endif %}</a>
       </section>
-      <div>
-        <span>This logbook shows entries tagged</span>
+      <section>
+        <h3>Tags</h3>
         {% for tag in self.tags.all %}
           {% include "logbooks/tag_label.html" with tag=tag %}
-          {% if not forloop.last %}
-            <span>or</span>
-          {% endif %}
         {% endfor %}
-      </div>
+      </section>
     </aside>
     <header class="col row mt-0 gy-3 gx-0">
       <h1 class="mt-6">{{self.title}}</h1>
