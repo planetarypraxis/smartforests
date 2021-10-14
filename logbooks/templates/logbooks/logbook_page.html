@@ -16,6 +16,11 @@
       <section>
         <h3>Contributors</h3>
         <a>{% if self.owner.first_name and self.owner.last_name %}{{ self.owner.first_name }} {{ self.owner.last_name }}{% else %}{{ self.owner }}{% endif %}</a>
+        {% for entry in child_page_list %}
+        <a>
+          {% if entry.owner.first_name and entry.owner.last_name %}{{ entry.owner.first_name }} {{ entry.owner.last_name }}{% else %}{{ entry.owner }}{% endif %}
+        </a>
+        {% endfor %}
       </section>
       <section>
         <h3>Location</h3>

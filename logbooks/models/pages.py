@@ -244,6 +244,10 @@ class LogbookPage(ChildListMixin, Page):
         if self.coordinates:
             return self.coordinates.coords[1]
 
+    def contributors(self, request):
+        entries = self.get_child_list_queryset(request)
+        return entries
+
     def regenerate_thumbnail(self, index_data):
         stories = index_data.get_related_pages(
             content_type=ContentType.objects.get_for_model(
