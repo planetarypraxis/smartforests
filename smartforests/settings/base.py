@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'wagtail_transfer',
     'wagtail.contrib.settings',
     'wagtail.api.v2',
+    "wagtail.contrib.routable_page",
 
     'modelcluster',
     'taggit',

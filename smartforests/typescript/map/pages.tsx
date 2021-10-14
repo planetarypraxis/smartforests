@@ -1,5 +1,5 @@
 import React, { Fragment, memo } from 'react'
-import { useWagtailSearch, Wagtail } from '../wagtail';
+import { constructModelTypeName, modelTypeToPath, pageToPath, useWagtailSearch, Wagtail } from '../wagtail';
 import { SmartForest } from './types';
 import { Marker, Popup } from '@urbica/react-map-gl'
 import { useFocusContext } from './state';
@@ -30,7 +30,7 @@ export const AtlasPageMarker: React.FC<{ page: Wagtail.Item<SmartForest.LogbookP
         latitude={page.coordinates.coordinates[1]}
       >
         <Link
-          to={`/map/${page.meta.type}/${page.id}`}
+          to={pageToPath(page)}
           onMouseOver={() => setIsFocusing(true, 'map')}
           onMouseOut={() => setIsFocusing(false, 'map')}
         >
@@ -47,7 +47,7 @@ export const AtlasPageMarker: React.FC<{ page: Wagtail.Item<SmartForest.LogbookP
           latitude={page?.coordinates?.coordinates[1]}
           offset={20}
         >
-          <Link to={`/map/${page.meta.type}/${page.id}`}>
+          <Link to={pageToPath(page)}>
             <div className='d-block p-2 rounded-1 bg-white' style={{ width: 250 }}>
               <AtlasPageCard page={page} />
             </div>
@@ -71,11 +71,11 @@ function AtlasPageCard({ page }: { page: Wagtail.Item<SmartForest.LogbookPage> }
 }
 
 export function AtlasPage() {
-  const { type, pageId } = useParams<{ type: string, pageId: string }>()
-  const page = useWagtailSearch({ id: parseInt(pageId), type })
+  const { app, model, id } = useParams<{ app: string, model: string, id: string }>()
+  const page = useWagtailSearch({ id: parseInt(id), type: constructModelTypeName(app, model) })
   return (
     <div className='w-100 h-100'>
-      <h1>{pageId}</h1>
+      <h1>{id}</h1>
       <pre className='font-monospace'>
         {JSON.stringify(page.data, null, 2)}
       </pre>

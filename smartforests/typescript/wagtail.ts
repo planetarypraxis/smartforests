@@ -6,6 +6,14 @@ export const wagtailAPIDefaultOptions = {
   'fields': '*'
 }
 
+export function pageToPath(page: Wagtail.Item): string {
+  return `/map/${page.meta.type.split('.').join('/')}/${page.id}`
+}
+
+export function constructModelTypeName(model: string, modelName: string): string {
+  return [model, modelName].join('.')
+}
+
 export function useWagtailSearch<Item = any, Wrapper = Wagtail.Results<Item>>(query: Wagtail.APIOptions = {}, url = '/api/v2/pages/') {
   return useSWR<Wrapper>(
     qs.stringifyUrl({

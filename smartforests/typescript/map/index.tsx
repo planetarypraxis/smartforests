@@ -15,7 +15,7 @@ function MapApp() {
     <Router>
       <StateContext>
         <MapVisual />
-        <Route path='/map/:type/:pageId'>
+        <Route path='/map/:app/:model/:id'>
           <div className='position-absolute top-0 end-0 h-100 bg-white overflow-auto' style={{
             width: 360,
             boxShadow: '0px 0px 20px 0px #02630233'
