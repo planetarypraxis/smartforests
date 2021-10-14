@@ -18,6 +18,15 @@
         <a>{% if self.owner.first_name and self.owner.last_name %}{{ self.owner.first_name }} {{ self.owner.last_name }}{% else %}{{ self.owner }}{% endif %}</a>
       </section>
       <section>
+        <h3>Location</h3>
+        {% if self.geographical_location %}
+        <div>{{ self.geographical_location }}</div>
+        {% endif %}
+        {% if self.coordinates %}
+          <div>{{ self.latitude | floatformat:4}}° N, {{ self.longitude | floatformat:4}}° E</div>
+        {% endif %}
+      </section>
+      <section>
         <h3>Tags</h3>
         {% for tag in self.tags.all %}
           {% include "logbooks/tag_label.html" with tag=tag %}

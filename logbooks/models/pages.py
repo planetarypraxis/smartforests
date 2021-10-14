@@ -234,6 +234,14 @@ class LogbookPage(ChildListMixin, Page):
         if self.index_entry and self.index_entry.thumbnail_image:
             return self.index_entry.thumbnail_image
 
+    def longitude(self):
+        if self.coordinates:
+            return self.coordinates.coords[0]
+
+    def latitude(self):
+        if self.coordinates:
+            return self.coordinates.coords[1]
+
     def regenerate_thumbnail(self, index_data):
         stories = index_data.get_related_pages(
             content_type=ContentType.objects.get_for_model(
@@ -255,12 +263,3 @@ class LogbookPage(ChildListMixin, Page):
             'self': self,
             'thumbnail_images': self.thumbnail_image,
         })
-
-    def get_context(self, request, *args, **kwargs):
-        context = super().get_context(request, *args, **kwargs)
-
-        if self.coordinates:
-            context['latitude'] = self.coordinates.coords[1]
-            context['longitude'] = self.coordinates.coords[0]
-
-        return context
