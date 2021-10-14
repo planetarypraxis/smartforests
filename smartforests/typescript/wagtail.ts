@@ -45,7 +45,7 @@ export namespace Wagtail {
     items: Item<T>[];
   }
 
-  type Item<T = {}> = T & {
+  export type Item<T = {}> = T & {
     id: number;
     meta: ItemMeta;
     title: string;

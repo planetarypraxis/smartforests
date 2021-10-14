@@ -6,5 +6,6 @@
   },
   "python.autoComplete.extraPaths": [],
   "python.linting.enabled": true,
-  "python.analysis.extraPaths": []
+  "python.analysis.extraPaths": [],
+  "html-css-class-completion.includeGlobPattern": "**/*.{scss,css,html}"
 }

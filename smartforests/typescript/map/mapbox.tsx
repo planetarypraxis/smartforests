@@ -6,7 +6,7 @@ import mapboxgl from 'mapbox-gl';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Fragment, useContext, useEffect, useRef, useState } from 'react';
-import { AtlasEntriesMapLayer } from './entriesLayer';
+import { AtlasPagesMapLayer } from './pages';
 
 export function MapVisual() {
   const [viewport, setViewport] = useState({
@@ -37,7 +37,7 @@ export function MapVisual() {
         {/* <NavigationControl showCompass showZoom position='top-left' /> */}
         {/* <GeolocateControl position='top-left' /> */}
         <GeocodeControl position='top-left' accessToken={process.env.MAPBOX_API_PUBLIC_TOKEN} />
-        <AtlasEntriesMapLayer />
+        <AtlasPagesMapLayer />
       </MapGL>
       {/* <div className='position-absolute bottom-0 end-0 me-3 mb-5 p-4 bg-white opacity-75'>
         <pre className='font-monospace mono monospace'>{JSON.stringify(results.data, null, 2)}</pre>
