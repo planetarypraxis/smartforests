@@ -2,9 +2,9 @@
 {% load ckdjango_tags ckbootstrap_tags wagtailcore_tags %}
 
 {% block content %}
-<main class="container-fluid" style="max-width: 700px;">
+<main class="container-fluid">
   <div class="row gx-0">
-    <aside class="col-md-4 microcopy">
+    <aside class="col microcopy">
       <section class="d-flex flex-column mb-3">
         <time class="text-dark-grey" datetime="{{ self.first_published_at|date:"Y-m-d" }}">
           Added {{ self.first_published_at|date:"d E Y" }}
@@ -38,15 +38,15 @@
         </div>
       </section>
     </aside>
-    <header class="col row mt-0 gy-3 gx-0">
-      <h1 class="mt-6">{{self.title}}</h1>
-      {% if self.description %}
-      <div class="bg-white rounded-1 p-3">
-        {{self.description|richtext}}
-      </div>
-      {% endif %}
-    </header>
-    <section class="col container gx-0 py-7">
+    <section class="col gx-0 py-7 content">
+      <header class="mb-7">
+        <h1 class="mb-5">{{self.title}}</h1>
+        {% if self.description %}
+        <div class="bg-white rounded-1 p-3">
+          {{self.description|richtext}}
+        </div>
+        {% endif %}
+      </header>
       <div class="row row-cols-1 gx-0 gy-7">
       {% for entry in child_page_list %}
         <div class="col">
