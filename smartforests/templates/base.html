@@ -27,6 +27,9 @@
 
         {% block extra_css %}
         {% endblock %}
+
+        <!-- Load this in the header so that it is not reloaded when body content is replaced. -->
+        <script type="module" src="https://cdn.skypack.dev/pin/@hotwired/turbo@v7.0.0-rc.1-Vumm1JJjKMC0HM7D9Tjd/mode=imports,min/optimized/@hotwired/turbo.js"></script>
     </head>
 
     <body class="min-vh-100 d-flex flex-column {% block body_class %}{% endblock %}">

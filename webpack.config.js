@@ -1,6 +1,7 @@
 const path = require("path");
 const BundleTracker = require("webpack-bundle-tracker");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const Dotenv = require('dotenv-webpack')
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -95,6 +96,7 @@ module.exports = {
   },
 
   plugins: [
+    new Dotenv(),
     ...(isProduction
       ? [
         new MiniCssExtractPlugin({

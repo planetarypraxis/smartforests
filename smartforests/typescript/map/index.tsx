@@ -1,11 +1,15 @@
 import React from 'react'
 import { render } from 'react-dom'
+import { Provider as StateContext } from 'jotai';
+import { MapVisual } from './mapbox';
 
 function MapApp() {
   return (
-    <div>
-      Map goes here.
-    </div>
+    <StateContext>
+      <div style={{ position: 'relative' }}>
+        <MapVisual />
+      </div>
+    </StateContext>
   )
 }
 

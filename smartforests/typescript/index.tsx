@@ -1,7 +1,3 @@
-import * as Turbo from "@hotwired/turbo"
-
-console.log("Page navigation handled by Turbo.", Turbo)
-
 console.debug("Initial page load.")
 load();
 
