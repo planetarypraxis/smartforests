@@ -52,12 +52,14 @@ INSTALLED_APPS = [
     'wagtail.contrib.postgres_search',
     'wagtail_transfer',
     'wagtail.contrib.settings',
+    'wagtail.api.v2',
 
     'modelcluster',
     'taggit',
     'webpack_loader',
     "anymail",
     "rest_framework",
+    "rest_framework_gis",
     # 'debug_toolbar',
 
     'django.contrib.gis',
