@@ -4,24 +4,24 @@
 {% block content %}
 <main class="container-fluid" style="max-width: 700px;">
   <div class="row gx-0">
-    <aside class="col-md-4">
-      <section>
-        <time datetime="{{ self.first_published_at|date:"Y-m-d" }}">
+    <aside class="col-md-4 microcopy">
+      <section class="d-flex flex-column mb-3">
+        <time class="text-dark-grey" datetime="{{ self.first_published_at|date:"Y-m-d" }}">
           Added {{ self.first_published_at|date:"d E Y" }}
         </time>
-        <time datetime="{{ self.last_published_at|date:"Y-m-d" }}">
+        <time class="text-dark-grey" datetime="{{ self.last_published_at|date:"Y-m-d" }}">
           Last edited {{ self.last_published_at|date:"d E Y" }}
         </time>
       </section>
-      <section>
-        <h3>Contributors</h3>
+      <section class="d-flex flex-column mb-3">
+        <h4 class="text-dark-green mb-0">Contributors</h4>
         <a>{% if self.owner.first_name and self.owner.last_name %}{{ self.owner.first_name }} {{ self.owner.last_name }}{% else %}{{ self.owner }}{% endif %}</a>
         <!-- {% for entry in child_page_list %}
         <a>{% if entry.owner.first_name and entry.owner.last_name %}{{ entry.owner.first_name }} {{ entry.owner.last_name }}{% else %}{{ entry.owner }}{% endif %}</a>
         {% endfor %} -->
       </section>
-      <section>
-        <h3>Location</h3>
+      <section class="d-flex flex-column mb-3">
+        <h4 class="text-dark-green mb-0">Location</h4>
         {% if self.geographical_location %}
         <div>{{ self.geographical_location }}</div>
         {% endif %}
@@ -29,8 +29,8 @@
           <div>{{ self.latitude | floatformat:4}}° N, {{ self.longitude | floatformat:4}}° E</div>
         {% endif %}
       </section>
-      <section>
-        <h3>Tags</h3>
+      <section class="d-flex flex-column">
+        <h4 class="text-dark-green mb-0">Tags</h4>
         {% for tag in self.tags.all %}
           {% include "logbooks/tag_label.html" with tag=tag %}
         {% endfor %}
