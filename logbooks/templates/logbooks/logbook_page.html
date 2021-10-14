@@ -3,6 +3,11 @@
 
 {% block content %}
 <main class="container-fluid">
+  <div class="row gx-0 mt-7">
+    <header class="col-lg-6 offset-lg-3">
+      <h1 class="mb-5">{{self.title}}</h1>
+    </header>
+  </div>
   <div class="row gx-0">
     <aside class="col-lg-2 microcopy">
       <section class="d-flex flex-column mb-3">
@@ -38,15 +43,14 @@
         </div>
       </section>
     </aside>
-    <section class="col-lg-6 offset-lg-1 gx-0 py-7">
-      <header class="mb-7">
-        <h1 class="mb-5">{{self.title}}</h1>
+    <section class="col-lg-6 offset-lg-1 gx-0">
+      <div>
         {% if self.description %}
         <div class="bg-white rounded-1 p-3">
           {{self.description|richtext}}
         </div>
         {% endif %}
-      </header>
+      </div>
       <div class="row row-cols-1 gx-0 gy-7">
       {% for entry in child_page_list %}
         <div class="col">
