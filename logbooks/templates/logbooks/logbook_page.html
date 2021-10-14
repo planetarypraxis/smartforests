@@ -4,7 +4,7 @@
 {% block content %}
 <main class="container-fluid">
   <div class="row gx-0">
-    <aside class="col microcopy">
+    <aside class="col-lg-2 microcopy">
       <section class="d-flex flex-column mb-3">
         <time class="text-dark-grey" datetime="{{ self.first_published_at|date:"Y-m-d" }}">
           Added {{ self.first_published_at|date:"d E Y" }}
@@ -38,7 +38,7 @@
         </div>
       </section>
     </aside>
-    <section class="col gx-0 py-7 content">
+    <section class="col-lg-6 offset-lg-1 gx-0 py-7">
       <header class="mb-7">
         <h1 class="mb-5">{{self.title}}</h1>
         {% if self.description %}
