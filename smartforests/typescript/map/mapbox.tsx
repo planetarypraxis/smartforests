@@ -1,13 +1,12 @@
 import React from 'react'
-import MapGL, { MapContext, Marker, Popup, NavigationControl, GeolocateControl } from '@urbica/react-map-gl'
-import { WebMercatorViewport } from '@math.gl/web-mercator';
+import MapGL, { MapContext, NavigationControl, GeolocateControl } from '@urbica/react-map-gl'
+// import { WebMercatorViewport } from '@math.gl/web-mercator';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import mapboxgl from 'mapbox-gl';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Fragment, useContext, useEffect, useRef, useState } from 'react';
-import { useWagtailSearch } from '../wagtail';
-import { SmartForest } from './types';
+import { AtlasEntriesMapLayer } from './entriesLayer';
 
 export function MapVisual() {
   const [viewport, setViewport] = useState({
@@ -16,10 +15,6 @@ export function MapVisual() {
     zoom: 2,
     bearing: 0,
     pitch: 0
-  })
-
-  const results = useWagtailSearch<SmartForest.LogbookPage>({
-    type: 'logbooks.LogbookPage',
   })
 
   return (
@@ -42,10 +37,11 @@ export function MapVisual() {
         {/* <NavigationControl showCompass showZoom position='top-left' /> */}
         {/* <GeolocateControl position='top-left' /> */}
         <GeocodeControl position='top-left' accessToken={process.env.MAPBOX_API_PUBLIC_TOKEN} />
+        <AtlasEntriesMapLayer />
       </MapGL>
-      <div className='position-absolute bottom-0 end-0 me-3 mb-5 p-4 bg-white opacity-75'>
+      {/* <div className='position-absolute bottom-0 end-0 me-3 mb-5 p-4 bg-white opacity-75'>
         <pre className='font-monospace mono monospace'>{JSON.stringify(results.data, null, 2)}</pre>
-      </div>
+      </div> */}
     </Fragment>
   )
 }

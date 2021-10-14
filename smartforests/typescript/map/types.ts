@@ -2,9 +2,9 @@ export namespace SmartForest {
   export interface LogbookPage {
     tags: string[];
     description: string;
-    geographical_location: null;
+    geographical_location?: string;
     contributors: Contributor[];
-    coordinates: Coordinates;
+    coordinates?: Coordinates;
   }
 
   export interface Contributor {
