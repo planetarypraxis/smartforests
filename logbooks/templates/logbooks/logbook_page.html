@@ -30,10 +30,12 @@
         {% endif %}
       </section>
       <section class="d-flex flex-column">
-        <h4 class="mb-0">Tags</h4>
+        <h4>Tags</h4>
+        <div class="d-flex flex-column">
         {% for tag in self.tags.all %}
-          {% include "logbooks/tag_label.html" with tag=tag %}
+          {% include "logbooks/tag_label.html" with tag=tag orientation="vertical" %}
         {% endfor %}
+        </div>
       </section>
     </aside>
     <header class="col row mt-0 gy-3 gx-0">
