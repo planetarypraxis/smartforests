@@ -3,7 +3,30 @@
 
 {% block content %}
 <main class="container-fluid" style="max-width: 700px;">
-  <div class="row row-cols-1 gx-0">
+  <div class="row gx-0">
+    <aside class="col-md-4">
+      <section>
+        <time datetime="{{ self.first_published_at|date:"Y-m-d" }}">
+          Added {{ self.first_published_at|date:"d E Y" }}
+        </time>
+        <time datetime="{{ self.last_published_at|date:"Y-m-d" }}">
+          Last edited {{ self.last_published_at|date:"d E Y" }}
+        </time>
+      </section>
+      <section>
+        <h3>Contributors</h3>
+        <a>{% if self.owner.first_name and self.owner.last_name %}{{ self.owner.first_name }} {{ self.owner.last_name }}{% else %}{{ self.owner }}{% endif %}</a>
+      </section>
+      <div>
+        <span>This logbook shows entries tagged</span>
+        {% for tag in self.tags.all %}
+          {% include "logbooks/tag_label.html" with tag=tag %}
+          {% if not forloop.last %}
+            <span>or</span>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </aside>
     <header class="col row mt-0 gy-3 gx-0">
       <h1 class="mt-6">{{self.title}}</h1>
       {% if self.description %}
