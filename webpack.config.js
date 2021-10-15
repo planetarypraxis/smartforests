@@ -95,19 +95,24 @@ module.exports = {
     },
   },
 
-  plugins: isProduction ? [
-    // Production plugins
-    new MiniCssExtractPlugin({
-      filename: "[name]-[contenthash].css",
-      chunkFilename: isProduction ? "[id]-[hash].css" : "[id].js",
-    }),
-    new BundleTracker({
-      path: __dirname,
-      filename: "./dist/webpack-stats.json",
-    }),
-  ] : [
-    // Development plugins
+  plugins: [
+    // Loads .env locally and allows process.env. references in bundled code.
+    // Will only expose environment variables that are explicitly referenced in your code to your final bundle.
     new Dotenv(),
+    //
+    ...(isProduction ? [
+      // Production plugins
+      new MiniCssExtractPlugin({
+        filename: "[name]-[contenthash].css",
+        chunkFilename: isProduction ? "[id]-[hash].css" : "[id].js",
+      }),
+      new BundleTracker({
+        path: __dirname,
+        filename: "./dist/webpack-stats.json",
+      }),
+    ] : [
+
+    ])
   ],
   output: {
     filename: isProduction ? "[name]-[hash].js" : "[name].js",
