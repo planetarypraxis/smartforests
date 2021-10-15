@@ -99,7 +99,7 @@ module.exports = {
     // Production plugins
     new MiniCssExtractPlugin({
       filename: "[name]-[contenthash].css",
-      chunkFilename: "[id].css",
+      chunkFilename: isProduction ? "[id]-[hash].css" : "[id].js",
     }),
     new BundleTracker({
       path: __dirname,
@@ -111,7 +111,7 @@ module.exports = {
   ],
   output: {
     filename: isProduction ? "[name]-[hash].js" : "[name].js",
-    chunkFilename: "[id].js",
+    chunkFilename: isProduction ? "[id]-[hash].js" : "[id].js",
     path: path.resolve(__dirname, "dist"),
     pathinfo: false,
   },
