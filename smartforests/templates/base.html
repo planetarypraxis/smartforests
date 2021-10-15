@@ -20,7 +20,7 @@
         <meta name="description" content="" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         
-        {% webpack_bundle 'css' %}
+        {% webpack_bundle 'main' 'css' %}
 
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@300&family=Open+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -79,6 +79,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         {% block extra_js %}
         {% endblock %}
-        {% webpack_bundle 'main' %}
+        {% webpack_bundle 'main' 'js' %}
     </body>
 </html>

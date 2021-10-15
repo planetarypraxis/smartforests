@@ -95,24 +95,22 @@ module.exports = {
     },
   },
 
-  plugins: [
+  plugins: isProduction ? [
+    // Production plugins
+    new MiniCssExtractPlugin({
+      filename: "[name].css",
+      chunkFilename: "[id].css",
+    }),
+    new BundleTracker({
+      path: __dirname,
+      filename: "./dist/webpack-stats.json",
+    }),
+  ] : [
+    // Development plugins
     new Dotenv(),
-    ...(isProduction
-      ? [
-        new MiniCssExtractPlugin({
-          filename: "[name].css",
-          chunkFilename: "[id].css",
-        }),
-        new BundleTracker({
-          path: __dirname,
-          filename: "./dist/webpack-stats.json",
-        }),
-      ]
-      : []),
   ],
-
   output: {
-    filename: "[name].js",
+    filename: isProduction ? "[name]-[hash].js" : "[name].js",
     chunkFilename: "[id].js",
     path: path.resolve(__dirname, "dist"),
     pathinfo: false,
