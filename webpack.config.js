@@ -98,7 +98,7 @@ module.exports = {
   plugins: isProduction ? [
     // Production plugins
     new MiniCssExtractPlugin({
-      filename: "[name].css",
+      filename: "[name]-[contenthash].css",
       chunkFilename: "[id].css",
     }),
     new BundleTracker({
