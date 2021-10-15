@@ -12,9 +12,9 @@ class HomePage(ChildListMixin, Page):
     subpage_types = [
         'logbooks.StoryIndexPage',
         'logbooks.LogbookIndexPage',
-        'home.InformationPage'
+        'home.InformationPage',
+        'smartforests.MapPage'
     ]
-    pass
 
 
 class InformationPage(Page):

@@ -52,12 +52,15 @@ INSTALLED_APPS = [
     'wagtail.contrib.postgres_search',
     'wagtail_transfer',
     'wagtail.contrib.settings',
+    'wagtail.api.v2',
+    "wagtail.contrib.routable_page",
 
     'modelcluster',
     'taggit',
     'webpack_loader',
     "anymail",
     "rest_framework",
+    "rest_framework_gis",
     # 'debug_toolbar',
 
     'django.contrib.gis',
@@ -252,3 +255,6 @@ LOGGING = {
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
+
+# This allows you to change the maximum number of results a user can request at a time. This applies to all endpoints. Set to None for no limit.
+WAGTAILAPI_LIMIT_MAX = None

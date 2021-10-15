@@ -33,7 +33,6 @@
   opacity: 0.5;
 }
 
-
 /** Masonry grid **/
 
 .grid__wrapper {
@@ -45,8 +44,10 @@
 .grid {
   --grid__gutter: #{map-get($spacers, 4)};
   --grid__columns: 2;
-  
-  margin-right: calc(var(--grid__gutter, 0px) * calc(-1 / var(--grid__columns, 2)));
+
+  margin-right: calc(
+    var(--grid__gutter, 0px) * calc(-1 / var(--grid__columns, 2))
+  );
 
   @include media-breakpoint-up(md) {
     --grid__columns: 3;
@@ -56,7 +57,7 @@
     }
   }
 
-  @include media-breakpoint-up(lg)  {
+  @include media-breakpoint-up(lg) {
     --grid__columns: 4;
 
     &.compact {
@@ -85,11 +86,16 @@
 .grid__col-sizer {
   width: calc(
     calc(100% / var(--grid__columns, 2)) -
-    calc(var(--grid__gutter, 0px) * calc(calc(var(--grid__columns, 2) - 1) / var(--grid__columns, 2)))
+      calc(
+        var(--grid__gutter, 0px) *
+          calc(calc(var(--grid__columns, 2) - 1) / var(--grid__columns, 2))
+      )
   );
 }
 
-.grid__gutter-sizer { width: var(--grid__gutter, 0px); }
+.grid__gutter-sizer {
+  width: var(--grid__gutter, 0px);
+}
 
 .grid__item {
   display: block;
@@ -100,4 +106,31 @@
 .page-load-status {
   padding-top: var(--grid__gutter, 0px);
   display: none;
+}
+
+.mapbox-invisible-popup {
+  max-width: none !important;
+  background: none;
+  border: none;
+
+  .mapboxgl-popup-close-button {
+    top: 15;
+    right: 15;
+  }
+
+  .mapboxgl-popup-content {
+    padding: 0;
+    background: none;
+    border: none;
+    boxshadow: none;
+    width: 300;
+  }
+
+  .mapboxgl-popup-close-button {
+    display: none;
+  }
+
+  .mapboxgl-popup-tip {
+    display: none;
+  }
 }

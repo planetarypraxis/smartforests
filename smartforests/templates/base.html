@@ -20,16 +20,20 @@
         <meta name="description" content="" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         
-        {% webpack_bundle 'main' 'css' %}
+        {% webpack_bundle 'css' %}
 
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@300&family=Open+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
         {% block extra_css %}
         {% endblock %}
+
+        <!-- Load this in the header so that it is not reloaded when body content is replaced. -->
+        <script type="module" src="https://cdn.skypack.dev/pin/@hotwired/turbo@v7.0.0-rc.1-Vumm1JJjKMC0HM7D9Tjd/mode=imports,min/optimized/@hotwired/turbo.js"></script>
     </head>
 
-    <body class="min-vh-100 d-flex flex-column {% block body_class %}{% endblock %}">
+    <body class="d-flex flex-column overflow-hidden {% block body_height %}min-vh-100{% endblock %}{% block body_class %}{% endblock %}">
+        {{ self.full_url|json_script:"routing_configuration" }} 
         {% wagtailuserbar %}
 
         {% block body %}
@@ -37,16 +41,19 @@
         {% main_menu max_levels=1 template="menus/header.html" %}
         {% endblock %}
 
+        <div class='flex-grow-1 overflow-auto h-100'>
         {% block content %}
         {% endblock %}
+        </div>
 
         {% block spacer %}
         <span class="flex-grow-1"></span>
         {% endblock %}
         {% endblock %}
 
+        {% block footer %}
         <div class="bg-panel bg-dark-green text-white links-white flex-grow-1">
-            <footer class="container py-5 fs-6 text">
+            <footer class="container py-3 fs-6 text">
                 <div class="row">
                     <div class="col-8 d-flex flex-column flex-md-row align-items-start">
                         <div class="mb-3 me-3">
@@ -66,12 +73,12 @@
                 </div>
             </footer>
         </div>
+        {% endblock %}
 
-        {% webpack_bundle 'main' %}
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         {% block extra_js %}
         {% endblock %}
-        <script type="module" src="https://cdn.skypack.dev/pin/@hotwired/turbo@v7.0.0-rc.1-Vumm1JJjKMC0HM7D9Tjd/mode=imports,min/optimized/@hotwired/turbo.js"></script>
+        {% webpack_bundle 'main' %}
     </body>
 </html>

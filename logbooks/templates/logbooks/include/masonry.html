@@ -72,12 +72,12 @@
 
       if (! $().masonry) {
         window.masonryListenerAttached = false;
-        console.log('Masonry not yet loaded, waiting');
+        console.debug('Masonry not yet loaded, waiting');
         
         window.setTimeout(checkMasonryLoadedAndSetup, 200);
         return;
       } else {
-        console.log('Masonry loaded');
+        console.debug('Masonry loaded');
         setupMasonryGrid();
       }
     }

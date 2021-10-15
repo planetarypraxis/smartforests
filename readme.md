@@ -2,7 +2,7 @@
 
 A tool to capture and narrate smart forests data, including fieldwork, interviews, social network analysis, maps and environmental data from instrumented forests.
 
-Staging: https://????
+See it live at https://atlas.smartforests.net
 
 ## Stack
 
@@ -11,7 +11,11 @@ Staging: https://????
 - Wagtail (CMS, administration, editor workflows and storage)
 - Webpack (asset pipeline)
 - PostgreSQL (Database & search index)
+
+## Third party services
+
 - Digital Ocean App Platform (Compute, database hosting, object storage & CDN)
+- Mapbox (username: `smartforests`)
 
 ## Dev quickstart
 

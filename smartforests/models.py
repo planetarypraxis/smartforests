@@ -2,6 +2,15 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from wagtail.images.models import AbstractImage, AbstractRendition, Image
 from wagtail.documents.models import Document, AbstractDocument
+from wagtail.core.models import Page
+from wagtail.contrib.routable_page.models import RoutablePageMixin, route
+
+
+class MapPage(RoutablePageMixin, Page):
+    # Hand off all routing below this page to the frontend router (react-router)
+    @route(r'^(?P<path>.*)/?$')
+    def subpages(self, request, *args, **kwargs):
+        return self.serve(request)
 
 
 class User(AbstractUser):
