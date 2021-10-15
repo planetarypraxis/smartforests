@@ -237,6 +237,16 @@ class LogbookPage(ChildListMixin, Page):
         if self.index_entry and self.index_entry.thumbnail_image:
             return self.index_entry.thumbnail_image
 
+    @property
+    def longitude(self):
+        if self.coordinates:
+            return self.coordinates.coords[0]
+
+    @property
+    def latitude(self):
+        if self.coordinates:
+            return self.coordinates.coords[1]
+
     def regenerate_thumbnail(self, index_data):
         stories = index_data.get_related_pages(
             content_type=ContentType.objects.get_for_model(

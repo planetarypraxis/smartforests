@@ -2,37 +2,67 @@
 {% load ckdjango_tags ckbootstrap_tags wagtailcore_tags %}
 
 {% block content %}
-<main class='container-fluid' style='max-width: 680px;'>
-  <div class='row row-cols-1 gx-0'>
-    <header class='col row mt-0 gy-3 gx-0'>
-      <h1 class='mt-6'>{{self.title}}</h1>
-      <div>
-        <span class='fs-7 align-baseline'>Entries tagged</span>
-        {% for tag in self.tags.all %}
-          {% include 'logbooks/tag_label.html' with tag=tag %}
-          {% if not forloop.last %}
-            <span class='fs-7 align-baseline'>or</span>
-          {% endif %}
-        {% endfor %}
-      </div>
-      {% if self.description %}
-      <div class='border-start border-dark ps-3 child-mb-0 lh-base'>
-        {{self.description|richtext}}
-      </div>
-      {% endif %}
-      <section class='caption text-grey fw-lighter'>
-        <div>Added by {% if self.owner.first_name and self.owner.last_name %}{{ self.owner.first_name }} {{ self.owner.last_name }}{% else %}{{ self.owner }}{% endif %}</div>
-        <time class='d-block'  datetime="{{ self.first_published_at|date:"Y-m-d" }}">
+<main class="container-fluid mb-7">
+  <div class="row gx-0 mt-3 mt-md-7">
+    <div class="d-block d-md-none mb-5">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7.00033 2.33334L7.82283 3.15584L4.56783 6.41668H11.667V7.58334H4.56783L7.82283 10.8442L7.00033 11.6667L2.33366 7.00001L7.00033 2.33334Z" fill="#043003"/>
+      </svg>
+      <a class="ms-2" href="{{ settings.logbooks.ImportantPages.page_url.logbooks_index_page }}">Logbooks</a>
+    </div>
+    <header class="col-lg-6 offset-lg-3">
+      <h1 class="mb-3 mb-md-5">{{self.title}}</h1>
+    </header>
+    <section class="d-flex d-md-none flex-row mb-3">
+      {% for tag in self.tags.all %}
+        {% include "logbooks/tag_label.html" with tag=tag %}
+      {% endfor %}
+    </section>
+  </div>
+  <div class="row gx-0">
+    <aside class="col-lg-2 d-none d-md-flex flex-column microcopy">
+      <section class="d-flex flex-column mb-3">
+        <time class="text-dark-grey" datetime="{{ self.first_published_at|date:"Y-m-d" }}">
+          Added {{ self.first_published_at|date:"d E Y" }}
+        </time>
+        <time class="text-dark-grey" datetime="{{ self.last_published_at|date:"Y-m-d" }}">
           Last edited {{ self.last_published_at|date:"d E Y" }}
         </time>
-        {% if self.geographical_location %}
-          <div>{{ self.geographical_location }}</div>
-        {% endif %}
       </section>
-    </header>
-
-    <section class='col container gx-0 py-6'>
-      <div class='row row-cols-1 gx-0 gy-6'>
+      <section class="d-flex flex-column mb-3">
+        <h4 class="mb-0">Contributors</h4>
+        <a>{% if self.owner.first_name and self.owner.last_name %}{{ self.owner.first_name }} {{ self.owner.last_name }}{% else %}{{ self.owner }}{% endif %}</a>
+        <!-- {% for entry in child_page_list %}
+        <a>{% if entry.owner.first_name and entry.owner.last_name %}{{ entry.owner.first_name }} {{ entry.owner.last_name }}{% else %}{{ entry.owner }}{% endif %}</a>
+        {% endfor %} -->
+      </section>
+      {% if self.geographical_location %}
+      <section class="d-flex flex-column mb-3">
+        <h4 class="mb-0">Location</h4>
+        <div>{{ self.geographical_location }}</div>
+        {% endif %}
+        {% if self.coordinates %}
+          <div>{{ self.latitude | floatformat:4}}° N, {{ self.longitude | floatformat:4}}° E</div>
+      </section>
+      {% endif %}
+      <section class="d-flex flex-column">
+        <h4>Tags</h4>
+        <div class="d-flex flex-column">
+        {% for tag in self.tags.all %}
+          {% include "logbooks/tag_label.html" with tag=tag orientation="vertical" %}
+        {% endfor %}
+        </div>
+      </section>
+    </aside>
+    <section class="col-lg-6 offset-lg-1 gx-0">
+      <div class="mb-7">
+        {% if self.description %}
+        <div class="bg-white rounded-1 p-3">
+          {{self.description|richtext}}
+        </div>
+        {% endif %}
+      </div>
+      <div class="row row-cols-1 gx-0 gy-7">
       {% for entry in child_page_list %}
         <div class="col">
           {{entry.content_html}}
