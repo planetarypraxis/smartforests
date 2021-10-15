@@ -15,7 +15,7 @@ See it live at https://atlas.smartforests.net
 ## Third party services
 
 - Digital Ocean App Platform (Compute, database hosting, object storage & CDN)
-- Mapbox (username: `smartforests`)
+- Mapbox
 
 ## Dev quickstart
 
