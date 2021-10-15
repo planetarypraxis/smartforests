@@ -7,13 +7,15 @@ $yellow: #ffff9b;
 $soft-green: #c7eac6;
 $grey: #545454;
 $light-grey: #c5c5c5;
+$offwhite: #f9f9f9;
 
-$body-bg: #f9f9f9;
+$body-bg: $offwhite;
 $primary: $mid-green;
 $secondary: $grey;
 $primary-hover-light: $light-grey;
 $custom-colors: (
   dark-green: $dark-green,
+  dark-green-transparent: rgba($dark-green, 0.8),
   mid-green: $mid-green,
   bright-green: $bright-green,
   yellow: $yellow,
@@ -21,6 +23,7 @@ $custom-colors: (
   soft-green: $soft-green,
   grey: $grey,
   light-grey: $light-grey,
+  offwhite: $offwhite,
 );
 $dark: $dark-green;
 

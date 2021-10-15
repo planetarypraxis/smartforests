@@ -1,5 +1,5 @@
 import React, { Fragment, memo } from 'react'
-import { constructModelTypeName, modelTypeToPath, pageToPath, useWagtailSearch, Wagtail } from '../wagtail';
+import { constructModelTypeName, pageToPath, useWagtailSearch, Wagtail } from '../wagtail';
 import { SmartForest } from './types';
 import { Marker, Popup } from '@urbica/react-map-gl'
 import { useFocusContext } from './state';
@@ -72,13 +72,30 @@ function AtlasPageCard({ page }: { page: Wagtail.Item<SmartForest.LogbookPage> }
 
 export function AtlasPage() {
   const { app, model, id } = useParams<{ app: string, model: string, id: string }>()
-  const page = useWagtailSearch({ id: parseInt(id), type: constructModelTypeName(app, model) })
+  const pageSearch = useWagtailSearch<SmartForest.LogbookPage>({ id: parseInt(id), type: constructModelTypeName(app, model) })
+  const page = pageSearch.data?.items?.[0]
   return (
-    <div className='w-100 h-100'>
-      <h1>{id}</h1>
-      <pre className='font-monospace'>
-        {JSON.stringify(page.data, null, 2)}
-      </pre>
+    <div className='w-100 h-100 bg-white'>
+      {!!page ? (
+        <div className='container row gy-1 py-3'>
+          <div className='caption text-muted'>{page.meta.type}</div>
+          <div className='fs-6 text-dark-green fw-bold'>{page.title}</div>
+          {!!page.geographical_location && (
+            <div className='caption text-muted'>{page.geographical_location}</div>
+          )}
+          <div>
+            {page.tags.map(tag => (
+              <span className='badge rounded-pill bg-offwhite text-mid-green caption align-baseline mx-1'>
+                {tag}
+              </span>
+            ))}
+          </div>
+          <hr className='mx-2 mt-3 mb-2' />
+          <div className='py-2' dangerouslySetInnerHTML={{ __html: page.description }} />
+        </div>
+      ) : (
+        "Loading"
+      )}
     </div>
   )
 }
