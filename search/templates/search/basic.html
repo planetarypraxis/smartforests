@@ -1,1 +1,13 @@
-{% extends "base.html" %}
+<turbo-frame id="search-results">
+  {% for item in search_results %}
+      <a href="{{item.page.url}}" class="search-item link-reset p-3 {% if forloop.first %}active{% endif %}">
+        <h3 class="m-0">{{item.page.title}}</h3>
+
+        {% if item.search_highlight %}
+          <div class="mt-2 small">
+            {{item.search_highlight}}
+          </div>
+        {% endif %}
+      </a>
+  {% endfor %}
+</turbo-frame>

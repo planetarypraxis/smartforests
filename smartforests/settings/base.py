@@ -212,6 +212,7 @@ WAGTAILDOCS_DOCUMENT_MODEL = 'smartforests.CmsDocument'
 WAGTAILSEARCH_BACKENDS = {
     'default': {
         'BACKEND': 'wagtail.contrib.postgres_search.backend',
+        'SEARCH_CONFIG': 'english',
         'AUTO_UPDATE': True,
     }
 }
