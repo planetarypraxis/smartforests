@@ -2,6 +2,12 @@
 {% load static ckbootstrap_tags %}
 {% block body_height %}vh-100{% endblock %}
 {% block content %}
-<div id="MAP_APP" class='h-100 w-100 position-relative'></div>
+  <div data-mapbox-token="{{mapbox_token}}" id="MAP_APP" class='h-100 w-100 position-relative'></div>
+
+  {% if debug and not mapbox_token %}
+    <script>
+      console.warn('No mapbox token found. Ensure that you have the MAPBOX_API_PUBLIC_TOKEN setting defined in local.py settings')
+    </script>
+  {% endif %}
 {% endblock content %}
 {% block footer %}{% endblock %}
