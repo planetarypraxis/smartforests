@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.conf import settings
 from wagtail.images.models import AbstractImage, AbstractRendition, Image
 from wagtail.documents.models import Document, AbstractDocument
 from wagtail.core.models import Page
@@ -11,6 +12,11 @@ class MapPage(RoutablePageMixin, Page):
     @route(r'^(?P<path>.*)/?$')
     def subpages(self, request, *args, **kwargs):
         return self.serve(request)
+
+    def get_context(self, *args, **kwargs):
+        context = super().get_context(*args, **kwargs)
+        context['mapbox_token'] = settings.MAPBOX_API_PUBLIC_TOKEN
+        return context
 
 
 class User(AbstractUser):

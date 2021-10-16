@@ -258,3 +258,6 @@ INTERNAL_IPS = [
 
 # This allows you to change the maximum number of results a user can request at a time. This applies to all endpoints. Set to None for no limit.
 WAGTAILAPI_LIMIT_MAX = None
+
+
+MAPBOX_API_PUBLIC_TOKEN = os.getenv('MAPBOX_API_PUBLIC_TOKEN')
