@@ -64,7 +64,7 @@ class StoryIndexPage(ChildListMixin, Page):
 
     show_in_menus_default = True
     parent_page_types = ['home.HomePage']
-    subpage_types = ['logbooks.StoryPage']
+    subpage_types = ['logbooks.LogbookEntryPage']
 
 
 class QuoteBlock(blocks.StructBlock):
@@ -88,7 +88,7 @@ class ImageBlock(blocks.StructBlock):
         icon = 'image'
 
 
-class StoryPage(IndexedStreamfieldMixin, Page):
+class LogbookEntryPage(IndexedStreamfieldMixin, Page):
     class Meta:
         verbose_name = "Logbook Entry"
         verbose_name_plural = "Logbook Entries"
@@ -273,7 +273,7 @@ class LogbookPage(ChildListMixin, Page):
             filter['tags__contains'] = tag_filter
 
         stories = self.index_entry.get_related_pages(
-            content_type=StoryPage.content_type_id(), **filter).order_by('-first_published_at').specific()
+            content_type=LogbookEntryPage.content_type_id(), **filter).order_by('-first_published_at').specific()
 
         return stories
 
@@ -295,7 +295,7 @@ class LogbookPage(ChildListMixin, Page):
     def regenerate_thumbnail(self, index_data):
         stories = index_data.get_related_pages(
             content_type=ContentType.objects.get_for_model(
-                StoryPage).id
+                LogbookEntryPage).id
         ).specific()
 
         images = tuple(

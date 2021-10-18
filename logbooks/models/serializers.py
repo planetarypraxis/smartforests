@@ -11,7 +11,7 @@ class UserSerializer(serializers.Serializer):
 
 class StoryCoordinatesSerializer(GeoFeatureModelSerializer):
     class Meta:
-        model = 'logbooks.StoryPage'
+        model = 'logbooks.LogbookEntryPage'
         geo_field = "coordinates"
         fields = '__all__'
 
