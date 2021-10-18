@@ -51,7 +51,7 @@ class ContributorMixin(Page):
         return list(set([
             revision.user
             for revision in PageRevision.objects.filter(page=self)
-        ] + [[self.owner]]))
+        ] + [self.owner]))
 
     api_fields = [
         APIField('contributors', serializer=UserSerializer(many=True)),
