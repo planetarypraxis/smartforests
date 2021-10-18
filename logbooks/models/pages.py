@@ -4,6 +4,7 @@ from taggit.models import Tag
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.api.conf import APIField
 from wagtail.core.fields import RichTextField
+from commonknowledge.wagtail.helpers import get_children_of_type
 from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
 
@@ -25,7 +26,6 @@ class StoryIndexPage(ChildListMixin, BaseLogbooksPage):
 
     show_in_menus_default = True
     parent_page_types = ['home.HomePage']
-    subpage_types = []
 
 
 class LogbookEntryPage(ArticlePage):
@@ -38,8 +38,7 @@ class LogbookEntryPage(ArticlePage):
         verbose_name_plural = "Logbook Entries"
 
     show_in_menus_default = True
-    parent_page_types = ['logbooks.StoryIndexPage']
-    subpage_types = []
+    parent_page_types = ['logbooks.LogbookPage']
 
     def content_html(self):
         '''
@@ -59,7 +58,6 @@ class LogbookPage(ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixi
     objects = IndexedPageManager()
     show_in_menus_default = True
     parent_page_types = ['logbooks.LogbookIndexPage']
-    subpage_types = []
 
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
     description = RichTextField()
@@ -75,24 +73,20 @@ class LogbookPage(ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixi
         APIField('description'),
     ] + ContributorMixin.api_fields + GeocodedMixin.api_fields
 
-    def get_child_list_queryset(self, request):
-        tag_filter = request.GET.get('filter', None)
-        filter = {}
-
-        if tag_filter is not None:
-            filter['tags__contains'] = tag_filter
-
-        stories = self.index_entry.get_related_pages(
-            content_type=LogbookEntryPage.content_type_id(), **filter).order_by('-first_published_at').specific()
-
-        return stories
+    def get_child_list_queryset(self, _request):
+        return self.logbook_entries
 
     def get_thumbnail_images(self):
-        entries = self.index_entry.get_related_pages(
-            content_type=LogbookEntryPage.content_type_id()
-        ).specific()
+        return tuple(x.cover_image() for x in self.logbook_entries if x.cover_image() is not None)
 
-        return tuple(x.cover_image() for x in entries if x.cover_image() is not None)
+    def card_content_html(self):
+        return render_to_string('logbooks/thumbnails/basic_thumbnail.html', {
+            'self': self
+        })
+
+    @property
+    def logbook_entries(self):
+        return get_children_of_type(self, LogbookEntryPage)
 
 
 class LogbookIndexPage(ChildListMixin, BaseLogbooksPage):
