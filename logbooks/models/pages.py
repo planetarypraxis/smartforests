@@ -1,11 +1,14 @@
-from datetime import datetime
+from commonknowledge.helpers import get_path
+from wagtail.search import index
 from django.db.models.fields import CharField
 from commonknowledge.wagtail.helpers import get_children_of_type
+from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin, StreamfieldIndexer, StructIndexer, TextIndexer
 from logbooks.models.helpers import group_by_title
+from logbooks.models.serializers import LogbookCoordinatesSerializer, StoryCoordinatesSerializer, UserSerializer
 from logbooks.thumbnail import generate_thumbnail
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from wagtail.core.models import Page, PageManager
+from wagtail.core.models import Page, PageManager, PageRevision
 from django.template.loader import render_to_string
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
@@ -15,10 +18,13 @@ from commonknowledge.wagtail.models import ChildListMixin
 from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.images.blocks import ImageChooserBlock
+from wagtail.embeds.blocks import EmbedBlock
 from wagtail.core import blocks
 from wagtail.contrib.settings.models import BaseSetting, register_setting
 from commonknowledge.django.cache import django_cached_model
 from django.contrib.gis.db import models as geo
+from wagtail.api import APIField
+from rest_framework.fields import DateField
 
 from smartforests.models import CmsImage
 
@@ -53,6 +59,9 @@ class StoryIndexPage(ChildListMixin, Page):
     class Meta:
         verbose_name = "Logbook entries index page"
 
+    def get_child_list_queryset(self, *args, **kwargs):
+        return self.get_children().order_by('-last_published_at').specific()
+
     show_in_menus_default = True
     parent_page_types = ['home.HomePage']
     subpage_types = ['logbooks.StoryPage']
@@ -79,7 +88,7 @@ class ImageBlock(blocks.StructBlock):
         icon = 'image'
 
 
-class StoryPage(Page):
+class StoryPage(IndexedStreamfieldMixin, Page):
     class Meta:
         verbose_name = "Logbook Entry"
         verbose_name_plural = "Logbook Entries"
@@ -102,8 +111,7 @@ class StoryPage(Page):
             'h3', 'bold', 'italic', 'link', 'ol', 'ul'
         ], template='logbooks/story_blocks/text.html')),
         ('quote', QuoteBlock()),
-        ('embed', blocks.RichTextBlock(features=[
-         'embed'], template='logbooks/story_blocks/text.html')),
+        ('embed', EmbedBlock(template='logbooks/story_blocks/embed.html')),
         ('image', ImageBlock()),
     ])
 
@@ -118,6 +126,31 @@ class StoryPage(Page):
         ),
         StreamFieldPanel('body'),
     ]
+
+    api_fields = [
+        APIField('tags'),
+        APIField('geographical_location'),
+        # This will nest the relevant BlogPageAuthor objects in the API response
+        APIField('contributors', serializer=UserSerializer(many=True)),
+        APIField('coordinates', serializer=StoryCoordinatesSerializer)
+    ]
+
+    def contributors(self):
+        return list(set([
+            revision.user
+            for revision in PageRevision.objects.filter(page=self)
+        ] + [[self.owner]]))
+
+    search_fields = IndexedStreamfieldMixin.search_fields + Page.search_fields
+
+    streamfield_indexer = StreamfieldIndexer(
+        quote=StructIndexer(
+            title=TextIndexer(),
+            author=TextIndexer(),
+            text=TextIndexer(),
+        ),
+        _default=TextIndexer(),
+    )
 
     def regenerate_thumbnail(self, *args):
         return generate_thumbnail(self.images(), fileslug=f'storythumbnail_{self.slug}')
@@ -217,6 +250,21 @@ class LogbookPage(ChildListMixin, Page):
         ),
     ]
 
+    api_fields = [
+        APIField('tags'),
+        APIField('description'),
+        APIField('geographical_location'),
+        # This will nest the relevant BlogPageAuthor objects in the API response
+        APIField('contributors', serializer=UserSerializer(many=True)),
+        APIField('coordinates', serializer=LogbookCoordinatesSerializer)
+    ]
+
+    def contributors(self):
+        return list(set([
+            revision.user
+            for revision in PageRevision.objects.filter(page=self)
+        ] + [self.owner]))
+
     def get_child_list_queryset(self, request):
         tag_filter = request.GET.get('filter', None)
         filter = {}
@@ -233,6 +281,16 @@ class LogbookPage(ChildListMixin, Page):
     def thumbnail_image(self):
         if self.index_entry and self.index_entry.thumbnail_image:
             return self.index_entry.thumbnail_image
+
+    @property
+    def longitude(self):
+        if self.coordinates:
+            return self.coordinates.coords[0]
+
+    @property
+    def latitude(self):
+        if self.coordinates:
+            return self.coordinates.coords[1]
 
     def regenerate_thumbnail(self, index_data):
         stories = index_data.get_related_pages(

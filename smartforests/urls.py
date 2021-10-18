@@ -11,6 +11,7 @@ from wagtail_transfer import urls as wagtailtransfer_urls
 from wagtail_content_import import urls as wagtail_content_import_urls
 
 from commonknowledge.django import rest
+from .api import wagtail_api_router
 
 from search import views as search_views
 
@@ -22,7 +23,7 @@ urlpatterns = [
     path('documents/', include(wagtaildocs_urls)),
 
     path('search/', search_views.SearchView.as_view(), name='search'),
-    path('api/', include(rest.get_urls())),
+    # path('api/', include(rest.get_urls())),
     # path('__debug__/', include(debug_toolbar.urls)),
 ]
 
@@ -34,8 +35,9 @@ if settings.DEBUG:
                           document_root=settings.MEDIA_ROOT)
 
 urlpatterns += [
+    path('api/v2/', wagtail_api_router.urls),
     re_path(r'^wagtail-transfer/', include(wagtailtransfer_urls)),
-    path("", include(wagtail_urls)),
+    re_path(r'^', include(wagtail_urls)),
 ]
 
 urlpatterns += [

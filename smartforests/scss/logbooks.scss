@@ -1,0 +1,6 @@
+.logbook-entry-embed {
+    div {
+      @extend .ratio;
+      @extend .ratio-16x9;
+    }
+  }

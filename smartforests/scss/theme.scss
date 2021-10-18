@@ -3,27 +3,34 @@ $dark-green: #043003;
 $mid-green: #026302;
 $bright-green: #25ed08;
 $faded-green: #71B340;
-
-$yellow: #ffff9b;
 $soft-green: #c7eac6;
+
+$bright-yellow: #ffff00;
+$yellow: #ffff9b;
+
 $grey: #545454;
 $light-grey: #c5c5c5;
-$off-white: #f9f9f9;
 
-$body-bg: $off-white;
+$offwhite: #f9f9f9;
+
+$body-bg: $offwhite;
 $primary: $mid-green;
 $secondary: $grey;
 $primary-hover-light: $light-grey;
 $custom-colors: (
   dark-green: $dark-green,
+  dark-green-transparent: rgba($dark-green, 0.8),
   mid-green: $mid-green,
   bright-green: $bright-green,
   faded-green: $faded-green,
   yellow: $yellow,
+  bright-yellow: $bright-yellow,
   soft-green: $soft-green,
   grey: $grey,
+  dark-grey: $grey,
   light-grey: $light-grey,
-  off-white: $off-white,
+  off-white: $offwhite,
+  offwhite: $offwhite,
 );
 $dark: $dark-green;
 

@@ -3,6 +3,7 @@ FROM ghcr.io/commonknowledge/do-app-baseimage-django-node@sha256:451f5e98c024ff3
 # Install the project requirements and build.
 COPY --chown=app:app .bin/install.sh Pipfile Pipfile.lock package.json yarn.lock ./
 RUN SKIP_MIGRATE=1 bash install.sh
+RUN yarn
 
 # Copy the rest of the sources over
 COPY --chown=app:app . .

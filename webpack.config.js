@@ -1,6 +1,7 @@
 const path = require("path");
 const BundleTracker = require("webpack-bundle-tracker");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const Dotenv = require('dotenv-webpack')
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -8,10 +9,15 @@ const isProduction = process.env.NODE_ENV === "production";
 module.exports = {
   mode: isProduction ? "production" : "development",
   entry: {
-    main: ["./smartforests/scss/index.scss"],
+    main: [
+      "./smartforests/scss/index.scss",
+      "./smartforests/typescript/index.tsx"
+    ],
   },
   devtool: isProduction ? "eval-source-map" : false,
-
+  resolve: {
+    extensions: ['.ts', '.tsx', '.scss', '...']
+  },
   module: {
     rules: [
       {
@@ -19,7 +25,7 @@ module.exports = {
         type: "asset/resource",
       },
       {
-        test: /\.jsx?/,
+        test: /\.(tsx?|jsx?)$/i,
         use: [
           {
             loader: "babel-loader",
@@ -89,24 +95,23 @@ module.exports = {
     },
   },
 
-  plugins: [
-    ...(isProduction
-      ? [
-        new MiniCssExtractPlugin({
-          filename: "[name].css",
-          chunkFilename: "[id].css",
-        }),
-        new BundleTracker({
-          path: __dirname,
-          filename: "./dist/webpack-stats.json",
-        }),
-      ]
-      : []),
+  plugins: isProduction ? [
+    // Production plugins
+    new MiniCssExtractPlugin({
+      filename: "[name]-[contenthash].css",
+      chunkFilename: isProduction ? "[id]-[hash].css" : "[id].js",
+    }),
+    new BundleTracker({
+      path: __dirname,
+      filename: "./dist/webpack-stats.json",
+    }),
+  ] : [
+    // Development plugins
+    new Dotenv(),
   ],
-
   output: {
-    filename: "[name].js",
-    chunkFilename: "[id].js",
+    filename: isProduction ? "[name]-[hash].js" : "[name].js",
+    chunkFilename: isProduction ? "[id]-[hash].js" : "[id].js",
     path: path.resolve(__dirname, "dist"),
     pathinfo: false,
   },

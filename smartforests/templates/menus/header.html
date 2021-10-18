@@ -68,5 +68,84 @@
                 </a>
             </div>
         </div>
+
+        <button class="btn p-0 ms-5" type="button" data-bs-toggle="modal" data-bs-target="#searchToggle" aria-controls="searchToggle" aria-expanded="false" aria-label="Toggle search">
+            Search<i class="ms-3 icon-search"></i>
+        </button>
     </div>
 </nav>
+
+
+<form data-autofocus-show="1" class="modal fade" id="searchToggle" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body bg-darkgrey red-shadow">
+                <div class="input-group input-group-focus">
+                    <div class="input-group-text bg-white d-flex align-items-center justify-content-center p-3">
+                        <i class="icon-search icon-lg"></i>
+                    </div>
+
+                    <input id="search-box" name="query" tabindex="1" autofocus class="form-control border-start-0 text-naturalcase heading-medium" autocapitalize="off" autocomplete="off" aria-label="Search">
+                </div>
+            </div>
+            <div class="modal-body p-0">
+                <turbo-frame id="search-results" target="_top">
+                </turbo-frame>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    window.addEventListener('turbo:load', () => {
+        const search = document.getElementById('search-box')
+        const searchResults = document.getElementById('search-results')
+        const modal = new bootstrap.Modal(document.getElementById('searchToggle'))
+
+        searchToggle.addEventListener('submit', e => e.preventDefault())
+
+        search.addEventListener('input', _.debounce(() => {
+            searchResults.src = '/search/?query=' + encodeURIComponent(search.value)
+        }, 300))
+
+        document.addEventListener('keydown', (event) => {
+            if (event.ctrlKey && event.key === 's') {
+                event.preventDefault()
+                modal.show()
+            }
+        })
+
+        searchToggle.addEventListener('turbo:frame-load', event => {
+            let index = 0
+
+            const down = 40
+            const up = 38
+            const enter = 13
+
+            const moveSelection = (delta) => {
+                searchResults.children[index].classList.remove('active')
+                searchResults.children[index + delta].classList.add('active')
+                index += delta
+            }
+            
+            search.addEventListener('keydown', (event) => {
+                if (event.keyCode == down) {
+                    if (index < searchResults.children.length - 1) {
+                        moveSelection(+1)
+                        event.preventDefault()
+                    }
+                } else if (event.keyCode == up) {
+                    if (index > 0) {
+                        moveSelection(-1)
+                        event.preventDefault()
+                    }
+                } else if (event.keyCode == enter) {
+                    if (searchResults.children[index].href) {
+                        modal.hide()
+                        Turbo.visit(searchResults.children[index].href)
+                    }
+                }
+            })
+        })
+    })
+</script>
