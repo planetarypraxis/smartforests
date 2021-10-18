@@ -15,7 +15,7 @@
     </header>
     <section class="d-flex d-md-none flex-row mb-3">
       {% for tag in self.tags.all %}
-        {% include "logbooks/tag_label.html" with tag=tag %}
+        {% include "logbooks/include/tag_label.html" with tag=tag %}
       {% endfor %}
     </section>
   </div>
@@ -49,7 +49,7 @@
         <h4>Tags</h4>
         <div class="d-flex flex-column">
         {% for tag in self.tags.all %}
-          {% include "logbooks/tag_label.html" with tag=tag orientation="vertical" %}
+          {% include "logbooks/include/tag_label.html" with tag=tag orientation="vertical" %}
         {% endfor %}
         </div>
       </section>
@@ -79,6 +79,6 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/masonry-layout@4/dist/masonry.pkgd.min.js" crossorigin="anonymous"></script>
+<script defer src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4/dist/masonry.pkgd.min.js" crossorigin="anonymous"></script>
 {% endblock %}

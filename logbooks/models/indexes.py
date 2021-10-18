@@ -1,11 +1,11 @@
 from functools import reduce
 from django.contrib.contenttypes.models import ContentType
-from logbooks.models.pages import LogbookIndexPage, LogbookPage, LogbookEntryPage
+from logbooks.models.pages import LogbookPage, LogbookEntryPage
 from django.dispatch import receiver
 from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.postgres.indexes import GinIndex
-from wagtail.core.models import Page
+from wagtail.core.models import Page, PageManager
 
 
 class LogbookPageIndex(models.Model):
@@ -40,8 +40,7 @@ class LogbookPageIndex(models.Model):
         super().save(*args, **kwargs)
 
         if regenerate_thumbnails and hasattr(self.page.specific, 'regenerate_thumbnail'):
-            self.thumbnail_image = self.page.specific.regenerate_thumbnail(
-                self)
+            self.thumbnail_image = self.page.specific.regenerate_thumbnail()
             self.save(regenerate_thumbnails=False)
 
     @staticmethod
