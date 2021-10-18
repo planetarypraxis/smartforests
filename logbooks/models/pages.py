@@ -4,7 +4,7 @@ from django.db.models.fields import CharField
 from commonknowledge.wagtail.helpers import get_children_of_type
 from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin, StreamfieldIndexer, StructIndexer, TextIndexer
 from logbooks.models.helpers import group_by_title
-from logbooks.models.serializers import LogbookCoordinatesSerializer, StoryCoordinatesSerializer, UserSerializer
+from logbooks.models.serializers import LogbookCoordinatesSerializer, RichTextSerializer, StoryCoordinatesSerializer, UserSerializer
 from logbooks.thumbnail import generate_thumbnail
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
@@ -25,6 +25,7 @@ from commonknowledge.django.cache import django_cached_model
 from django.contrib.gis.db import models as geo
 from wagtail.api import APIField
 from rest_framework.fields import DateField
+# from wagtail.core.rich_text import expand_db_html
 
 from smartforests.models import CmsImage
 
@@ -256,8 +257,16 @@ class LogbookPage(ChildListMixin, Page):
         APIField('geographical_location'),
         # This will nest the relevant BlogPageAuthor objects in the API response
         APIField('contributors', serializer=UserSerializer(many=True)),
-        APIField('coordinates', serializer=LogbookCoordinatesSerializer)
+        APIField('coordinates', serializer=LogbookCoordinatesSerializer),
+        APIField('metadata_template', serializer=RichTextSerializer()),
     ]
+
+    def metadata_template(self):
+        return {
+            'html': render_to_string('logbooks/metadata.html', {
+                'page': self
+            })
+        }
 
     def contributors(self):
         return list(set([

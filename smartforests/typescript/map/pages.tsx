@@ -83,15 +83,17 @@ export function AtlasPage() {
           {!!page.geographical_location && (
             <div className='caption text-muted'>{page.geographical_location}</div>
           )}
-          <div>
+          {/* <div>
             {page.tags.map(tag => (
-              <span className='badge rounded-pill bg-offwhite text-mid-green caption align-baseline mx-1'>
+              <span key={tag} className='badge rounded-pill bg-offwhite text-mid-green caption align-baseline mx-1'>
                 {tag}
               </span>
             ))}
-          </div>
+          </div> */}
           <hr className='mx-2 mt-3 mb-2' />
-          <div className='py-2' dangerouslySetInnerHTML={{ __html: page.description }} />
+          <div className='pt-2' dangerouslySetInnerHTML={{ __html: page.description }} />
+          <hr className='mx-2 mb-2' />
+          <div className='py-2' dangerouslySetInnerHTML={{ __html: page?.metadata_template?.html }} />
         </div>
       ) : (
         "Loading"

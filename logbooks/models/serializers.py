@@ -21,3 +21,7 @@ class LogbookCoordinatesSerializer(GeoFeatureModelSerializer):
         model = 'logbooks.LogbookPage'
         geo_field = "coordinates"
         fields = '__all__'
+
+
+class RichTextSerializer(serializers.Serializer):
+    html = serializers.CharField(max_length=10000000)
