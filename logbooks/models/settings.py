@@ -8,8 +8,6 @@ from django.db import models
 class ImportantPages(BaseSetting):
     logbooks_index_page = models.ForeignKey(
         'logbooks.LogbookIndexPage', null=True, on_delete=models.SET_NULL, related_name='+')
-    stories_index_page = models.ForeignKey(
-        'logbooks.StoryIndexPage', null=True, on_delete=models.SET_NULL, related_name='+', verbose_name="Logbook Entries Index Page")
 
     panels = [
         PageChooserPanel('logbooks_index_page'),

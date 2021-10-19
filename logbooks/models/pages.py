@@ -13,21 +13,6 @@ from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMix
 from logbooks.models.snippets import AtlasTag
 
 
-class StoryIndexPage(ChildListMixin, BaseLogbooksPage):
-    '''
-    Collection of stories.
-    '''
-
-    class Meta:
-        verbose_name = "Logbook entries index page"
-
-    def get_child_list_queryset(self, *args, **kwargs):
-        return self.get_children().order_by('-last_published_at').specific()
-
-    show_in_menus_default = True
-    parent_page_types = ['home.HomePage']
-
-
 class LogbookEntryPage(ArticlePage):
     '''
     Logbook entry pages are typically short articles, produced by consistent authors, associated with a single logbook.
