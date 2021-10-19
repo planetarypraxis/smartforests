@@ -1,0 +1,19 @@
+{% extends "logbooks/article_page_base.html" %}
+{% load ckdjango_tags ckbootstrap_tags wagtailcore_tags %}
+
+{% block article %}
+  <div class="mb-7">
+    {% if self.description %}
+    <div class="bg-white rounded-1 p-3">
+      {{self.description|richtext}}
+    </div>
+    {% endif %}
+  </div>
+  <div class="row row-cols-1 gx-0 gy-7">
+  {% for entry in child_page_list %}
+    <article class="col">
+      {{entry.content_html}}
+    </article>
+  {% endfor %}
+  </div>
+{% endblock %}
