@@ -57,6 +57,8 @@ class ContributorMixin(Page):
         APIField('contributors', serializer=UserSerializer(many=True)),
     ]
 
+    content_panels = []
+
 
 class GeocodedMixin(Page):
     '''

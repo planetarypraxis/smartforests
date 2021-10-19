@@ -1,5 +1,12 @@
 {% extends "logbooks/article_page_base.html" %}
-{% load ckdjango_tags ckbootstrap_tags wagtailcore_tags %}
+{% load ckdjango_tags wagtailimages_tags wagtailcore_tags %}
+
+{% block article_header %}
+  {% if self.image %}
+    {% image self.image height-500 class="img-fluid hero-img" %}
+  {% endif %}
+{% endblock %}
+
 
 {% block article %}
   {{self.body}}

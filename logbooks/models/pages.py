@@ -1,8 +1,11 @@
+from django.db import models
+from django.db.models.fields.related import ForeignKey
 from django.template.loader import render_to_string
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import Tag
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.api.conf import APIField
+from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.core.fields import RichTextField
 from commonknowledge.wagtail.helpers import get_children_of_type
 from commonknowledge.wagtail.models import ChildListMixin
@@ -11,11 +14,12 @@ from commonknowledge.django.cache import django_cached_model
 from logbooks.models.helpers import group_by_title
 from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager
 from logbooks.models.snippets import AtlasTag
+from smartforests.models import CmsImage
 
 
 class StoryPage(ArticlePage):
     '''
-    Logbook entry pages are typically short articles, produced by consistent authors, associated with a single logbook.
+    Stories are longer, self-contained articles.
     '''
 
     class Meta:
@@ -24,6 +28,16 @@ class StoryPage(ArticlePage):
 
     show_in_menus_default = True
     parent_page_types = ['logbooks.StoryIndexPage']
+
+    image = ForeignKey(CmsImage, on_delete=models.SET_NULL,
+                       null=True, blank=True)
+
+    content_panels = [
+        ImageChooserPanel('image')
+    ] + ArticlePage.content_panels
+
+    def cover_image(self):
+        return self.image
 
 
 class StoryIndexPage(ChildListMixin, BaseLogbooksPage):
