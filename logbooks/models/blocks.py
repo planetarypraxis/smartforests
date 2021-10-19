@@ -28,16 +28,7 @@ class ImageBlock(blocks.StructBlock):
         icon = 'image'
 
 
-class ArticleContentStream(StreamField):
-    text_indexer = StreamfieldIndexer(
-        quote=StructIndexer(
-            title=TextIndexer(),
-            author=TextIndexer(),
-            text=TextIndexer(),
-        ),
-        _default=TextIndexer(),
-    )
-
+def ArticleContentStream(block_types=None, **kwargs):
     common_block_types = [
         ('text', blocks.RichTextBlock(features=[
             'h3', 'bold', 'italic', 'link', 'ol', 'ul'
@@ -47,5 +38,14 @@ class ArticleContentStream(StreamField):
         ('image', ImageBlock()),
     ]
 
-    def __init__(self, block_types=None, **kwargs):
-        super().__init__(self.common_block_types + (block_types or []), **kwargs)
+    return StreamField(common_block_types + (block_types or []), **kwargs)
+
+
+ArticleContentStream.text_indexer = StreamfieldIndexer(
+    quote=StructIndexer(
+        title=TextIndexer(),
+        author=TextIndexer(),
+        text=TextIndexer(),
+    ),
+    _default=TextIndexer(),
+)
