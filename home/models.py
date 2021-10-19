@@ -9,6 +9,7 @@ from commonknowledge.wagtail.models import ChildListMixin
 
 class HomePage(ChildListMixin, Page):
     show_in_menus_default = True
+    parent_page_types = ['wagtailcore.Page']
 
 
 class InformationPage(Page):
