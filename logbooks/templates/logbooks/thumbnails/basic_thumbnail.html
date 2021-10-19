@@ -1,0 +1,18 @@
+{% load wagtailimages_tags %}
+
+{% if self.thumbnail_image %}
+  <div class="card">
+    <img width="{{self.thumbnail_image.width}}" height="{{self.thumbnail_image.height}}" src="{{self.thumbnail_image.url}}" class="img-fluid">
+    
+    <div class="overlay-bg"></div>
+    <div class="position-absolute fw-bold top-0 start-0 w-100 h-100 p-3 text-white link-reset">
+      {{self.title}}
+    </div>
+  </div>
+{% else %}
+  <div class="card">
+    <div class="card-body fw-bold">
+      {{self.title}}
+    </div>
+  </div>
+{% endif %}

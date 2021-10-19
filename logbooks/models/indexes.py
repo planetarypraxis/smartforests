@@ -1,11 +1,11 @@
 from functools import reduce
 from django.contrib.contenttypes.models import ContentType
-from logbooks.models.pages import LogbookIndexPage, LogbookPage, StoryPage
+from logbooks.models.pages import LogbookPage, LogbookEntryPage
 from django.dispatch import receiver
 from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.postgres.indexes import GinIndex
-from wagtail.core.models import Page
+from wagtail.core.models import Page, PageManager
 
 
 class LogbookPageIndex(models.Model):
@@ -40,8 +40,7 @@ class LogbookPageIndex(models.Model):
         super().save(*args, **kwargs)
 
         if regenerate_thumbnails and hasattr(self.page.specific, 'regenerate_thumbnail'):
-            self.thumbnail_image = self.page.specific.regenerate_thumbnail(
-                self)
+            self.thumbnail_image = self.page.specific.regenerate_thumbnail()
             self.save(regenerate_thumbnails=False)
 
     @staticmethod
@@ -57,8 +56,8 @@ class LogbookPageIndex(models.Model):
         return idx
 
     @staticmethod
-    @receiver(post_save, sender=StoryPage)
-    def handle_story_updated(sender, instance: StoryPage, *args, **kwargs):
+    @receiver(post_save, sender=LogbookEntryPage)
+    def handle_story_updated(sender, instance: LogbookEntryPage, *args, **kwargs):
         idx = LogbookPageIndex.get_for_instance(instance)
 
         idx.update_tags(instance)
@@ -68,12 +67,12 @@ class LogbookPageIndex(models.Model):
 
     @staticmethod
     @receiver(post_save, sender=LogbookPage)
-    def handle_logbook_updated(sender, instance: StoryPage, *args, **kwargs):
+    def handle_logbook_updated(sender, instance: LogbookEntryPage, *args, **kwargs):
         idx = LogbookPageIndex.get_for_instance(instance)
 
         idx.update_tags(instance)
-        idx.update_pages_related_to(StoryPage)
-        idx.update_related_pages(StoryPage)
+        idx.update_pages_related_to(LogbookEntryPage)
+        idx.update_related_pages(LogbookEntryPage)
         idx.save()
 
     def get_related_page_indexes(self, related_type):

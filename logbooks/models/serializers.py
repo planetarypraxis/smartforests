@@ -9,15 +9,8 @@ class UserSerializer(serializers.Serializer):
         fields = ['username', 'id', ]
 
 
-class StoryCoordinatesSerializer(GeoFeatureModelSerializer):
+class PageCoordinatesSerializer(GeoFeatureModelSerializer):
     class Meta:
-        model = 'logbooks.StoryPage'
-        geo_field = "coordinates"
-        fields = '__all__'
-
-
-class LogbookCoordinatesSerializer(GeoFeatureModelSerializer):
-    class Meta:
-        model = 'logbooks.LogbookPage'
+        model = 'logbooks.GeocodedMixin'
         geo_field = "coordinates"
         fields = '__all__'
