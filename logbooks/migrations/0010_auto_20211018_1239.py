@@ -18,5 +18,10 @@ class Migration(migrations.Migration):
         migrations.RenameModel(
             new_name='LogbookEntryPage',
             old_name='StoryPage',
-        )
+        ),
+        # PostGIS indexes don't get renamed automatically. Do it here so that we don't get name collisions in future.
+        migrations.RunSQL(
+            'ALTER INDEX logbooks_storypage_coordinates_id RENAME TO logbooks_logbookentrypage_coordinates_id',
+            reverse_sql='ALTER INDEX logbooks_logbookentrypage_coordinates_id RENAME TO logbooks_storypage_coordinates_id'
+        ),
     ]
