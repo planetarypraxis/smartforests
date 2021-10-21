@@ -39,7 +39,7 @@
         {% endblock %}
     </head>
 
-    <body class="{% block body_class %}d-flex flex-column min-vh-100{% endblock %}">
+    <body class="d-flex flex-column {% block body_height %}min-vh-100 overflow-auto{% endblock %}{% block body_class %}{% endblock %}">
         {{ self.full_url|json_script:"routing_configuration" }} 
         {% wagtailuserbar %}
 
