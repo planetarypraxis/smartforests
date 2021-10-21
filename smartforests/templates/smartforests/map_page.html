@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static ckbootstrap_tags %}
-{% block body_height %}vh-100{% endblock %}
+{% block body_height %}vh-100 overflow-hidden{% endblock %}
 {% block content %}
   <div data-mapbox-token="{{mapbox_token}}" id="MAP_APP" class='h-100 w-100 position-relative'></div>
 
