@@ -12,7 +12,7 @@ from datetime import datetime
 from faker import Faker, providers
 import requests
 
-from logbooks.models import LogbookIndexPage, LogbookPage, StoryIndexPage, StoryPage
+from logbooks.models import LogbookIndexPage, LogbookPage, StoryIndexPage, LogbookEntryPage
 
 
 class Command(BaseCommand):
@@ -114,7 +114,7 @@ class Command(BaseCommand):
             apply_tags(logbook, options.get('tags_per_logbook'))
             logbook.save()
 
-        def populate_story(story: StoryPage):
+        def populate_story(story: LogbookEntryPage):
             story.body = [generate_story_block()
                           for _ in range(random_distribution())]
             apply_tags(story, options.get('tags_per_story'))
@@ -139,7 +139,7 @@ class Command(BaseCommand):
         for index in StoryIndexPage.objects.all():
             if index.is_leaf():
                 for _ in range(options.get('stories')):
-                    story = StoryPage(
+                    story = LogbookEntryPage(
                         title=fake.sentence(),
                         first_published_at=fake.past_datetime(
                             start_date='-60d')
@@ -147,5 +147,5 @@ class Command(BaseCommand):
                     index.add_child(instance=story)
                     populate_story(story)
             else:
-                for story in get_children_of_type(index, StoryPage):
+                for story in get_children_of_type(index, LogbookEntryPage):
                     populate_story(story)

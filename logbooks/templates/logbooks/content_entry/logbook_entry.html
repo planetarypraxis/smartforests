@@ -1,5 +1,6 @@
 {% load ckdjango_tags wagtailimages_tags wagtailcore_tags %}
-<article class='row row-cols-1 gy-2'>
+
+<article class='row row-cols-1 gy-2' id="{{self.slug}}">
   <header class='col'>
     <section class='caption text-grey fw-lighter'>
       <div class="d-flex">
@@ -15,9 +16,7 @@
       {% endif %}
     </section>
   </header>
-  <h3 class='fs-4 fw-bolder'><a href="{{ self.url }}" class='text-reset text-decoration-none'>
-    {{ self.title }}
-  </a></h3>
+  <h3 class='fs-4 fw-bolder'>{{ self.title }}</h3>
   <section class='row gy-3 my-0'>
   {% for block in self.body %}  
       {% with next_block=self.body|next:forloop.counter0 %}
@@ -44,7 +43,7 @@
   </section>
   <footer class='col'>
     {% for tag in self.tags.all %}
-      {% include 'logbooks/tag_label.html' with tag=tag %}
+      {% include 'logbooks/include/tag_label.html' with tag=tag %}
     {% endfor %}
   </footer>
 </article>

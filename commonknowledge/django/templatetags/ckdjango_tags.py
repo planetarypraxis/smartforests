@@ -15,7 +15,7 @@ register = template.Library()
 def webpack_bundle(name, type='js'):
     if settings.DEBUG:
         if type == 'js':
-            return mark_safe(f'<script src="http://localhost:8080/{name}.js"></script>')
+            return mark_safe(f'<script defer src="http://localhost:8080/{name}.js"></script>')
         else:
             return mark_safe('')
 

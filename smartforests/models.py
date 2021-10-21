@@ -8,6 +8,8 @@ from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 
 
 class MapPage(RoutablePageMixin, Page):
+    parent_page_types = ['home.HomePage']
+
     # Hand off all routing below this page to the frontend router (react-router)
     @route(r'^(?P<path>.*)/?$')
     def subpages(self, request, *args, **kwargs):
