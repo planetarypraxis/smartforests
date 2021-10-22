@@ -10,10 +10,8 @@ from commonknowledge.wagtail.helpers import get_children_of_type
 from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
 from wagtail.api import APIField
-from wagtail.contrib.routable_page.models import RoutablePageMixin, route
-from turbo_response import TurboFrame
 from logbooks.models.helpers import group_by_title
-from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager
+from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager, TurboFrameMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
 
@@ -78,7 +76,7 @@ class LogbookEntryPage(ArticlePage):
         })
 
 
-class LogbookPage(RoutablePageMixin, ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
+class LogbookPage(TurboFrameMixin, ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
     '''
     Collection of logbook entries.
     '''
@@ -101,11 +99,6 @@ class LogbookPage(RoutablePageMixin, ChildListMixin, ContributorMixin, GeocodedM
         APIField('tags'),
         APIField('description'),
     ] + ContributorMixin.api_fields + GeocodedMixin.api_fields
-
-    @route('^frame/(?P<dom_id>[-\w_]+)/(?P<template_path>.+)$')
-    def turbo_frame_response(self, request, dom_id, template_path, *args, **kwargs):
-        print(dom_id, template_path)
-        return TurboFrame(dom_id).template(f'{template_path.replace("-", "/").strip("/")}.html', {"page": self}).response(request)
 
     def get_child_list_queryset(self, _request):
         return self.logbook_entries
