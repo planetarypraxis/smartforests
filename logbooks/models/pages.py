@@ -96,6 +96,7 @@ class LogbookPage(TurboFrameMixin, ChildListMixin, ContributorMixin, GeocodedMix
     ] + ContributorMixin.content_panels + GeocodedMixin.content_panels
 
     api_fields = [
+        APIField('label'),
         APIField('tags'),
         APIField('description'),
     ] + ContributorMixin.api_fields + GeocodedMixin.api_fields

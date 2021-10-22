@@ -3,7 +3,7 @@ import { constructModelTypeName, pageToPath, initialPageURL, useWagtailSearch, W
 import { SmartForest } from './types';
 import { Marker, Popup } from '@urbica/react-map-gl'
 import { useFocusContext } from './state';
-import { Link, useParams, useHistory } from 'react-router-dom';
+import { Link, useRouteMatch, useHistory } from 'react-router-dom';
 import type { Offcanvas } from 'bootstrap';
 
 export function AtlasPagesMapLayer() {
@@ -62,7 +62,7 @@ export const AtlasPageMarker: React.FC<{ page: Wagtail.Item<SmartForest.LogbookP
 function AtlasPageCard({ page }: { page: Wagtail.Item<SmartForest.LogbookPage> }) {
   return (
     <div className='row gy-1'>
-      <div className='caption text-muted'>{page.meta.type}</div>
+      <div className='caption text-muted'>{page.label}</div>
       <div className='fs-6 text-dark-green fw-bold'>{page.title}</div>
       {!!page.geographical_location && (
         <div className='caption text-muted'>{page.geographical_location}</div>

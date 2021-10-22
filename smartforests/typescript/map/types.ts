@@ -5,6 +5,7 @@ export namespace SmartForest {
     geographical_location?: string;
     contributors: Contributor[];
     coordinates?: Coordinates;
+    label: string;
   }
 
   export interface Contributor {
