@@ -80,11 +80,13 @@ class LogbookPage(TurboFrameMixin, ChildListMixin, ContributorMixin, GeocodedMix
     '''
     Collection of logbook entries.
     '''
+    class Meta:
+        verbose_name = "Logbook"
+        verbose_name_plural = "Logbooks"
 
     objects = IndexedPageManager()
     show_in_menus_default = True
     parent_page_types = ['logbooks.LogbookIndexPage']
-    label = 'Logbook'
 
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
     description = RichTextField()
@@ -96,7 +98,6 @@ class LogbookPage(TurboFrameMixin, ChildListMixin, ContributorMixin, GeocodedMix
     ] + ContributorMixin.content_panels + GeocodedMixin.content_panels
 
     api_fields = [
-        APIField('label'),
         APIField('tags'),
         APIField('description'),
     ] + ContributorMixin.api_fields + GeocodedMixin.api_fields
