@@ -6,10 +6,10 @@ export const wagtailAPIDefaultOptions = {
   'fields': '*'
 }
 
-export const pageURL = () => new URL(JSON.parse(document.getElementById('routing_configuration').textContent))
+export const initialPageURL = () => new URL(JSON.parse(document.getElementById('routing_configuration').textContent))
 
 export function pageToPath(page: Wagtail.Item): string {
-  return `${pageURL().pathname}${page.meta.type.split('.').join('/')}/${page.id}`
+  return `${initialPageURL().pathname}${page.meta.type.split('.').join('/')}/${page.id}`
 }
 
 export function constructModelTypeName(model: string, modelName: string): string {

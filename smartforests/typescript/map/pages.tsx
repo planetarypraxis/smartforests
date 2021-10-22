@@ -1,9 +1,10 @@
-import React, { Fragment, memo } from 'react'
-import { constructModelTypeName, pageToPath, useWagtailSearch, Wagtail } from '../wagtail';
+import React, { Fragment, memo, useEffect, useRef } from 'react'
+import { constructModelTypeName, pageToPath, initialPageURL, useWagtailSearch, Wagtail } from '../wagtail';
 import { SmartForest } from './types';
 import { Marker, Popup } from '@urbica/react-map-gl'
 import { useFocusContext } from './state';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useHistory } from 'react-router-dom';
+import type { Offcanvas } from 'bootstrap';
 
 export function AtlasPagesMapLayer() {
   const results = useWagtailSearch<SmartForest.LogbookPage>({
@@ -70,18 +71,61 @@ function AtlasPageCard({ page }: { page: Wagtail.Item<SmartForest.LogbookPage> }
   )
 }
 
-export function AtlasPage() {
-  const { app, model, id } = useParams<{ app: string, model: string, id: string }>()
+export function Sidepanel() {
+  const history = useHistory()
+  const { params: { app, model, id } } = useRouteMatch<{ app: string, model: string, id: string }>('/map/:app?/:model?/:id?')
   const pageSearch = useWagtailSearch<SmartForest.LogbookPage>({ id: parseInt(id), type: constructModelTypeName(app, model) })
   const page = pageSearch.data?.items?.[0]
-  return (
-    <div className='w-100 h-100 bg-white'>
+
+  const offcanvasMapId = 'offcanvasMap'
+  const offcanvasElement = useRef<HTMLElement>()
+  const offcanvas = useRef<Offcanvas>()
+
+  useEffect(() => {
+    offcanvasElement.current ??= document.getElementById(offcanvasMapId)
+    // @ts-ignore
+    offcanvas.current ??= new bootstrap.Offcanvas(offcanvasElement.current)
+    offcanvasElement.current?.addEventListener('hide.bs.offcanvas', function () {
+      return history.push(initialPageURL().pathname)
+    })
+  }, [])
+
+  useEffect(() => {
+    if (page) {
+      return offcanvas.current?.show()
+    } else {
+      return offcanvas.current?.hide()
+    }
+  }, [page])
+
+  return <div
+    className="offcanvas offcanvas-end flex flex-column h-100 overflow-hidden"
+    tabIndex={-1}
+    id={offcanvasMapId}
+    aria-labelledby="offcanvasMapTitle"
+    data-bs-scroll="true"
+    data-bs-backdrop="false"
+  >
+    <div className='container gx-2 py-2 bg-warning' style={{
+      mixBlendMode: 'multiply',
+    }}>
+      <button type="button" className="btn btn-link text-reset text-decoration-none" data-bs-dismiss="offcanvas" aria-label="Close">
+        <span className='pe-2'>&larr;</span>
+        <span className='border-bottom border-1 pb-1 border-dark-green'>Close</span>
+      </button>
+    </div>
+    <div className='overflow-auto h-100'>
       {!!page ? (
-        // @ts-ignore
-        <turbo-frame id="metadata" src={`${page?.meta.html_url}frame/metadata/logbooks-sidepanel`} />
+        /* @ts-ignore */
+        <turbo-frame id="metadata" src={`${page.meta.html_url}frame/metadata/logbooks-sidepanel`} />
       ) : (
-        <div className='container py-3'>Loading</div>
+        <Fragment>
+          <div className='offcanvas-header container gy-1 gx-3 py-3'>
+            Loading
+          </div>
+          <div className='offcanvas-body container gy-1 gx-3 py-3'></div>
+        </Fragment>
       )}
     </div>
-  )
+  </div>
 }
