@@ -77,18 +77,10 @@ export function AtlasPage() {
   return (
     <div className='w-100 h-100 bg-white'>
       {!!page ? (
-        <div className='container row gy-1 py-3'>
-          <div className='caption text-muted'>{page.meta.type}</div>
-          <div className='fs-6 text-dark-green fw-bold'>{page.title}</div>
-          {!!page.geographical_location && (
-            <div className='caption text-muted'>{page.geographical_location}</div>
-          )}
-          <hr className='mx-2 mt-3 mb-2' />
-          {/* @ts-ignore */}
-          <turbo-frame id="metadata" src={`${page?.meta.html_url}metadata`} />
-        </div>
+        // @ts-ignore
+        <turbo-frame id="metadata" src={`${page?.meta.html_url}frame/metadata/logbooks-sidepanel`} />
       ) : (
-        "Loading"
+        <div className='container py-3'>Loading</div>
       )}
     </div>
   )

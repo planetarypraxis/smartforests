@@ -86,6 +86,7 @@ class LogbookPage(RoutablePageMixin, ChildListMixin, ContributorMixin, GeocodedM
     objects = IndexedPageManager()
     show_in_menus_default = True
     parent_page_types = ['logbooks.LogbookIndexPage']
+    label = 'Logbook'
 
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
     description = RichTextField()
@@ -101,9 +102,10 @@ class LogbookPage(RoutablePageMixin, ChildListMixin, ContributorMixin, GeocodedM
         APIField('description'),
     ] + ContributorMixin.api_fields + GeocodedMixin.api_fields
 
-    @route('^metadata')
-    def metadata_template(self, request, *args, **kwargs):
-        return TurboFrame("metadata").template("logbooks/metadata.html", {"page": self}).response(request)
+    @route('^frame/(?P<dom_id>[-\w_]+)/(?P<template_path>.+)$')
+    def turbo_frame_response(self, request, dom_id, template_path, *args, **kwargs):
+        print(dom_id, template_path)
+        return TurboFrame(dom_id).template(f'{template_path.replace("-", "/").strip("/")}.html', {"page": self}).response(request)
 
     def get_child_list_queryset(self, _request):
         return self.logbook_entries
