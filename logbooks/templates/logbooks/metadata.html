@@ -10,17 +10,17 @@
   <section class="d-flex flex-column mb-3">
     <h4 class="mb-0">Contributors</h4>
     <a>{% if page.owner.first_name and page.owner.last_name %}{{ page.owner.first_name }} {{ page.owner.last_name }}{% else %}{{ page.owner }}{% endif %}</a>
-    <!-- {% for entry in child_page_list %}
+    {% for entry in child_page_list %}
     <a>{% if entry.owner.first_name and entry.owner.last_name %}{{ entry.owner.first_name }} {{ entry.owner.last_name }}{% else %}{{ entry.owner }}{% endif %}</a>
-    {% endfor %} -->
+    {% endfor %}
   </section>
   {% if page.geographical_location %}
   <section class="d-flex flex-column mb-3">
     <h4 class="mb-0">Location</h4>
     <div>{{ page.geographical_location }}</div>
-    {% endif %}
     {% if page.coordinates %}
       <div>{{ page.latitude | floatformat:4}}° N, {{ page.longitude | floatformat:4}}° E</div>
+    {% endif %}
   </section>
   {% endif %}
   <section class="d-flex flex-column">
