@@ -7,6 +7,16 @@ import { Link, useRouteMatch, useHistory } from 'react-router-dom';
 import type { Offcanvas } from 'bootstrap';
 
 export function AtlasPagesMapLayer() {
+  return (
+    <Fragment>
+      <LogbookPageMarkers />
+      <LogbookEntryPageMarkers />
+      <StoryPageMarkers />
+    </Fragment>
+  )
+}
+
+export function LogbookPageMarkers() {
   const results = useWagtailSearch<SmartForest.LogbookPage>({
     type: 'logbooks.LogbookPage',
     limit: 1000
@@ -21,7 +31,37 @@ export function AtlasPagesMapLayer() {
   )
 }
 
-export const AtlasPageMarker: React.FC<{ page: Wagtail.Item<SmartForest.LogbookPage> }> = memo(({ page }) => {
+export function LogbookEntryPageMarkers() {
+  const results = useWagtailSearch<SmartForest.LogbookEntryPage>({
+    type: 'logbooks.LogbookEntryPage',
+    limit: 1000
+  })
+
+  return (
+    <Fragment>
+      {results.data?.items?.filter(f => !!f.coordinates).map((page, i) => (
+        <AtlasPageMarker key={i + page.id} page={page} />
+      ))}
+    </Fragment>
+  )
+}
+
+export function StoryPageMarkers() {
+  const results = useWagtailSearch<SmartForest.StoryPage>({
+    type: 'logbooks.StoryPage',
+    limit: 1000
+  })
+
+  return (
+    <Fragment>
+      {results.data?.items?.filter(f => !!f.coordinates).map((page, i) => (
+        <AtlasPageMarker key={i + page.id} page={page} />
+      ))}
+    </Fragment>
+  )
+}
+
+export const AtlasPageMarker: React.FC<{ page: Wagtail.Item<SmartForest.GeocodedMixin> }> = memo(({ page }) => {
   const [isFocusing, setIsFocusing] = useFocusContext(page.id, page.meta.type)
 
   return (
@@ -59,7 +99,7 @@ export const AtlasPageMarker: React.FC<{ page: Wagtail.Item<SmartForest.LogbookP
   )
 })
 
-function AtlasPageCard({ page }: { page: Wagtail.Item<SmartForest.LogbookPage> }) {
+function AtlasPageCard({ page }: { page: Wagtail.Item<SmartForest.GeocodedMixin> }) {
   return (
     <div className='row gy-1'>
       <div className='caption text-muted'>{page.label}</div>

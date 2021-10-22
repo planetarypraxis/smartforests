@@ -30,7 +30,7 @@ export function useWagtailSearch<Item = any, Wrapper = Wagtail.Results<Item>>(qu
 export namespace Wagtail {
   export type APIOptions = {
     // search
-    type?: string,
+    type?: string | string[],
     search?: string,
     search_operator?: 'and' | 'or',
     html_path?: string,
