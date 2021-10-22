@@ -14,7 +14,3 @@ class PageCoordinatesSerializer(GeoFeatureModelSerializer):
         model = 'logbooks.GeocodedMixin'
         geo_field = "coordinates"
         fields = '__all__'
-
-
-class RichTextSerializer(serializers.Serializer):
-    html = serializers.CharField(max_length=10000000)

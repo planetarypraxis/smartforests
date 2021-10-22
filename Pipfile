@@ -30,3 +30,4 @@ faker = "*"
 wagtailmenus = {editable = true, git = "https://github.com/rkhleics/wagtailmenus.git"}
 django-debug-toolbar = "*"
 djangorestframework-gis = "*"
+django-turbo-response = "*"

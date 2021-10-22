@@ -27,7 +27,7 @@
     <h4>Tags</h4>
     <div class="d-flex flex-column">
     {% for tag in page.tags.all %}
-      {% include "logbooks/tag_label.html" with tag=tag orientation="vertical" %}
+      {% include "logbooks/include/tag_label.html" with tag=tag orientation="vertical" %}
     {% endfor %}
     </div>
   </section>

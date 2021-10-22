@@ -4,13 +4,14 @@ from django.template.loader import render_to_string
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import Tag
 from wagtail.admin.edit_handlers import FieldPanel
-from wagtail.api.conf import APIField
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.core.fields import RichTextField
 from commonknowledge.wagtail.helpers import get_children_of_type
 from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
-
+from wagtail.api import APIField
+from wagtail.contrib.routable_page.models import RoutablePageMixin, route
+from turbo_response import TurboFrame
 from logbooks.models.helpers import group_by_title
 from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager
 from logbooks.models.snippets import AtlasTag
@@ -77,7 +78,7 @@ class LogbookEntryPage(ArticlePage):
         })
 
 
-class LogbookPage(ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
+class LogbookPage(RoutablePageMixin, ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
     '''
     Collection of logbook entries.
     '''
@@ -99,6 +100,10 @@ class LogbookPage(ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixi
         APIField('tags'),
         APIField('description'),
     ] + ContributorMixin.api_fields + GeocodedMixin.api_fields
+
+    @route('^metadata')
+    def metadata_template(self, request, *args, **kwargs):
+        return TurboFrame("metadata").template("logbooks/metadata.html", {"page": self}).response(request)
 
     def get_child_list_queryset(self, _request):
         return self.logbook_entries

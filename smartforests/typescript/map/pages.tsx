@@ -13,8 +13,8 @@ export function AtlasPagesMapLayer() {
 
   return (
     <Fragment>
-      {results.data?.items?.filter(f => !!f.coordinates).map(page => (
-        <AtlasPageMarker key={page.id} page={page} />
+      {results.data?.items?.filter(f => !!f.coordinates).map((page, i) => (
+        <AtlasPageMarker key={i + page.id} page={page} />
       ))}
     </Fragment>
   )
@@ -83,17 +83,9 @@ export function AtlasPage() {
           {!!page.geographical_location && (
             <div className='caption text-muted'>{page.geographical_location}</div>
           )}
-          {/* <div>
-            {page.tags.map(tag => (
-              <span key={tag} className='badge rounded-pill bg-offwhite text-mid-green caption align-baseline mx-1'>
-                {tag}
-              </span>
-            ))}
-          </div> */}
           <hr className='mx-2 mt-3 mb-2' />
-          <div className='pt-2' dangerouslySetInnerHTML={{ __html: page.description }} />
-          <hr className='mx-2 mb-2' />
-          <div className='py-2' dangerouslySetInnerHTML={{ __html: page?.metadata_template?.html }} />
+          {/* @ts-ignore */}
+          <turbo-frame id="metadata" src={`${page?.meta.html_url}metadata`} />
         </div>
       ) : (
         "Loading"
