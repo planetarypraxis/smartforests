@@ -69,6 +69,8 @@ class GeocodedMixin(Page):
 
     class Meta:
         abstract = True
+        verbose_name = "Location"
+        verbose_name_plural = "Locations"
 
     geographical_location = models.CharField(
         max_length=250, null=True, blank=True)
@@ -94,7 +96,12 @@ class GeocodedMixin(Page):
         )
     ]
 
+    @classmethod
+    def label(self):
+        return self._meta.verbose_name
+
     api_fields = [
+        APIField('label'),
         APIField('geographical_location'),
         APIField('coordinates', serializer=PageCoordinatesSerializer)
     ]

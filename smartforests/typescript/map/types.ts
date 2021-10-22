@@ -1,9 +1,19 @@
 export namespace SmartForest {
-  export interface LogbookPage {
+  export interface StoryPage extends GeocodedMixin {
+    tags: string[];
+  }
+
+  export interface LogbookPage extends GeocodedMixin {
     tags: string[];
     description: string;
+  }
+
+  export interface LogbookEntryPage extends GeocodedMixin {
+    tags: string[];
+  }
+
+  export interface GeocodedMixin {
     geographical_location?: string;
-    contributors: Contributor[];
     coordinates?: Coordinates;
     label: string;
   }
