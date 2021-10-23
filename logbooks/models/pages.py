@@ -16,7 +16,7 @@ from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
 
 
-class StoryPage(ArticlePage):
+class StoryPage(TurboFrameMixin, ArticlePage):
     '''
     Stories are longer, self-contained articles.
     '''
@@ -54,7 +54,7 @@ class StoryIndexPage(ChildListMixin, BaseLogbooksPage):
     parent_page_types = ['home.HomePage']
 
 
-class LogbookEntryPage(ArticlePage):
+class LogbookEntryPage(TurboFrameMixin, ArticlePage):
     '''
     Logbook entry pages are typically short articles, produced by consistent authors, associated with a single logbook.
     '''
