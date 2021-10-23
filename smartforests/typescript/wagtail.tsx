@@ -1,3 +1,4 @@
+import React from 'react'
 import useSWR from "swr"
 import qs from 'query-string'
 
@@ -14,6 +15,11 @@ export function pageToPath(page: Wagtail.Item): string {
 
 export function constructModelTypeName(model: string, modelName: string): string {
   return [model, modelName].join('.')
+}
+
+export function TurboFrame({ id, page, template }: { id: string, page: Wagtail.Item, template: string }) {
+  // @ts-ignore
+  return <turbo-frame id={id} src={`${page.meta.html_url}frame/${id}/${template.replace(/\//, '-').replace('.html', '')}`} />
 }
 
 export function useWagtailSearch<Item = any, Wrapper = Wagtail.Results<Item>>(query: Wagtail.APIOptions = {}, url = '/api/v2/pages/') {

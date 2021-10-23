@@ -1,5 +1,5 @@
 import React, { Fragment, memo, useEffect, useRef } from 'react'
-import { constructModelTypeName, pageToPath, initialPageURL, useWagtailSearch, Wagtail } from '../wagtail';
+import { constructModelTypeName, pageToPath, initialPageURL, useWagtailSearch, Wagtail, TurboFrame } from '../wagtail';
 import { SmartForest } from './types';
 import { Marker, Popup } from '@urbica/react-map-gl'
 import { useFocusContext } from './state';
@@ -116,8 +116,7 @@ export function Sidepanel() {
     </div>
     <div className='overflow-auto h-100'>
       {!!page ? (
-        /* @ts-ignore */
-        <turbo-frame id="metadata" src={`${page.meta.html_url}frame/metadata/logbooks-sidepanel`} />
+        <TurboFrame id='metadata' page={page} template='logbooks/sidepanel.html' />
       ) : (
         <Fragment>
           <div className='offcanvas-header container gy-1 gx-3 py-3'>
