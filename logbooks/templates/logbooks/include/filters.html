@@ -1,6 +1,6 @@
 {% load ckdjango_tags %}
 
-<div id="filters" class="collapse filter-sidebar collapse-horizontal">
+<div id="filters" class="collapse filter-sidebar collapse-horizontal" data-turbo-permanent>
   <div class="sidebar filter-bar">
     <div class="index-header justify-content-end px-2">
       <div>
@@ -23,6 +23,7 @@
               <a
                 class="text-uppercase badge badge-primary rounded-pill m-1 p-1 link-reset {% if tag_filter == tag.slug %}active{% endif %}"
                 href="{% qs_link 'filter' tag.slug %}"
+                data-filter-tag="{{tag.slug}}"
               >
                 {{tag}}
               </a>
@@ -32,4 +33,14 @@
       {% endfor %}
     </div>
   </div>
+
+  <script>
+    window.addEventListener('turbo:load', () => {
+      const params = new URLSearchParams(window.location.search);
+      
+      $('#filters [data-filter-tag]').each((_, pill) => {
+        $(pill).toggleClass('active', params.getAll('filter').includes(pill.dataset.filterTag))
+      })
+    })
+  </script>
 </div>
