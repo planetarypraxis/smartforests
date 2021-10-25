@@ -17,7 +17,11 @@ export function constructModelTypeName(model: string, modelName: string): string
   return [model, modelName].join('.')
 }
 
-export function TurboFrame({ id, page, template }: { id: string, page: Wagtail.Item, template: string }) {
+export function pageToFrameURL(frameId: string | number, page: Wagtail.Item, template: string) {
+  return `${page.meta.html_url}frame/${frameId}/${template.replace(/\//, '-').replace('.html', '')}`
+}
+
+export function TurboFrame({ id, page, template }: { id: string | number, page: Wagtail.Item, template: string }) {
   // @ts-ignore
   return <turbo-frame id={id} src={`${page.meta.html_url}frame/${id}/${template.replace(/\//, '-').replace('.html', '')}`} />
 }

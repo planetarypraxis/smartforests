@@ -1,26 +1,48 @@
 {% load ckdjango_tags ckbootstrap_tags wagtailcore_tags %}
-
-<div class='offcanvas-header container gy-1 gx-3 py-3'>
-  <div class='row gy-1'>
-    <div class='caption text-muted'>{{ page.label }}</div>
-    <h5 id="offcanvasMapTitle" class='fs-6 text-dark-green fw-bold mb-0'>{{ page.title }}</h5>
-    {% if page.geographical_location %}
-    <div class='caption text-muted'>{{ page.geographical_location }}</div>
-    {% endif %}
+  <div class="container gx-2 py-2 bg-warning" style="mix-blend-mode: multiply">
+    <button
+      type='button'
+      data-bs-dismiss="offcanvas"
+      class="btn btn-link text-reset text-decoration-none"
+      aria-label="Close"
+    >
+      <span class="pe-2">&larr;</span>
+      <span class="border-bottom border-1 pb-1 border-dark-green">Close</span>
+    </button>
   </div>
-</div>
-<img src='https://via.placeholder.com/350x150' class='w-100' />
-<div class='offcanvas-body container gy-1 gx-3 py-3'>
-  <div class='row'>
-    <div class='mt-2 mb-0'>
-      {{ page.description|richtext }}
-      <p class='mt-0'><a class='text-uppercase text-decoration-underline text-mid-green fs-7' href="{{ page.url }}">
-        READ MORE
-      </a></p>
+  <div class="overflow-auto h-100">
+    <div class="offcanvas-header container gy-1 gx-3 py-3">
+      <div class="row gy-1">
+        <div class="caption text-muted">{{ page.label }}</div>
+        <h5 id="offcanvasMapTitle" class="fs-6 text-dark-green fw-bold mb-0">
+          {{ page.title }}
+        </h5>
+        {% if page.geographical_location %}
+        <div class="caption text-muted">{{ page.geographical_location }}</div>
+        {% endif %}
+      </div>
     </div>
-    <div>
-      <hr class='mt-0' />
+    <img src="https://via.placeholder.com/350x150" class="w-100" />
+    <div class="offcanvas-body container gy-1 gx-3 py-3">
+      <div class="row">
+        <div class="mt-2 mb-0">
+          {{ page.description|richtext }}
+          <p class="mt-0">
+            <a
+              class="
+                text-uppercase text-decoration-underline text-mid-green
+                fs-7
+              "
+              href="{{ page.url }}"
+            >
+              READ MORE
+            </a>
+          </p>
+        </div>
+        <div>
+          <hr class="mt-0" />
+        </div>
+        {% include "logbooks/metadata.html" with page=page %}
+      </div>
     </div>
-    {% include "logbooks/metadata.html" with page=page %}
   </div>
-</div>

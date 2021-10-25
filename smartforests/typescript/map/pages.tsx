@@ -1,10 +1,10 @@
 import React, { Fragment, memo, useEffect, useRef } from 'react'
-import { constructModelTypeName, pageToPath, initialPageURL, useWagtailSearch, Wagtail, TurboFrame } from '../wagtail';
+import { constructModelTypeName, pageToPath, initialPageURL, useWagtailSearch, Wagtail, TurboFrame, pageToFrameURL } from '../wagtail';
 import { SmartForest } from './types';
 import { Marker, Popup } from '@urbica/react-map-gl'
 import { useFocusContext } from './state';
 import { Link, useRouteMatch, useHistory } from 'react-router-dom';
-import type { Offcanvas } from 'bootstrap';
+import { useOffcanvas } from '../bootstrap';
 
 export function AtlasPagesMapLayer() {
   return (
@@ -63,6 +63,8 @@ export function StoryPageMarkers() {
 
 export const AtlasPageMarker: React.FC<{ page: Wagtail.Item<SmartForest.GeocodedMixin> }> = memo(({ page }) => {
   const [isFocusing, setIsFocusing] = useFocusContext(page.id, page.meta.type)
+  const history = useHistory()
+  const [offcanvas] = useOffcanvas('sidepanel-offcanvas')
 
   return (
     <Fragment>
@@ -70,16 +72,33 @@ export const AtlasPageMarker: React.FC<{ page: Wagtail.Item<SmartForest.Geocoded
         longitude={page.coordinates.coordinates[0]}
         latitude={page.coordinates.coordinates[1]}
       >
-        <Link
-          to={pageToPath(page)}
+        <a
+          // data-bs-toggle="offcanvas"
+          // data-bs-target="#sidepanel-offcanvas"
+          data-turbo-action="advance"
+          data-turbo-frame="sidepanel-turboframe"
+          href={pageToFrameURL("sidepanel-turboframe", page, 'logbooks/sidepanel.html')}
           onMouseOver={() => setIsFocusing(true, 'map')}
           onMouseOut={() => setIsFocusing(false, 'map')}
+          onClick={() => {
+            // data-bs-toggle does not open/close things appropriately
+            // data-bs-[*] attributes interfere with data-turbo-action
+            // So we do this programatically instead.
+            // An alternative would be to control this at the URL level, coordinated by some kind of routing library.
+            offcanvas.show()
+            // NB: Currently the TurboFrame sidepanel will not respond to back/forward navigation, so this is not in use.
+            // Update the window URL to allow navigation back to this sidepanel on share/refresh.
+            // (supported by server-side rendering at smartforests.models.MapPage.subpages).
+            // (There is an open PR to do this via data-turbo-[attr] at https://github.com/hotwired/turbo/pull/167 / https://github.com/hotwired/turbo/pull/398)
+            //
+            // history.push(pageToPath(page))
+          }}
         >
           <div
             className='cursor-pointer absolute bg-bright-yellow rounded-circle'
             style={{ transform: 'translate(-50%, -50%)', width: '15px', height: '15px' }}
           />
-        </Link>
+        </a>
       </Marker>
       {isFocusing && (
         <Popup
@@ -109,62 +128,4 @@ function AtlasPageCard({ page }: { page: Wagtail.Item<SmartForest.GeocodedMixin>
       )}
     </div>
   )
-}
-
-export function Sidepanel() {
-  const history = useHistory()
-  const { params: { app, model, id } } = useRouteMatch<{ app: string, model: string, id: string }>('/map/:app?/:model?/:id?')
-  const pageSearch = useWagtailSearch<SmartForest.LogbookPage>({ id: parseInt(id), type: constructModelTypeName(app, model) })
-  const page = pageSearch.data?.items?.[0]
-
-  const offcanvasMapId = 'offcanvasMap'
-  const offcanvasElement = useRef<HTMLElement>()
-  const offcanvas = useRef<Offcanvas>()
-
-  useEffect(() => {
-    offcanvasElement.current ??= document.getElementById(offcanvasMapId)
-    // @ts-ignore
-    offcanvas.current ??= new bootstrap.Offcanvas(offcanvasElement.current)
-    offcanvasElement.current?.addEventListener('hide.bs.offcanvas', function () {
-      return history.push(initialPageURL().pathname)
-    })
-  }, [])
-
-  useEffect(() => {
-    if (page) {
-      return offcanvas.current?.show()
-    } else {
-      return offcanvas.current?.hide()
-    }
-  }, [page])
-
-  return <div
-    className="offcanvas offcanvas-end flex flex-column h-100 overflow-hidden"
-    tabIndex={-1}
-    id={offcanvasMapId}
-    aria-labelledby="offcanvasMapTitle"
-    data-bs-scroll="true"
-    data-bs-backdrop="false"
-  >
-    <div className='container gx-2 py-2 bg-warning' style={{
-      mixBlendMode: 'multiply',
-    }}>
-      <button type="button" className="btn btn-link text-reset text-decoration-none" data-bs-dismiss="offcanvas" aria-label="Close">
-        <span className='pe-2'>&larr;</span>
-        <span className='border-bottom border-1 pb-1 border-dark-green'>Close</span>
-      </button>
-    </div>
-    <div className='overflow-auto h-100'>
-      {!!page ? (
-        <TurboFrame id='metadata' page={page} template='logbooks/sidepanel.html' />
-      ) : (
-        <Fragment>
-          <div className='offcanvas-header container gy-1 gx-3 py-3'>
-            Loading
-          </div>
-          <div className='offcanvas-body container gy-1 gx-3 py-3'></div>
-        </Fragment>
-      )}
-    </div>
-  </div>
 }

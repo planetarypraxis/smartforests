@@ -205,4 +205,6 @@ class TurboFrameMixin(RoutablePageMixin, Page):
 
     @route('^frame/(?P<dom_id>[-\w_]+)/(?P<template_path>.+)$')
     def turbo_frame_response(self, request, dom_id, template_path, *args, **kwargs):
-        return TurboFrame(dom_id).template(f'{template_path.replace("-", "/").strip("/")}.html', {"page": self}).response(request)
+        template_filename = f'{template_path.replace("-", "/").strip("/")}.html'
+        context = {"page": self}
+        return TurboFrame(dom_id).template(template_filename, context).response(request)
