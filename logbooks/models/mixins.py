@@ -135,7 +135,7 @@ class ThumbnailMixin(Page):
 
 class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, GeocodedMixin, BaseLogbooksPage):
     '''
-    Common configuration for logbook entries / stories
+    Common configuration for logbook entries, stories and radio episodes.
     '''
     class Meta:
         abstract = True

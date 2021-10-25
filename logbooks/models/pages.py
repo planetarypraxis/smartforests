@@ -54,6 +54,37 @@ class StoryIndexPage(ChildListMixin, BaseLogbooksPage):
     parent_page_types = ['home.HomePage']
 
 
+class EpisodePage(ArticlePage):
+    '''
+    Episodes are individual items for the radio.
+    '''
+
+    show_in_menus_default = True
+    parent_page_types = ['logbooks.RadioIndexPage']
+
+    image = ForeignKey(CmsImage, on_delete=models.SET_NULL,
+                       null=True, blank=True)
+
+    content_panels = [
+        ImageChooserPanel('image')
+    ] + ArticlePage.content_panels
+
+    def cover_image(self):
+        return self.image
+
+
+class RadioIndexPage(ChildListMixin, BaseLogbooksPage):
+    '''
+    Index page for the Radio. A collection of episodes.
+    '''
+
+    class Meta:
+        verbose_name = "Radio index page"
+
+    show_in_menus_default = True
+    parent_page_types = ['home.HomePage']
+
+
 class LogbookEntryPage(ArticlePage):
     '''
     Logbook entry pages are typically short articles, produced by consistent authors, associated with a single logbook.
