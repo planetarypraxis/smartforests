@@ -87,3 +87,16 @@ h4 {
   @extend .shadow-sm;
   background-color: $off-white;
 }
+
+// Remove this for the moment, but return as it makes this inaccessible.
+.navbar-toggler:focus {
+  box-shadow: none;
+}
+
+.navbar {
+  padding-bottom: 0;
+  
+  @include media-breakpoint-up(lg) {
+    padding-bottom: $spacer * .5;
+  }
+}
