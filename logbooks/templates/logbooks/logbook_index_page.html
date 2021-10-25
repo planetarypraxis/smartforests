@@ -3,29 +3,55 @@
 
 {% block content %}
 
-<div class="container-fluid py-4">
-  <div class="row">
-    <div class="col-4 col-md-3 col-lg-2">
-      {% include "logbooks/include/filters.html" with tags=self.relevant_tags %}
-    </div>
-    <div class="col">
-      <div class="mb-5">
-        <h1 class="col">Logbooks</h1>
-        <div>
-          {% if tag_filter %}
-          <div
-            class="font-monospace text-uppercase badge rounded-pill m-1 p-1 link-reset bg-white fs-7"
-          >
-            {{ tag_filter }}
+<div class="filter-page">
+  {% include "logbooks/include/filters.html" with tags=self.relevant_tags %}
+
+  <div class="container-fluid mt-0 filter-page__content">
+    <div class="mb-5">
+      <div class="index-header">
+        <div id="sidebar-show" class="collapse-horizontal">
+          <div class="sidebar-sized filter-sidebar">
+            <a data-bs-toggle="collapse" href="#filters" class="btn btn-link" aria-expanded="false" aria-controls="filters">
+
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" id="open-svg">
+                <path d="M7.00016 2.33334L6.17766 3.15584L9.43266 6.41668H2.3335V7.58334H9.43266L6.17766 10.8442L7.00016 11.6667L11.6668 7.00001L7.00016 2.33334Z" fill="#043003"/>
+              </svg>
+              
+              Filters
+            </a>
+        
           </div>
-          {% endif %}
         </div>
+        <h1 class="col">Logbooks</h1>
+        
       </div>
-      {% include "logbooks/include/masonry.html" with contents=child_page_list class="compact" %}
+      <div>
+        {% if tag_filter %}
+        <div
+          class="font-monospace text-uppercase badge rounded-pill m-1 p-1 link-reset bg-white fs-7"
+        >
+          {{ tag_filter }}
+        </div>
+        {% endif %}
+      </div>
     </div>
+    {% include "logbooks/include/masonry.html" with contents=child_page_list class="compact" %}
   </div>
 </div>
 
+<script>
+  window.addEventListener('turbo:load', () => {
+    const filters = document.getElementById('filters')
+    const showFilters = document.getElementById('sidebar-show')
+
+    filters.addEventListener('show.bs.collapse', () => {
+      showFilters.classList.add('collapse')
+    })
+    filters.addEventListener('hidden.bs.collapse', () => {
+      showFilters.classList.remove('collapse')
+    })
+  })
+</script>
 {% endblock %}
 
 <!-- The masonry component doesn't get on with the flex: 1 we usually stick at the bottom of the page -->

@@ -13,6 +13,8 @@ body {
     font-size: 18px;
   }
 
+  display: flex;
+  flex-direction: column;
   color: $dark;
   background: $body-bg;
 }
@@ -55,7 +57,6 @@ h1 {
   @include heading-large;
 }
 
-
 .heading-medium,
 h2 {
   @include heading-medium;
@@ -95,8 +96,22 @@ h4 {
 
 .navbar {
   padding-bottom: 0;
-  
+
   @include media-breakpoint-up(lg) {
-    padding-bottom: $spacer * .5;
+    padding-bottom: $spacer * 0.5;
+  }
+}
+
+.badge-primary {
+  background: $offwhite;
+  color: $mid-green;
+
+  &:hover:not(.active) {
+    background: $soft-green;
+  }
+
+  &.active {
+    background: $dark-green;
+    color: $white;
   }
 }
