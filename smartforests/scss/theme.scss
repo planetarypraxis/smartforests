@@ -1,4 +1,9 @@
 // Colors
+$off-white: #f9f9f9;
+
+$grey: #545454;
+$light-grey: #c5c5c5;
+
 $dark-green: #043003;
 $mid-green: #026302;
 $bright-green: #25ed08;
@@ -8,13 +13,7 @@ $soft-green: #c7eac6;
 $bright-yellow: #ffff00;
 $yellow: #ffff9b;
 
-$grey: #545454;
-$light-grey: #c5c5c5;
-
-$offwhite: #f9f9f9;
-$off-white: $offwhite;
-
-$body-bg: $offwhite;
+$body-bg: $off-white;
 $primary: $mid-green;
 $secondary: $grey;
 $primary-hover-light: $light-grey;
@@ -30,8 +29,7 @@ $custom-colors: (
   grey: $grey,
   dark-grey: $grey,
   light-grey: $light-grey,
-  off-white: $offwhite,
-  offwhite: $offwhite,
+  off-white: $off-white,
 );
 $dark: $dark-green;
 
