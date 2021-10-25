@@ -1,199 +1,130 @@
-from commonknowledge.helpers import get_path
-from wagtail.search import index
-from django.db.models.fields import CharField
-from commonknowledge.wagtail.helpers import get_children_of_type
-from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin, StreamfieldIndexer, StructIndexer, TextIndexer
-from logbooks.models.helpers import group_by_title
-from logbooks.models.serializers import LogbookCoordinatesSerializer, StoryCoordinatesSerializer, UserSerializer
-from logbooks.thumbnail import generate_thumbnail
-from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from wagtail.core.models import Page, PageManager, PageRevision
+from django.db.models.fields.related import ForeignKey
 from django.template.loader import render_to_string
-from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
-from taggit.models import TaggedItemBase, Tag
-from wagtail.snippets.models import register_snippet
+from taggit.models import Tag
+from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.images.edit_handlers import ImageChooserPanel
+from wagtail.core.fields import RichTextField
+from commonknowledge.wagtail.helpers import get_children_of_type
 from commonknowledge.wagtail.models import ChildListMixin
-from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel
-from wagtail.core.fields import RichTextField, StreamField
-from wagtail.images.blocks import ImageChooserBlock
-from wagtail.embeds.blocks import EmbedBlock
-from wagtail.core import blocks
-from wagtail.contrib.settings.models import BaseSetting, register_setting
 from commonknowledge.django.cache import django_cached_model
-from django.contrib.gis.db import models as geo
 from wagtail.api import APIField
-from rest_framework.fields import DateField
-
+from logbooks.models.helpers import group_by_title
+from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager, TurboFrameMixin
+from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
 
 
-# Should these just be pages?
-@register_snippet
-class AtlasTag(TaggedItemBase):
-    content_object = ParentalKey(
-        Page, related_name='tagged_items', on_delete=models.CASCADE)
+class StoryPage(ArticlePage):
+    '''
+    Stories are longer, self-contained articles.
+    '''
 
-
-class IndexedPageManager(PageManager):
-    def get_queryset(self):
-        return super().get_queryset().select_related('index_entry')
-
-
-# CMS settings for canonical index pages
-@register_setting
-class ImportantPages(BaseSetting):
-    logbooks_index_page = models.ForeignKey(
-        'logbooks.LogbookIndexPage', null=True, on_delete=models.SET_NULL, related_name='+')
-    stories_index_page = models.ForeignKey(
-        'logbooks.StoryIndexPage', null=True, on_delete=models.SET_NULL, related_name='+', verbose_name="Logbook Entries Index Page")
-
-    panels = [
-        PageChooserPanel('logbooks_index_page'),
-        PageChooserPanel('stories_index_page'),
-    ]
-
-
-class StoryIndexPage(ChildListMixin, Page):
     class Meta:
-        verbose_name = "Logbook entries index page"
+        verbose_name = "Story"
+        verbose_name_plural = "Stories"
+
+    show_in_menus_default = True
+    parent_page_types = ['logbooks.StoryIndexPage']
+
+    image = ForeignKey(CmsImage, on_delete=models.SET_NULL,
+                       null=True, blank=True)
+
+    content_panels = [
+        ImageChooserPanel('image')
+    ] + ArticlePage.content_panels
+
+    def cover_image(self):
+        return self.image
+
+
+class StoryIndexPage(ChildListMixin, BaseLogbooksPage):
+    '''
+    Collection of stories.
+    '''
+
+    class Meta:
+        verbose_name = "Stories index page"
 
     def get_child_list_queryset(self, *args, **kwargs):
         return self.get_children().order_by('-last_published_at').specific()
 
     show_in_menus_default = True
     parent_page_types = ['home.HomePage']
-    subpage_types = ['logbooks.StoryPage']
 
 
-class QuoteBlock(blocks.StructBlock):
-    text = blocks.RichTextBlock(features=['bold', 'italic', 'link'])
-    author = blocks.CharBlock(required=False)
-    title = blocks.CharBlock(required=False)
-    date = blocks.DateBlock(required=False)
-    link = blocks.URLBlock(required=False)
+class LogbookEntryPage(ArticlePage):
+    '''
+    Logbook entry pages are typically short articles, produced by consistent authors, associated with a single logbook.
+    '''
 
-    class Meta:
-        template = 'logbooks/story_blocks/quote.html'
-        icon = 'quote'
-
-
-class ImageBlock(blocks.StructBlock):
-    image = ImageChooserBlock(required=False)
-    caption = blocks.CharBlock()
-
-    class Meta:
-        template = 'logbooks/story_blocks/image.html'
-        icon = 'image'
-
-
-class StoryPage(IndexedStreamfieldMixin, Page):
     class Meta:
         verbose_name = "Logbook Entry"
         verbose_name_plural = "Logbook Entries"
 
-    @classmethod
-    def content_type_id(cls):
-        return ContentType.objects.get_for_model(cls).id
-
-    objects = IndexedPageManager()
     show_in_menus_default = True
-    parent_page_types = ['logbooks.StoryIndexPage']
-    subpage_types = []
-    tags = ClusterTaggableManager(through=AtlasTag, blank=True)
-    geographical_location = CharField(max_length=250, null=True, blank=True)
-    coordinates = geo.PointField(null=True, blank=True)
-
-    # Streamfield of options here
-    body = StreamField([
-        ('text', blocks.RichTextBlock(features=[
-            'h3', 'bold', 'italic', 'link', 'ol', 'ul'
-        ], template='logbooks/story_blocks/text.html')),
-        ('quote', QuoteBlock()),
-        ('embed', EmbedBlock(template='logbooks/story_blocks/embed.html')),
-        ('image', ImageBlock()),
-    ])
-
-    content_panels = Page.content_panels + [
-        FieldPanel('tags'),
-        MultiFieldPanel(
-            [
-                FieldPanel('geographical_location'),
-                FieldPanel('coordinates')
-            ],
-            heading="Geographical data",
-        ),
-        StreamFieldPanel('body'),
-    ]
-
-    api_fields = [
-        APIField('tags'),
-        APIField('geographical_location'),
-        # This will nest the relevant BlogPageAuthor objects in the API response
-        APIField('contributors', serializer=UserSerializer(many=True)),
-        APIField('coordinates', serializer=StoryCoordinatesSerializer)
-    ]
-
-    def contributors(self):
-        return list(set([
-            revision.user
-            for revision in PageRevision.objects.filter(page=self)
-        ] + [[self.owner]]))
-
-    search_fields = IndexedStreamfieldMixin.search_fields + Page.search_fields
-
-    streamfield_indexer = StreamfieldIndexer(
-        quote=StructIndexer(
-            title=TextIndexer(),
-            author=TextIndexer(),
-            text=TextIndexer(),
-        ),
-        _default=TextIndexer(),
-    )
-
-    def regenerate_thumbnail(self, *args):
-        return generate_thumbnail(self.images(), fileslug=f'storythumbnail_{self.slug}')
-
-    def cover_image(self):
-        images = self.images()
-        return None if len(images) == 0 else images[0]
-
-    def images(self):
-        return tuple(
-            block.value.get('image')
-            for block in self.body
-            if block.block_type == 'image'
-            and block.value.get('image')
-        )
-
-    @property
-    def thumbnail_image(self):
-        if self.index_entry and self.index_entry.thumbnail_image:
-            return self.index_entry.thumbnail_image
-
-    def thumbnail_content_html(self):
-        if self.thumbnail_image is None:
-            return render_to_string('logbooks/thumbnails/story_no_image.html', {
-                'self': self
-            })
-
-        return render_to_string('logbooks/thumbnails/story_images.html', {
-            'self': self,
-            'thumbnail_images': self.thumbnail_image,
-        })
+    parent_page_types = ['logbooks.LogbookPage']
 
     def content_html(self):
-        return render_to_string('logbooks/story.html', {
+        '''
+        Render just the content of the page, for embedding in a logbook
+        '''
+
+        return render_to_string('logbooks/content_entry/logbook_entry.html', {
             'self': self
         })
 
 
-class LogbookIndexPage(ChildListMixin, Page):
+class LogbookPage(TurboFrameMixin, ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
+    '''
+    Collection of logbook entries.
+    '''
+
+    objects = IndexedPageManager()
+    show_in_menus_default = True
+    parent_page_types = ['logbooks.LogbookIndexPage']
+    label = 'Logbook'
+
+    tags = ClusterTaggableManager(through=AtlasTag, blank=True)
+    description = RichTextField()
+
+    content_panels = [
+        FieldPanel('title', classname="full title"),
+        FieldPanel('description'),
+        FieldPanel('tags'),
+    ] + ContributorMixin.content_panels + GeocodedMixin.content_panels
+
+    api_fields = [
+        APIField('label'),
+        APIField('tags'),
+        APIField('description'),
+    ] + ContributorMixin.api_fields + GeocodedMixin.api_fields
+
+    def get_child_list_queryset(self, _request):
+        return self.logbook_entries
+
+    def get_thumbnail_images(self):
+        return tuple(x.cover_image() for x in self.logbook_entries if x.cover_image() is not None)
+
+    def card_content_html(self):
+        return render_to_string('logbooks/thumbnails/basic_thumbnail.html', {
+            'self': self
+        })
+
+    @property
+    def logbook_entries(self):
+        return get_children_of_type(self, LogbookEntryPage)
+
+
+class LogbookIndexPage(ChildListMixin, BaseLogbooksPage):
+    '''
+    Collection of logbooks.
+    '''
+
     page_size = 50
     show_in_menus_default = True
     parent_page_types = ['home.HomePage']
-    subpage_types = ['logbooks.LogbookPage']
 
     def get_child_list_queryset(self, request):
         from .indexes import LogbookPageIndex
@@ -220,96 +151,3 @@ class LogbookIndexPage(ChildListMixin, Page):
         context['tag_filter'] = request.GET.get('filter', None)
 
         return context
-
-
-class LogbookPage(ChildListMixin, Page):
-    @classmethod
-    def content_type_id(cls):
-        return ContentType.objects.get_for_model(cls).id
-
-    objects = IndexedPageManager()
-    show_in_menus_default = True
-    parent_page_types = ['logbooks.LogbookIndexPage']
-    subpage_types = []
-    tags = ClusterTaggableManager(through=AtlasTag, blank=True)
-    description = RichTextField()
-
-    geographical_location = CharField(max_length=250, null=True, blank=True)
-    coordinates = geo.PointField(null=True, blank=True)
-
-    content_panels = [
-        FieldPanel('title', classname="full title"),
-        FieldPanel('description'),
-        FieldPanel('tags'),
-        MultiFieldPanel(
-            [
-                FieldPanel('geographical_location'),
-                FieldPanel('coordinates')
-            ],
-            heading="Geographical data",
-        ),
-    ]
-
-    api_fields = [
-        APIField('tags'),
-        APIField('description'),
-        APIField('geographical_location'),
-        # This will nest the relevant BlogPageAuthor objects in the API response
-        APIField('contributors', serializer=UserSerializer(many=True)),
-        APIField('coordinates', serializer=LogbookCoordinatesSerializer)
-    ]
-
-    def contributors(self):
-        return list(set([
-            revision.user
-            for revision in PageRevision.objects.filter(page=self)
-        ] + [self.owner]))
-
-    def get_child_list_queryset(self, request):
-        tag_filter = request.GET.get('filter', None)
-        filter = {}
-
-        if tag_filter is not None:
-            filter['tags__contains'] = tag_filter
-
-        stories = self.index_entry.get_related_pages(
-            content_type=StoryPage.content_type_id(), **filter).order_by('-first_published_at').specific()
-
-        return stories
-
-    @property
-    def thumbnail_image(self):
-        if self.index_entry and self.index_entry.thumbnail_image:
-            return self.index_entry.thumbnail_image
-
-    @property
-    def longitude(self):
-        if self.coordinates:
-            return self.coordinates.coords[0]
-
-    @property
-    def latitude(self):
-        if self.coordinates:
-            return self.coordinates.coords[1]
-
-    def regenerate_thumbnail(self, index_data):
-        stories = index_data.get_related_pages(
-            content_type=ContentType.objects.get_for_model(
-                StoryPage).id
-        ).specific()
-
-        images = tuple(
-            x.cover_image() for x in stories if x.cover_image() is not None)
-
-        return generate_thumbnail(images, fileslug=f'logbookthumbnail_{self.slug}')
-
-    def thumbnail_content(self):
-        if self.thumbnail_image is None:
-            return render_to_string('logbooks/thumbnails/logbook_no_image.html', {
-                'self': self
-            })
-
-        return render_to_string('logbooks/thumbnails/logbook_images.html', {
-            'self': self,
-            'thumbnail_images': self.thumbnail_image,
-        })
