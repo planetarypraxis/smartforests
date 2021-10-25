@@ -13,13 +13,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto bg-off-white">
                 <li class="nav-item d-lg-none border-bottom p-3">
-                    <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center" href="#">
+                    <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center" href="{{ settings.logbooks.ImportantPages.page_url.logbooks_index_page }}">
                         <span>Logbooks</span>
                         <img src="{% static "/img/logbooks.svg" %}" />
                     </a>
                 </li>
                 <li class="nav-item d-lg-none border-bottom p-3">
-                  <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center" href="#">
+                  <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center" href="{{ settings.logbooks.ImportantPages.page_url.stories_index_page }}">
                       <span>Stories</span>
                       <img src="{% static "/img/stories.svg" %}" />
                   </a>
@@ -42,13 +42,13 @@
                     </a>
                     <ul class="dropdown-menu border-0 mt-0 bg-off-white shadow-sm" aria-labelledby="navbarDropdown">
                       <li>
-                        <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="#">
+                        <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ settings.logbooks.ImportantPages.page_url.logbooks_index_page }}">
                             <span>Logbooks</span>
                             <img src="{% static "/img/logbooks.svg" %}" />
                         </a>
                       </li>
                       <li>
-                          <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="#">
+                          <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ settings.logbooks.ImportantPages.page_url.stories_index_page }}">
                               <span>Stories</span>
                               <img src="{% static "/img/stories.svg" %}" />
                           </a>
