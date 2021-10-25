@@ -7,6 +7,8 @@ from wagtail.api.conf import APIField
 from wagtail.core.models import Page, PageManager, PageRevision
 from django.contrib.gis.db import models as geo
 from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin
+from wagtail.contrib.routable_page.models import RoutablePageMixin, route
+from turbo_response import TurboFrame
 
 from logbooks.models.blocks import ArticleContentStream
 from logbooks.models.serializers import PageCoordinatesSerializer, UserSerializer
@@ -188,3 +190,12 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
 
         if self.index_entry and self.index_entry.thumbnail_image:
             return self.index_entry.thumbnail_image
+
+
+class TurboFrameMixin(RoutablePageMixin, Page):
+    class Meta:
+        abstract = True
+
+    @route('^frame/(?P<dom_id>[-\w_]+)/(?P<template_path>.+)$')
+    def turbo_frame_response(self, request, dom_id, template_path, *args, **kwargs):
+        return TurboFrame(dom_id).template(f'{template_path.replace("-", "/").strip("/")}.html', {"page": self}).response(request)

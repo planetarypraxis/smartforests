@@ -4,15 +4,14 @@ from django.template.loader import render_to_string
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import Tag
 from wagtail.admin.edit_handlers import FieldPanel
-from wagtail.api.conf import APIField
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.core.fields import RichTextField
 from commonknowledge.wagtail.helpers import get_children_of_type
 from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
-
+from wagtail.api import APIField
 from logbooks.models.helpers import group_by_title
-from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager
+from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager, TurboFrameMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
 
@@ -77,7 +76,7 @@ class LogbookEntryPage(ArticlePage):
         })
 
 
-class LogbookPage(ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
+class LogbookPage(TurboFrameMixin, ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
     '''
     Collection of logbook entries.
     '''
@@ -85,6 +84,7 @@ class LogbookPage(ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixi
     objects = IndexedPageManager()
     show_in_menus_default = True
     parent_page_types = ['logbooks.LogbookIndexPage']
+    label = 'Logbook'
 
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
     description = RichTextField()
@@ -96,6 +96,7 @@ class LogbookPage(ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixi
     ] + ContributorMixin.content_panels + GeocodedMixin.content_panels
 
     api_fields = [
+        APIField('label'),
         APIField('tags'),
         APIField('description'),
     ] + ContributorMixin.api_fields + GeocodedMixin.api_fields
