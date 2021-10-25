@@ -115,6 +115,9 @@ $spacers: (
   7: 90px,
 );
 
+// Allow negative margins
+$enable-negative-margins: true;
+
 // Merge with Bootstrap
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
