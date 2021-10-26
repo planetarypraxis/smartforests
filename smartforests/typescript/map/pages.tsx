@@ -1,4 +1,4 @@
-import React, { Fragment, memo } from "react";
+import React, { Fragment, memo, useEffect, useMemo, useState } from "react";
 import {
   pageToPath,
   useWagtailSearch,
@@ -9,7 +9,7 @@ import { SmartForest } from "./types";
 import { Marker, Popup } from "@urbica/react-map-gl";
 import { useFocusContext } from "./state";
 import { Link } from "react-router-dom";
-import { useOffcanvas } from "../bootstrap";
+import { equalUrls, useFrameSrc, useOffcanvas } from "../bootstrap";
 
 export function AtlasPagesMapLayer() {
   return (
@@ -74,16 +74,20 @@ export function StoryPageMarkers() {
 
 export const AtlasPageMarker: React.FC<{
   page: Wagtail.Item<SmartForest.GeocodedMixin>;
-  active?: boolean;
 }> = memo(({ page }) => {
   const [isFocusing, setIsFocusing] = useFocusContext(page.id, page.meta.type);
-  const [offcanvas] = useOffcanvas("sidepanel-offcanvas");
+  const [offcanvas] = useOffcanvas<any>("sidepanel-offcanvas");
 
   const frameUrl = pageToFrameURL(
     "sidepanel-turboframe",
     page,
     "logbooks/sidepanel.html"
   );
+
+  const activeUrl = useFrameSrc("sidepanel-turboframe");
+
+  const active = equalUrls(frameUrl, activeUrl);
+  const iconClass = active ? `icon-30 icon-cursor` : page.icon_class;
 
   return (
     <Fragment>
@@ -112,25 +116,20 @@ export const AtlasPageMarker: React.FC<{
           }}
         >
           <div
-            className={`cursor-pointer translate-middle absolute bg-bright-yellow icon ${page.icon_class}`}
+            className={`${
+              !active ? "cursor-pointer" : ""
+            } translate-middle position-absolute bg-bright-yellow icon ${iconClass}`}
           />
         </a>
       </Marker>
-      {isFocusing && (
+      {isFocusing && !active && (
         <Popup
           className="mapbox-invisible-popup"
           longitude={page?.coordinates?.coordinates[0]}
           latitude={page?.coordinates?.coordinates[1]}
           offset={20}
         >
-          <Link to={pageToPath(page)}>
-            <div
-              className="d-block p-2 rounded-1 bg-white"
-              style={{ width: 250 }}
-            >
-              <AtlasPageCard page={page} />
-            </div>
-          </Link>
+          <AtlasPageCard page={page} />
         </Popup>
       )}
     </Fragment>
@@ -143,11 +142,20 @@ function AtlasPageCard({
   page: Wagtail.Item<SmartForest.GeocodedMixin>;
 }) {
   return (
-    <div className="row gy-1">
-      <div className="caption text-muted">{page.label}</div>
-      <div className="fs-6 text-dark-green fw-bold">{page.title}</div>
-      {!!page.geographical_location && (
-        <div className="caption text-muted">{page.geographical_location}</div>
+    <div className="p-3 w-popover bg-white elevated">
+      <div className="caption text-dark-grey">{page.label}</div>
+
+      <h5 id="offcanvasMapTitle" className="text-dark-green fw-bold mt-1 mb-0">
+        <i
+          className={`icon icon-20 bg-primary ms-2 align-bottom float-end ${page.icon_class}`}
+        />
+        {page.title}
+      </h5>
+
+      {page.geographical_location && (
+        <div className="mt-1 caption text-dark-grey">
+          {page.geographical_location}
+        </div>
       )}
     </div>
   );
