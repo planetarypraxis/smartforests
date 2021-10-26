@@ -144,3 +144,13 @@
     color: $white;
   }
 }
+
+.sidebar-coverimage {
+  @extend .ratio;
+  @extend .ratio-21x9;
+
+  img {
+    object-fit: cover;
+    width: 100%;
+  }
+}

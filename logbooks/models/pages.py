@@ -113,6 +113,16 @@ class LogbookPage(TurboFrameMixin, ChildListMixin, ContributorMixin, GeocodedMix
             'self': self
         })
 
+    def cover_image(self):
+        '''
+        Returns the first image in the body stream (or None if there aren't any).
+
+        Used to determine which image to contribute to a thumbnail when images from multiple pages are combined into a single thumbnail (as with logbooks)
+        '''
+
+        images = self.get_thumbnail_images()
+        return None if len(images) == 0 else images[0]
+
     @property
     def logbook_entries(self):
         return get_children_of_type(self, LogbookEntryPage)

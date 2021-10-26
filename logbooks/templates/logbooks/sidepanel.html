@@ -1,4 +1,4 @@
-{% load ckdjango_tags ckbootstrap_tags wagtailcore_tags %}
+{% load ckdjango_tags ckbootstrap_tags wagtailcore_tags wagtailimages_tags %}
   <div class="container gx-2 py-2 bg-warning" style="mix-blend-mode: multiply">
     <button
       type='button'
@@ -22,7 +22,11 @@
         {% endif %}
       </div>
     </div>
-    <img src="https://via.placeholder.com/350x150" class="w-100" />
+
+    <div class="sidebar-coverimage">
+      {% image page.cover_image height-500 %}
+    </div>
+    
     <div class="offcanvas-body container gy-1 gx-3 py-3">
       <div class="row">
         <div class="mt-2 mb-0">
