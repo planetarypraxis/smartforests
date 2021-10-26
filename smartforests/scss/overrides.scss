@@ -95,6 +95,10 @@ a.card {
   }
 }
 
+.card {
+  overflow: hidden;
+}
+
 .nav-link {
   font-weight: bold;
   color: $secondary;

@@ -11,8 +11,8 @@
       percentPosition: true,
       stagger: 30,
       // nicer reveal transition
-      visibleStyle: { transform: "translateY(0)", opacity: 1 },
-      hiddenStyle: { transform: "translateY(100px)", opacity: 0 },
+      visibleStyle: { opacity: 1 },
+      hiddenStyle: { opacity: 0 },
     });
 
     // get Masonry instance
@@ -37,6 +37,15 @@
       status: ".page-load-status",
     });
   };
+
+  window.addEventListener("sf:layout", () => {
+    $(".grid").each((_, el) => {
+      const msnry = $(".grid").data("masonry");
+      if (msnry) {
+        msnry.layout();
+      }
+    });
+  });
 
   window.addEventListener("turbo:load", init);
   init();

@@ -11,9 +11,13 @@
 
     filters.addEventListener("show.bs.collapse", () => {
       page.classList.add("filters-visible");
+
+      filters.dispatchEvent(new CustomEvent("sf:layout", { bubbles: true }));
     });
     filters.addEventListener("hidden.bs.collapse", () => {
       page.classList.remove("filters-visible");
+
+      filters.dispatchEvent(new CustomEvent("sf:layout", { bubbles: true }));
     });
 
     $("#filters [data-filter-tag]").each((_, pill) => {
