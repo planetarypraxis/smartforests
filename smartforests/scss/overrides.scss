@@ -72,8 +72,38 @@ h4 {
   @include microcopy;
 }
 
+.microcopy-small,
+h4 {
+  @include microcopy;
+  @extend .small;
+  text-transform: uppercase;
+}
+
 .small {
   font-size: 12px;
+}
+
+a .card,
+a.card {
+  .card-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    &:hover {
+      background-color: transparentize($color: $dark-green, $amount: 0.9);
+    }
+  }
+}
+
+.nav-link {
+  font-weight: bold;
+  color: $secondary;
+  padding: 0 !important;
+
+  &.active {
+    color: $dark;
+    border-bottom: 2px solid $primary;
+  }
 }
 
 .nav-link:hover {
@@ -106,8 +136,8 @@ h4 {
   background: $offwhite;
   color: $mid-green;
 
-  &:hover:not(.active) {
-    background: $soft-green;
+  &:not(.active) {
+    @extend .hoverable;
   }
 
   &.active {

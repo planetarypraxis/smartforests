@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load ckdjango_tags ckbootstrap_tags %}
+{% load static ckdjango_tags ckbootstrap_tags %}
 
 {% block content %}
 
@@ -49,6 +49,7 @@
 {% block extra_js %}
 <script defer src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4/dist/masonry.pkgd.min.js" crossorigin="anonymous"></script>
+<script defer src="{% static 'js/masonry.js' %}"></script>
 
 <script>
   window.addEventListener('turbo:load', () => {

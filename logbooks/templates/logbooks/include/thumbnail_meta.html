@@ -1,0 +1,24 @@
+
+<div class="d-flex align-items-start flex-row {{class}}">
+  <div class="flex-grow-1">
+    <div class="fw-bold text-dark-green">
+      {{self.title}}
+    </div>
+    
+    {% if self.geographical_location %}
+      <div class="microcopy-small pt-1">
+        {{self.geographical_location}}
+      </div>
+    {% endif %}
+    
+    {% if self.first_published_at %}
+      <div class="microcopy-small pt-1">
+        {{self.first_published_at|date:"j F Y"}}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="ms-2">
+    <i class="icon-logbook"></i>
+  </div>
+</div>
