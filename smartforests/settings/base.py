@@ -73,6 +73,7 @@ INSTALLED_APPS = [
 
     'wagtail.contrib.modeladmin',
     'wagtailmenus',
+    "wagtailmedia",
 ]
 
 MIDDLEWARE = [

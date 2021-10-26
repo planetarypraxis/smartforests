@@ -84,14 +84,15 @@
         <div id="radioPlayer" data-turbo-permanent class="offcanvas offcanvas-bottom h-48px bg-dark-green border-0 drop-shadow-mid-green-glow" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" aria-labelledby="radioPlayerLabel">
             <div class="text-white ps-3 d-flex align-items-center justify-content-between" style="height: 100%;">
               <div>
-                <button class="btn btn-link" title="Play episode: {{self.title}}" type="button">
+                <button id="radioPlayerButton" class="btn btn-link" title="Play episode: {{self.title}}" type="button">
                   <svg width="11" height="14" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M0 0.5V35.5L27.5 18L0 0.5Z" fill="white"/>
                   </svg>
                 </button>
-                <span class="ps-2" id="radioPlayerLabel">{{self.title}}</span>
+                <span class="ps-2" id="radioPlxayerLabel">{{self.title}}</span>
                 <span class="ps-3 small font-monospace text-uppercase">{% if self.owner.first_name and self.owner.last_name %}{{ self.owner.first_name }} {{ self.owner.last_name }}{% else %}{{ self.owner }}{% endif %}</span>
                 <span class="ps-3 small font-monospace text-uppercase">{{ self.last_published_at|date:"d E Y" }}</span>
+                <audio id="radioPlayerAudio" src="{{ self.audio.file.url }}"/>
               </div>
               <div class="position-relative">
                 {% if self.image %}
@@ -107,6 +108,19 @@
                     Array.from(modal.querySelectorAll('[autofocus]')).forEach(el => el.focus())
                 })
             })
+            
+            const radioPlayerAudio = document.getElementById('radioPlayerAudio');
+            const playButton = document.getElementById('radioPlayerButton');
+            
+            playButton.addEventListener('click', () => {
+               radioPlayerAudio.play();
+            });
+            
+            const radioPlayerOffCanvas = document.getElementById('radioPlayer');
+
+            radioPlayerOffCanvas.addEventListener('show.bs.offcanvas', function () {
+                radioPlayerAudio.play();
+            });
         </script>
     </body>
 </html>

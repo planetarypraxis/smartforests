@@ -6,6 +6,7 @@ from taggit.models import Tag
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.core.fields import RichTextField
+from wagtailmedia.edit_handlers import MediaChooserPanel
 from commonknowledge.wagtail.helpers import get_children_of_type
 from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
@@ -64,9 +65,17 @@ class EpisodePage(ArticlePage):
 
     image = ForeignKey(CmsImage, on_delete=models.SET_NULL,
                        null=True, blank=True)
+    audio = models.ForeignKey(
+        'wagtailmedia.Media',
+        null=True,
+        blank=False,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
 
     content_panels = [
-        ImageChooserPanel('image')
+        ImageChooserPanel('image'),
+        MediaChooserPanel('audio', media_type='audio'),
     ] + ArticlePage.content_panels
 
     def cover_image(self):
