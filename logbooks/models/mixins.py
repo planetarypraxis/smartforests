@@ -159,6 +159,7 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
 
     api_fields = [
         APIField('tags'),
+        APIField('icon_class'),
     ] + ContributorMixin.api_fields + GeocodedMixin.api_fields
 
     search_fields = IndexedStreamfieldMixin.search_fields + Page.search_fields

@@ -42,8 +42,8 @@
 }
 
 .caption {
-  @extend .font-monospace;
-  @extend .fs-7;
+  @extend .microcopy;
+  @extend .small;
   @extend .text-uppercase;
 }
 

@@ -1,12 +1,47 @@
-.icon-search {
+.icon {
   display: inline-block;
-  background-image: url("./svg/search.svg");
-  width: 13px;
-  height: 13px;
+  mask-size: var(--icon-size, 15px) var(--icon-size, 15px);
+  background-size: var(--icon-size, 15px) var(--icon-size, 15px);
+  width: var(--icon-size, 15px);
+  height: var(--icon-size, 15px);
 }
 
-.icon-lg {
-  width: 24px;
-  height: 24px;
-  background-size: 24px 24px;
+/** Sizes */
+
+.icon-13 {
+  --icon-size: 13px;
+}
+
+.icon-20 {
+  --icon-size: 20px;
+}
+
+.icon-24 {
+  --icon-size: 24px;
+}
+
+.icon-30 {
+  --icon-size: 30px;
+}
+
+/** Svgs */
+
+.icon-search {
+  background-image: url("./svg/search.svg");
+}
+
+.icon-logbooks {
+  mask-image: url("./svg/map-icons/logbooks.svg");
+}
+
+.icon-stories {
+  mask-image: url("./svg/map-icons/stories.svg");
+}
+
+.icon-radio {
+  mask-image: url("./svg/map-icons/radio.svg");
+}
+
+.icon-cursor {
+  mask-image: url("./svg/map-icons/map.svg");
 }

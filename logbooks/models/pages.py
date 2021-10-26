@@ -25,6 +25,8 @@ class StoryPage(TurboFrameMixin, ArticlePage):
         verbose_name = "Story"
         verbose_name_plural = "Stories"
 
+    icon_class = 'icon-stories'
+
     show_in_menus_default = True
     parent_page_types = ['logbooks.StoryIndexPage']
 
@@ -65,6 +67,7 @@ class LogbookEntryPage(TurboFrameMixin, ArticlePage):
 
     show_in_menus_default = True
     parent_page_types = ['logbooks.LogbookPage']
+    icon_class = 'icon-logbooks'
 
     def content_html(self):
         '''
@@ -84,6 +87,8 @@ class LogbookPage(TurboFrameMixin, ChildListMixin, ContributorMixin, GeocodedMix
         verbose_name = "Logbook"
         verbose_name_plural = "Logbooks"
 
+    icon_class = 'icon-logbooks'
+
     objects = IndexedPageManager()
     show_in_menus_default = True
     parent_page_types = ['logbooks.LogbookIndexPage']
@@ -98,6 +103,7 @@ class LogbookPage(TurboFrameMixin, ChildListMixin, ContributorMixin, GeocodedMix
     ] + ContributorMixin.content_panels + GeocodedMixin.content_panels
 
     api_fields = [
+        APIField('icon_class'),
         APIField('tags'),
         APIField('description'),
     ] + ContributorMixin.api_fields + GeocodedMixin.api_fields

@@ -1,64 +1,96 @@
-import React from 'react'
-import useSWR from "swr"
-import qs from 'query-string'
+import React from "react";
+import useSWR from "swr";
+import qs from "query-string";
 
 export const wagtailAPIDefaultOptions = {
-  'limit': 20,
-  'fields': '*'
-}
+  limit: 20,
+  fields: "*",
+};
 
-export const initialPageURL = () => new URL(JSON.parse(document.getElementById('routing_configuration').textContent))
+export const initialPageURL = () =>
+  new URL(
+    JSON.parse(document.getElementById("routing_configuration").textContent)
+  );
 
 export function pageToPath(page: Wagtail.Item): string {
-  return `${initialPageURL().pathname}${page.meta.type.split('.').join('/')}/${page.id}`
+  return `${initialPageURL().pathname}${page.meta.type.split(".").join("/")}/${
+    page.id
+  }`;
 }
 
-export function constructModelTypeName(model: string, modelName: string): string {
-  return [model, modelName].join('.')
+export function constructModelTypeName(
+  model: string,
+  modelName: string
+): string {
+  return [model, modelName].join(".");
 }
 
-export function pageToFrameURL(frameId: string | number, page: Wagtail.Item, template: string) {
-  return `${page.meta.html_url}frame/${frameId}/${template.replace(/\//, '-').replace('.html', '')}`
+export function pageToFrameURL(
+  frameId: string | number,
+  page: Wagtail.Item,
+  template: string
+) {
+  return `${page.meta.html_url}frame/${frameId}/${template
+    .replace(/\//, "-")
+    .replace(".html", "")}`;
 }
 
-export function TurboFrame({ id, page, template }: { id: string | number, page: Wagtail.Item, template: string }) {
+export function TurboFrame({
+  id,
+  page,
+  template,
+}: {
+  id: string | number;
+  page: Wagtail.Item;
+  template: string;
+}) {
   // @ts-ignore
-  return <turbo-frame id={id} src={`${page.meta.html_url}frame/${id}/${template.replace(/\//, '-').replace('.html', '')}`} />
+  return (
+    <turbo-frame
+      id={id}
+      src={`${page.meta.html_url}frame/${id}/${template
+        .replace(/\//, "-")
+        .replace(".html", "")}`}
+    />
+  );
 }
 
-export function useWagtailSearch<Item = any, Wrapper = Wagtail.Results<Item>>(query: Wagtail.APIOptions = {}, url = '/api/v2/pages/') {
+export function useWagtailSearch<Item = any, Wrapper = Wagtail.Results<Item>>(
+  query: Wagtail.APIOptions = {},
+  url = "/api/v2/pages/"
+) {
   return useSWR<Wrapper>(
     qs.stringifyUrl({
       url,
-      query: Object.assign({}, wagtailAPIDefaultOptions, query)
+      query: Object.assign({}, wagtailAPIDefaultOptions, query),
     }),
-    url => fetch(url).then(response => response.json()),
+    (url) => fetch(url).then((response) => response.json()),
     { revalidateOnFocus: false, revalidateOnReconnect: false }
-  )
+  );
 }
 
 export namespace Wagtail {
   export type APIOptions = {
     // search
-    type?: string | string[],
-    search?: string,
-    search_operator?: 'and' | 'or',
-    html_path?: string,
+    type?: string | string[];
+    search?: string;
+    search_operator?: "and" | "or";
+    html_path?: string;
     // result
-    fields?: string,
-    order?: string,
+    fields?: string;
+    order?: string;
     // list
-    offset?: number,
-    limit?: number,
+    offset?: number;
+    limit?: number;
     // hierarchy
-    id?: number
-    child_of?: number,
-    ancestor_of?: number,
-    descendant_of?: number,
+    id?: number;
+    child_of?: number;
+    ancestor_of?: number;
+    descendant_of?: number;
     // i18n
-    translation_of?: number,
-    locale?: string
-  }
+    translation_of?: number;
+    locale?: string;
+  };
 
   export interface Results<T = {}> {
     meta: ResultsMeta;
@@ -69,7 +101,8 @@ export namespace Wagtail {
     id: number;
     meta: ItemMeta;
     title: string;
-  }
+    icon_class?: string;
+  };
 
   interface ItemMeta {
     type: string;
