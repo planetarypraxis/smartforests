@@ -1,7 +1,8 @@
 (() => {
   const init = () => {
+    const page = document.getElementById("filter-page");
     const filters = document.getElementById("filters");
-    if (!filters) {
+    if (!filters || !page) {
       return;
     }
 
@@ -9,10 +10,10 @@
     const showFilters = document.getElementById("sidebar-show");
 
     filters.addEventListener("show.bs.collapse", () => {
-      showFilters.classList.add("collapse");
+      page.classList.add("filters-visible");
     });
     filters.addEventListener("hidden.bs.collapse", () => {
-      showFilters.classList.remove("collapse");
+      page.classList.remove("filters-visible");
     });
 
     $("#filters [data-filter-tag]").each((_, pill) => {

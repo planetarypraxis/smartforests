@@ -49,7 +49,7 @@
   @include media-breakpoint-up(md) {
     --grid__columns: 3;
 
-    &.compact {
+    &.grid-compact {
       --grid__columns: 2;
     }
   }
@@ -57,7 +57,7 @@
   @include media-breakpoint-up(lg) {
     --grid__columns: 4;
 
-    &.compact {
+    &.grid-compact {
       --grid__columns: 3;
     }
   }
@@ -65,7 +65,7 @@
   @include media-breakpoint-up(xl) {
     --grid__columns: 5;
 
-    &.compact {
+    &.grid-compact {
       --grid__columns: 4;
     }
   }
@@ -171,6 +171,22 @@
 .filter-page {
   display: flex;
   flex-direction: row;
+
+  &.filters-visible {
+    .filters-reveal {
+      @extend .collapse;
+    }
+
+    .grid {
+      @extend .grid-compact;
+    }
+  }
+
+  &:not(.filters-visible) {
+    .filter-sidebar {
+      @extend .collapse;
+    }
+  }
 }
 
 .filter-page__content {

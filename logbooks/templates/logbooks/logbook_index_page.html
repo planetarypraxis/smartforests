@@ -3,14 +3,14 @@
 
 {% block content %}
 
-<div class="filter-page">
+<div id="filter-page" class="filter-page">
   {% include "logbooks/include/filters.html" with tags=self.relevant_tags target="logbook-search-results" %}
 
   <div class="container-fluid mt-0 filter-page__content">
     <div class="mb-5">
       <div class="index-header">
-        <div id="sidebar-show" class="collapse-horizontal" data-turbo-permanent>
-          <div class="sidebar-sized filter-sidebar">
+        <div id="sidebar-show" class="filters-reveal collapse-horizontal" data-turbo-permanent>
+          <div class="sidebar-sized">
             <a data-bs-toggle="collapse" href="#filters" class="btn btn-link" aria-expanded="false" aria-controls="filters">
 
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" id="open-svg">
@@ -36,7 +36,7 @@
       </div>
     </div>
     
-    {% include "logbooks/include/masonry.html" with contents=child_list_page class="compact" %}
+    {% include "logbooks/include/masonry.html" with contents=child_list_page %}
   </div>
 </div>
 
