@@ -180,3 +180,31 @@
 .filter-bar {
   background-color: white;
 }
+
+/** Filters **/
+
+.filter-tag {
+  @extend .badge;
+  @extend .link-reset;
+  @extend .rounded-pill;
+  @extend .microcopy;
+  @extend .small;
+
+  background: $offwhite;
+  color: $mid-green;
+  text-transform: uppercase;
+  font-weight: normal;
+  padding: #{map-get($map: $spacers, $key: 1) * 0.5} #{map-get(
+      $map: $spacers,
+      $key: 2
+    )};
+
+  &:not(.active) {
+    @extend .hoverable;
+  }
+
+  &.active {
+    background: $dark-green;
+    color: $white;
+  }
+}

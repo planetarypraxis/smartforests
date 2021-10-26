@@ -80,7 +80,7 @@ h4 {
 }
 
 .small {
-  font-size: 12px;
+  font-size: 12px !important;
 }
 
 a .card,
@@ -129,19 +129,5 @@ a.card {
 
   @include media-breakpoint-up(lg) {
     padding-bottom: $spacer * 0.5;
-  }
-}
-
-.badge-primary {
-  background: $offwhite;
-  color: $mid-green;
-
-  &:not(.active) {
-    @extend .hoverable;
-  }
-
-  &.active {
-    background: $dark-green;
-    color: $white;
   }
 }

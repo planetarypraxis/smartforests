@@ -28,7 +28,7 @@
       <div>
         {% if tag_filter %}
         <div
-          class="font-monospace text-uppercase badge rounded-pill m-1 p-1 link-reset bg-white fs-7"
+          class="filter-tag active"
         >
           {{ tag_filter }}
         </div>
@@ -50,18 +50,5 @@
 <script defer src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4/dist/masonry.pkgd.min.js" crossorigin="anonymous"></script>
 <script defer src="{% static 'js/masonry.js' %}"></script>
-
-<script>
-  window.addEventListener('turbo:load', () => {
-    const filters = document.getElementById('filters')
-    const showFilters = document.getElementById('sidebar-show')
-
-    filters.addEventListener('show.bs.collapse', () => {
-      showFilters.classList.add('collapse')
-    })
-    filters.addEventListener('hidden.bs.collapse', () => {
-      showFilters.classList.remove('collapse')
-    })
-  })
-</script>
+<script defer src="{% static 'js/filters.js' %}"></script>
 {% endblock %}
