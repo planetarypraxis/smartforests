@@ -1,5 +1,5 @@
 {% extends "logbooks/article_page_base.html" %}
-{% load ckdjango_tags wagtailimages_tags wagtailcore_tags %}
+{% load ckdjango_tags wagtailimages_tags wagtailcore_tags static %}
 
 {% block article_header %}
   {% if self.image %}
@@ -8,7 +8,12 @@
 {% endblock %}
 
 {% block article_title %}
-  <h1 class="mb-3 mb-md-5">{{self.title}}</h1>
+  <h1 class="mb-3 mb-md-5 d-flex align-items-center">
+    <button class="btn btn-link" id="play-episode" title="Play episode: {{self.title}}">
+      <img src="{% static "/img/play-button.svg" %}" class="p-3" alt="Play episode: {{self.title}}"/>
+    </button>
+    <span>{{self.title}}</span>
+  </h1>
 {% endblock %}
 
 {% block article %}
