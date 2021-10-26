@@ -43,10 +43,18 @@
 }
 
 .grid {
-  --grid__columns: 2;
+  --grid__columns: 1;
   --grid__gutter: #{map-get($spacers, 4)};
 
   @include media-breakpoint-up(md) {
+    --grid__columns: 2;
+
+    &.grid-compact {
+      --grid__columns: 1;
+    }
+  }
+
+  @include media-breakpoint-up(lg) {
     --grid__columns: 3;
 
     &.grid-compact {
@@ -54,7 +62,7 @@
     }
   }
 
-  @include media-breakpoint-up(lg) {
+  @include media-breakpoint-up(xl) {
     --grid__columns: 4;
 
     &.grid-compact {
@@ -62,7 +70,7 @@
     }
   }
 
-  @include media-breakpoint-up(xl) {
+  @include media-breakpoint-up(xxl) {
     --grid__columns: 5;
 
     &.grid-compact {
