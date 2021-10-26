@@ -16,7 +16,7 @@
     data-bs-scroll="true"
     data-bs-backdrop="false"
   >
-    <turbo-frame id="sidepanel-turboframe">
+    <turbo-frame id="sidepanel-turboframe" target="_top">
       {% if sidepanel_page %}
         {% include "logbooks/sidepanel.html" with page=sidepanel_page %}
       {% endif %}

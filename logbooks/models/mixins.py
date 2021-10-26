@@ -1,6 +1,8 @@
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.http.response import HttpResponseNotFound
 from django.template.loader import render_to_string
+from django.template.response import TemplateResponse
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, StreamFieldPanel
 from wagtail.api.conf import APIField
@@ -8,7 +10,6 @@ from wagtail.core.models import Page, PageManager, PageRevision
 from django.contrib.gis.db import models as geo
 from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
-from turbo_response import TurboFrame
 
 from logbooks.models.blocks import ArticleContentStream
 from logbooks.models.serializers import PageCoordinatesSerializer, UserSerializer
@@ -36,6 +37,16 @@ class BaseLogbooksPage(Page):
     @classmethod
     def content_type_id(cls):
         return ContentType.objects.get_for_model(cls).id
+
+    @property
+    def link_url(self):
+        '''
+        Wrapper for url allowing us to link to a page embedded in a parent (as with logbook entries) without
+        overriding any wagtail internals
+
+        '''
+
+        return self.url
 
 
 class ContributorMixin(Page):
@@ -140,7 +151,17 @@ class ThumbnailMixin(Page):
         })
 
 
-class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, GeocodedMixin, BaseLogbooksPage):
+class SidebarRenderableMixin():
+    def get_sidebar_frame_response(self, request, *args, **kwargs):
+        '''
+        Render the sidebar frame's html.
+        '''
+
+        context = self.get_context(request)
+        return TemplateResponse(request, 'logbooks/content_entry/sidepanel.html', context)
+
+
+class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, GeocodedMixin, SidebarRenderableMixin, BaseLogbooksPage):
     '''
     Common configuration for logbook entries / stories
     '''
@@ -198,14 +219,3 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
 
         if self.index_entry and self.index_entry.thumbnail_image:
             return self.index_entry.thumbnail_image
-
-
-class TurboFrameMixin(RoutablePageMixin, Page):
-    class Meta:
-        abstract = True
-
-    @route('^frame/(?P<dom_id>[-\w_]+)/(?P<template_path>.+)$')
-    def turbo_frame_response(self, request, dom_id, template_path, *args, **kwargs):
-        template_filename = f'{template_path.replace("-", "/").strip("/")}.html'
-        context = {"page": self}
-        return TurboFrame(dom_id).template(template_filename, context).response(request)

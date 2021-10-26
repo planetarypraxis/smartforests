@@ -78,12 +78,7 @@ export const AtlasPageMarker: React.FC<{
   const [isFocusing, setIsFocusing] = useFocusContext(page.id, page.meta.type);
   const [offcanvas] = useOffcanvas<any>("sidepanel-offcanvas");
 
-  const frameUrl = pageToFrameURL(
-    "sidepanel-turboframe",
-    page,
-    "logbooks/sidepanel.html"
-  );
-
+  const frameUrl = pageToFrameURL(page);
   const activeUrl = useFrameSrc("sidepanel-turboframe");
 
   const active = equalUrls(frameUrl, activeUrl);

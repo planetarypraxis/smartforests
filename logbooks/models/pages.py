@@ -11,12 +11,12 @@ from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
 from wagtail.api import APIField
 from logbooks.models.helpers import group_by_title
-from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager, TurboFrameMixin
+from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager, SidebarRenderableMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
 
 
-class StoryPage(TurboFrameMixin, ArticlePage):
+class StoryPage(ArticlePage):
     '''
     Stories are longer, self-contained articles.
     '''
@@ -56,7 +56,7 @@ class StoryIndexPage(ChildListMixin, BaseLogbooksPage):
     parent_page_types = ['home.HomePage']
 
 
-class LogbookEntryPage(TurboFrameMixin, ArticlePage):
+class LogbookEntryPage(ArticlePage):
     '''
     Logbook entry pages are typically short articles, produced by consistent authors, associated with a single logbook.
     '''
@@ -78,8 +78,18 @@ class LogbookEntryPage(TurboFrameMixin, ArticlePage):
             'self': self
         })
 
+    @property
+    def link_url(self):
+        '''
+        Wrapper for url allowing us to link to a page embedded in a parent (as with logbook entries) without
+        overriding any wagtail internals
 
-class LogbookPage(TurboFrameMixin, ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
+        '''
+
+        return f'{self.get_parent().url}#{self.slug}'
+
+
+class LogbookPage(SidebarRenderableMixin, ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
     '''
     Collection of logbook entries.
     '''

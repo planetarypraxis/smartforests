@@ -1,4 +1,6 @@
 {% load ckdjango_tags ckbootstrap_tags wagtailcore_tags wagtailimages_tags %}
+
+<turbo-frame id="sidepanel-turboframe">
   <div class="container gx-2 py-2 bg-yellow" style="mix-blend-mode: multiply">
     <button
       type='button'
@@ -40,7 +42,7 @@
               text-uppercase text-decoration-underline text-mid-green
               fs-7
             "
-            href="{{ page.url }}"
+            href="{{ page.link_url }}"
           >
             Read More
           </a>
@@ -52,3 +54,4 @@
       {% include "logbooks/metadata.html" with page=page %}
     </div>
   </div>
+</turbo-frame>
