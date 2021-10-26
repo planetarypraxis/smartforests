@@ -52,7 +52,7 @@
 }
 
 .h-48px {
-  height: 48px;
+  height: 48px !important;
 }
 
 .links-white {
@@ -77,6 +77,22 @@
 
 .mr-3 {
   margin-right: 20px !important;
+}
+
+.font-serif {
+  font-family: $font-family-serif !important;
+}
+
+.bg-faded-yellow {
+  background-color: rgba($yellow, 0.8);
+}
+
+.navbar-brand {
+  font-size: $font-size-root;
+}
+
+.text-black {
+  color: $black !important;
 }
 
 .max-content {
