@@ -10,7 +10,7 @@
 {% block article_title %}
   <h1 class="mb-3 mb-md-5 d-flex align-items-center">
     <button id="play-episode" class="btn btn-link" title="Play episode: {{self.title}}" type="button" data-bs-toggle="offcanvas" data-bs-target="#radioPlayer" aria-controls="radioPlayer">
-      <img src="{% static "/img/play-button.svg" %}" class="p-3" alt="Play episode: {self.title}}"/>
+      <img src="{% static "img/play-button.svg" %}" class="p-3" alt="Play episode: {self.title}}"/>
     </button>
     <span>{{self.title}}</span>
   </h1>
@@ -30,7 +30,7 @@
         {% if self.image %}
           {% image self.image height-48 %}
         {% endif %}
-        <img class="position-absolute top-50 start-50 translate-middle" src="{% static "/img/radio-icon.svg" %}"/>
+        <img class="position-absolute top-50 start-50 translate-middle" src="{% static "img/radio-icon.svg" %}"/>
       </div>
     </div>
   </div>
