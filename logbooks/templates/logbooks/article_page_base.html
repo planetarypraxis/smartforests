@@ -13,7 +13,9 @@
       <a class="ms-2" href="{{ settings.logbooks.ImportantPages.page_url.logbooks_index_page }}">Logbooks</a>
     </div>
     <header class="col-lg-6 offset-lg-3">
+      {% block article_title %}
       <h1 class="mb-3 mb-md-5">{{self.title}}</h1>
+      {% endblock %}
     </header>
     <section class="d-flex d-md-none flex-row mb-3">
       {% for tag in self.tags.all %}
