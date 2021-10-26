@@ -8,12 +8,30 @@
 {% endblock %}
 
 {% block article_title %}
-  <h1 class="mb-3 mb-md-5 d-flex">
-    <button class="btn btn-link" id="play-episode" title="Play episode: {{self.title}}">
+  <h1 class="mb-3 mb-md-5 d-flex align-items-center">
+    <button id="play-episode" class="btn btn-link" title="Play episode: {{self.title}}" type="button" data-bs-toggle="offcanvas" data-bs-target="#radioPlayer" aria-controls="radioPlayer">
       <img src="{% static "/img/play-button.svg" %}" class="p-3" alt="Play episode: {self.title}}"/>
     </button>
     <span>{{self.title}}</span>
   </h1>
+  <div class="offcanvas offcanvas-bottom h-48px bg-dark-green border-0" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="radioPlayer" aria-labelledby="radioPlayerLabel">
+    <div class="text-white ps-3 d-flex align-items-center justify-content-between" style="height: 100%;">
+      <div>
+        <svg width="11" height="14" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0.5V35.5L27.5 18L0 0.5Z" fill="white"/>
+        </svg>
+        <span class="ps-2" id="radioPlayerLabel">{{self.title}}</span>
+        <span class="ps-3 small font-monospace text-uppercase">{% if self.owner.first_name and self.owner.last_name %}{{ self.owner.first_name }} {{ self.owner.last_name }}{% else %}{{ self.owner }}{% endif %}</span>
+        <span class="ps-3 small font-monospace text-uppercase">{{ self.last_published_at|date:"d E Y" }}</span>
+      </div>
+      <div class="position-relative">
+        {% if self.image %}
+          {% image self.image height-48 %}
+        {% endif %}
+        <img class="position-absolute top-50 start-50 translate-middle" src="{% static "/img/radio-icon.svg" %}"/>
+      </div>
+    </div>
+  </div>
 {% endblock %}
 
 {% block article %}
