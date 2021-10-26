@@ -4,7 +4,7 @@
   <header class='col'>
     <section class='caption text-grey fw-lighter'>
       <div class="d-flex">
-        <div class="mr-3">
+        <div class="me-3">
           Added by {% if self.owner.first_name and self.owner.last_name %}{{ self.owner.first_name }} {{ self.owner.last_name }}{% else %}{{ self.owner }}{% endif %}
         </div>
         <time datetime="{{ self.first_published_at|date:"Y-m-d" }}">
