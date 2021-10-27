@@ -17,8 +17,11 @@ export function useOffcanvas<T extends HTMLElement>(offcanvasId: string) {
   return [offcanvas, offcanvasElement as T] as const;
 }
 
-export function useFrameSrc(id: string) {
-  const el = useMemo<any>(() => document.getElementById(id), [id]);
+export function useFrameSrc(id: string | HTMLElement) {
+  const el = useMemo<any>(
+    () => (typeof id === "string" ? document.getElementById(id) : id),
+    [id]
+  );
   const [url, setUrl] = useState<string>(el.src);
 
   useEffect(() => {
@@ -34,5 +37,11 @@ export function useFrameSrc(id: string) {
 }
 
 export const equalUrls = (a?: string, b?: string) => {
+  if (a?.startsWith("/")) {
+    a = window.location.protocol + "//" + window.location.host + a;
+  }
+  if (b?.startsWith("/")) {
+    b = window.location.protocol + "//" + window.location.host + b;
+  }
   return a?.replace(/\/$/, "") === b?.replace(/\/$/, "");
 };

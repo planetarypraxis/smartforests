@@ -8,8 +8,11 @@ import {
 import { SmartForest } from "./types";
 import { Marker, Popup } from "@urbica/react-map-gl";
 import { useFocusContext } from "./state";
-import { Link } from "react-router-dom";
 import { equalUrls, useFrameSrc, useOffcanvas } from "../bootstrap";
+
+interface TurboFrameElement extends HTMLElement {
+  src?: string;
+}
 
 export function AtlasPagesMapLayer() {
   return (
@@ -76,10 +79,16 @@ export const AtlasPageMarker: React.FC<{
   page: Wagtail.Item<SmartForest.GeocodedMixin>;
 }> = memo(({ page }) => {
   const [isFocusing, setIsFocusing] = useFocusContext(page.id, page.meta.type);
-  const [offcanvas] = useOffcanvas<any>("sidepanel-offcanvas");
+  const [offcanvas, sidebarEl] = useOffcanvas("sidepanel-offcanvas");
+  const frame = useMemo(
+    () => document.querySelector<TurboFrameElement>("#sidepanel-turboframe"),
+    []
+  );
 
   const frameUrl = pageToFrameURL(page);
-  const activeUrl = useFrameSrc("sidepanel-turboframe");
+  const activeUrl = useFrameSrc(frame);
+
+  console.log(frameUrl, activeUrl);
 
   const active = equalUrls(frameUrl, activeUrl);
   const iconClass = active ? `icon-30 icon-cursor` : page.icon_class;
@@ -97,17 +106,11 @@ export const AtlasPageMarker: React.FC<{
           onMouseOver={() => setIsFocusing(true, "map")}
           onMouseOut={() => setIsFocusing(false, "map")}
           onClick={() => {
-            // data-bs-toggle does not open/close things appropriately
-            // data-bs-[*] attributes interfere with data-turbo-action
-            // So we do this programatically instead.
-            // An alternative would be to control this at the URL level, coordinated by some kind of routing library.
+            // Remove children from frame before showing to prevent flash of stale content
+            if (sidebarEl.style.visibility !== "visible") {
+              Array.from(frame.children).forEach((x) => x.remove());
+            }
             offcanvas.show();
-            // NB: Currently the TurboFrame sidepanel will not respond to back/forward navigation, so this is not in use.
-            // Update the window URL to allow navigation back to this sidepanel on share/refresh.
-            // (supported by server-side rendering at smartforests.models.MapPage.subpages).
-            // (There is an open PR to do this via data-turbo-[attr] at https://github.com/hotwired/turbo/pull/167 / https://github.com/hotwired/turbo/pull/398)
-            //
-            // history.push(pageToPath(page))
           }}
         >
           <div
