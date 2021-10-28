@@ -43,36 +43,44 @@
 }
 
 .grid {
+  --grid__columns: 1;
   --grid__gutter: #{map-get($spacers, 4)};
-  --grid__columns: 2;
-
-  margin-right: calc(
-    var(--grid__gutter, 0px) * calc(-1 / var(--grid__columns, 2))
-  );
 
   @include media-breakpoint-up(md) {
-    --grid__columns: 3;
+    --grid__columns: 2;
 
-    &.compact {
-      --grid__columns: 2;
+    &.grid-compact {
+      --grid__columns: 1;
     }
   }
 
   @include media-breakpoint-up(lg) {
-    --grid__columns: 4;
+    --grid__columns: 3;
 
-    &.compact {
-      --grid__columns: 3;
+    &.grid-compact {
+      --grid__columns: 2;
     }
   }
 
   @include media-breakpoint-up(xl) {
+    --grid__columns: 4;
+
+    &.grid-compact {
+      --grid__columns: 3;
+    }
+  }
+
+  @include media-breakpoint-up(xxl) {
     --grid__columns: 5;
 
-    &.compact {
+    &.grid-compact {
       --grid__columns: 4;
     }
   }
+
+  margin-right: calc(
+    var(--grid__gutter, 0px) * calc(-1 / var(--grid__columns, 2))
+  );
 
   &.are-images-unloaded {
     opacity: 0;
@@ -109,6 +117,8 @@
   display: none;
 }
 
+/** Map **/
+
 .mapbox-invisible-popup {
   max-width: none !important;
   background: none;
@@ -141,6 +151,84 @@
 
   &.active {
     background-color: $primary;
+    color: $white;
+  }
+}
+
+/** Sidebar */
+
+.sidebar-sized {
+  width: 320px;
+}
+.sidebar {
+  @extend .sidebar-sized;
+  background: $white;
+}
+
+/** Sizing **/
+
+.index-header {
+  height: 128px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+/** Filter bar **/
+
+.filter-page {
+  display: flex;
+  flex-direction: row;
+
+  &.filters-visible {
+    .filters-reveal {
+      @extend .collapse;
+    }
+
+    .grid {
+      @extend .grid-compact;
+    }
+  }
+
+  &:not(.filters-visible) {
+    .filter-sidebar {
+      @extend .collapse;
+    }
+  }
+}
+
+.filter-page__content {
+  flex: 1;
+}
+
+.filter-bar {
+  background-color: $white;
+}
+
+/** Filters **/
+
+.filter-tag {
+  @extend .badge;
+  @extend .link-reset;
+  @extend .rounded-pill;
+  @extend .microcopy;
+  @extend .small;
+
+  background: $off-white;
+  color: $mid-green;
+  text-transform: uppercase;
+  font-weight: normal;
+  padding: #{map-get($map: $spacers, $key: 1) * 0.5} #{map-get(
+      $map: $spacers,
+      $key: 2
+    )};
+
+  &:not(.active) {
+    @extend .hoverable;
+  }
+
+  &.active {
+    background: $dark-green;
     color: $white;
   }
 }
