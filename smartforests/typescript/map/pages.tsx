@@ -88,8 +88,6 @@ export const AtlasPageMarker: React.FC<{
   const frameUrl = pageToFrameURL(page);
   const activeUrl = useFrameSrc(frame);
 
-  console.log(frameUrl, activeUrl);
-
   const active = equalUrls(frameUrl, activeUrl);
   const iconClass = active ? `icon-30 icon-cursor` : page.icon_class;
 
