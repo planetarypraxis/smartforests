@@ -52,6 +52,8 @@ class StoryIndexPage(ChildListMixin, BaseLogbooksPage):
     class Meta:
         verbose_name = "Stories index page"
 
+    is_index_page = True
+
     def get_child_list_queryset(self, *args, **kwargs):
         return self.get_children().order_by('-last_published_at').specific()
 
@@ -69,6 +71,7 @@ class LogbookEntryPage(ArticlePage):
         verbose_name = "Logbook Entry"
         verbose_name_plural = "Logbook Entries"
 
+    is_index_page = True
     show_in_menus_default = True
     parent_page_types = ['logbooks.LogbookPage']
     icon_class = 'icon-logbooks'
