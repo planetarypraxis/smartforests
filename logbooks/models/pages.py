@@ -13,9 +13,10 @@ from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
 from wagtail.api import APIField
 from logbooks.models.helpers import group_by_title
-from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, DescendantPageContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager, TurboFrameMixin
+from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, DescendantPageContributorMixin, GeocodedMixin, SidebarRenderableMixin, ThumbnailMixin, IndexedPageManager, TurboFrameMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
+from django.shortcuts import redirect
 
 
 class StoryPage(ArticlePage):
@@ -54,6 +55,7 @@ class StoryIndexPage(ChildListMixin, BaseLogbooksPage):
 
     show_in_menus_default = True
     parent_page_types = ['home.HomePage']
+    max_count = 1
 
 
 class LogbookEntryPage(ArticlePage):
@@ -77,8 +79,37 @@ class LogbookEntryPage(ArticlePage):
             'self': self
         })
 
+    def serve(self, request, *args, **kwargs):
+        '''
+        Never allow logbook entries to be visited on their own.
+        '''
+        return redirect(self.get_parent().get_url(request) + '#' + str(self.id))
 
-class LogbookPage(TurboFrameMixin, ChildListMixin, DescendantPageContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
+    @property
+    def link_url(self):
+        '''
+        Wrapper for url allowing us to link to a page embedded in a parent (as with logbook entries) without
+        overriding any wagtail internals
+
+        '''
+
+        return f'{self.get_parent().url}#{self.slug}'
+
+    def get_url(self, request=None, current_site=None):
+        return self.get_parent().get_url(request=request, current_site=current_site)
+
+    def relative_url(self, request=None, current_site=None):
+        return self.get_parent().relative_url(request=request, current_site=current_site)
+
+    def get_url_parts(self, request=None, current_site=None):
+        return self.get_parent().get_url_parts(request=request, current_site=current_site)
+
+    @property
+    def full_url(self):
+        return self.get_parent().full_url
+
+
+class LogbookPage(TurboFrameMixin, SidebarRenderableMixin, ChildListMixin, DescendantPageContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
     '''
     Collection of logbook entries.
     '''
@@ -128,6 +159,7 @@ class LogbookIndexPage(ChildListMixin, RoutablePageMixin, BaseLogbooksPage):
     page_size = 50
     show_in_menus_default = True
     parent_page_types = ['home.HomePage']
+    max_count = 1
 
     def get_child_list_queryset(self, request):
         from .indexes import LogbookPageIndex
