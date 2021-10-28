@@ -31,9 +31,9 @@
                   </a>
                 </li>
                 <li class="nav-item d-lg-none p-2">
-                    {% for page in settings.logbooks.ImportantPages.menu_items.all %}
-                    <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ page.url }}">
-                        {{ page.title }}
+                    {% for page in menu_items %}
+                    <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ page.href }}">
+                        {{ page.text }}
                     </a>
                     {% endfor %}
                 </li>
@@ -64,8 +64,8 @@
                             <img src="{% static "img/map.svg" %}" />
                           </a>
                       </li>
-                      {% for page in settings.logbooks.ImportantPages.menu_items.all %}
-                      <li><a class="dropdown-item text-dark-green" href="{{ page.url }}">{{ page.title }}</a></li>
+                      {% for page in menu_items %}
+                        <li><a class="dropdown-item text-dark-green" href="{{ page.href }}">{{ page.text }}</a></li>
                       {% endfor %}
                     </ul>
                 </li>
