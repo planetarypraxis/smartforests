@@ -14,6 +14,7 @@ from commonknowledge.django import rest
 from .api import wagtail_api_router
 
 from search import views as search_views
+from smartforests import views as sf_views
 
 
 urlpatterns = [
@@ -23,6 +24,7 @@ urlpatterns = [
     path('documents/', include(wagtaildocs_urls)),
 
     path('search/', search_views.SearchView.as_view(), name='search'),
+    path('_frame/<page_id>', sf_views.frame_content),
     # path('api/', include(rest.get_urls())),
     # path('__debug__/', include(debug_toolbar.urls)),
 ]

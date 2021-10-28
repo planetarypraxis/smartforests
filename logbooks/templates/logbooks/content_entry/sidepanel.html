@@ -1,0 +1,57 @@
+{% load ckdjango_tags ckbootstrap_tags wagtailcore_tags wagtailimages_tags %}
+
+<turbo-frame id="sidepanel-turboframe">
+  <div class="container gx-2 py-2 bg-yellow" style="mix-blend-mode: multiply">
+    <button
+      type='button'
+      data-bs-dismiss="offcanvas"
+      class="btn btn-link text-reset text-decoration-none"
+      aria-label="Close"
+    >
+      <span class="pe-2">&larr;</span>
+      <span class="border-bottom border-1 pb-1 border-dark-green">Close</span>
+    </button>
+  </div>
+
+  <div class="overflow-auto h-100">
+    <div class="offcanvas-header align-items-stretch flex-column py-3">
+      <div class="caption text-dark-grey">{{ page.label }}</div>
+
+      <h5 id="offcanvasMapTitle" class="text-dark-green fw-bold mt-1 mb-0">
+        {{page.title}}
+        <i class="icon icon-20 bg-primary float-end {{page.icon_class}}"></i>
+      </h5>
+      
+      {% if page.geographical_location %}
+        <div class="mt-1 caption text-dark-grey">{{ page.geographical_location }}</div>
+      {% endif %}
+    </div>
+
+    {% if page.cover_image %}
+      <div class="sidebar-coverimage">
+        {% image page.cover_image height-500 %}
+      </div>
+    {% endif %}
+    
+    <div class="offcanvas-body align-items-stretch flex-column p-3">
+      <div class="mb-0">
+        {{ page.preview_text|richtext }}
+        <p class="mt-0">
+          <a
+            class="
+              text-uppercase text-decoration-underline text-mid-green
+              fs-7
+            "
+            href="{{ page.link_url }}"
+          >
+            Read More
+          </a>
+        </p>
+      </div>
+      <div>
+        <hr class="mt-0" />
+      </div>
+      {% include "logbooks/metadata.html" with page=page %}
+    </div>
+  </div>
+</turbo-frame>

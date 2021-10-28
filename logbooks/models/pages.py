@@ -13,7 +13,7 @@ from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
 from wagtail.api import APIField
 from logbooks.models.helpers import group_by_title
-from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager, TurboFrameMixin
+from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager, SidebarRenderableMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
 
@@ -26,6 +26,8 @@ class StoryPage(ArticlePage):
     class Meta:
         verbose_name = "Story"
         verbose_name_plural = "Stories"
+
+    icon_class = 'icon-stories'
 
     show_in_menus_default = True
     parent_page_types = ['logbooks.StoryIndexPage']
@@ -67,6 +69,7 @@ class LogbookEntryPage(ArticlePage):
 
     show_in_menus_default = True
     parent_page_types = ['logbooks.LogbookPage']
+    icon_class = 'icon-logbooks'
 
     def content_html(self):
         '''
@@ -77,16 +80,30 @@ class LogbookEntryPage(ArticlePage):
             'self': self
         })
 
+    @property
+    def link_url(self):
+        '''
+        Wrapper for url allowing us to link to a page embedded in a parent (as with logbook entries) without
+        overriding any wagtail internals
 
-class LogbookPage(TurboFrameMixin, ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
+        '''
+
+        return f'{self.get_parent().url}#{self.slug}'
+
+
+class LogbookPage(SidebarRenderableMixin, ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
     '''
     Collection of logbook entries.
     '''
+    class Meta:
+        verbose_name = "Logbook"
+        verbose_name_plural = "Logbooks"
+
+    icon_class = 'icon-logbooks'
 
     objects = IndexedPageManager()
     show_in_menus_default = True
     parent_page_types = ['logbooks.LogbookIndexPage']
-    label = 'Logbook'
 
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
     description = RichTextField()
@@ -98,7 +115,7 @@ class LogbookPage(TurboFrameMixin, ChildListMixin, ContributorMixin, GeocodedMix
     ] + ContributorMixin.content_panels + GeocodedMixin.content_panels
 
     api_fields = [
-        APIField('label'),
+        APIField('icon_class'),
         APIField('tags'),
         APIField('description'),
     ] + ContributorMixin.api_fields + GeocodedMixin.api_fields
@@ -114,9 +131,23 @@ class LogbookPage(TurboFrameMixin, ChildListMixin, ContributorMixin, GeocodedMix
             'self': self
         })
 
+    def cover_image(self):
+        '''
+        Returns the first image in the body stream (or None if there aren't any).
+
+        Used to determine which image to contribute to a thumbnail when images from multiple pages are combined into a single thumbnail (as with logbooks)
+        '''
+
+        images = self.get_thumbnail_images()
+        return None if len(images) == 0 else images[0]
+
     @property
     def logbook_entries(self):
         return get_children_of_type(self, LogbookEntryPage)
+
+    @property
+    def preview_text(self):
+        return self.description
 
 
 class LogbookIndexPage(ChildListMixin, RoutablePageMixin, BaseLogbooksPage):
