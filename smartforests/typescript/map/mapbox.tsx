@@ -11,7 +11,7 @@ import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { Fragment, useContext, useEffect, useRef, useState } from "react";
 import { AtlasPagesMapLayer } from "./pages";
-import * as ReactDOM from 'react-dom'
+import * as ReactDOM from "react-dom";
 import { useWagtailSearch } from "../wagtail";
 
 const MAPBOX_TOKEN = document.getElementById("MAP_APP")?.dataset.mapboxToken;
@@ -75,7 +75,14 @@ function GeocodeControl({
       placeholder: "Search by location",
       collapsed: true,
       marker: false,
-      types: ['country', 'region', 'district', 'place', 'locality', 'neighborhood'].join(',')
+      types: [
+        "country",
+        "region",
+        "district",
+        "place",
+        "locality",
+        "neighborhood",
+      ].join(","),
     });
 
     map?.addControl(control as any, position);
@@ -94,32 +101,40 @@ class FilterControlRenderer extends Evented {
 
   onAdd(map) {
     this._map = map;
-    this._container = document.createElement('div');
-    ReactDOM.render(
-      <FilterPopover />,
-      this._container
-    )
+    this._container = document.createElement("div");
+    ReactDOM.render(<FilterPopover />, this._container);
     return this._container;
   }
 }
 
 function FilterIcon() {
-  return <div className='mapboxgl-ctrl-geocoder mapboxgl-ctrl mapboxgl-ctrl-geocoder--collapsed p-1 py-2 text-center flex-column align-middle align-items-center'>
-    <svg width="24" height="16" viewBox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M9.33333 16H14.6667V13.3333H9.33333V16ZM0 0V2.66667H24V0H0ZM4 9.33333H20V6.66667H4V9.33333Z" fill="#043003" />
-    </svg>
-  </div>
+  return (
+    <div className="mapboxgl-ctrl-geocoder mapboxgl-ctrl mapboxgl-ctrl-geocoder--collapsed p-1 py-2 text-center flex-column align-middle align-items-center">
+      <svg
+        width="24"
+        height="16"
+        viewBox="0 0 24 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M9.33333 16H14.6667V13.3333H9.33333V16ZM0 0V2.66667H24V0H0ZM4 9.33333H20V6.66667H4V9.33333Z"
+          fill="#043003"
+        />
+      </svg>
+    </div>
+  );
 }
 
 function FilterOptions() {
-  const tags = useWagtailSearch({ type: 'logbooks.AtlasTag' })
+  const tags = useWagtailSearch({ type: "logbooks.AtlasTag" });
   return (
     <div>
-      {tags.data?.items?.map(tag => {
-        <div key={tag.id}>{tag.slug}</div>
+      {tags.data?.items?.map((tag) => {
+        <div key={tag.id}>{tag.slug}</div>;
       })}
     </div>
-  )
+  );
   // We could actually just load filters.html as a turbo-frame
   // And then abstract the logic of filters.html out, perhaps using Stimulus?
   // Option 1: Click a tag will navigate to a URL (logbook index)
@@ -129,15 +144,15 @@ function FilterOptions() {
 }
 
 function FilterPopover() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
   return (
     <Fragment>
-      <div onClick={() => setOpen(o => !o)}>
+      <div onClick={() => setOpen((o) => !o)}>
         <FilterIcon />
       </div>
       {open && <FilterOptions />}
     </Fragment>
-  )
+  );
 }
 
 export function FilterControl() {
@@ -145,7 +160,7 @@ export function FilterControl() {
   useEffect(() => {
     const control = new FilterControlRenderer();
     // @ts-ignore
-    map?.addControl(control, 'top-left');
+    map?.addControl(control, "top-left");
     return () => void map?.removeControl(control as any);
   }, [map]);
   return null;
