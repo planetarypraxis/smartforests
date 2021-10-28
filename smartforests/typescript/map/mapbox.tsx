@@ -64,9 +64,15 @@ function GeocodeControl({
   const map: mapboxgl.Map = useContext(MapContext);
 
   useEffect(() => {
+    // Docs: https://github.com/mapbox/mapbox-gl-geocoder/blob/master/API.md#mapboxgeocoder
     const control = new MapboxGeocoder({
       accessToken,
       mapboxgl,
+      zoom: 14,
+      placeholder: "Search by location",
+      collapsed: true,
+      marker: false,
+      types: ['country', 'region', 'district', 'place', 'locality', 'neighborhood'].join(',')
     });
 
     map?.addControl(control as any, position);
