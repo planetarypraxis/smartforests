@@ -14,7 +14,7 @@
       {% include "logbooks/metadata.html" with page=self %}
     </aside>
     <div class="row row-cols-1 gx-0 gy-7">
-      {% for entry in child_page_list %}
+      {% for entry in child_list_page %}
       <article class="col">
         {{entry.content_html}}
       </article>

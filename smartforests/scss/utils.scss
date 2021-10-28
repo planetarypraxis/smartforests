@@ -115,3 +115,10 @@
 .w-popover {
   width: 340px;
 }
+
+.hoverable {
+  &:hover,
+  &:focus {
+    background-color: transparentize($color: $dark-green, $amount: 0.9);
+  }
+}
