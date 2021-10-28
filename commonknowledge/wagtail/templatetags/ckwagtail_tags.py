@@ -2,6 +2,8 @@ from urllib import parse
 
 from wagtail.core.models import Site
 from django import template
+from django.utils.safestring import mark_safe
+from commonknowledge.helpers import safe_to_int
 
 
 register = template.Library()
@@ -24,6 +26,11 @@ def menubar(context, **kwargs):
 def next_page_path(context):
     request = context['request']
     params = request.GET.dict()
-    params['page'] = '{{#}}'
-    return request.path + '?' + \
-        parse.urlencode(params).replace('%7B%7B%23%7D%7D', '{{#}}')
+
+    # Return the next page
+    params['page'] = safe_to_int(params.get('page'), 1) + 1
+
+    # This informs our ChildListMixin not to return any data after the last page.
+    params['empty'] = '1'
+
+    return mark_safe(parse.urlencode(params))

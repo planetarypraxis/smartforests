@@ -1,15 +1,19 @@
 // Colors
+$off-white: #f9f9f9;
+
+$grey: #545454;
+$light-grey: #c5c5c5;
+
 $dark-green: #043003;
 $mid-green: #026302;
 $bright-green: #25ed08;
+$faded-green: #71B340;
+$soft-green: #c7eac6;
+
 $bright-yellow: #ffff00;
 $yellow: #ffff9b;
-$soft-green: #c7eac6;
-$grey: #545454;
-$light-grey: #c5c5c5;
-$offwhite: #f9f9f9;
 
-$body-bg: $offwhite;
+$body-bg: $off-white;
 $primary: $mid-green;
 $secondary: $grey;
 $primary-hover-light: $light-grey;
@@ -18,13 +22,14 @@ $custom-colors: (
   dark-green-transparent: rgba($dark-green, 0.8),
   mid-green: $mid-green,
   bright-green: $bright-green,
+  faded-green: $faded-green,
   yellow: $yellow,
   bright-yellow: $bright-yellow,
   soft-green: $soft-green,
   grey: $grey,
   dark-grey: $grey,
   light-grey: $light-grey,
-  offwhite: $offwhite,
+  off-white: $off-white,
 );
 $dark: $dark-green;
 
@@ -95,6 +100,7 @@ $font-family-monospace: Monaco, SFMono-Regular, Menlo, Consolas,
 $font-family-sans-serif: MarrSans, system-ui, "Segoe UI", Roboto,
   "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
   "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+$font-family-serif: Georgia, Times, "Times New Roman", serif;
 
 // Spacers
 $spacer: 1rem;
@@ -108,6 +114,9 @@ $spacers: (
   6: 60px,
   7: 90px,
 );
+
+// Allow negative margins
+$enable-negative-margins: true;
 
 // Merge with Bootstrap
 @import "~bootstrap/scss/functions";

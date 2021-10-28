@@ -13,6 +13,8 @@ body {
     font-size: 18px;
   }
 
+  display: flex;
+  flex-direction: column;
   color: $dark;
   background: $body-bg;
 }
@@ -55,7 +57,6 @@ h1 {
   @include heading-large;
 }
 
-
 .heading-medium,
 h2 {
   @include heading-medium;
@@ -71,8 +72,31 @@ h4 {
   @include microcopy;
 }
 
+.microcopy-small,
+h4 {
+  @include microcopy;
+  @extend .small;
+  text-transform: uppercase;
+}
+
 .small {
-  font-size: 12px;
+  font-size: 12px !important;
+}
+
+a .card,
+a.card {
+  .card-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    &:hover {
+      background-color: transparentize($color: $dark-green, $amount: 0.9);
+    }
+  }
+}
+
+.card {
+  overflow: hidden;
 }
 
 .nav-link {
@@ -86,6 +110,28 @@ h4 {
   }
 }
 
+.nav-link:hover {
+  text-decoration: underline;
+}
+
 .turbo-progress-bar {
   background: $dark-green;
+}
+
+.dropdown-toggle.show {
+  @extend .shadow-sm;
+  background-color: $off-white;
+}
+
+// Remove this for the moment, but return as it makes this inaccessible.
+.navbar-toggler:focus {
+  box-shadow: none;
+}
+
+.navbar {
+  padding-bottom: 0;
+
+  @include media-breakpoint-up(lg) {
+    padding-bottom: $spacer * 0.5;
+  }
 }

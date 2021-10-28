@@ -1,9 +1,11 @@
 from django.db import models
 from django.db.models.fields.related import ForeignKey
 from django.template.loader import render_to_string
+from django.template.response import TemplateResponse
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import Tag
 from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.core.fields import RichTextField
 from commonknowledge.wagtail.helpers import get_children_of_type
@@ -144,11 +146,12 @@ class LogbookPage(SidebarRenderableMixin, ChildListMixin, ContributorMixin, Geoc
         return get_children_of_type(self, LogbookEntryPage)
 
 
-class LogbookIndexPage(ChildListMixin, BaseLogbooksPage):
+class LogbookIndexPage(ChildListMixin, RoutablePageMixin, BaseLogbooksPage):
     '''
     Collection of logbooks.
     '''
 
+    allow_search = True
     page_size = 50
     show_in_menus_default = True
     parent_page_types = ['home.HomePage']

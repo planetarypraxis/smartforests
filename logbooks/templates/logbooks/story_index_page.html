@@ -2,7 +2,7 @@
 {% load ckdjango_tags %}
 
 {% block content %}
-{% with story_count=child_page_list|length %}
+{% with story_count=child_list_page|length %}
 <div class="container-fluid">
   <div class="row">
     <div class="col-2"></div>
@@ -11,7 +11,7 @@
 
       <section class='col container gx-0'>
         <div class='row row-cols-1 gx-0 gy-5'>
-        {% for entry in child_page_list %}
+        {% for entry in child_list_page %}
           <div class="col">
             {{entry.content_html}}
           </div>
