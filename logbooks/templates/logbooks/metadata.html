@@ -9,7 +9,7 @@
   </section>
   <section class="d-flex flex-column mb-3">
     <h4 class="mb-0">Contributors</h4>
-    {% for user in page.contribs %}
+    {% for user in page.contributors %}
       <div>{% include 'logbooks/username.html' with user=user %}</div>
     {% endfor %}
   </section>

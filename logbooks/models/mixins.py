@@ -70,7 +70,7 @@ class DescendantPageContributorMixin(Page):
     class Meta:
         abstract = True
 
-    def contribs(self):
+    def contributors(self):
         '''
         Return all the people who have contributed to this page,
         and any descendant pages too.
