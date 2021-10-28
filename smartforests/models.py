@@ -12,6 +12,7 @@ import re
 
 class MapPage(RoutablePageMixin, Page):
     parent_page_types = ['home.HomePage']
+    max_count = 1
 
     @route(r'^(?P<path>.*)/?$')
     def subpages(self, request, path, *args, **kwargs):

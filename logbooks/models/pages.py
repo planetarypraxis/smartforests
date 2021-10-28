@@ -56,6 +56,7 @@ class StoryIndexPage(ChildListMixin, BaseLogbooksPage):
 
     show_in_menus_default = True
     parent_page_types = ['home.HomePage']
+    max_count = 1
 
 
 class LogbookEntryPage(ArticlePage):
@@ -159,6 +160,7 @@ class LogbookIndexPage(ChildListMixin, RoutablePageMixin, BaseLogbooksPage):
     page_size = 50
     show_in_menus_default = True
     parent_page_types = ['home.HomePage']
+    max_count = 1
 
     def get_child_list_queryset(self, request):
         from .indexes import LogbookPageIndex
