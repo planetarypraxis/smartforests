@@ -71,6 +71,7 @@ class ChildListMixin:
             qs = qs.order_by(sort.ordering)
 
         search = self.get_search_queryset(request, qs)
+
         if search is None:
             paginator = Paginator(qs, self.get_page_size())
         else:

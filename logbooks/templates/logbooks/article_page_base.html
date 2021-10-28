@@ -34,9 +34,6 @@
       <section class="d-flex flex-column mb-3">
         <h4 class="mb-0">Contributors</h4>
         <a>{% if self.owner.first_name and self.owner.last_name %}{{ self.owner.first_name }} {{ self.owner.last_name }}{% else %}{{ self.owner }}{% endif %}</a>
-        <!-- {% for entry in child_list_page %}
-        <a>{% if entry.owner.first_name and entry.owner.last_name %}{{ entry.owner.first_name }} {{ entry.owner.last_name }}{% else %}{{ entry.owner }}{% endif %}</a>
-        {% endfor %} -->
       </section>
       {% if self.geographical_location %}
       <section class="d-flex flex-column mb-3">
