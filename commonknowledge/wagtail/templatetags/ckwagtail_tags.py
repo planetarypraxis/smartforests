@@ -1,9 +1,11 @@
 from urllib import parse
+from wagtail.core.blocks.base import Block
 
 from wagtail.core.models import Site
 from django import template
 from django.utils.safestring import mark_safe
 from commonknowledge.helpers import safe_to_int
+from django import template
 
 
 register = template.Library()
@@ -34,3 +36,14 @@ def next_page_path(context):
     params['empty'] = '1'
 
     return mark_safe(parse.urlencode(params))
+
+
+@register.simple_tag(takes_context=True)
+def render_streamfield(context, value):
+    def get_context(self, value):
+        return dict(context.flatten(), **{
+            'self': value,
+            self.TEMPLATE_VAR: value,
+        })
+    Block.get_context = get_context
+    return str(value)

@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_gis",
     # 'debug_toolbar',
+    "wagtail_footnotes",
 
     'django.contrib.gis',
     'django.contrib.admin',
