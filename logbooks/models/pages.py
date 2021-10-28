@@ -99,13 +99,13 @@ class LogbookEntryPage(ArticlePage):
         return f'{self.get_parent().url}#{self.slug}'
 
     def get_url(self, request=None, current_site=None):
-        return self.get_parent().get_url(request=request, current_site=current_site)
+        return self.get_parent().get_url(request=request)
 
     def relative_url(self, request=None, current_site=None):
-        return self.get_parent().relative_url(request=request, current_site=current_site)
+        return self.get_parent().relative_url(request=request)
 
     def get_url_parts(self, request=None, current_site=None):
-        return self.get_parent().get_url_parts(request=request, current_site=current_site)
+        return self.get_parent().get_url_parts(request=request)
 
     @property
     def full_url(self):
