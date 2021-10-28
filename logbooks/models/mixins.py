@@ -151,7 +151,7 @@ class ThumbnailMixin(Page):
         })
 
 
-class SidebarRenderableMixin():
+class SidebarRenderableMixin:
     def get_sidebar_frame_response(self, request, *args, **kwargs):
         '''
         Render the sidebar frame's html.
