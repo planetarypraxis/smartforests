@@ -1,26 +1,70 @@
-{% load menu_tags %}
+{% load menu_tags static %}
 
-<nav class="navbar navbar-expand-lg navbar-light bg-warning opacity-8 h-48px">
+<nav class="navbar navbar-expand-lg navbar-light bg-faded-yellow">
     <div class="container-fluid">
-        <a class="text-dark-green fw-normal text-decoration-none" href="/">Smart Forests</a>
-
-        <div>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class='navbar-nav mr-auto'>
-                {% for item in menu_items %}
-                    <li class="nav-item {{ item.active_class }}">
-                        <a class='nav-link text-dark-green fw-normal' href="{{ item.href }}">{{ item.text }}</a>
-                        <!-- {% if item.has_children_in_menu %}
-                            {% sub_menu item %}
-                        {% endif %} -->
-                    </li>
-                {% endfor %}
-              </ul>
+        <a class="navbar-brand text-black fw-normal text-decoration-none d-flex align-items-center" href="/">
+            <div class="d-flex align-items-center">
+                <img src="{% static "img/smart-forests-logo.svg" %}" />
             </div>
+        </a>
+        <button class="navbar-toggler fs-6 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse mx-n3 mx-lg-0" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto bg-off-white">
+                <li class="nav-item d-lg-none border-bottom p-2">
+                    <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ settings.logbooks.ImportantPages.page_url.logbooks_index_page }}">
+                        <span>Logbooks</span>
+                        <img src="{% static "img/logbooks.svg" %}" />
+                    </a>
+                </li>
+                <li class="nav-item d-lg-none border-bottom p-2">
+                  <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="/stories/">
+                      <span>Stories</span>
+                      <img src="{% static "img/stories.svg" %}" />
+                  </a>
+                </li>
+                <li class="nav-item d-lg-none border-bottom p-2">
+                  <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="/map/">
+                    <span>Map</span>
+                    <img src="{% static "img/map.svg" %}" />
+                  </a>
+                </li>
+                <li class="nav-item d-lg-none p-2">
+                    <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="/about/">
+                        About
+                    </a>
+                </li>
+                <li class="nav-item dropdown d-none d-lg-block">
+                    <a class="nav-link dropdown-toggle text-dark-green bg-faded-yellow" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Overview
+                    </a>
+                    <ul class="dropdown-menu border-0 mt-0 bg-off-white shadow-sm" aria-labelledby="navbarDropdown">
+                      <li>
+                        <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ settings.logbooks.ImportantPages.page_url.logbooks_index_page }}">
+                            <span>Logbooks</span>
+                            <img src="{% static "img/logbooks.svg" %}" />
+                        </a>
+                      </li>
+                      <li>
+                          <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="/stories/">
+                              <span>Stories</span>
+                              <img src="{% static "img/stories.svg" %}" />
+                          </a>
+                      </li>
+                      <li>
+                          <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="/map/">
+                            <span>Map</span>
+                            <img src="{% static "img/map.svg" %}" />
+                          </a>
+                      </li>
+                      <li><a class="dropdown-item text-dark-green" href="/about/">About</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
-
-        <button class="btn p-0 ms-5" type="button" data-bs-toggle="modal" data-bs-target="#searchToggle" aria-controls="searchToggle" aria-expanded="false" aria-label="Toggle search">
-            Search<i class="ms-3 icon icon-search icon-13"></i>
+        <button class="btn p-0 ms-5 d-none d-lg-block" type="button" data-bs-toggle="modal" data-bs-target="#searchToggle" aria-controls="searchToggle" aria-expanded="false" aria-label="Toggle search">
+            Search<i class="ms-3 icon-search"></i>
         </button>
     </div>
 </nav>
