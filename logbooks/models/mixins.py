@@ -15,6 +15,7 @@ from sumy.summarizers.lsa import LsaSummarizer as Summarizer
 from sumy.nlp.stemmers import Stemmer
 from sumy.utils import get_stop_words
 from sumy.nlp.tokenizers import Tokenizer
+from turbo_response import TurboFrame
 
 from logbooks.models.blocks import ArticleContentStream
 from logbooks.models.serializers import PageCoordinatesSerializer, UserSerializer
@@ -70,6 +71,32 @@ class ContributorMixin(Page):
             revision.user
             for revision in PageRevision.objects.filter(page=self)
         ] + [self.owner]))
+
+    api_fields = [
+        APIField('contributors', serializer=UserSerializer(many=True)),
+    ]
+
+    content_panels = []
+
+
+class DescendantPageContributorMixin(Page):
+    '''
+    Common configuration for pages that want to track their contributors.
+    '''
+
+    class Meta:
+        abstract = True
+
+    def contributors(self):
+        '''
+        Return all the people who have contributed to this page,
+        and any descendant pages too.
+        '''
+        pages = self.get_descendants(inclusive=True)
+        return list(set([
+            revision.user
+            for revision in PageRevision.objects.filter(page__in=pages)
+        ]))
 
     api_fields = [
         APIField('contributors', serializer=UserSerializer(many=True)),
@@ -246,3 +273,12 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
             return summary
         else:
             return self.indexed_streamfield_text
+
+
+class TurboFrameMixin(RoutablePageMixin, Page):
+    class Meta:
+        abstract = True
+
+    @route('^frame/(?P<dom_id>[-\w_]+)/(?P<template_path>.+)$')
+    def turbo_frame_response(self, request, dom_id, template_path, *args, **kwargs):
+        return TurboFrame(dom_id).template(f'{template_path.replace("-", "/").strip("/")}.html', {"page": self}).response(request)
