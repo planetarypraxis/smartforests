@@ -6,14 +6,12 @@ import {
   BrowserRouter as Router,
   Route
 } from "react-router-dom";
-import { Sidepanel } from './pages';
 
 function MapApp() {
   return (
     <Router>
       <StateContext>
         <MapVisual />
-        <Sidepanel />
       </StateContext>
     </Router>
   )
