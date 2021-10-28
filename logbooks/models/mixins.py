@@ -10,6 +10,11 @@ from wagtail.core.models import Page, PageManager, PageRevision
 from django.contrib.gis.db import models as geo
 from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
+from sumy.parsers.plaintext import PlaintextParser
+from sumy.summarizers.lsa import LsaSummarizer as Summarizer
+from sumy.nlp.stemmers import Stemmer
+from sumy.utils import get_stop_words
+from sumy.nlp.tokenizers import Tokenizer
 
 from logbooks.models.blocks import ArticleContentStream
 from logbooks.models.serializers import PageCoordinatesSerializer, UserSerializer
@@ -219,3 +224,25 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
 
         if self.index_entry and self.index_entry.thumbnail_image:
             return self.index_entry.thumbnail_image
+
+    @property
+    def preview_text(self):
+        language = 'english'
+
+        parser = PlaintextParser.from_string(
+            self.indexed_streamfield_text, Tokenizer(language))
+        stemmer = Stemmer(language)
+
+        summarizer = Summarizer(stemmer)
+        summarizer.stop_words = get_stop_words(language)
+
+        summary = ' '.join(
+            str(x)
+            for x in summarizer(parser.document, 2)
+            if str(x).strip() != ''
+        )
+
+        if summary:
+            return summary
+        else:
+            return self.indexed_streamfield_text

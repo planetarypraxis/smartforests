@@ -145,6 +145,10 @@ class LogbookPage(SidebarRenderableMixin, ChildListMixin, ContributorMixin, Geoc
     def logbook_entries(self):
         return get_children_of_type(self, LogbookEntryPage)
 
+    @property
+    def preview_text(self):
+        return self.description
+
 
 class LogbookIndexPage(ChildListMixin, RoutablePageMixin, BaseLogbooksPage):
     '''
