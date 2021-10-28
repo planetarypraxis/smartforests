@@ -82,7 +82,7 @@ class DescendantPageContributorMixin(Page):
         ]))
 
     api_fields = [
-        APIField('contribs', serializer=UserSerializer(many=True)),
+        APIField('contributors', serializer=UserSerializer(many=True)),
     ]
 
     content_panels = []
