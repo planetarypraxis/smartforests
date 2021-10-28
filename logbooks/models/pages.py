@@ -13,7 +13,7 @@ from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
 from wagtail.api import APIField
 from logbooks.models.helpers import group_by_title
-from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, DescendantPageContributorMixin, GeocodedMixin, SidebarRenderableMixin, ThumbnailMixin, IndexedPageManager, TurboFrameMixin
+from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, DescendantPageContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager, SidebarRenderableMixin, TurboFrameMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
 from django.shortcuts import redirect
@@ -27,6 +27,8 @@ class StoryPage(ArticlePage):
     class Meta:
         verbose_name = "Story"
         verbose_name_plural = "Stories"
+
+    icon_class = 'icon-stories'
 
     show_in_menus_default = True
     parent_page_types = ['logbooks.StoryIndexPage']
@@ -69,6 +71,7 @@ class LogbookEntryPage(ArticlePage):
 
     show_in_menus_default = True
     parent_page_types = ['logbooks.LogbookPage']
+    icon_class = 'icon-logbooks'
 
     def content_html(self):
         '''
@@ -109,15 +112,19 @@ class LogbookEntryPage(ArticlePage):
         return self.get_parent().full_url
 
 
-class LogbookPage(TurboFrameMixin, SidebarRenderableMixin, ChildListMixin, DescendantPageContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
+class LogbookPage(SidebarRenderableMixin, ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
     '''
     Collection of logbook entries.
     '''
+    class Meta:
+        verbose_name = "Logbook"
+        verbose_name_plural = "Logbooks"
+
+    icon_class = 'icon-logbooks'
 
     objects = IndexedPageManager()
     show_in_menus_default = True
     parent_page_types = ['logbooks.LogbookIndexPage']
-    label = 'Logbook'
 
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
     description = RichTextField()
@@ -129,7 +136,7 @@ class LogbookPage(TurboFrameMixin, SidebarRenderableMixin, ChildListMixin, Desce
     ] + DescendantPageContributorMixin.content_panels + GeocodedMixin.content_panels
 
     api_fields = [
-        APIField('label'),
+        APIField('icon_class'),
         APIField('tags'),
         APIField('description'),
     ] + DescendantPageContributorMixin.api_fields + GeocodedMixin.api_fields
@@ -145,9 +152,23 @@ class LogbookPage(TurboFrameMixin, SidebarRenderableMixin, ChildListMixin, Desce
             'self': self
         })
 
+    def cover_image(self):
+        '''
+        Returns the first image in the body stream (or None if there aren't any).
+
+        Used to determine which image to contribute to a thumbnail when images from multiple pages are combined into a single thumbnail (as with logbooks)
+        '''
+
+        images = self.get_thumbnail_images()
+        return None if len(images) == 0 else images[0]
+
     @property
     def logbook_entries(self):
         return get_children_of_type(self, LogbookEntryPage)
+
+    @property
+    def preview_text(self):
+        return self.description
 
 
 class LogbookIndexPage(ChildListMixin, RoutablePageMixin, BaseLogbooksPage):
