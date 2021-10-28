@@ -9,6 +9,7 @@ from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 from wagtail_transfer import urls as wagtailtransfer_urls
 from wagtail_content_import import urls as wagtail_content_import_urls
+from wagtailautocomplete.urls.admin import urlpatterns as autocomplete_admin_urls
 
 from commonknowledge.django import rest
 from .api import wagtail_api_router
@@ -20,6 +21,7 @@ from smartforests import views as sf_views
 urlpatterns = [
     path('django-admin/', admin.site.urls),
 
+    re_path(r'^admin/autocomplete/', include(autocomplete_admin_urls)),
     path('admin/', include(wagtailadmin_urls)),
     path('documents/', include(wagtaildocs_urls)),
 

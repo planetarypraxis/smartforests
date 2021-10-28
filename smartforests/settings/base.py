@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'wagtail.contrib.settings',
     'wagtail.api.v2',
     "wagtail.contrib.routable_page",
+    'wagtailautocomplete',
 
     'modelcluster',
     'taggit',

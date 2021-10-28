@@ -13,27 +13,29 @@
         <div class="collapse navbar-collapse mx-n3 mx-lg-0" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto bg-off-white">
                 <li class="nav-item d-lg-none border-bottom p-2">
-                    <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ settings.logbooks.ImportantPages.page_url.logbooks_index_page }}">
-                        <span>Logbooks</span>
+                    <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ settings.logbooks.ImportantPages.page_url.logbooks_index_page}}">
+                        <span>{{ settings.logbooks.ImportantPages.logbooks_index_page.title }}</span>
                         <img src="{% static "img/logbooks.svg" %}" />
                     </a>
                 </li>
                 <li class="nav-item d-lg-none border-bottom p-2">
-                  <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="/stories/">
-                      <span>Stories</span>
+                  <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ settings.logbooks.ImportantPages.page_url.stories_index_page }}">
+                      <span>{{ settings.logbooks.ImportantPages.stories_index_page.title }}</span>
                       <img src="{% static "img/stories.svg" %}" />
                   </a>
                 </li>
                 <li class="nav-item d-lg-none border-bottom p-2">
-                  <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="/map/">
-                    <span>Map</span>
+                  <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ settings.logbooks.ImportantPages.page_url.map_page }}">
+                    <span>{{ settings.logbooks.ImportantPages.map_page.title }}</span>
                     <img src="{% static "img/map.svg" %}" />
                   </a>
                 </li>
                 <li class="nav-item d-lg-none p-2">
-                    <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="/about/">
-                        About
+                    {% for page in settings.logbooks.ImportantPages.menu_items.all %}
+                    <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ page.url }}">
+                        {{ page.title }}
                     </a>
+                    {% endfor %}
                 </li>
                 <li class="nav-item dropdown d-none d-lg-block">
                     <a class="nav-link dropdown-toggle text-dark-green bg-faded-yellow" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -42,23 +44,25 @@
                     <ul class="dropdown-menu border-0 mt-0 bg-off-white shadow-sm" aria-labelledby="navbarDropdown">
                       <li>
                         <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ settings.logbooks.ImportantPages.page_url.logbooks_index_page }}">
-                            <span>Logbooks</span>
+                            <span>{{ settings.logbooks.ImportantPages.logbooks_index_page.title }}</span>
                             <img src="{% static "img/logbooks.svg" %}" />
                         </a>
                       </li>
                       <li>
-                          <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="/stories/">
-                              <span>Stories</span>
+                          <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ settings.logbooks.ImportantPages.page_url.stories_index_page }}">
+                              <span>{{ settings.logbooks.ImportantPages.stories_index_page.title }}</span>
                               <img src="{% static "img/stories.svg" %}" />
                           </a>
                       </li>
                       <li>
-                          <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="/map/">
-                            <span>Map</span>
+                          <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ settings.logbooks.ImportantPages.page_url.map_page }}">
+                            <span>{{ settings.logbooks.ImportantPages.map_page.title }}</span>
                             <img src="{% static "img/map.svg" %}" />
                           </a>
                       </li>
-                      <li><a class="dropdown-item text-dark-green" href="/about/">About</a></li>
+                      {% for page in settings.logbooks.ImportantPages.menu_items.all %}
+                      <li><a class="dropdown-item text-dark-green" href="{{ page.url }}">{{ page.title }}</a></li>
+                      {% endfor %}
                     </ul>
                 </li>
             </ul>
