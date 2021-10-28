@@ -46,10 +46,19 @@
   mask-image: url("./svg/map-icons/map.svg");
 }
 
-.icon-logbook {
+.icon-png {
   display: inline-block;
-  background-image: url("./svg/icon-logbook.png");
   width: 20px;
   height: 20px;
   background-size: 20px 20px;
+}
+
+.icon-logbook {
+  @extend .icon-png;
+  background-image: url("./svg/icon-logbook.png");
+}
+
+.icon-story {
+  @extend .icon-png;
+  background-image: url("./svg/icon-story.png");
 }

@@ -43,6 +43,11 @@ class StoryPage(ArticlePage):
     def cover_image(self):
         return self.image
 
+    def card_content_html(self):
+        return render_to_string('logbooks/thumbnails/story_thumbnail.html', {
+            'self': self
+        })
+
 
 class StoryIndexPage(ChildListMixin, BaseLogbooksPage):
     '''
@@ -53,13 +58,33 @@ class StoryIndexPage(ChildListMixin, BaseLogbooksPage):
         verbose_name = "Stories index page"
 
     is_index_page = True
-
-    def get_child_list_queryset(self, *args, **kwargs):
-        return self.get_children().order_by('-last_published_at').specific()
-
     show_in_menus_default = True
     parent_page_types = ['home.HomePage']
     max_count = 1
+
+    # "'IndexedPageManager' object is not callable"
+
+    # def get_child_list_queryset(self, request):
+    #     tag_filter = request.GET.get('filter', None)
+    #     filter = {}
+
+    #     if tag_filter is not None:
+    #         try:
+    #             tag = Tag.objects.get(slug=tag_filter)
+    #             filter['tags__contains'] = tag.id
+    #         except Tag.DoesNotExist:
+    #             pass
+
+    #     return StoryPage.objects(**filter).specific()
+
+    # def relevant_tags(self):
+    #     return group_by_title(Tag.objects.filter(logbooks_atlastag_items__isnull=False).distinct(), key='name')
+
+    # def get_context(self, request, *args, **kwargs):
+    #     context = super().get_context(request, *args, **kwargs)
+    #     context['tag_filter'] = request.GET.get('filter', None)
+
+    #     return context
 
 
 class LogbookEntryPage(ArticlePage):
