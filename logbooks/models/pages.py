@@ -16,6 +16,7 @@ from logbooks.models.helpers import group_by_title
 from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager, SidebarRenderableMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
+from django.shortcuts import redirect
 
 
 class StoryPage(ArticlePage):
@@ -80,6 +81,12 @@ class LogbookEntryPage(ArticlePage):
             'self': self
         })
 
+    def serve(self, request, *args, **kwargs):
+        '''
+        Never allow logbook entries to be visited on their own.
+        '''
+        return redirect(self.get_parent().get_url(request) + '#' + str(self.id))
+
     @property
     def link_url(self):
         '''
@@ -89,6 +96,19 @@ class LogbookEntryPage(ArticlePage):
         '''
 
         return f'{self.get_parent().url}#{self.slug}'
+
+    def get_url(self, request=None, current_site=None):
+        return self.get_parent().get_url(request=request, current_site=current_site)
+
+    def relative_url(self, request=None, current_site=None):
+        return self.get_parent().relative_url(request=request, current_site=current_site)
+
+    def get_url_parts(self, request=None, current_site=None):
+        return self.get_parent().get_url_parts(request=request, current_site=current_site)
+
+    @property
+    def full_url(self):
+        return self.get_parent().full_url
 
 
 class LogbookPage(SidebarRenderableMixin, ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
