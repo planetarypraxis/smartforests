@@ -14,7 +14,7 @@ from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
 from wagtail.api import APIField
 from logbooks.models.helpers import group_by_title
-from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager, SidebarRenderableMixin
+from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, DescendantPageContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager, SidebarRenderableMixin, TurboFrameMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
 from django.shortcuts import redirect
@@ -139,13 +139,13 @@ class LogbookEntryPage(ArticlePage):
         return f'{self.get_parent().url}#{self.slug}'
 
     def get_url(self, request=None, current_site=None):
-        return self.get_parent().get_url(request=request, current_site=current_site)
+        return self.get_parent().get_url(request=request)
 
     def relative_url(self, request=None, current_site=None):
-        return self.get_parent().relative_url(request=request, current_site=current_site)
+        return self.get_parent().relative_url(request=request)
 
     def get_url_parts(self, request=None, current_site=None):
-        return self.get_parent().get_url_parts(request=request, current_site=current_site)
+        return self.get_parent().get_url_parts(request=request)
 
     @property
     def full_url(self):
@@ -173,13 +173,13 @@ class LogbookPage(SidebarRenderableMixin, ChildListMixin, ContributorMixin, Geoc
         FieldPanel('title', classname="full title"),
         FieldPanel('description'),
         FieldPanel('tags'),
-    ] + ContributorMixin.content_panels + GeocodedMixin.content_panels
+    ] + DescendantPageContributorMixin.content_panels + GeocodedMixin.content_panels
 
     api_fields = [
         APIField('icon_class'),
         APIField('tags'),
         APIField('description'),
-    ] + ContributorMixin.api_fields + GeocodedMixin.api_fields
+    ] + DescendantPageContributorMixin.api_fields + GeocodedMixin.api_fields
 
     def get_child_list_queryset(self, _request):
         return self.logbook_entries
