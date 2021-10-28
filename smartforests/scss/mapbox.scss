@@ -1,0 +1,50 @@
+.mapbox-invisible-popup {
+  max-width: none !important;
+  background: none;
+  border: none;
+  outline: none;
+
+  .mapboxgl-popup {
+    &-close-button {
+      top: 15;
+      right: 15;
+    }
+
+    &-content {
+      padding: 0;
+      background: none;
+      border: none;
+      box-shadow: none;
+      outline: none;
+      width: 300;
+    }
+
+    &-close-button {
+      display: none;
+    }
+
+    &-tip {
+      display: none;
+    }
+  }
+}
+
+.mapboxgl-ctrl-geocoder {
+  &--input {
+    font-weight: 400 !important;
+    font-size: $font-size-base * 0.9 !important;
+    font-family: $font-family-sans-serif !important;
+  }
+  &--suggestion-title {
+    font-weight: 400 !important;
+    font-size: $font-size-base * 0.9;
+    font-family: $font-family-sans-serif !important;
+  }
+  &--suggestion-address {
+    font-weight: 200 !important;
+    color: $mid-green;
+    font-family: $font-family-monospace !important;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+}
