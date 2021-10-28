@@ -39,7 +39,7 @@
         {% endblock %}
     </head>
 
-    <body class="{% block body_height %}min-vh-100{% endblock %} {% block body_class %}{% endblock %}">
+    <body class="{% block body_height %}min-vh-100{% endblock %} {% block body_class %}{% endblock %} app-{{ self.content_type.app_label }} model-{{ self.content_type.model }}">
         {{ self.full_url|json_script:"routing_configuration" }} 
         {% wagtailuserbar %}
 

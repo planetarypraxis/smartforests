@@ -135,3 +135,7 @@ a.card {
     padding-bottom: $spacer * 0.5;
   }
 }
+
+.model-storypage .block-text {
+  @extend .font-serif;
+}
