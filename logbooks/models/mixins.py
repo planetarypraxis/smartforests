@@ -75,10 +75,11 @@ class DescendantPageContributorMixin(Page):
         Return all the people who have contributed to this page,
         and any descendant pages too.
         '''
+        pages = self.get_descendants(inclusive=True)
         return list(set([
             revision.user
-            for revision in PageRevision.objects.filter(page__in=self.get_descendants(inclusive=True))
-        ] + [self.owner]))
+            for revision in PageRevision.objects.filter(page__in=pages)
+        ]))
 
     api_fields = [
         APIField('contribs', serializer=UserSerializer(many=True)),
