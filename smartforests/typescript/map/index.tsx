@@ -6,12 +6,14 @@ import {
   BrowserRouter as Router,
   Route
 } from "react-router-dom";
+import { Filters } from './filters';
 
 function MapApp() {
   return (
     <Router>
       <StateContext>
         <MapVisual />
+        <Filters />
       </StateContext>
     </Router>
   )
