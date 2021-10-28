@@ -9,9 +9,8 @@
   </section>
   <section class="d-flex flex-column mb-3">
     <h4 class="mb-0">Contributors</h4>
-    <a>{% if page.owner.first_name and page.owner.last_name %}{{ page.owner.first_name }} {{ page.owner.last_name }}{% else %}{{ page.owner }}{% endif %}</a>
-    {% for entry in child_list_page %}
-    <a>{% if entry.owner.first_name and entry.owner.last_name %}{{ entry.owner.first_name }} {{ entry.owner.last_name }}{% else %}{{ entry.owner }}{% endif %}</a>
+    {% for user in page.contribs %}
+      <div>{% include 'logbooks/username.html' with user=user %}</div>
     {% endfor %}
   </section>
   {% if page.geographical_location %}

@@ -22,36 +22,8 @@
     </section>
   </div>
   <div class="row gx-0">
-    <aside class="col-lg-2 d-none d-md-flex flex-column microcopy">
-      <section class="d-flex flex-column mb-3">
-        <time class="text-dark-grey" datetime="{{ self.first_published_at|date:"Y-m-d" }}">
-          Added {{ self.first_published_at|date:"d E Y" }}
-        </time>
-        <time class="text-dark-grey" datetime="{{ self.last_published_at|date:"Y-m-d" }}">
-          Last edited {{ self.last_published_at|date:"d E Y" }}
-        </time>
-      </section>
-      <section class="d-flex flex-column mb-3">
-        <h4 class="mb-0">Contributors</h4>
-        <a>{% if self.owner.first_name and self.owner.last_name %}{{ self.owner.first_name }} {{ self.owner.last_name }}{% else %}{{ self.owner }}{% endif %}</a>
-      </section>
-      {% if self.geographical_location %}
-      <section class="d-flex flex-column mb-3">
-        <h4 class="mb-0">Location</h4>
-        <div>{{ self.geographical_location }}</div>
-        {% endif %}
-        {% if self.coordinates %}
-          <div>{{ self.latitude | floatformat:4}}° N, {{ self.longitude | floatformat:4}}° E</div>
-      </section>
-      {% endif %}
-      <section class="d-flex flex-column">
-        <h4>Tags</h4>
-        <div class="d-flex flex-column">
-        {% for tag in self.tags.all %}
-          {% include "logbooks/include/tag_label.html" with tag=tag orientation="vertical" %}
-        {% endfor %}
-        </div>
-      </section>
+    <aside class="col-lg-2">
+      {% include "logbooks/metadata.html" with page=self %}
     </aside>
     <section class="col-lg-6 offset-lg-1 gx-0">
       {% block article %}

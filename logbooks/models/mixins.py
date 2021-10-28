@@ -62,6 +62,31 @@ class ContributorMixin(Page):
     content_panels = []
 
 
+class DescendantPageContributorMixin(Page):
+    '''
+    Common configuration for pages that want to track their contributors.
+    '''
+
+    class Meta:
+        abstract = True
+
+    def contribs(self):
+        '''
+        Return all the people who have contributed to this page,
+        and any descendant pages too.
+        '''
+        return list(set([
+            revision.user
+            for revision in PageRevision.objects.filter(page__in=self.get_descendants(inclusive=True))
+        ] + [self.owner]))
+
+    api_fields = [
+        APIField('contribs', serializer=UserSerializer(many=True)),
+    ]
+
+    content_panels = []
+
+
 class GeocodedMixin(Page):
     '''
     Common configuration for pages that want to track a geographical location.

@@ -13,7 +13,7 @@ from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
 from wagtail.api import APIField
 from logbooks.models.helpers import group_by_title
-from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager, TurboFrameMixin
+from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, DescendantPageContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager, TurboFrameMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
 
@@ -78,7 +78,7 @@ class LogbookEntryPage(ArticlePage):
         })
 
 
-class LogbookPage(TurboFrameMixin, ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
+class LogbookPage(TurboFrameMixin, ChildListMixin, DescendantPageContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
     '''
     Collection of logbook entries.
     '''
@@ -95,13 +95,13 @@ class LogbookPage(TurboFrameMixin, ChildListMixin, ContributorMixin, GeocodedMix
         FieldPanel('title', classname="full title"),
         FieldPanel('description'),
         FieldPanel('tags'),
-    ] + ContributorMixin.content_panels + GeocodedMixin.content_panels
+    ] + DescendantPageContributorMixin.content_panels + GeocodedMixin.content_panels
 
     api_fields = [
         APIField('label'),
         APIField('tags'),
         APIField('description'),
-    ] + ContributorMixin.api_fields + GeocodedMixin.api_fields
+    ] + DescendantPageContributorMixin.api_fields + GeocodedMixin.api_fields
 
     def get_child_list_queryset(self, _request):
         return self.logbook_entries
