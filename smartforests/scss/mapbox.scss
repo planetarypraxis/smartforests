@@ -30,6 +30,9 @@
 }
 
 .mapboxgl-ctrl-geocoder {
+  &--icon {
+    fill: $dark-green !important;
+  }
   &--input {
     font-weight: 400 !important;
     font-size: $font-size-base * 0.9 !important;
