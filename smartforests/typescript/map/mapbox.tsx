@@ -1,18 +1,16 @@
-import React from "react";
-import MapGL, {
-  MapContext,
-  NavigationControl,
-  GeolocateControl,
-} from "@urbica/react-map-gl";
-// import { WebMercatorViewport } from '@math.gl/web-mercator';
-import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
-import mapboxgl, { Evented } from "mapbox-gl";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import "mapbox-gl/dist/mapbox-gl.css";
+
+import React from "react";
+import MapGL, { MapContext } from "@urbica/react-map-gl";
+import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
+import mapboxgl, { Evented } from "mapbox-gl";
 import { Fragment, useContext, useEffect, useRef, useState } from "react";
-import { AtlasPagesMapLayer } from "./pages";
 import * as ReactDOM from "react-dom";
 import { useWagtailSearch } from "../wagtail";
+
+import { useSize } from "./data";
+import { AtlasPageFeatureLayer } from "./layers";
 
 const MAPBOX_TOKEN = document.getElementById("MAP_APP")?.dataset.mapboxToken;
 
@@ -24,15 +22,17 @@ export function MapVisual() {
     bearing: 0,
     pitch: 0,
   });
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const size = useSize(mapContainerRef);
 
   return (
-    <Fragment>
+    <div style={{ width: "100%", height: "100%" }} ref={mapContainerRef}>
       <MapGL
+        {...viewport}
         accessToken={MAPBOX_TOKEN}
         mapStyle="mapbox://styles/smartforests/ckuquky9r2o3v18lkxddvri76/draft?v2"
         style={{ width: "100%", height: "100%" }}
         viewportChangeMethod="flyTo"
-        {...viewport}
         onViewportChange={(viewport) =>
           setViewport({
             ...viewport,
@@ -44,16 +44,11 @@ export function MapVisual() {
         minZoom={2}
         maxZoom={6}
       >
-        {/* <NavigationControl showCompass showZoom position='top-left' /> */}
-        {/* <GeolocateControl position='top-left' /> */}
         <GeocodeControl position="top-left" accessToken={MAPBOX_TOKEN} />
         <FilterControl />
-        <AtlasPagesMapLayer />
+        <AtlasPageFeatureLayer size={size} viewport={viewport} />
       </MapGL>
-      {/* <div className='position-absolute bottom-0 end-0 me-3 mb-5 p-4 bg-white opacity-75'>
-        <pre className='font-monospace mono monospace'>{JSON.stringify(results.data, null, 2)}</pre>
-      </div> */}
-    </Fragment>
+    </div>
   );
 }
 

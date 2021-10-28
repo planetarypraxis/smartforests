@@ -9,76 +9,20 @@ import { SmartForest } from "./types";
 import { Marker, Popup } from "@urbica/react-map-gl";
 import { useFocusContext } from "./state";
 import { equalUrls, useFrameSrc, useOffcanvas } from "../bootstrap";
+import { Feature, Point } from "geojson";
 
 interface TurboFrameElement extends HTMLElement {
   src?: string;
 }
 
-export function AtlasPagesMapLayer() {
-  return (
-    <Fragment>
-      <LogbookPageMarkers />
-      <LogbookEntryPageMarkers />
-      <StoryPageMarkers />
-    </Fragment>
-  );
-}
-
-export function LogbookPageMarkers() {
-  const results = useWagtailSearch<SmartForest.LogbookPage>({
-    type: "logbooks.LogbookPage",
-    limit: 1000,
-  });
-
-  return (
-    <Fragment>
-      {results.data?.items
-        ?.filter((f) => !!f.coordinates)
-        .map((page, i) => (
-          <AtlasPageMarker key={i + page.id} page={page} />
-        ))}
-    </Fragment>
-  );
-}
-
-export function LogbookEntryPageMarkers() {
-  const results = useWagtailSearch<SmartForest.LogbookEntryPage>({
-    type: "logbooks.LogbookEntryPage",
-    limit: 1000,
-  });
-
-  return (
-    <Fragment>
-      {results.data?.items
-        ?.filter((f) => !!f.coordinates)
-        .map((page, i) => (
-          <AtlasPageMarker key={i + page.id} page={page} />
-        ))}
-    </Fragment>
-  );
-}
-
-export function StoryPageMarkers() {
-  const results = useWagtailSearch<SmartForest.StoryPage>({
-    type: "logbooks.StoryPage",
-    limit: 1000,
-  });
-
-  return (
-    <Fragment>
-      {results.data?.items
-        ?.filter((f) => !!f.coordinates)
-        .map((page, i) => (
-          <AtlasPageMarker key={i + page.id} page={page} />
-        ))}
-    </Fragment>
-  );
-}
-
 export const AtlasPageMarker: React.FC<{
-  page: Wagtail.Item<SmartForest.GeocodedMixin>;
-}> = memo(({ page }) => {
-  const [isFocusing, setIsFocusing] = useFocusContext(page.id, page.meta.type);
+  feature: Feature<Point, SmartForest.MapItem>;
+}> = memo(({ feature }) => {
+  const {
+    properties: { page },
+    geometry,
+  } = feature;
+  const [isFocusing, setIsFocusing] = useFocusContext(page.id, "");
   const [offcanvas, sidebarEl] = useOffcanvas("sidepanel-offcanvas");
   const frame = useMemo(
     () => document.querySelector<TurboFrameElement>("#sidepanel-turboframe"),
@@ -94,8 +38,8 @@ export const AtlasPageMarker: React.FC<{
   return (
     <Fragment>
       <Marker
-        longitude={page.coordinates.coordinates[0]}
-        latitude={page.coordinates.coordinates[1]}
+        longitude={geometry.coordinates[0]}
+        latitude={geometry.coordinates[1]}
       >
         <a
           data-turbo-action="advance"
@@ -121,11 +65,11 @@ export const AtlasPageMarker: React.FC<{
       {isFocusing && !active && (
         <Popup
           className="mapbox-invisible-popup"
-          longitude={page?.coordinates?.coordinates[0]}
-          latitude={page?.coordinates?.coordinates[1]}
+          longitude={geometry.coordinates[0]}
+          latitude={geometry.coordinates[1]}
           offset={20}
         >
-          <AtlasPageCard page={page} />
+          <AtlasPageCard feature={feature} />
         </Popup>
       )}
     </Fragment>
@@ -133,13 +77,17 @@ export const AtlasPageMarker: React.FC<{
 });
 
 function AtlasPageCard({
-  page,
+  feature,
 }: {
-  page: Wagtail.Item<SmartForest.GeocodedMixin>;
+  feature: Feature<Point, SmartForest.MapItem>;
 }) {
+  const {
+    properties: { page },
+  } = feature;
+
   return (
     <div className="p-3 w-popover bg-white elevated">
-      <div className="caption text-dark-grey">{page.label}</div>
+      <div className="caption text-dark-grey">{page.title}</div>
 
       <h5 id="offcanvasMapTitle" className="text-dark-green fw-bold mt-1 mb-0">
         <i
