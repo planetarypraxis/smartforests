@@ -42,8 +42,8 @@
 }
 
 .caption {
-  @extend .font-monospace;
-  @extend .fs-7;
+  @extend .microcopy;
+  @extend .small;
   @extend .text-uppercase;
 }
 
@@ -108,5 +108,21 @@
   input:focus {
     box-shadow: $input-box-shadow;
     border-color: $input-border-color;
+  }
+}
+
+.elevated {
+  box-shadow: 0px 0px 20px rgba(2, 99, 2, 0.2);
+  border-radius: 3px;
+}
+
+.w-popover {
+  width: 340px;
+}
+
+.hoverable {
+  &:hover,
+  &:focus {
+    background-color: transparentize($color: $dark-green, $amount: 0.9);
   }
 }

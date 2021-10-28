@@ -1,13 +1,33 @@
 {% extends "base.html" %}
-{% load static ckbootstrap_tags %}
+{% load static ckbootstrap_tags menu_tags %}
 {% block body_height %}vh-100 overflow-hidden{% endblock %}
-{% block content %}
-  <div data-mapbox-token="{{mapbox_token}}" id="MAP_APP" class='h-100 w-100 position-relative'></div>
-
+{% block body %}
+  <!-- No floating header -->
+  {% main_menu max_levels=1 template="menus/header_static.html" %}
+  <div
+    data-turbo-permanent
+    data-mapbox-token="{{mapbox_token}}"
+    id="MAP_APP"
+    class='h-100 w-100 position-relative'
+  ></div>
+  <div
+    class="offcanvas {% if sidepanel_page %}show{% endif %} offcanvas-end flex flex-column h-100 overflow-hidden"
+    tabindex="-1"
+    id="sidepanel-offcanvas"
+    aria-labelledby="offcanvasMapTitle"
+    data-bs-scroll="true"
+    data-bs-backdrop="false"
+  >
+    <turbo-frame id="sidepanel-turboframe" target="_top">
+      {% if sidepanel_page %}
+        {% include "logbooks/sidepanel.html" with page=sidepanel_page %}
+      {% endif %}
+    </turbo-frame>
+  </div>
   {% if debug and not mapbox_token %}
     <script>
       console.warn('No mapbox token found. Ensure that you have the MAPBOX_API_PUBLIC_TOKEN setting defined in local.py settings')
     </script>
   {% endif %}
-{% endblock content %}
+{% endblock %}
 {% block footer %}{% endblock %}

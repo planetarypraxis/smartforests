@@ -14,7 +14,7 @@
     <h2 class="mb-4">News</h2>
 
     <ul class="list-group mb-3">
-      {% for page in child_page_list %}
+      {% for page in child_list_page %}
         <ul class="list-group-item">
           <a href="{{page.url}}">
             {{page.title}}
@@ -31,4 +31,4 @@
   </div>
 </main>
 
-{% endblock content %}
+{% endblock %}

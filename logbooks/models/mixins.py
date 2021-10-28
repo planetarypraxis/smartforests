@@ -1,6 +1,8 @@
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.http.response import HttpResponseNotFound
 from django.template.loader import render_to_string
+from django.template.response import TemplateResponse
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, StreamFieldPanel
 from wagtail.api.conf import APIField
@@ -8,7 +10,11 @@ from wagtail.core.models import Page, PageManager, PageRevision
 from django.contrib.gis.db import models as geo
 from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
-from turbo_response import TurboFrame
+from sumy.parsers.plaintext import PlaintextParser
+from sumy.summarizers.lsa import LsaSummarizer as Summarizer
+from sumy.nlp.stemmers import Stemmer
+from sumy.utils import get_stop_words
+from sumy.nlp.tokenizers import Tokenizer
 
 from logbooks.models.blocks import ArticleContentStream
 from logbooks.models.serializers import PageCoordinatesSerializer, UserSerializer
@@ -36,6 +42,16 @@ class BaseLogbooksPage(Page):
     @classmethod
     def content_type_id(cls):
         return ContentType.objects.get_for_model(cls).id
+
+    @property
+    def link_url(self):
+        '''
+        Wrapper for url allowing us to link to a page embedded in a parent (as with logbook entries) without
+        overriding any wagtail internals
+
+        '''
+
+        return self.url
 
 
 class ContributorMixin(Page):
@@ -69,6 +85,8 @@ class GeocodedMixin(Page):
 
     class Meta:
         abstract = True
+        verbose_name = "Location"
+        verbose_name_plural = "Locations"
 
     geographical_location = models.CharField(
         max_length=250, null=True, blank=True)
@@ -94,7 +112,12 @@ class GeocodedMixin(Page):
         )
     ]
 
+    @classmethod
+    def label(self):
+        return self._meta.verbose_name
+
     api_fields = [
+        APIField('label'),
         APIField('geographical_location'),
         APIField('coordinates', serializer=PageCoordinatesSerializer)
     ]
@@ -133,7 +156,17 @@ class ThumbnailMixin(Page):
         })
 
 
-class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, GeocodedMixin, BaseLogbooksPage):
+class SidebarRenderableMixin:
+    def get_sidebar_frame_response(self, request, *args, **kwargs):
+        '''
+        Render the sidebar frame's html.
+        '''
+
+        context = self.get_context(request)
+        return TemplateResponse(request, 'logbooks/content_entry/sidepanel.html', context)
+
+
+class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, GeocodedMixin, SidebarRenderableMixin, BaseLogbooksPage):
     '''
     Common configuration for logbook entries, stories and radio episodes.
     '''
@@ -152,6 +185,7 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
 
     api_fields = [
         APIField('tags'),
+        APIField('icon_class'),
     ] + ContributorMixin.api_fields + GeocodedMixin.api_fields
 
     search_fields = IndexedStreamfieldMixin.search_fields + Page.search_fields
@@ -191,11 +225,24 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
         if self.index_entry and self.index_entry.thumbnail_image:
             return self.index_entry.thumbnail_image
 
+    @property
+    def preview_text(self):
+        language = 'english'
 
-class TurboFrameMixin(RoutablePageMixin, Page):
-    class Meta:
-        abstract = True
+        parser = PlaintextParser.from_string(
+            self.indexed_streamfield_text, Tokenizer(language))
+        stemmer = Stemmer(language)
 
-    @route('^frame/(?P<dom_id>[-\w_]+)/(?P<template_path>.+)$')
-    def turbo_frame_response(self, request, dom_id, template_path, *args, **kwargs):
-        return TurboFrame(dom_id).template(f'{template_path.replace("-", "/").strip("/")}.html', {"page": self}).response(request)
+        summarizer = Summarizer(stemmer)
+        summarizer.stop_words = get_stop_words(language)
+
+        summary = ' '.join(
+            str(x)
+            for x in summarizer(parser.document, 2)
+            if str(x).strip() != ''
+        )
+
+        if summary:
+            return summary
+        else:
+            return self.indexed_streamfield_text

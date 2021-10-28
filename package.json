@@ -32,6 +32,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
+    "@hotwired/turbo": "^7.0.1",
     "@mapbox/mapbox-gl-geocoder": "^4.7.4",
     "@math.gl/web-mercator": "^3.5.6",
     "@types/bootstrap": "^5.1.6",

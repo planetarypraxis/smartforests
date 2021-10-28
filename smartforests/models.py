@@ -1,19 +1,41 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
+from turbo_response.frame import TurboFrame
 from wagtail.images.models import AbstractImage, AbstractRendition, Image
 from wagtail.documents.models import Document, AbstractDocument
 from wagtail.core.models import Page
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
+from django.apps import apps
+import re
 
 
 class MapPage(RoutablePageMixin, Page):
     parent_page_types = ['home.HomePage']
+    max_count = 1
 
-    # Hand off all routing below this page to the frontend router (react-router)
     @route(r'^(?P<path>.*)/?$')
-    def subpages(self, request, *args, **kwargs):
-        return self.serve(request)
+    def subpages(self, request, path, *args, **kwargs):
+        '''
+        Subpaths of this page will show a sidepanel with the relevant model.
+        '''
+        try:
+            '''
+            If URL points to a sidepanel, load the relevant model so the sidepanel HTML can be pre-rendered.
+            Can also be used to render meta HTML for things like sharecards.
+            '''
+            sidepanel_route = r'(?P<app_label>[-\w_]+)/(?P<model_name>[-\w_]+)/(?P<record_id>[0-9]+).*$'
+            sidepanel_match = re.match(sidepanel_route, path).groupdict()
+            model = apps.get_model(
+                app_label=sidepanel_match['app_label'],
+                model_name=sidepanel_match['model_name']
+            )
+            page = model.objects.get(id=sidepanel_match['record_id'])
+            return self.render(request, context_overrides={
+                'sidepanel_page': page
+            })
+        except:
+            return self.serve(request)
 
     def get_context(self, *args, **kwargs):
         context = super().get_context(*args, **kwargs)
