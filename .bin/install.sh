@@ -3,7 +3,7 @@ set -e
 pipenv install
 yarn
 
-python <<EOL
+pipenv run python <<EOL
 from nltk import download
 
 download('punkt')
