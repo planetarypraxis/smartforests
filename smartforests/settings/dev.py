@@ -13,6 +13,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 BASE_URL = 'http://localhost:8080'
 
 DATABASES['default']['CONN_MAX_AGE'] = 0
+SUPERCLUSTER_URL = 'http://localhost:3001'
 
 try:
     from .local import *

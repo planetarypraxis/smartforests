@@ -1,6 +1,7 @@
+import { Feature, Point } from "geojson";
 import React, { FC, Fragment } from "react";
-import { MapViewport, useMapData } from "./data";
-import { AtlasPageMarker } from "./markers";
+import { Cluster, MapViewport, useClusteredMapData } from "./data";
+import { AtlasPageMarker, ClusterMarker } from "./markers";
 import { stringifyQuery, useFilterParam } from "./state";
 import { SmartForest } from "./types";
 
@@ -9,14 +10,11 @@ export const AtlasPageFeatureLayer: FC<{
   viewport: MapViewport;
 }> = ({ size, viewport }) => {
   const tag = useFilterParam();
-  const data = useMapData<SmartForest.MapItem>(
+
+  const data = useClusteredMapData<SmartForest.MapItem>(
     size,
     viewport,
-    () =>
-      "/api/v2/geo/?" +
-      stringifyQuery({
-        tag,
-      }),
+    () => getFeaturesUrl({ tag }),
     [tag]
   );
 
@@ -26,15 +24,40 @@ export const AtlasPageFeatureLayer: FC<{
 
   return (
     <Fragment>
-      {data.features.map((feature) => {
+      {data.map((feature) => {
         if (!feature.geometry) {
           return;
         }
 
+        const properties = feature.properties;
+
+        if (properties.cluster) {
+          return (
+            <ClusterMarker
+              key={"cluster:" + properties.cluster_id}
+              feature={{ ...feature, properties }}
+            />
+          );
+        }
+
+        const featureProperties = feature.properties as SmartForest.MapItem;
+
         return (
-          <AtlasPageMarker key={feature.properties.page.id} feature={feature} />
+          <AtlasPageMarker
+            key={"page:" + featureProperties.page.id}
+            feature={{ ...feature, properties: featureProperties }}
+          />
         );
       })}
     </Fragment>
   );
 };
+
+const getFeaturesUrl = (opts: { tag?: string }) =>
+  [
+    window.location.host +
+      "/api/v2/geo/?" +
+      stringifyQuery({
+        ...(opts.tag ? { tag: opts.tag } : {}),
+      }),
+  ].join("");

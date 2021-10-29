@@ -7,22 +7,17 @@ import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import mapboxgl, { Evented } from "mapbox-gl";
 import { Fragment, useContext, useEffect, useRef, useState } from "react";
 import * as ReactDOM from "react-dom";
-import { useWagtailSearch } from "../wagtail";
 
 import { useSize } from "./data";
 import { AtlasPageFeatureLayer } from "./layers";
-import { stringifyQuery, useFilterParam } from "./state";
+import { unmountComponentAtNode } from "react-dom";
+import { useAtom } from "jotai";
+import { viewportAtom } from "./state";
 
 const MAPBOX_TOKEN = document.getElementById("MAP_APP")?.dataset.mapboxToken;
 
 export function MapVisual() {
-  const [viewport, setViewport] = useState({
-    latitude: 0,
-    longitude: 0,
-    zoom: 2,
-    bearing: 0,
-    pitch: 0,
-  });
+  const [viewport, setViewport] = useAtom(viewportAtom);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const size = useSize(mapContainerRef);
 
@@ -100,6 +95,12 @@ class FilterControlRenderer extends Evented {
     this._container = document.createElement("div");
     ReactDOM.render(<FilterPopover />, this._container);
     return this._container;
+  }
+
+  onRemove() {
+    if (this._container) {
+      unmountComponentAtNode(this._container);
+    }
   }
 }
 
