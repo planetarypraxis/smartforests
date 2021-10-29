@@ -135,7 +135,7 @@ const FilterView: FC<{ onClose: () => void; open: boolean }> = ({
         <h2 className="heading-small fw-normal flex-grow-1">Filter by tag</h2>
 
         <button onClick={onClose} className="icon-btn" aria-label="Close">
-          <i className="icon icon-close"></i>
+          <i className="icon bg-dark icon-close"></i>
         </button>
       </div>
 
