@@ -271,5 +271,8 @@ POSTHOG_URL = 'https://app.posthog.com'
 # Settings accessible via {{ settings.XXX }} in templates
 SETTINGS_EXPORT = [
     'DEBUG',
+    'POSTHOG_URL',
     'POSTHOG_PUBLIC_TOKEN',
 ]
+
+SETTINGS_EXPORT_VARIABLE_NAME = 'environment'
