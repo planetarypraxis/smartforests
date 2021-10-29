@@ -105,7 +105,7 @@ class LogbookEntryPage(ArticlePage):
         return self.get_parent().full_url
 
 
-class LogbookPage(SidebarRenderableMixin, ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
+class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
     '''
     Collection of logbook entries.
     '''
@@ -162,6 +162,16 @@ class LogbookPage(SidebarRenderableMixin, ChildListMixin, ContributorMixin, Geoc
     @property
     def preview_text(self):
         return self.description
+
+    @route(r'^(?P<path>.*)/?$')
+    def serve_subpages_too(self, request, path, *args, **kwargs):
+        '''
+        LogbookEntryPage URLs will be captured by LogbookPage.
+        The path will be converted into a hash by frontend javascript.
+        '''
+        return self.render(request, context_overrides={
+            'hash': path
+        })
 
 
 class LogbookIndexPage(ChildListMixin, RoutablePageMixin, BaseLogbooksPage):
