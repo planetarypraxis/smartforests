@@ -35,7 +35,9 @@ INSTALLED_APPS = [
     'commonknowledge.django',
     'commonknowledge.wagtail',
 
+    'wagtailmenus',
     'wagtail_content_import',
+    "wagtail_footnotes",
     'import_export',
 
     'wagtail.contrib.forms',
@@ -54,15 +56,15 @@ INSTALLED_APPS = [
     'wagtail.contrib.settings',
     'wagtail.api.v2',
     "wagtail.contrib.routable_page",
-
+    'wagtail.contrib.modeladmin',
     'modelcluster',
     'taggit',
+
     'webpack_loader',
     "anymail",
     "rest_framework",
     "rest_framework_gis",
     # 'debug_toolbar',
-    "wagtail_footnotes",
 
     'django.contrib.gis',
     'django.contrib.admin',
@@ -71,9 +73,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    'wagtail.contrib.modeladmin',
-    'wagtailmenus',
 ]
 
 MIDDLEWARE = [
