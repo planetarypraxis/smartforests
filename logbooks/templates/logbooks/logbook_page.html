@@ -10,12 +10,9 @@
     {% endif %}
   </div>
   <div class="row gx-0">
-    <aside class='col-lg-2'>
-      {% include "logbooks/metadata.html" with page=self %}
-    </aside>
     <div class="row row-cols-1 gx-0 gy-7">
       {% for entry in child_list_page %}
-      <article class="col">
+      <article class="col" id="{{ entry.id }}">
         {{entry.content_html}}
       </article>
       {% endfor %}

@@ -12,10 +12,11 @@ from commonknowledge.wagtail.helpers import get_children_of_type
 from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
 from wagtail.api import APIField
-from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager, SidebarRenderableMixin
+from logbooks.models.helpers import group_by_title
+from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, DescendantPageContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager, SidebarRenderableMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
-from smartforests.util import group_by_title
+from django.shortcuts import redirect
 
 
 class StoryPage(ArticlePage):
@@ -56,6 +57,7 @@ class StoryIndexPage(ChildListMixin, BaseLogbooksPage):
 
     show_in_menus_default = True
     parent_page_types = ['home.HomePage']
+    max_count = 1
 
 
 class LogbookEntryPage(ArticlePage):
@@ -80,6 +82,12 @@ class LogbookEntryPage(ArticlePage):
             'self': self
         })
 
+    def serve(self, request, *args, **kwargs):
+        '''
+        Never allow logbook entries to be visited on their own.
+        '''
+        return redirect(self.get_parent().get_url(request) + '#' + str(self.id))
+
     @property
     def link_url(self):
         '''
@@ -89,6 +97,19 @@ class LogbookEntryPage(ArticlePage):
         '''
 
         return f'{self.get_parent().url}#{self.slug}'
+
+    def get_url(self, request=None, current_site=None):
+        return self.get_parent().get_url(request=request)
+
+    def relative_url(self, request=None, current_site=None):
+        return self.get_parent().relative_url(request=request)
+
+    def get_url_parts(self, request=None, current_site=None):
+        return self.get_parent().get_url_parts(request=request)
+
+    @property
+    def full_url(self):
+        return self.get_parent().full_url
 
 
 class LogbookPage(SidebarRenderableMixin, ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
@@ -112,13 +133,13 @@ class LogbookPage(SidebarRenderableMixin, ChildListMixin, ContributorMixin, Geoc
         FieldPanel('title', classname="full title"),
         FieldPanel('description'),
         FieldPanel('tags'),
-    ] + ContributorMixin.content_panels + GeocodedMixin.content_panels
+    ] + DescendantPageContributorMixin.content_panels + GeocodedMixin.content_panels
 
     api_fields = [
         APIField('icon_class'),
         APIField('tags'),
         APIField('description'),
-    ] + ContributorMixin.api_fields + GeocodedMixin.api_fields
+    ] + DescendantPageContributorMixin.api_fields + GeocodedMixin.api_fields
 
     def get_child_list_queryset(self, _request):
         return self.logbook_entries
@@ -145,6 +166,10 @@ class LogbookPage(SidebarRenderableMixin, ChildListMixin, ContributorMixin, Geoc
     def logbook_entries(self):
         return get_children_of_type(self, LogbookEntryPage)
 
+    @property
+    def preview_text(self):
+        return self.description
+
 
 class LogbookIndexPage(ChildListMixin, RoutablePageMixin, BaseLogbooksPage):
     '''
@@ -155,6 +180,7 @@ class LogbookIndexPage(ChildListMixin, RoutablePageMixin, BaseLogbooksPage):
     page_size = 50
     show_in_menus_default = True
     parent_page_types = ['home.HomePage']
+    max_count = 1
 
     def get_child_list_queryset(self, request):
         from .indexes import LogbookPageIndex

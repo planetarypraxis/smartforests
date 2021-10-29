@@ -1,75 +1,89 @@
 {% load menu_tags static %}
 
-<nav class="navbar navbar-expand-lg navbar-light bg-faded-yellow">
+<nav class="navbar py-1 {% block header_position %}fixed-top{% endblock %} navbar-expand-lg navbar-light bg-faded-yellow">
     <div class="container-fluid">
-        <a class="navbar-brand text-black fw-normal text-decoration-none d-flex align-items-center" href="/">
+        <a class="navbar-brand text-black fw-normal text-decoration-none d-flex d-lg-none align-items-center" href="/">
             <div class="d-flex align-items-center">
-                <img src="{% static "img/smart-forests-logo.svg" %}" />
+                <img src="{% static 'img/smart-forests-logo.svg' %}" />
             </div>
         </a>
         <button class="navbar-toggler fs-6 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse mx-n3 mx-lg-0" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto bg-off-white">
+        <div class="col-lg-3 collapse navbar-collapse mx-n3 mx-lg-0" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto align-items-center">
                 <li class="nav-item d-lg-none border-bottom p-2">
-                    <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ settings.logbooks.ImportantPages.page_url.logbooks_index_page }}">
-                        <span>Logbooks</span>
-                        <img src="{% static "img/logbooks.svg" %}" />
+                    <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ settings.logbooks.ImportantPages.page_url.logbooks_index_page}}">
+                        <span>{{ settings.logbooks.ImportantPages.logbooks_index_page.title }}</span>
+                        <img src="{% static 'img/logbooks.svg' %}" />
                     </a>
                 </li>
                 <li class="nav-item d-lg-none border-bottom p-2">
-                  <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="/stories/">
-                      <span>Stories</span>
-                      <img src="{% static "img/stories.svg" %}" />
+                  <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ settings.logbooks.ImportantPages.page_url.stories_index_page }}">
+                      <span>{{ settings.logbooks.ImportantPages.stories_index_page.title }}</span>
+                      <img src="{% static 'img/stories.svg' %}" />
                   </a>
                 </li>
                 <li class="nav-item d-lg-none border-bottom p-2">
-                  <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="/map/">
-                    <span>Map</span>
-                    <img src="{% static "img/map.svg" %}" />
+                  <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ settings.logbooks.ImportantPages.page_url.map_page }}">
+                    <span>{{ settings.logbooks.ImportantPages.map_page.title }}</span>
+                    <img src="{% static 'img/map.svg' %}" />
                   </a>
                 </li>
-                <li class="nav-item d-lg-none p-2">
-                    <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="/about/">
-                        About
+                <li class="nav-item d-lg-none p-2 text-truncate overflow-hidden">
+                    {% for page in menu_items %}
+                    <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ page.href }}">
+                        {{ page.text }}
                     </a>
+                    {% endfor %}
                 </li>
-                <li class="nav-item dropdown d-none d-lg-block">
-                    <a class="nav-link dropdown-toggle text-dark-green bg-faded-yellow" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Overview
+                <a class="navbar-brand text-black fw-normal text-decoration-none d-inline-block d-none d-lg-block" href="/">
+                    <img src="{% static 'img/smart-forests-logo.svg' %}" />
+                </a>
+                <li class="nav-item dropdown visible-lg-block">
+                    <a class="fw-normal nav-link dropdown-toggle text-dark-green" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      {% if page.content_type.model == 'logbookpage' %}
+                        {{ page.get_parent.title }}
+                      {% else %}
+                        {{ page.title }}
+                      {% endif %}
                     </a>
                     <ul class="dropdown-menu border-0 mt-0 bg-off-white shadow-sm" aria-labelledby="navbarDropdown">
                       <li>
                         <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ settings.logbooks.ImportantPages.page_url.logbooks_index_page }}">
-                            <span>Logbooks</span>
-                            <img src="{% static "img/logbooks.svg" %}" />
+                            <span>{{ settings.logbooks.ImportantPages.logbooks_index_page.title }}</span>
+                            <img src="{% static 'img/logbooks.svg' %}" />
                         </a>
                       </li>
                       <li>
-                          <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="/stories/">
-                              <span>Stories</span>
-                              <img src="{% static "img/stories.svg" %}" />
+                          <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ settings.logbooks.ImportantPages.page_url.stories_index_page }}">
+                              <span>{{ settings.logbooks.ImportantPages.stories_index_page.title }}</span>
+                              <img src="{% static 'img/stories.svg' %}" />
                           </a>
                       </li>
                       <li>
-                          <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="/map/">
-                            <span>Map</span>
-                            <img src="{% static "img/map.svg" %}" />
+                          <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ settings.logbooks.ImportantPages.page_url.map_page }}">
+                            <span>{{ settings.logbooks.ImportantPages.map_page.title }}</span>
+                            <img src="{% static 'img/map.svg' %}" />
                           </a>
                       </li>
-                      <li><a class="dropdown-item text-dark-green" href="/about/">About</a></li>
+                      {% for page in menu_items %}
+                        <li><a class="dropdown-item text-dark-green" href="{{ page.href }}">{{ page.text }}</a></li>
+                      {% endfor %}
                     </ul>
                 </li>
             </ul>
         </div>
-        <button class="btn p-0 ms-5 d-none d-lg-block" type="button" data-bs-toggle="modal" data-bs-target="#searchToggle" aria-controls="searchToggle" aria-expanded="false" aria-label="Toggle search">
+        {% if page.content_type.model == 'logbookpage' %}
+        <a class="col-lg-8 d-none d-lg-block text-decoration-none text-dark-green" href="#" role="button">
+          {{ page.title }}
+        </a>
+        {% endif %}
+        <button class="col-lg-1 btn p-0 ms-5 d-none d-lg-block" type="button" data-bs-toggle="modal" data-bs-target="#searchToggle" aria-controls="searchToggle" aria-expanded="false" aria-label="Toggle search">
             Search<i class="ms-3 icon-search"></i>
         </button>
     </div>
 </nav>
-
-
 <form data-autofocus-show="1" class="modal fade" id="searchToggle" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

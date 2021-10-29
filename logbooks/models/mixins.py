@@ -1,3 +1,13 @@
+from logbooks.thumbnail import generate_thumbnail
+from logbooks.models.snippets import AtlasTag
+from logbooks.models.serializers import PageCoordinatesSerializer, UserSerializer
+from logbooks.models.blocks import ArticleContentStream
+from turbo_response import TurboFrame
+from sumy.nlp.tokenizers import Tokenizer
+from sumy.utils import get_stop_words
+from sumy.nlp.stemmers import Stemmer
+from sumy.summarizers.lsa import LsaSummarizer as Summarizer
+from sumy.parsers.plaintext import PlaintextParser
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.http.response import HttpResponseNotFound
@@ -10,11 +20,9 @@ from wagtail.core.models import Page, PageManager, PageRevision
 from django.contrib.gis.db import models as geo
 from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
-
-from logbooks.models.blocks import ArticleContentStream
-from logbooks.models.serializers import PageCoordinatesSerializer, UserSerializer
-from logbooks.models.snippets import AtlasTag
-from logbooks.thumbnail import generate_thumbnail
+<< << << < HEAD
+== == == =
+>>>>>> > main
 
 
 class IndexedPageManager(PageManager):
@@ -65,6 +73,32 @@ class ContributorMixin(Page):
             revision.user
             for revision in PageRevision.objects.filter(page=self)
         ] + [self.owner]))
+
+    api_fields = [
+        APIField('contributors', serializer=UserSerializer(many=True)),
+    ]
+
+    content_panels = []
+
+
+class DescendantPageContributorMixin(Page):
+    '''
+    Common configuration for pages that want to track their contributors.
+    '''
+
+    class Meta:
+        abstract = True
+
+    def contributors(self):
+        '''
+        Return all the people who have contributed to this page,
+        and any descendant pages too.
+        '''
+        pages = self.get_descendants(inclusive=True)
+        return list(set([
+            revision.user
+            for revision in PageRevision.objects.filter(page__in=pages)
+        ]))
 
     api_fields = [
         APIField('contributors', serializer=UserSerializer(many=True)),
@@ -151,7 +185,7 @@ class ThumbnailMixin(Page):
         })
 
 
-class SidebarRenderableMixin():
+class SidebarRenderableMixin:
     def get_sidebar_frame_response(self, request, *args, **kwargs):
         '''
         Render the sidebar frame's html.
@@ -219,3 +253,25 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
 
         if self.index_entry and self.index_entry.thumbnail_image:
             return self.index_entry.thumbnail_image
+
+    @property
+    def preview_text(self):
+        language = 'english'
+
+        parser = PlaintextParser.from_string(
+            self.indexed_streamfield_text, Tokenizer(language))
+        stemmer = Stemmer(language)
+
+        summarizer = Summarizer(stemmer)
+        summarizer.stop_words = get_stop_words(language)
+
+        summary = ' '.join(
+            str(x)
+            for x in summarizer(parser.document, 2)
+            if str(x).strip() != ''
+        )
+
+        if summary:
+            return summary
+        else:
+            return self.indexed_streamfield_text

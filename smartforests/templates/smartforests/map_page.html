@@ -4,6 +4,8 @@
 {% block body_height %}vh-100 overflow-hidden{% endblock %}
 
 {% block content %}
+  <!-- No floating header -->
+  {% main_menu max_levels=1 template="menus/header_static.html" %}
 
   <div
     data-turbo-permanent
@@ -28,18 +30,15 @@
       {% endif %}
     </turbo-frame>
   </div>
-
+  
   {% if debug and not mapbox_token %}
     <script>
       console.warn('No mapbox token found. Ensure that you have the MAPBOX_API_PUBLIC_TOKEN setting defined in local.py settings')
     </script>
   {% endif %}
-{% endblock content %}
+{% endblock %}
 
 
 {% block extra_js %}
 <script defer src="{% static 'js/filters.js' %}"></script>
-{% endblock %}
-
-{% block footer %}
 {% endblock %}

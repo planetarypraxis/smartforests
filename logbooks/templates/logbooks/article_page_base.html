@@ -5,53 +5,25 @@
 {% block article_header %}
 {% endblock %}
 <main class="container-fluid mb-7">
-  <div class="row gx-0 mt-3 mt-md-7">
-    <div class="d-block d-md-none mb-5">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M7.00033 2.33334L7.82283 3.15584L4.56783 6.41668H11.667V7.58334H4.56783L7.82283 10.8442L7.00033 11.6667L2.33366 7.00001L7.00033 2.33334Z" fill="#043003"/>
+  <div class="row gx-0 mt-3 mt-lg-7">
+    <div class="d-block d-lg-none mb-5 text-reset text-decoration-none text-mid-green">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" class='text-mid-green' xmlns="http://www.w3.org/2000/svg">
+        <path d="M7.00033 2.33334L7.82283 3.15584L4.56783 6.41668H11.667V7.58334H4.56783L7.82283 10.8442L7.00033 11.6667L2.33366 7.00001L7.00033 2.33334Z" />
       </svg>
-      <a class="ms-2" href="{{ settings.logbooks.ImportantPages.page_url.logbooks_index_page }}">Logbooks</a>
+      <a class="border-bottom border-1 pb-1 text-mid-green border-mid-green ms-2 text-decoration-none" href="{{ self.get_parent.url }}">{{ self.get_parent.title}}</a>
     </div>
     <header class="col-lg-6 offset-lg-3">
-      <h1 class="mb-3 mb-md-5">{{self.title}}</h1>
+      <h1 class="mb-3 mb-lg-5">{{self.title}}</h1>
     </header>
-    <section class="d-flex d-md-none flex-row mb-3">
+    <section class="d-flex d-lg-none flex-row mb-3">
       {% for tag in self.tags.all %}
         {% include "logbooks/include/tag_label.html" with tag=tag %}
       {% endfor %}
     </section>
   </div>
   <div class="row gx-0">
-    <aside class="col-lg-2 d-none d-md-flex flex-column microcopy">
-      <section class="d-flex flex-column mb-3">
-        <time class="text-dark-grey" datetime="{{ self.first_published_at|date:"Y-m-d" }}">
-          Added {{ self.first_published_at|date:"d E Y" }}
-        </time>
-        <time class="text-dark-grey" datetime="{{ self.last_published_at|date:"Y-m-d" }}">
-          Last edited {{ self.last_published_at|date:"d E Y" }}
-        </time>
-      </section>
-      <section class="d-flex flex-column mb-3">
-        <h4 class="mb-0">Contributors</h4>
-        <a>{% if self.owner.first_name and self.owner.last_name %}{{ self.owner.first_name }} {{ self.owner.last_name }}{% else %}{{ self.owner }}{% endif %}</a>
-      </section>
-      {% if self.geographical_location %}
-      <section class="d-flex flex-column mb-3">
-        <h4 class="mb-0">Location</h4>
-        <div>{{ self.geographical_location }}</div>
-        {% endif %}
-        {% if self.coordinates %}
-          <div>{{ self.latitude | floatformat:4}}° N, {{ self.longitude | floatformat:4}}° E</div>
-      </section>
-      {% endif %}
-      <section class="d-flex flex-column">
-        <h4>Tags</h4>
-        <div class="d-flex flex-column">
-        {% for tag in self.tags.all %}
-          {% include "logbooks/include/tag_label.html" with tag=tag orientation="vertical" %}
-        {% endfor %}
-        </div>
-      </section>
+    <aside class="col-lg-2">
+      {% include "logbooks/metadata.html" with page=self %}
     </aside>
     <section class="col-lg-6 offset-lg-1 gx-0">
       {% block article %}
