@@ -64,13 +64,12 @@
                 </div>
               </div>
             </div>
-            <div class="col-2 d-flex align-items-start">
-              <div class="position-relative">
-                {% if episode.image %}
+            <div class="col-2 d-flex align-items-start justify-content-end">
+              {% if episode.image %}
                   {% image episode.image height-48 %}
+                {% else %}
+                <img src="{% static "img/radio-icon.svg" %}"/>
                 {% endif %}
-                <img class="position-absolute top-50 start-50 translate-middle" src="{% static "img/radio-icon.svg" %}"/>
-              </div>
             </div>
           </div>
         {% endfor %}
