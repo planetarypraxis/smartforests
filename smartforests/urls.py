@@ -25,6 +25,7 @@ urlpatterns = [
 
     path('search/', search_views.SearchView.as_view(), name='search'),
     path('_frame/<page_id>', sf_views.frame_content),
+    path('_tags/', sf_views.filters_frame),
     # path('api/', include(rest.get_urls())),
     # path('__debug__/', include(debug_toolbar.urls)),
 ]

@@ -11,11 +11,11 @@ from .models import LogbookPageIndex
 
 class MapSearchViewset(viewsets.ReadOnlyModelViewSet):
     '''
-    Query the page metadata index, filtering by tags, returning a geojson FeatureCollection
+    Query the page metadata index, filtering by tag, returning a geojson FeatureCollection
     '''
 
     class RequestSerializer(serializers.Serializer):
-        tags = serializers.ListField(child=serializers.CharField(), default=())
+        tag = serializers.ListField(child=serializers.CharField(), default=())
 
     class ResultSerializer(GeoFeatureModelSerializer):
         class PageSerializer(serializers.Serializer):
@@ -52,12 +52,15 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet):
         if not params.is_valid():
             raise BadRequestError()
 
-        tags = params.data.get('tags', ())
+        tag = params.data.get('tag', ())
         content_type = params.data.get('type', ())
 
-        if tags:
-            tags = tuple(x.id for x in Tag.objects.filter(name__in=tags))
-            qs = qs.filter(metadata__tags__contains=tags)
+        if tag:
+            tag_objects = tuple(x.id for x in Tag.objects.filter(slug__in=tag))
+            if tag_objects:
+                qs = qs.filter(metadata__tags__contains=tag_objects)
+            else:
+                qs = qs.none()
 
         return qs
 
