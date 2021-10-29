@@ -112,17 +112,38 @@
                 })
             })
             
-            const radioPlayerAudio = document.getElementById('radioPlayerAudio');
-            const playButton = document.getElementById('radioPlayerButton');
-            
-            playButton.addEventListener('click', () => {
-               radioPlayerAudio.play();
-            });
-            
-            const radioPlayerOffCanvas = document.getElementById('radioPlayer');
+            const radioPlayerAudio = document.getElementById("radioPlayerAudio");
+            const playButton = document.getElementById("radioPlayerButton");
 
-            radioPlayerOffCanvas.addEventListener('show.bs.offcanvas', function () {
+            let radioIsPlaying = false;
+
+            const myOffcanvas = document.getElementById("radioPlayer");
+            const bsOffcanvas = new bootstrap.Offcanvas(myOffcanvas);
+
+            const playEpisode = document.getElementById("play-episode");
+
+            playEpisode.addEventListener("click", (event) => {
+                bsOffcanvas.show();
+            });
+
+            playButton.addEventListener("click", (event) => {
+                if (!radioIsPlaying) {
+                  console.log("Starting radio");
+                  radioPlayerAudio.play();
+                  radioIsPlaying = true;
+                  return;
+                }
+
+                console.log("Stopping radio");
+                radioIsPlaying = false;
+                radioPlayerAudio.pause();
+                });
+
+                const radioPlayerOffCanvas = document.getElementById("radioPlayer");
+
+                radioPlayerOffCanvas.addEventListener("show.bs.offcanvas", function () {
                 radioPlayerAudio.play();
+                radioIsPlaying = true;
             });
         </script>
     </body>

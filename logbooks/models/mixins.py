@@ -177,7 +177,6 @@ class ThumbnailMixin(Page):
         '''
         Return markup to render the summary of this page when embedded in a list
         '''
-
         return render_to_string('logbooks/thumbnails/basic_thumbnail.html', {
             'self': self
         })

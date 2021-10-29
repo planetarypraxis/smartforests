@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static ckdjango_tags ckbootstrap_tags %}
+{% load static ckdjango_tags ckbootstrap_tags wagtailimages_tags %}
 
 {% block content %}
 
@@ -35,12 +35,49 @@
         {% endif %}
       </div>
     </div>
-    
-    {% include "logbooks/include/simple-list.html" with contents=child_list_page %}
+
+    <div>
+      <main class="container-fluid">
+        {% for episode in child_list_page %}
+          <div class="row g-0 border-bottom pt-3 pb-2">
+            <div class="col d-flex align-items-start">
+              <button class="me-2 btn btn-link p-0" title="Play episode: {{self.title}}" type="button" aria-controls="radioPlayer">
+                <svg width="11" height="14" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0 0.5V35.5L27.5 18L0 0.5Z" fill="#043003"/>
+                </svg>
+              </button>
+              <div>
+                <div class="d-flex align-items-center mb-2">
+                  <a class="link-reset me-3" href="{{episode.url}}" >
+                    {{episode.title}}
+                  </a>
+                  <div class="font-monospace color-dark-grey small">
+                    {% if episode.audio.duration != 0.0 %}
+                      {{ episode.audio.duration }}
+                    {% endif %}
+                  </div>
+                </div>
+                <div>
+                  {% for tag in episode.tags.all %}
+                    {% include 'logbooks/include/tag_label.html' with tag=tag %}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <div class="col-2 d-flex align-items-start">
+              <div class="position-relative">
+                {% if episode.image %}
+                  {% image episode.image height-48 %}
+                {% endif %}
+                <img class="position-absolute top-50 start-50 translate-middle" src="{% static "img/radio-icon.svg" %}"/>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </main>
+    </div>
   </div>
 </div>
-
-{% endblock %}
 
 {% endblock %}
 
