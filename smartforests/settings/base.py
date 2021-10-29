@@ -107,6 +107,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'wagtail.contrib.settings.context_processors.settings',
                 'wagtailmenus.context_processors.wagtailmenus',
+                'django_settings_export.settings_export',
             ],
         },
     },
@@ -263,3 +264,8 @@ WAGTAILAPI_LIMIT_MAX = None
 
 
 MAPBOX_API_PUBLIC_TOKEN = os.getenv('MAPBOX_API_PUBLIC_TOKEN')
+
+# Settings accessible via {{ settings.XXX }} in templates
+SETTINGS_EXPORT = [
+    'DEBUG',
+]
