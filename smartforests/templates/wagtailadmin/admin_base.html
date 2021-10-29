@@ -1,0 +1,5 @@
+{% extends "wagtailadmin/admin_base.html" %}
+{% block extra_js %}
+{% include 'posthog/initialise.html' %}
+{% include "posthog/identify.html" %}
+{% endblock %}

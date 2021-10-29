@@ -1,0 +1,11 @@
+<script>
+  const userId = "{{ user.id }}"
+  const email = "{{ user.email }}"
+  const name = "{{ user.get_full_name }}"
+  if (userId) {
+    posthog.identify(userId, {
+      email: email || undefined,
+      name: name || undefined
+    })
+  }
+</script>
