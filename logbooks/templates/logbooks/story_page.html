@@ -1,5 +1,5 @@
 {% extends "logbooks/article_page_base.html" %}
-{% load ckdjango_tags wagtailimages_tags wagtailcore_tags %}
+{% load ckdjango_tags ckwagtail_tags wagtailimages_tags wagtailcore_tags %}
 
 {% block article_header %}
   {% if self.image %}
@@ -7,7 +7,22 @@
   {% endif %}
 {% endblock %}
 
-
 {% block article %}
-  {{self.body}}
+  {% render_streamfield self.body %}
+
+  <footer class="footnotes mt-5" id="footnotes">
+    <h5 id="footnote-label" class='fs-6a text-body'>
+        Footnotes
+    </h5>
+    <ol class='fs-6a ps-3 microcopy text-dark-grey'>
+        {% for footnote in page.footnotes.all %}
+          <li id="footnote-{{ forloop.counter }}">
+            <div class='d-flex flex-row'>
+              <span class='pe-2 child-mb-0 mb-1'>{{ footnote.text|richtext }}</span>
+              <a href="#footnote-source-{{ forloop.counter }}" aria-label="Back to content">↩</a>
+            </div>
+          </li>
+        {% endfor %}
+    </ol>
+  </footer>
 {% endblock %}

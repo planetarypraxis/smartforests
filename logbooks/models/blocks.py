@@ -3,6 +3,7 @@ from wagtail.core.blocks.field_block import PageChooserBlock
 from wagtail.core.fields import StreamField
 from wagtail.embeds.blocks import EmbedBlock
 from wagtail.images.blocks import ImageChooserBlock
+from wagtail_footnotes.blocks import RichTextBlockWithFootnotes
 
 from commonknowledge.wagtail.search.models import StreamfieldIndexer, StructIndexer, TextIndexer
 
@@ -30,8 +31,8 @@ class ImageBlock(blocks.StructBlock):
 
 def ArticleContentStream(block_types=None, **kwargs):
     common_block_types = [
-        ('text', blocks.RichTextBlock(features=[
-            'h3', 'bold', 'italic', 'link', 'ol', 'ul'
+        ('text', RichTextBlockWithFootnotes(features=[
+            'h3', 'bold', 'italic', 'link', 'ol', 'ul', 'footnotes',
         ], template='logbooks/story_blocks/text.html')),
         ('quote', QuoteBlock()),
         ('embed', EmbedBlock(template='logbooks/story_blocks/embed.html')),
