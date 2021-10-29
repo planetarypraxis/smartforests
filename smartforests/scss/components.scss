@@ -213,3 +213,19 @@
     color: $white;
   }
 }
+
+/** Buttons */
+
+.icon-btn {
+  outline: none;
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+
+  &:hover,
+  &:focus {
+    opacity: 0.6;
+    background-color: transparent !important;
+  }
+}

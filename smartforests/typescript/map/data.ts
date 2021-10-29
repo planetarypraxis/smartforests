@@ -5,6 +5,7 @@ import {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -20,9 +21,11 @@ export interface MapViewport {
 export const useMapData = <T>(
   dimensions: DOMRectReadOnly,
   viewport: MapViewport,
-  url: string
+  getUrl: () => string,
+  deps: unknown[] = []
 ) => {
   const [state, setState] = useState<FeatureCollection<Point, T>>();
+  const url = useMemo(getUrl, deps);
 
   useEffect(() => {
     const projection = new WebMercatorViewport({

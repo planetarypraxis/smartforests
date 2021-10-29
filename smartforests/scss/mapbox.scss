@@ -51,3 +51,24 @@
     letter-spacing: 0.1em;
   }
 }
+
+.mapbox-ctl-filters {
+  height: 500px !important;
+  width: 300px !important;
+  max-height: 100%;
+}
+
+.mapbox-ctl-filters-content {
+  @extend .mapbox-ctl-filters;
+
+  position: absolute;
+  overflow-y: auto;
+
+  opacity: 1;
+  transition: opacity 0.25s ease-in-out;
+
+  &.hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+}

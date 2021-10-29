@@ -1,7 +1,7 @@
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-import React from "react";
+import React, { FC } from "react";
 import MapGL, { MapContext } from "@urbica/react-map-gl";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import mapboxgl, { Evented } from "mapbox-gl";
@@ -11,6 +11,7 @@ import { useWagtailSearch } from "../wagtail";
 
 import { useSize } from "./data";
 import { AtlasPageFeatureLayer } from "./layers";
+import { stringifyQuery, useFilterParam } from "./state";
 
 const MAPBOX_TOKEN = document.getElementById("MAP_APP")?.dataset.mapboxToken;
 
@@ -104,49 +105,73 @@ class FilterControlRenderer extends Evented {
 
 function FilterIcon() {
   return (
-    <div className="mapboxgl-ctrl-geocoder mapboxgl-ctrl mapboxgl-ctrl-geocoder--collapsed p-1 py-2 text-center flex-column align-middle align-items-center">
-      <svg
-        width="24"
-        height="16"
-        viewBox="0 0 24 16"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M9.33333 16H14.6667V13.3333H9.33333V16ZM0 0V2.66667H24V0H0ZM4 9.33333H20V6.66667H4V9.33333Z"
-          fill="#043003"
-        />
-      </svg>
-    </div>
+    <svg
+      width="24"
+      height="16"
+      viewBox="0 0 24 16"
+      fill="none"
+      className="d-inline-block"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M9.33333 16H14.6667V13.3333H9.33333V16ZM0 0V2.66667H24V0H0ZM4 9.33333H20V6.66667H4V9.33333Z"
+        fill="#043003"
+      />
+    </svg>
   );
 }
-
-function FilterOptions() {
-  const tags = useWagtailSearch({ type: "logbooks.AtlasTag" });
+const FilterView: FC<{ onClose: () => void; open: boolean }> = ({
+  onClose,
+  open,
+}) => {
   return (
-    <div>
-      {tags.data?.items?.map((tag) => {
-        <div key={tag.id}>{tag.slug}</div>;
-      })}
+    <div className={`mapbox-ctl-filters-content ${open ? "" : "hidden"}`}>
+      <div className="position-sticky bg-white p-3 d-flex flex-row justify-content-start">
+        <h2 className="heading-small fw-normal flex-grow-1">Filter by tag</h2>
+
+        <button onClick={onClose} className="icon-btn" aria-label="Close">
+          <i className="icon icon-close"></i>
+        </button>
+      </div>
+
+      <div className="p-3 pt-0">
+        {/* @ts-ignore */}
+        <turbo-frame
+          id="filters"
+          target="_top"
+          loading="lazy"
+          src={`/_tags`}
+          data-turbo-permanent=""
+        />
+      </div>
     </div>
   );
-  // We could actually just load filters.html as a turbo-frame
-  // And then abstract the logic of filters.html out, perhaps using Stimulus?
-  // Option 1: Click a tag will navigate to a URL (logbook index)
-  // Option 2: Click a tag for map entries.
-  //  The annoying thing is we've given up on URLs for the map, so we can't use the URL as an inter-app system.
-  //  Another option we have is some kind of independent state, some object in memory that the map and the filter UI can be reactive to.
-}
+};
 
 function FilterPopover() {
   const [open, setOpen] = useState(false);
+
   return (
-    <Fragment>
-      <div onClick={() => setOpen((o) => !o)}>
-        <FilterIcon />
-      </div>
-      {open && <FilterOptions />}
-    </Fragment>
+    <div
+      id="filter-popover"
+      data-turbo-permanent
+      aria-label={open ? undefined : "Show filters"}
+      role={open ? undefined : "button"}
+      className={`mapboxgl-ctrl-geocoder mapboxgl-ctrl overflow-hidden ${
+        open
+          ? "mapbox-ctl-filters"
+          : "p-1 py-2 mapboxgl-ctrl-geocoder--collapsed text-center cursor-pointer"
+      }`}
+      onClick={open ? undefined : () => setOpen(true)}
+    >
+      <FilterView
+        open={open}
+        onClose={() => {
+          setOpen(false);
+        }}
+      />
+      {!open && <FilterIcon />}
+    </div>
   );
 }
 

@@ -56,3 +56,5 @@ export const useQueryParams = () => {
 export const useFilterParam = () => {
   return useQueryParams().get("filter");
 };
+
+export const stringifyQuery = (x: any) => new URLSearchParams(x).toString();

@@ -1,13 +1,20 @@
 {% extends "base.html" %}
 {% load static ckbootstrap_tags %}
+
 {% block body_height %}vh-100 overflow-hidden{% endblock %}
+
 {% block content %}
+
+
+
   <div
     data-turbo-permanent
     data-mapbox-token="{{mapbox_token}}"
     id="MAP_APP"
     class='h-100 w-100 position-relative'
-  ></div>
+  >
+  </div>
+
   <div
     class="offcanvas {% if sidepanel_page %}show{% endif %} offcanvas-end flex flex-column h-100 overflow-hidden"
     tabindex="-1"
@@ -22,10 +29,18 @@
       {% endif %}
     </turbo-frame>
   </div>
+
   {% if debug and not mapbox_token %}
     <script>
       console.warn('No mapbox token found. Ensure that you have the MAPBOX_API_PUBLIC_TOKEN setting defined in local.py settings')
     </script>
   {% endif %}
 {% endblock content %}
-{% block footer %}{% endblock %}
+
+
+{% block extra_js %}
+<script defer src="{% static 'js/filters.js' %}"></script>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
