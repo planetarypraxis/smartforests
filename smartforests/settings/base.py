@@ -265,7 +265,10 @@ WAGTAILAPI_LIMIT_MAX = None
 
 MAPBOX_API_PUBLIC_TOKEN = os.getenv('MAPBOX_API_PUBLIC_TOKEN')
 
+POSTHOG_PUBLIC_TOKEN = '...'
+
 # Settings accessible via {{ settings.XXX }} in templates
 SETTINGS_EXPORT = [
     'DEBUG',
+    'POSTHOG_PUBLIC_TOKEN',
 ]
