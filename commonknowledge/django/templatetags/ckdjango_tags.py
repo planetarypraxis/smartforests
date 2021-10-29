@@ -48,7 +48,7 @@ def qs_link(context, key, value, **kwargs):
 
     params = request.GET.dict()
     params[key] = value
-    return request.path + '?' + parse.urlencode(params)
+    return '?' + parse.urlencode(params)
 
 
 # https://stackoverflow.com/questions/32795907/how-to-access-the-next-and-the-previous-elements-in-a-django-template-forloop

@@ -1,0 +1,18 @@
+{% load ckdjango_tags %}
+
+{% for letter, tags in tags %}
+  <h4 class="text-uppercase fw-normal font-monospace fs-7 mb-0">{{letter}}</h4>
+  <div class="font-monospace pb-3 fs-7">
+    {% for tag in tags %}
+      <div>
+        <a
+          class="mb-1 filter-tag {% if tag_filter == tag.slug %}active{% endif %}"
+          href="{% qs_link 'filter' tag.slug %}"
+          data-filter-tag="{{tag.slug}}"
+        >
+          {{tag}}
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+{% endfor %}
