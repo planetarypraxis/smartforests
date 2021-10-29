@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% load static ckbootstrap_tags %}
+{% load static ckbootstrap_tags menu_tags %}
 
 {% block body_height %}vh-100 overflow-hidden{% endblock %}
 
-{% block content %}
+{% block body %}
   <!-- No floating header -->
   {% main_menu max_levels=1 template="menus/header_static.html" %}
 
@@ -42,3 +42,5 @@
 {% block extra_js %}
 <script defer src="{% static 'js/filters.js' %}"></script>
 {% endblock %}
+
+{% block footer %}{% endblock %}

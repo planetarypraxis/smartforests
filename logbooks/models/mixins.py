@@ -19,10 +19,6 @@ from wagtail.api.conf import APIField
 from wagtail.core.models import Page, PageManager, PageRevision
 from django.contrib.gis.db import models as geo
 from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin
-from wagtail.contrib.routable_page.models import RoutablePageMixin, route
-<< << << < HEAD
-== == == =
->>>>>> > main
 
 
 class IndexedPageManager(PageManager):
