@@ -82,18 +82,17 @@ class LogbookEntryPage(ArticlePage):
             'self': self
         })
 
-    def serve(self, request, *args, **kwargs):
+    def serve(self, *args, **kwargs):
         '''
         Never allow logbook entries to be visited on their own.
         '''
-        return redirect(self.get_parent().get_url(request) + '#' + str(self.id))
+        return redirect(self.link_url)
 
     @property
     def link_url(self):
         '''
         Wrapper for url allowing us to link to a page embedded in a parent (as with logbook entries) without
         overriding any wagtail internals
-
         '''
 
         return f'{self.get_parent().url}#{self.slug}'
