@@ -4,6 +4,11 @@
     api_host: "{{ environment.POSTHOG_URL }}",
     loaded: (posthog) => {
       if ("{{ environment.DEBUG }}" == "True") posthog.opt_out_capturing()
+
+      // Capture visits mediated by Turbo
+      window.addEventListener('turbo:load', () => {
+        posthog.capture('$pageview')
+      })
     }
   })
 </script>
