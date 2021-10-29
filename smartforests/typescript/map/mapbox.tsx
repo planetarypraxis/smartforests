@@ -104,14 +104,14 @@ class FilterControlRenderer extends Evented {
   }
 }
 
-function FilterIcon() {
+function FilterIcon({ className = "" }) {
   return (
     <svg
       width="24"
       height="16"
       viewBox="0 0 24 16"
       fill="none"
-      className="d-inline-block"
+      className={`d-inline-block fade-inout ${className}`}
       xmlns="http://www.w3.org/2000/svg"
     >
       <path
@@ -126,7 +126,11 @@ const FilterView: FC<{ onClose: () => void; open: boolean }> = ({
   open,
 }) => {
   return (
-    <div className={`mapbox-ctl-filters-content ${open ? "" : "hidden"}`}>
+    <div
+      className={`mapbox-ctl-filters-content top-0 fade-inout ${
+        open ? "" : "hidden"
+      }`}
+    >
       <div className="position-sticky bg-white p-3 d-flex flex-row justify-content-start">
         <h2 className="heading-small fw-normal flex-grow-1">Filter by tag</h2>
 
@@ -158,7 +162,7 @@ function FilterPopover() {
       data-turbo-permanent
       aria-label={open ? undefined : "Show filters"}
       role={open ? undefined : "button"}
-      className={`mapboxgl-ctrl-geocoder mapboxgl-ctrl overflow-hidden ${
+      className={`mapboxgl-ctrl-geocoder fade-inout mapboxgl-ctrl overflow-hidden ${
         open
           ? "mapbox-ctl-filters"
           : "p-1 py-2 mapboxgl-ctrl-geocoder--collapsed text-center cursor-pointer"
@@ -171,7 +175,7 @@ function FilterPopover() {
           setOpen(false);
         }}
       />
-      {!open && <FilterIcon />}
+      <FilterIcon className={open ? "hidden" : ""} />
     </div>
   );
 }
