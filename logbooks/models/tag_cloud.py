@@ -1,20 +1,33 @@
-from typing import NamedTuple, DefaultDict
+from typing import DefaultDict
+from dataclasses import dataclass
 
 from django.db import models
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
+from wagtail.core.models import Page
 from taggit.models import Tag
 
 
 class TagCloud(models.Model):
-    class Item(NamedTuple):
+    @dataclass
+    class Item:
         id: int
         index: int
         links: list
         count: int = 1
 
+        def to_json(self, tag=None):
+            if tag:
+                json = self.to_json()
+                json['name'] = tag.name
+                json['slug'] = tag.slug
+                return json
+
+            else:
+                return self.__dict__
+
         def score(self):
-            return self.count ** 2 + self.index
+            return self.count ** 2 - self.index
 
     class Meta:
         indexes = (models.indexes.Index(fields=('score',)),)
@@ -89,7 +102,7 @@ class TagCloud(models.Model):
                 id=item.id, index=i, links=list(merged_links))
             i += 1
 
-        return TagCloud.to_json(sorted(merged_cloud.items(), reverse=True, key=TagCloud.Item.score))
+        return TagCloud.to_json(sorted(merged_cloud.values(), reverse=True, key=TagCloud.Item.score))
 
     @staticmethod
     def to_json(items):
@@ -102,18 +115,8 @@ class TagCloud(models.Model):
             for tag in TagCloud.objects.filter(id__in=[item.id for item in items])
         }
 
-        def to_json(item: TagCloud.Item):
-            model = lookup[item.id]
-            return {
-                'name': model.name,
-                'slug': model.slug,
-                'id': item.id,
-                'links': item.links,
-                'score': item.score
-            }
-
         return [
-            to_json(item) for item in items
+            item.to_json(lookup[item.id]) for item in items
         ]
 
     @ staticmethod
@@ -139,18 +142,23 @@ class TagCloud(models.Model):
                 visited[tag.id].count += 1
                 continue
 
-            visited[tag.id] = TagCloud.Item(index=i, id=tag, links=[])
+            visited[tag.id] = TagCloud.Item(index=i, id=tag.id, links=[])
 
             pages = Page.objects.filter(tagged_items__tag=tag)
 
-            for tagged_item in AtlasTag.objects.filter(content__object__in=pages):
-                stack.append(tagged_item.tag)
-                visited[tag.id].links.append(tagged_item.id)
+            for tagged_item in AtlasTag.objects.filter(content_object__in=pages):
+                if tagged_item.tag_id != tag.id:
+                    stack.append(tagged_item.tag)
+                    visited[tag.id].links.append(tagged_item.tag_id)
 
             i += 1
 
         cloud, _ = TagCloud.objects.get_or_create(tag=instance)
         cloud.value = list(
-            sorted(visited.items(), key=TagCloud.Item.score, reverse=True))
-        cloud.score = sum(visited.items(), key=TagCloud.Item.score)
+            item.to_json() for item
+            in sorted(visited.values(), key=TagCloud.Item.score, reverse=True)
+            if item.id != instance.id
+        )
+
+        cloud.score = sum(x.score() for x in visited.values())
         cloud.save()
