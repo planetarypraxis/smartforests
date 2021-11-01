@@ -1,17 +1,15 @@
 {% load static %}
 
-{% if large == True %}
-<button class="btn btn-link" title="Play episode: {{episode.title}}" type="button" aria-controls="radioPlayer" data-smartforests-radio-play-button data-smartforests-audio="{{ episode.audio.file.url }}" data-smartforests-owner="{% if episode.owner.first_name and episode.owner.last_name %}{{ episode.owner.first_name }} {{ episode.owner.last_name }}{% else %}{{ episode.owner }}{% endif %}" data-smartforests-last-published-at="{{ episode.last_published_at|date:'d E Y' }}" data-smartforests-title="{{ episode.title }}">
-    <img class="play-button" src="{% static "img/play-button.svg" %}" class="p-3" alt="Play episode: {{episode.title}}"/>
-    <img class="pause-button d-none" src="{% static "img/pause-icon.svg" %}" class="p-3" alt="Pause episode: {{episode.title}}"/>
-</button>
-{% else %}
-<button class="me-2 btn btn-link p-0" title="Play episode: {{episode.title}}" type="button" aria-controls="radioPlayer" data-smartforests-radio-play-button data-smartforests-audio="{{ episode.audio.file.url }}" data-smartforests-owner="{% if episode.owner.first_name and episode.owner.last_name %}{{ episode.owner.first_name }} {{ episode.owner.last_name }}{% else %}{{ episode.owner }}{% endif %}" data-smartforests-last-published-at="{{ episode.last_published_at|date:'d E Y' }}" data-smartforests-title="{{ episode.title }}">
+<button class="btn btn-link {{ extra_classes }}" title="Play episode: {{episode.title}}" type="button" aria-controls="radioPlayer" data-smartforests-radio-play-button data-smartforests-audio="{{ episode.audio.file.url }}" data-smartforests-owner="{% if episode.owner.first_name and episode.owner.last_name %}{{ episode.owner.first_name }} {{ episode.owner.last_name }}{% else %}{{ episode.owner }}{% endif %}" data-smartforests-last-published-at="{{ episode.last_published_at|date:'d E Y' }}" data-smartforests-title="{{ episode.title }}">
+    {% if large == True %}
+    <img class="play-button p-3" src="{% static "img/play-button.svg" %}" alt="Play episode: {{episode.title}}"/>
+    <img class="pause-button d-none p-3" src="{% static "img/pause-icon.svg" %}" alt="Pause episode: {{episode.title}}"/>
+    {% else %}
     <svg class="play-button" width="11" height="14" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0 0.5V35.5L27.5 18L0 0.5Z" fill="#043003"/>
+        <path d="M0 0.5V35.5L27.5 18L0 0.5Z" fill="#043003"/>
     </svg>
     <svg class="pause-button d-none" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
         <path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
     </svg>
+    {% endif %}
 </button>
-{% endif %}
