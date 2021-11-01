@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.db.models.fields.related import ForeignKey
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
@@ -58,7 +59,8 @@ class StoryIndexPage(ChildListMixin, BaseLogbooksPage):
 
     show_in_menus_default = True
     parent_page_types = ['home.HomePage']
-    max_count = 1
+    if not settings.DEBUG:
+        max_count = 1
 
 
 class EpisodePage(ArticlePage):
@@ -221,7 +223,9 @@ class LogbookIndexPage(ChildListMixin, RoutablePageMixin, BaseLogbooksPage):
     page_size = 50
     show_in_menus_default = True
     parent_page_types = ['home.HomePage']
-    max_count = 1
+
+    if not settings.DEBUG:
+        max_count = 1
 
     def get_child_list_queryset(self, request):
         from .indexes import LogbookPageIndex
@@ -237,7 +241,7 @@ class LogbookIndexPage(ChildListMixin, RoutablePageMixin, BaseLogbooksPage):
                 pass
 
         return LogbookPageIndex.filter_pages(
-            **filter, content_type=LogbookPage.content_type_id()).specific()
+            **filter, content_type=LogbookPage.content_type_id()).specific().child_of(self)
 
     @django_cached_model('logbooks.LogbookIndexPage.relevant_tags')
     def relevant_tags(self):
