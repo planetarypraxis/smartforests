@@ -98,6 +98,7 @@ class RadioIndexPage(ChildListMixin, BaseLogbooksPage):
 
     show_in_menus_default = True
     parent_page_types = ['home.HomePage']
+    max_count = 1
 
 
 class LogbookEntryPage(ArticlePage):
