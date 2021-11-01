@@ -9,9 +9,7 @@
 
 {% block article_title %}
   <h1 class="mb-3 mb-md-5 d-flex align-items-center">
-    <button id="play-episode" class="btn btn-link" title="Play episode: {{self.title}}" type="button" aria-controls="radioPlayer" data-smartforests-radio-play-button data-smartforests-audio="{{ self.audio.file.url }}">
-      <img src="{% static "img/play-button.svg" %}" class="p-3" alt="Play episode: {self.title}}"/>
-    </button>
+    {% include 'logbooks/include/episode_button.html' with episode=self large=True %}
     <span>{{self.title}}</span>
   </h1>
 {% endblock %}
