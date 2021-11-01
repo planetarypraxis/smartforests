@@ -4,7 +4,7 @@ from django.http.response import HttpResponseNotFound
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
 from modelcluster.contrib.taggit import ClusterTaggableManager
-from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, StreamFieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, StreamFieldPanel
 from wagtail.api.conf import APIField
 from wagtail.core.models import Page, PageManager, PageRevision
 from django.contrib.gis.db import models as geo
@@ -207,6 +207,7 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
     content_panels = Page.content_panels + [
         FieldPanel('tags'),
         StreamFieldPanel('body'),
+        InlinePanel("footnotes", label="Footnotes"),
     ] + ContributorMixin.content_panels + GeocodedMixin.content_panels
 
     api_fields = [

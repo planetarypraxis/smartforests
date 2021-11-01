@@ -37,9 +37,9 @@ class StoryPage(ArticlePage):
     image = ForeignKey(CmsImage, on_delete=models.SET_NULL,
                        null=True, blank=True)
 
-    content_panels = [
+    content_panels = ArticlePage.content_panels + [
         ImageChooserPanel('image')
-    ] + ArticlePage.content_panels
+    ]
 
     def cover_image(self):
         return self.image
