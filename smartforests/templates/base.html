@@ -96,9 +96,9 @@
                     <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
                   </svg>
                 </button>
-                <span class="ps-2" id="radioPlayerLabel" data-smartforests-radio-episode-title>{{self.title}}</span>
-                <span class="ps-3 small font-monospace text-uppercase" data-smartforests-radio-episode-owner>{% if self.owner.first_name and self.owner.last_name %}{{ self.owner.first_name }} {{ self.owner.last_name }}{% else %}{{ self.owner }}{% endif %}</span>
-                <span class="ps-3 small font-monospace text-uppercase" data-smartforests-radio-episode-last-published-at>{{ self.last_published_at|date:"d E Y" }}</span>
+                <span class="ps-2" id="radioPlayerLabel" data-smartforests-radio-episode-title></span>
+                <span class="ps-3 small font-monospace text-uppercase" data-smartforests-radio-episode-owner></span>
+                <span class="ps-3 small font-monospace text-uppercase" data-smartforests-radio-episode-last-published-at></span>
                 <audio id="radioPlayerAudio"/>
               </div>
               <div class="position-relative">
