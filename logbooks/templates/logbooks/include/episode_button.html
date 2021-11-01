@@ -1,7 +1,8 @@
 {% load static %}
 
-<button class="btn btn-link {{ extra_classes }}" title="Play episode: {{episode.title}}" type="button" aria-controls="radioPlayer" data-smartforests-radio-play-button data-smartforests-audio="{{ episode.audio.file.url }}" data-smartforests-owner="{% if episode.owner.first_name and episode.owner.last_name %}{{ episode.owner.first_name }} {{ episode.owner.last_name }}{% else %}{{ episode.owner }}{% endif %}" data-smartforests-last-published-at="{{ episode.last_published_at|date:'d E Y' }}" data-smartforests-title="{{ episode.title }}">
+<button class="btn btn-link {{ extra_classes }}" title="Play episode: {{episode.title}}" type="button" aria-controls="radioPlayer" data-smartforests-radio-play-button data-smartforests-audio="{{ episode.audio.file.url }}" data-smartforests-owner="{% if episode.owner.first_name and episode.owner.last_name %}{{ episode.owner.first_name }} {{ episode.owner.last_name }}{% else %}{{ episode.owner }}{% endif %}" data-smartforests-last-published-at="{{ episode.last_published_at|date:'d E Y' }}" data-smartforests-title="{{ episode.title }}" data-smartforests-image="{{ episode.image.file.url }}">
     {% if large == True %}
+    {{ episode.image.file.url }}
     <img class="play-button p-3" src="{% static "img/play-button.svg" %}" alt="Play episode: {{episode.title}}"/>
     <img class="pause-button d-none p-3" src="{% static "img/pause-icon.svg" %}" alt="Pause episode: {{episode.title}}"/>
     {% else %}

@@ -103,7 +103,9 @@
               </div>
               <div class="position-relative">
                 {% if self.image %}
-                  {% image self.image height-48 %}
+                    {% image self.image height-48 data-smartforests-radio-episode-image=true %}
+                {% else %}
+                    <img height="48" data-smartforests-radio-episode-image>
                 {% endif %}
                 <img class="position-absolute top-50 start-50 translate-middle" src="{% static "img/radio-icon.svg" %}"/>
               </div>
