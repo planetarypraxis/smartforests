@@ -79,10 +79,10 @@ class EpisodePage(ArticlePage):
         related_name='+'
     )
 
-    content_panels = [
+    content_panels = ArticlePage.content_panels + [
         ImageChooserPanel('image'),
         MediaChooserPanel('audio', media_type='audio'),
-    ] + ArticlePage.content_panels
+    ]
 
     def cover_image(self):
         return self.image
