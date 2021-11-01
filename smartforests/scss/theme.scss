@@ -123,6 +123,10 @@ $spacers: (
 // Allow negative margins
 $enable-negative-margins: true;
 
+// Modal
+$modal-backdrop-bg: $dark-green;
+$modal-backdrop-opacity: 0.9;
+
 // Merge with Bootstrap
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";

@@ -139,3 +139,7 @@ a.card {
 .model-storypage .block-text {
   @extend .font-serif;
 }
+
+.modal-backdrop {
+  mix-blend-mode: multiply;
+}
