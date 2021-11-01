@@ -35,3 +35,4 @@ nltk = "*"
 sumy = "*"
 numpy = "*"
 wagtail-footnotes = "*"
+mapwidgets = {editable = true, ref = "mapbox", git = "https://git@github.com/commonknowledge/django-map-widgets.git"}

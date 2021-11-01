@@ -21,6 +21,7 @@ from logbooks.models.blocks import ArticleContentStream
 from logbooks.models.serializers import PageCoordinatesSerializer, UserSerializer
 from logbooks.models.snippets import AtlasTag
 from logbooks.thumbnail import generate_thumbnail
+from mapwidgets.widgets import MapboxPointFieldWidget
 
 
 class IndexedPageManager(PageManager):
@@ -133,7 +134,7 @@ class GeocodedMixin(Page):
         MultiFieldPanel(
             [
                 FieldPanel('geographical_location'),
-                FieldPanel('coordinates')
+                FieldPanel('coordinates', widget=MapboxPointFieldWidget)
             ],
             heading="Geographical data",
         )
