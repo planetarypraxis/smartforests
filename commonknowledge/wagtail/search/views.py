@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView
 from django.core.paginator import Paginator
 from django.contrib.postgres.search import SearchHeadline, SearchQuery
-from django.utils.html import format_html, format_html_join
+from django.utils.html import format_html
 from wagtail.core.models import Page
 from wagtail.search.models import Query
 from django.utils.safestring import mark_safe
