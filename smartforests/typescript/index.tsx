@@ -1,6 +1,7 @@
 load();
 
 import { Offcanvas } from "bootstrap";
+import { findAncestor } from "./util";
 
 document.addEventListener("turbo:load", async (event) => {
   load();
@@ -63,15 +64,6 @@ async function load() {
       otherPlaybutton.querySelector(".play-button").classList.remove("d-none");
     });
   });
-
-  function findAncestor(element, selector) {
-    while (
-      (element = element.parentElement) &&
-      !(element.matches || element.matchesSelector).call(element, selector)
-    );
-
-    return element;
-  }
 
   function startRadioPlayer(audioUrl, title, owner, lastPublishedAt) {
     radioPlayerPlayButton.querySelector(".play-button").classList.add("d-none");
