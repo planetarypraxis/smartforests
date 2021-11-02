@@ -1,20 +1,22 @@
 <turbo-frame id="search-results">
   {% for item in search_results %}
-      <a href="{{item.page.url}}" class="search-item link-reset p-3 {% if forloop.first %}active{% endif %}">
-        <i class="icon icon-20 {{item.page.icon_class}}"></i>
-        <h3 class="m-0">{{item.page.title}}</h3>
-        <div>{{ item.page.geographical_location }}</div>
-        <div>{{ item.page.last_published_at|date:"d E Y" }}</div>
-        {% if item.search_highlight %}
-          <div class="mt-2 small">
-            {{item.search_highlight}}
-          </div>
-        {% endif %}
+      <div class="search-item p-3 {% if forloop.first %}active{% endif %}">
+        <a class="link-reset" href="{{item.page.url}}">
+          <i class="icon icon-20 {{item.page.icon_class}}"></i>
+          <h3 class="m-0">{{item.page.title}}</h3>
+          <div>{{ item.page.geographical_location }}</div>
+          <div>{{ item.page.last_published_at|date:"d E Y" }}</div>
+          {% if item.search_highlight %}
+            <div class="mt-2 small">
+              {{item.search_highlight}}
+            </div>
+          {% endif %}
+        </a>
         <div>
-        {% for tag in item.page.tags.all %}
-          {% include "logbooks/include/tag_label.html" with tag=tag orientation="vertical" %}
-        {% endfor %}
-        </div>
-      </a>
+          {% for tag in item.page.tags.all %}
+            {% include "logbooks/include/tag_label.html" with tag=tag orientation="vertical" %}
+          {% endfor %}
+          </div>
+      </div>
   {% endfor %}
 </turbo-frame>
