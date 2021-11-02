@@ -95,6 +95,10 @@
   width: max-content !important;
 }
 
+.drop-shadow-mid-green-glow {
+  filter: drop-shadow(0px -4px 15px rgba($mid-green, 0.3));
+}
+
 .input-group-focus {
   &:focus-within {
     border-color: $input-focus-border-color;

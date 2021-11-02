@@ -13,7 +13,9 @@
       <a class="border-bottom border-1 pb-1 text-mid-green border-mid-green ms-2 text-decoration-none" href="{{ self.get_parent.url }}">{{ self.get_parent.title}}</a>
     </div>
     <header class="col-lg-6 offset-lg-3">
+      {% block article_title %}
       <h1 class="mb-3 mb-lg-5">{{self.title}}</h1>
+      {% endblock %}
     </header>
     <section class="d-flex d-lg-none flex-row mb-3">
       {% for tag in self.tags.all %}
