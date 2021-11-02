@@ -126,3 +126,12 @@
     background-color: transparentize($color: $dark-green, $amount: 0.9);
   }
 }
+
+.fade-inout {
+  transition: opacity 0.25s ease-in-out;
+
+  &.hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+}

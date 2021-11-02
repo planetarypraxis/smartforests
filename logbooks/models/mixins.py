@@ -1,3 +1,13 @@
+from logbooks.thumbnail import generate_thumbnail
+from logbooks.models.snippets import AtlasTag
+from logbooks.models.serializers import PageCoordinatesSerializer, UserSerializer
+from logbooks.models.blocks import ArticleContentStream
+from turbo_response import TurboFrame
+from sumy.nlp.tokenizers import Tokenizer
+from sumy.utils import get_stop_words
+from sumy.nlp.stemmers import Stemmer
+from sumy.summarizers.lsa import LsaSummarizer as Summarizer
+from sumy.parsers.plaintext import PlaintextParser
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.http.response import HttpResponseNotFound
@@ -9,18 +19,6 @@ from wagtail.api.conf import APIField
 from wagtail.core.models import Page, PageManager, PageRevision
 from django.contrib.gis.db import models as geo
 from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin
-from wagtail.contrib.routable_page.models import RoutablePageMixin, route
-from sumy.parsers.plaintext import PlaintextParser
-from sumy.summarizers.lsa import LsaSummarizer as Summarizer
-from sumy.nlp.stemmers import Stemmer
-from sumy.utils import get_stop_words
-from sumy.nlp.tokenizers import Tokenizer
-from turbo_response import TurboFrame
-
-from logbooks.models.blocks import ArticleContentStream
-from logbooks.models.serializers import PageCoordinatesSerializer, UserSerializer
-from logbooks.models.snippets import AtlasTag
-from logbooks.thumbnail import generate_thumbnail
 
 
 class IndexedPageManager(PageManager):
@@ -273,12 +271,3 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
             return summary
         else:
             return self.indexed_streamfield_text
-
-
-class TurboFrameMixin(RoutablePageMixin, Page):
-    class Meta:
-        abstract = True
-
-    @route('^frame/(?P<dom_id>[-\w_]+)/(?P<template_path>.+)$')
-    def turbo_frame_response(self, request, dom_id, template_path, *args, **kwargs):
-        return TurboFrame(dom_id).template(f'{template_path.replace("-", "/").strip("/")}.html', {"page": self}).response(request)

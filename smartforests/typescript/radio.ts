@@ -17,6 +17,7 @@ export function main() {
   let radioIsPlaying = false;
 
   const radioPlayerOffCanvasElement = document.getElementById("radioPlayer");
+
   const radioPlayerOffCanvas = new bootstrap.Offcanvas(
     radioPlayerOffCanvasElement
   );

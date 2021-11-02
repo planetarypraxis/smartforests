@@ -18,11 +18,21 @@ export namespace SmartForest {
     label: string;
   }
 
-  export interface Contributor {
-  }
+  export interface Contributor {}
 
   export interface Coordinates {
     type: string;
     coordinates: number[];
+  }
+
+  export interface MapItem {
+    page: {
+      id: number;
+      link_url: string;
+      title: string;
+      icon_class: string;
+      geographical_location: string;
+      tags: string[];
+    };
   }
 }
