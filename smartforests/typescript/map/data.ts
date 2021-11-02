@@ -1,91 +1,28 @@
-import WebMercatorViewport from "@math.gl/web-mercator";
-import {
-  Ref,
-  RefObject,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { debounce } from "lodash";
-import { Feature, FeatureCollection, Point } from "geojson";
+import { RefObject, useLayoutEffect, useMemo, useState } from "react";
 import useResizeObserver from "@react-hook/resize-observer";
+import { Superclusterd, Viewport } from "superclusterd";
+import { useClusteredMapData } from "superclusterd/react";
+import { SmartForest } from "./types";
 import { stringifyQuery } from "./state";
 
-const SUPERCLUSTER_URL =
-  document.getElementById("MAP_APP")?.dataset.superclusterUrl;
+export type MapViewport = Viewport;
 
-export interface MapViewport {
-  latitude: number;
-  longitude: number;
-  zoom: number;
-}
+const supercluster = new Superclusterd(
+  document.getElementById("MAP_APP")?.dataset.superclusterUrl
+);
 
-export interface Cluster {
-  cluster: true;
-  cluster_id: number;
-  point_count: number;
-}
-
-type Clusterable<T> =
-  | Cluster
-  | (T & {
-      cluster: false;
-    });
-
-export const useClusteredMapData = <T>(
+export const useFeatures = <T>(
   dimensions: DOMRectReadOnly,
-  viewport: MapViewport,
-  getUrl: () => string,
+  viewport: Viewport,
+  getQuery: () => any,
   deps: unknown[] = []
-) => {
-  const [state, setState] = useState<Feature<Point, Clusterable<T>>[]>();
-  const url = useMemo(() => {
-    const rawUrl = getUrl();
-
-    const projection = new WebMercatorViewport({
-      width: dimensions.width,
-      height: dimensions.height,
-      latitude: viewport.latitude,
-      longitude: viewport.longitude,
-      zoom: viewport.zoom,
-    });
-
-    const bounds = projection.getBounds();
-    const bbox = JSON.stringify(
-      [...bounds[0], ...bounds[1]].map((x) => round(x, 4))
-    );
-
-    const clusterQuery = `?bbox=${bbox}&zoom=${Math.round(projection.zoom)}`;
-
-    const projectedUrl =
-      SUPERCLUSTER_URL +
-      "/cluster/" +
-      encodeURIComponent(rawUrl) +
-      clusterQuery;
-
-    return projectedUrl;
-  }, [...deps, dimensions, viewport]);
-
-  const debouncedFetch = useMemo(
-    () =>
-      debounce(async (url: string) => {
-        const res = await fetch(url);
-        if (res.ok) {
-          setState(await res.json());
-        }
-      }, 500),
-    []
+) =>
+  useClusteredMapData<SmartForest.MapItem>(
+    supercluster,
+    dimensions,
+    viewport,
+    useMemo(() => getFeaturesUrl(getQuery()), deps)
   );
-
-  useEffect(() => {
-    debouncedFetch(url);
-  }, [url]);
-
-  return state;
-};
 
 export const useSize = (target: RefObject<HTMLElement>) => {
   const [size, setSize] = useState<DOMRectReadOnly>();
@@ -99,7 +36,10 @@ export const useSize = (target: RefObject<HTMLElement>) => {
   return size;
 };
 
-const round = (x: number, precision: number) => {
-  const factor = 10 ** precision;
-  return Math.round(factor * x) / factor;
+const getFeaturesUrl = (opts: { tag?: string }) => {
+  const q = stringifyQuery({
+    ...(opts.tag ? { tag: opts.tag } : {}),
+  });
+
+  return `${window.location.host}/api/v2/geo/${q}`;
 };

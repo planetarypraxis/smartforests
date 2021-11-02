@@ -1,6 +1,5 @@
-import { Feature, Point } from "geojson";
 import React, { FC, Fragment } from "react";
-import { Cluster, MapViewport, useClusteredMapData } from "./data";
+import { MapViewport, useFeatures } from "./data";
 import { AtlasPageMarker, ClusterMarker } from "./markers";
 import { stringifyQuery, useFilterParam } from "./state";
 import { SmartForest } from "./types";
@@ -11,10 +10,10 @@ export const AtlasPageFeatureLayer: FC<{
 }> = ({ size, viewport }) => {
   const tag = useFilterParam();
 
-  const data = useClusteredMapData<SmartForest.MapItem>(
+  const data = useFeatures<SmartForest.MapItem>(
     size,
     viewport,
-    () => getFeaturesUrl({ tag }),
+    () => ({ tag }),
     [tag]
   );
 
@@ -51,12 +50,4 @@ export const AtlasPageFeatureLayer: FC<{
       })}
     </Fragment>
   );
-};
-
-const getFeaturesUrl = (opts: { tag?: string }) => {
-  const q = stringifyQuery({
-    ...(opts.tag ? { tag: opts.tag } : {}),
-  });
-
-  return [window.location.host, "/api/v2/geo/", q ? "?" : ""].join("");
 };

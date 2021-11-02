@@ -103,6 +103,10 @@
     text-align: center;
     padding: map-get($map: $spacers, $key: 1) map-get($map: $spacers, $key: 2);
 
+    width: 36px;
+    max-width: 36px;
+    height: 36px;
+
     @include media-breakpoint-down(sm) {
       width: 50px;
       max-width: 50px;
