@@ -53,11 +53,10 @@ export const AtlasPageFeatureLayer: FC<{
   );
 };
 
-const getFeaturesUrl = (opts: { tag?: string }) =>
-  [
-    window.location.host +
-      "/api/v2/geo/?" +
-      stringifyQuery({
-        ...(opts.tag ? { tag: opts.tag } : {}),
-      }),
-  ].join("");
+const getFeaturesUrl = (opts: { tag?: string }) => {
+  const q = stringifyQuery({
+    ...(opts.tag ? { tag: opts.tag } : {}),
+  });
+
+  return [window.location.host, "/api/v2/geo/", q ? "?" : ""].join("");
+};

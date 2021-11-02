@@ -38,7 +38,7 @@ export function MapVisual() {
           })
         }
         minZoom={2}
-        maxZoom={6}
+        maxZoom={16}
       >
         <GeocodeControl position="top-left" accessToken={MAPBOX_TOKEN} />
         <FilterControl />
