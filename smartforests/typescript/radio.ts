@@ -1,4 +1,3 @@
-import { Offcanvas } from "bootstrap";
 import { findAncestor } from "./util";
 
 export function main() {
@@ -18,7 +17,9 @@ export function main() {
   let radioIsPlaying = false;
 
   const radioPlayerOffCanvasElement = document.getElementById("radioPlayer");
-  const radioPlayerOffCanvas = new Offcanvas(radioPlayerOffCanvasElement);
+  const radioPlayerOffCanvas = new bootstrap.Offcanvas(
+    radioPlayerOffCanvasElement
+  );
 
   radioPlayerPlayButton.addEventListener("click", (event) => {
     event.stopImmediatePropagation();
