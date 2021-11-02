@@ -1,9 +1,11 @@
 {% extends "base.html" %}
-{% load ckdjango_tags ckbootstrap_tags wagtailcore_tags %}
+{% load ckdjango_tags static ckbootstrap_tags wagtailcore_tags %}
 
 {% block content %}
+
 {% block article_header %}
 {% endblock %}
+
 <main class="container-fluid mb-7">
   <div class="row gx-0 mt-3 mt-lg-7">
     <div class="d-block d-lg-none mb-5 text-reset text-decoration-none text-mid-green">
@@ -33,4 +35,19 @@
     </section>
   </div>
 </main>
+
+{% block article_footer %}
+{% endblock %}
+
+<h3 class="bg-dark-green p-3 py-2 microcopy-small text-white m-0">
+  Related Tags
+</h3>
+<div id="tag-cloud" data-tag-cloud-data="tag_cloud"></div>
+{{self.tag_cloud|json_script:"tag_cloud"}}
+
+{% endblock %}
+
+
+{% block extra_js %}
+  <script defer type="module" src="{% static 'js/tag_cloud.js' %}"></script>
 {% endblock %}

@@ -21,10 +21,11 @@ class TagCloud(models.Model):
                 json = self.to_json()
                 json['name'] = tag.name
                 json['slug'] = tag.slug
+                json['score'] = self.score()
                 return json
 
             else:
-                return self.__dict__
+                return dict(self.__dict__)
 
         def score(self):
             return self.count ** 2 - self.index
@@ -32,7 +33,7 @@ class TagCloud(models.Model):
     class Meta:
         indexes = (models.indexes.Index(fields=('score',)),)
 
-    tag = models.ForeignKey(
+    tag = models.OneToOneField(
         Tag, on_delete=models.CASCADE, related_name='tag_cloud')
     value = models.JSONField(default=list, blank=True)
     score = models.IntegerField(default=0, blank=True)
@@ -112,7 +113,7 @@ class TagCloud(models.Model):
 
         lookup = {
             tag.id: tag
-            for tag in TagCloud.objects.filter(id__in=[item.id for item in items])
+            for tag in Tag.objects.filter(id__in=[item.id for item in items])
         }
 
         return [

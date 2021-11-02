@@ -197,13 +197,14 @@
 
 /** Filters **/
 
-.filter-tag {
+@mixin tag-base {
   @extend .badge;
   @extend .rounded-pill;
   @extend .microcopy;
   @extend .small;
   @extend .text-decoration-none;
 
+  cursor: pointer;
   background: $off-white;
   color: $mid-green;
   text-transform: uppercase;
@@ -212,6 +213,10 @@
       $map: $spacers,
       $key: 2
     )};
+}
+
+.filter-tag {
+  @include tag-base;
 
   &:not(.active) {
     @extend .hoverable;
@@ -220,6 +225,46 @@
   &.active {
     background: $dark-green;
     color: $white;
+  }
+}
+
+/** Tag cloud */
+
+.tag-cloud {
+  position: relative;
+  background-color: $faded-green;
+  height: 40vw;
+  width: 100%;
+  overflow: hidden;
+}
+
+.related-tag {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: map-get($map: $spacers, $key: 2);
+  will-change: transform;
+
+  &:hover > * {
+    background-color: $off-white !important;
+  }
+
+  .tag-label {
+    @include tag-base;
+
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+
+  .tag-handle {
+    position: absolute;
+    background-color: $white;
+    border-radius: 9px;
+    width: 9px;
+    height: 9px;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
   }
 }
 

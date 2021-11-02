@@ -18,6 +18,7 @@ from smartforests.util import group_by_title
 from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, DescendantPageContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager, SidebarRenderableMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
+from logbooks.models.tag_cloud import TagCloud
 from django.shortcuts import redirect
 
 
@@ -210,8 +211,24 @@ class LogbookPage(SidebarRenderableMixin, ChildListMixin, ContributorMixin, Geoc
         return get_children_of_type(self, LogbookEntryPage)
 
     @property
+    def entry_tags(self):
+        return [
+            tag
+            for entry in self.logbook_entries
+            for tag in entry.tags.all()
+        ]
+
+    @property
+    def all_tags(self):
+        return self.entry_tags + list(self.tags.all())
+
+    @property
     def preview_text(self):
         return self.description
+
+    @property
+    def tag_cloud(self):
+        return TagCloud.get_related(self.all_tags)
 
 
 class LogbookIndexPage(ChildListMixin, RoutablePageMixin, BaseLogbooksPage):
