@@ -1,9 +1,9 @@
 <turbo-frame id="search-results">
   {% for item in search_results %}
       <div class="search-item p-3 {% if forloop.first %}active{% endif %}">
-        <a class="link-reset" href="{{item.page.url}}">
+        <div>
           <i class="icon icon-20 {{item.page.icon_class}}"></i>
-          <h3 class="m-0">{{item.page.title}}</h3>
+          <a class="link-reset" href="{{item.page.url}}"><h3 class="m-0">{{item.page.title}}</h3></a>
           <div>{{ item.page.geographical_location }}</div>
           <div>{{ item.page.last_published_at|date:"d E Y" }}</div>
           {% if item.search_highlight %}
@@ -11,7 +11,7 @@
               {{item.search_highlight}}
             </div>
           {% endif %}
-        </a>
+        </div>
         <div>
           {% for tag in item.page.tags.all %}
             {% include "logbooks/include/tag_label.html" with tag=tag orientation="vertical" %}
