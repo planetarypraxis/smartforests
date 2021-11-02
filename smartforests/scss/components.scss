@@ -117,37 +117,6 @@
   display: none;
 }
 
-/** Map **/
-
-.mapbox-invisible-popup {
-  max-width: none !important;
-  background: none;
-  border: none;
-  outline: none;
-
-  .mapboxgl-popup-close-button {
-    top: 15;
-    right: 15;
-  }
-
-  .mapboxgl-popup-content {
-    padding: 0;
-    background: none;
-    border: none;
-    box-shadow: none;
-    outline: none;
-    width: 300;
-  }
-
-  .mapboxgl-popup-close-button {
-    display: none;
-  }
-
-  .mapboxgl-popup-tip {
-    display: none;
-  }
-}
-
 .search-item {
   display: block;
 
@@ -242,5 +211,21 @@
   &.active {
     background: $dark-green;
     color: $white;
+  }
+}
+
+/** Buttons */
+
+.icon-btn {
+  outline: none;
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+
+  &:hover,
+  &:focus {
+    opacity: 0.6;
+    background-color: transparent !important;
   }
 }
