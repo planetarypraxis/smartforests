@@ -56,12 +56,20 @@
       "args": ["serve", "--hot", "--progress"],
       "console": "internalConsole",
       "internalConsoleOptions": "openOnSessionStart"
+    },
+    {
+      "name": "Supercluster",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/.bin/superclusterd",
+      "console": "internalConsole",
+      "internalConsoleOptions": "openOnSessionStart"
     }
   ],
   "compounds": [
     {
       "name": "App",
-      "configurations": ["Python: Django", "Webpack"]
+      "configurations": ["Python: Django", "Webpack", "Supercluster"]
     }
   ]
 }

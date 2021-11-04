@@ -1,3 +1,6 @@
+// 14px, expressed as rem
+$small-font-size: $font-size-base * 0.7777777778;
+
 :root {
   --bs-font-sans-serif: "MarrSans", "sans-serif";
 }
@@ -47,8 +50,9 @@ body {
 }
 
 @mixin microcopy {
+  @extend .font-monospace;
   font-style: normal;
-  font-size: 14px;
+  font-size: $small-font-size;
   line-height: 18px;
 }
 
@@ -138,4 +142,30 @@ a.card {
 
 .model-storypage .block-text {
   @extend .font-serif;
+}
+
+.modal-backdrop {
+  mix-blend-mode: multiply;
+}
+
+.metadata {
+  font-style: normal;
+  font-size: $small-font-size !important;
+  line-height: $font-size-root;
+
+  // This is an ugly workaround.
+  // We want to preserve <h4> default styles to be the styles encapsulated in the class microcopy.
+  // This is because Wagtail outputs these in general body text for a page without any classes attached.
+  // However, we also want to be able to overwrite the look on the metadata sidebar, but keep the semantic <h4> tag to allow screenreaders a better change of getting it right.
+  h4 {
+    color: $dark-green;
+    font-size: $small-font-size !important;
+    font-family: $font-family-sans-serif !important;
+    text-transform: none;
+  }
+}
+
+.offcanvas-end {
+  border-left: none;
+  box-shadow: 0px 0px 20px 0px rgba($dark-green, 0.2);
 }

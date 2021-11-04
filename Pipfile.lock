@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "328589f737acec300189d36f61355bcb45f319aa29aae2ba517b20a1ba28743a"
+            "sha256": "0530faa7987375c9b808565c90f4df7bc65d29dba33c22767ab7096eb37f126f"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -42,19 +42,19 @@
         },
         "boto3": {
             "hashes": [
-                "sha256:2fe4edec0e02705059e6baac52e29f97fae6086bf8b817e6ca0e49b48c0fbbf2",
-                "sha256:efa4aea4d30e93f8913a5731ab4de7b6d2020ee77cdde7e61bfae56670da1a14"
+                "sha256:57ee38d02772f44a52d2d836cee61d039d405f6eaefc68f92ae0d80e0260c097",
+                "sha256:79c982c5930f989292ca849b0caaa1ffeb9eb9d27c32992c3b2f6736b3b14ad2"
             ],
             "index": "pypi",
-            "version": "==1.19.9"
+            "version": "==1.19.10"
         },
         "botocore": {
             "hashes": [
-                "sha256:612d26b58f790d267cc7714e82262104b681db799655b6dd6b64fcd9caf08bef",
-                "sha256:7b59367bace96595e9feeed9765c7178278c55531b2b9e07b7618911e9f0a00b"
+                "sha256:543cd69e9b248be942d181a097a4715312939ec998602a7b4b07e9fda36d30e9",
+                "sha256:dffa1e7e7e3a8da73bbdead3aeff7d52fd5a159a1a93b2896ac67b2aa79a461c"
             ],
             "index": "pypi",
-            "version": "==1.22.9"
+            "version": "==1.22.10"
         },
         "breadability": {
             "hashes": [
@@ -82,7 +82,7 @@
                 "sha256:e019de665e2bcf9c2b64e2e5aa025fa991da8720daa3c1138cadd2fd1856aed0",
                 "sha256:f7af805c321bfa1ce6714c51f254e0d5bb5e5834039bc17db7ebe3a4cec9492b"
             ],
-            "markers": "python_version >= '3.0'",
+            "markers": "python_version >= '3'",
             "version": "==2.0.7"
         },
         "click": {
@@ -168,7 +168,7 @@
         "django-map-widgets": {
             "editable": true,
             "git": "https://git@github.com/commonknowledge/django-map-widgets.git",
-            "ref": "14c0cc185d139e4903d590acf186f12ba6d4196a"
+            "ref": "77662265d6c05c24a2c40da26d562c4da2700822"
         },
         "django-modelcluster": {
             "hashes": [
@@ -284,7 +284,7 @@
                 "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff",
                 "sha256:9d643ff0a55b762d5cdb124b8eaa99c66322e2157b69160bc32796e824360e6d"
             ],
-            "markers": "python_version >= '3.0'",
+            "markers": "python_version >= '3'",
             "version": "==3.3"
         },
         "importlib-metadata": {
@@ -502,13 +502,15 @@
             "hashes": [
                 "sha256:079d97fc22de90da1d370c90583659a9f9a6ee4007355f5825e5f1c70dffc1fa",
                 "sha256:2087013c159a73e09713294a44d0c8008204d06326006b7f652bef5ace66eebb",
+                "sha256:25615574419dd9bda6fdfdcd58afb22e721f5b807cb3d5e62f488c8acf8cb754",
                 "sha256:2c992196719fadda59f72d44603ee1a2fdcc67de097eea38d41c7ad9ad246e62",
                 "sha256:7640e1e4d72444ef012e275e7b53204d7fab341fb22bc76057ede22fe6860b25",
                 "sha256:7f91312f065df517187134cce8e395ab37f5b601a42446bdc0f0d51773621854",
                 "sha256:830c8e8dddab6b6716a4bf73a09910c7954a92f40cf1d1e702fb93c8a919cc56",
                 "sha256:89409d369f4882c47f7ea20c42c5046879ce22c1e4ea20ef3b00a4dfc0a7f188",
                 "sha256:bf35a25f1aaa8a3781195595577fcbb59934856ee46b4f252f56ad12b8043bcf",
-                "sha256:de5303a6f1d0a7a34b9d40e4d3bef684ccc44a49bbe3eb85e3c0bffb4a131b7c"
+                "sha256:de5303a6f1d0a7a34b9d40e4d3bef684ccc44a49bbe3eb85e3c0bffb4a131b7c",
+                "sha256:e5a8ed9dbfca8dc162c4ada5ab017e10d5a66c542b4c73569f103fa5f342f498"
             ],
             "index": "pypi",
             "version": "==2.9.1"
@@ -659,11 +661,11 @@
         },
         "soupsieve": {
             "hashes": [
-                "sha256:052774848f448cf19c7e959adf5566904d525f33a3f8b6ba6f6f8f26ec7de0cc",
-                "sha256:c2c1c2d44f158cdbddab7824a9af8c4f83c76b1e23e049479aa432feb6c4c23b"
+                "sha256:617ffc4d0dfd39c66f4d1413a6e165663a34eca86be9b54f97b91756300ff6df",
+                "sha256:e4860f889dfa88774c07da0b276b70c073b6470fa1a4a8350800bb7bce3dcc76"
             ],
-            "markers": "python_version >= '3.0'",
-            "version": "==2.2.1"
+            "markers": "python_version >= '3'",
+            "version": "==2.3"
         },
         "sqlparse": {
             "hashes": [
@@ -738,11 +740,11 @@
         },
         "wagtail": {
             "hashes": [
-                "sha256:c13283dd19dc4fc6c46867bff21bf1813ccd42a8faa322db4ac711715bc3af44",
-                "sha256:fe6632e6e232977ea59d5c2ac5197691596095d9771ff35b5294a481126fe901"
+                "sha256:2ee964bca4888bd12301c36fa8e22d75fc144b6811c0077d22c642cb9a00a1f2",
+                "sha256:5a8f59e46179a7f13b9ba3da3ab1d3c274da373854882741ca507f4bc0131e2f"
             ],
             "index": "pypi",
-            "version": "==2.14.2"
+            "version": "==2.15"
         },
         "wagtail-content-import": {
             "hashes": [
@@ -766,6 +768,14 @@
             ],
             "index": "pypi",
             "version": "==0.8.2"
+        },
+        "wagtailmedia": {
+            "hashes": [
+                "sha256:550b41f60c546276fb79eac69630364efb82d40389ddb7f64242ff9eaef621ef",
+                "sha256:79313a9565f8b737304412bbf297c3975274e104a2ea005f8a8e1499c3ef743f"
+            ],
+            "index": "pypi",
+            "version": "==0.8.0"
         },
         "wagtailmenus": {
             "editable": true,
@@ -795,10 +805,11 @@
         },
         "xlsxwriter": {
             "hashes": [
-                "sha256:0956747859567ec01907e561a7d8413de18a7aae36860f979f9da52b9d58bc19",
-                "sha256:f9335f1736e2c4fd80e940fe1b6d92d967bf454a1e5d639b0b7a4459ade790cc"
+                "sha256:1aa65166697c42284e82f5bf9a33c2e913341eeef2b262019c3f5b5334768765",
+                "sha256:53005f03e8eb58f061ebf41d5767c7495ee0772c2396fe26b7e0ca22fa9c2570"
             ],
-            "version": "==1.4.5"
+            "markers": "python_version >= '3.4'",
+            "version": "==3.0.2"
         },
         "xlwt": {
             "hashes": [

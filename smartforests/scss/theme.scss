@@ -120,8 +120,16 @@ $spacers: (
   7: 90px,
 );
 
+// Cards
+$card-spacer-y: #{map-get($spacers, 2)};
+$card-spacer-x: #{map-get($spacers, 2)};
+
 // Allow negative margins
 $enable-negative-margins: true;
+
+// Modal
+$modal-backdrop-bg: $dark-green;
+$modal-backdrop-opacity: 0.9;
 
 // Merge with Bootstrap
 @import "~bootstrap/scss/functions";

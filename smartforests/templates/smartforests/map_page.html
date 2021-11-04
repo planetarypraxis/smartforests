@@ -1,17 +1,23 @@
 {% extends "base.html" %}
 {% load static ckbootstrap_tags menu_tags %}
+
 {% block body_height %}vh-100 overflow-hidden{% endblock %}
+
 {% block body %}
   <!-- No floating header -->
   {% main_menu max_levels=1 template="menus/header_static.html" %}
+
   <div
     data-turbo-permanent
     data-mapbox-token="{{mapbox_token}}"
+    data-supercluster-url="{{supercluster_url}}"
     id="MAP_APP"
     class='h-100 w-100 position-relative'
-  ></div>
+  >
+  </div>
+
   <div
-    class="offcanvas {% if sidepanel_page %}show{% endif %} offcanvas-end flex flex-column h-100 overflow-hidden"
+    class="offcanvas {% if sidepanel_page %}show{% endif %} offcanvas-end flex flex-column h-100 overflow-auto"
     tabindex="-1"
     id="sidepanel-offcanvas"
     aria-labelledby="offcanvasMapTitle"
@@ -24,10 +30,17 @@
       {% endif %}
     </turbo-frame>
   </div>
+  
   {% if debug and not mapbox_token %}
     <script>
       console.warn('No mapbox token found. Ensure that you have the MAPBOX_API_PUBLIC_TOKEN setting defined in local.py settings')
     </script>
   {% endif %}
 {% endblock %}
+
+
+{% block extra_js %}
+<script defer src="{% static 'js/filters.js' %}"></script>
+{% endblock %}
+
 {% block footer %}{% endblock %}

@@ -1,9 +1,14 @@
 .icon {
   display: inline-block;
-  mask-size: var(--icon-size, 15px) var(--icon-size, 15px);
-  background-size: var(--icon-size, 15px) var(--icon-size, 15px);
   width: var(--icon-size, 15px);
   height: var(--icon-size, 15px);
+
+  mask-image: var(--icon);
+  -webkit-mask-image: var(--icon);
+
+  mask-size: var(--icon-size, 15px) var(--icon-size, 15px);
+  -webkit-mask-size: var(--icon-size, 15px) var(--icon-size, 15px);
+  background-size: var(--icon-size, 15px) var(--icon-size, 15px);
 }
 
 /** Sizes */
@@ -26,24 +31,28 @@
 
 /** Svgs */
 
+.icon-close {
+  --icon: url("./svg/close-icon.svg");
+}
+
 .icon-search {
-  background-image: url("./svg/search.svg");
+  --icon: url("./svg/search.svg");
 }
 
 .icon-logbooks {
-  mask-image: url("./svg/map-icons/logbooks.svg");
+  --icon: url("./svg/map-icons/logbooks.svg");
 }
 
 .icon-stories {
-  mask-image: url("./svg/map-icons/stories.svg");
+  --icon: url("./svg/map-icons/stories.svg");
 }
 
 .icon-radio {
-  mask-image: url("./svg/map-icons/radio.svg");
+  --icon: url("./svg/map-icons/radio.svg");
 }
 
 .icon-cursor {
-  mask-image: url("./svg/map-icons/map.svg");
+  --icon: url("./svg/map-icons/map.svg");
 }
 
 .icon-logbook {

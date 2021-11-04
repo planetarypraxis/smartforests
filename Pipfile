@@ -31,6 +31,7 @@ wagtailmenus = {editable = true, git = "https://github.com/rkhleics/wagtailmenus
 django-debug-toolbar = "*"
 djangorestframework-gis = "*"
 django-turbo-response = "*"
+wagtailmedia = "*"
 nltk = "*"
 sumy = "*"
 numpy = "*"

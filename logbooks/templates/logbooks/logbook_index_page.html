@@ -4,7 +4,25 @@
 {% block content %}
 
 <div id="filter-page" class="filter-page">
-  {% include "logbooks/include/filters.html" with tags=self.relevant_tags target="logbook-search-results" %}
+  <div id="filters" class="filter-sidebar collapse-horizontal" data-turbo-permanent>
+    <div class="sidebar filter-bar">
+      <div class="index-header justify-content-end px-2">
+        <div>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" id="close-svg">
+            <path d="M7.00033 2.33334L7.82283 3.15584L4.56783 6.41668H11.667V7.58334H4.56783L7.82283 10.8442L7.00033 11.6667L2.33366 7.00001L7.00033 2.33334Z" fill="#043003"/>
+          </svg>
+      
+          <a class="btn btn-link" data-bs-toggle="collapse" href="#filters">Filters</a>
+        </div>
+      </div>
+      <div class="p-3">
+        <h3 class="fw-bold">Tags</h3>
+
+        {% include "smartforests/include/tag_list.html" with tags=self.relevant_tags target="logbook-search-results" %}
+      </div>
+    </div>
+  </div>
+
 
   <div class="container-fluid mt-0 filter-page__content">
     <div class="mb-5">

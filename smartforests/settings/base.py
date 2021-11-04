@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'wagtail.contrib.modeladmin',
     'modelcluster',
     'taggit',
+    'wagtailmedia',
 
     'webpack_loader',
     "anymail",
