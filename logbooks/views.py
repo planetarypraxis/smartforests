@@ -1,12 +1,37 @@
+from django.shortcuts import get_object_or_404, render
 from rest_framework import serializers, viewsets
 from rest_framework_gis.serializers import GeoFeatureModelSerializer, GeometrySerializerMethodField
 from django.urls import path
 from taggit.models import Tag
 from wagtail.api.v2.utils import BadRequestError
+from logbooks.models.pages import LogbookEntryPage, LogbookPage, StoryPage
 
 from logbooks.models.snippets import AtlasTag
 
 from .models import LogbookPageIndex
+
+
+def tag_panel(request, slug):
+    tag = get_object_or_404(Tag.objects.filter(slug=slug))
+    page_types = (LogbookPage, StoryPage, LogbookEntryPage)
+
+    return render(
+        request,
+        'logbooks/frames/tags.html',
+        {
+            'tag': tag,
+            'pages': (
+                (
+                    page_type,
+                    page_type.objects.filter(
+                        tagged_items__tag__slug=slug
+                    )
+                )
+                for page_type
+                in page_types
+            )
+        }
+    )
 
 
 class MapSearchViewset(viewsets.ReadOnlyModelViewSet):

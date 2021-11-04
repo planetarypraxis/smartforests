@@ -283,3 +283,18 @@
     background-color: transparent !important;
   }
 }
+
+/** Mini-card */
+
+.mini-card {
+  border-radius: 3px;
+  border: 1px solid $soft-green;
+  padding: map-get($map: $spacers, $key: 2);
+  display: block;
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    background-color: $primary-hover-light;
+  }
+}

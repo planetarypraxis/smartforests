@@ -16,6 +16,7 @@ from .api import wagtail_api_router
 
 from search import views as search_views
 from smartforests import views as sf_views
+from logbooks import views as logbook_views
 
 
 urlpatterns = [
@@ -26,8 +27,8 @@ urlpatterns = [
 
     path('search/', search_views.SearchView.as_view(), name='search'),
     path("footnotes/", include(footnotes_urls)),
-    path('_frame/<page_id>', sf_views.frame_content),
-    path('_tags/', sf_views.filters_frame),
+    path('_frame/<page_id>/', sf_views.frame_content),
+    path('_tags/<slug>/', logbook_views.tag_panel),
     # path('api/', include(rest.get_urls())),
     # path('__debug__/', include(debug_toolbar.urls)),
 ]

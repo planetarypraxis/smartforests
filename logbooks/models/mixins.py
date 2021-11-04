@@ -43,6 +43,13 @@ class BaseLogbooksPage(Page):
     def content_type_id(cls):
         return ContentType.objects.get_for_model(cls).id
 
+    @classmethod
+    def model_info(cls):
+        ''''
+        Expose the meta attr to templates
+        '''
+        return cls._meta
+
     @property
     def link_url(self):
         '''
@@ -66,10 +73,14 @@ class ContributorMixin(Page):
         '''
         Return all the people who have contributed to this page
         '''
-        return list(set([
-            revision.user
-            for revision in PageRevision.objects.filter(page=self)
-        ] + [self.owner]))
+        return list(
+            user
+            for user in set([
+                revision.user
+                for revision in PageRevision.objects.filter(page=self)
+            ] + [self.owner])
+            if user is not None
+        )
 
     api_fields = [
         APIField('contributors', serializer=UserSerializer(many=True)),
