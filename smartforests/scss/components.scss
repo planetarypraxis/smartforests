@@ -190,10 +190,10 @@
 
 .filter-tag {
   @extend .badge;
-  @extend .link-reset;
   @extend .rounded-pill;
   @extend .microcopy;
   @extend .small;
+  @extend .text-decoration-none;
 
   background: $off-white;
   color: $mid-green;
