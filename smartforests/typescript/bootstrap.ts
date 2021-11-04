@@ -30,7 +30,7 @@ export function useFrameSrc(id: string | HTMLElement) {
     };
     el.addEventListener("turbo:frame-load", listener);
 
-    return () => el.removeEventListener(listener);
+    return () => el.removeEventListener("turbo:frame-load", listener);
   }, [el]);
 
   return url;

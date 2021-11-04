@@ -10,9 +10,9 @@
     {% endif %}
   </div>
   <div class="row gx-0">
-    <div class="row row-cols-1 gx-0 gy-7">
+    <div class="row row-cols-1 gx-0 gy-7 mt-0">
       {% for entry in child_list_page %}
-      <article class="col">
+      <article class="col {% if forloop.first %}mt-0{% endif %}" id="{{ entry.id }}">
         {{entry.content_html}}
       </article>
       {% endfor %}

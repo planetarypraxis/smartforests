@@ -1,4 +1,4 @@
-{% load static wagtailuserbar ckdjango_tags ckwagtail_tags menu_tags %}
+{% load static wagtailuserbar wagtailimages_tags ckdjango_tags ckwagtail_tags menu_tags %}
 
 <!DOCTYPE html>
 <html class="no-js" lang="en">
@@ -84,7 +84,33 @@
             </footer>
         </div>
         {% endblock %}
-
+        <div id="radioPlayer" data-turbo-permanent class="offcanvas offcanvas-bottom h-48px bg-dark-green border-0 drop-shadow-mid-green-glow" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" aria-labelledby="radioPlayerLabel">
+            <div class="text-white ps-3 d-flex align-items-center justify-content-between" style="height: 100%;">
+              <div>
+                <button id="radioPlayerPlayButton" class="btn btn-link" title="Play episode: {{self.title}}" type="button">
+                  <svg class="play-button" width="11" height="14" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 0.5V35.5L27.5 18L0 0.5Z" fill="white"/>
+                  </svg>
+                  <svg class="pause-button d-none" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="white">
+                    <path d="M0 0h24v24H0V0z" fill="none"/>
+                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                  </svg>
+                </button>
+                <span class="ps-2" id="radioPlayerLabel" data-smartforests-radio-episode-title></span>
+                <span class="ps-3 small font-monospace text-uppercase" data-smartforests-radio-episode-owner></span>
+                <span class="ps-3 small font-monospace text-uppercase" data-smartforests-radio-episode-last-published-at></span>
+                <audio id="radioPlayerAudio"/>
+              </div>
+              <div class="position-relative">
+                {% if self.image %}
+                    {% image self.image height-48 data-smartforests-radio-episode-image=true %}
+                {% else %}
+                    <img height="48" data-smartforests-radio-episode-image>
+                {% endif %}
+                <img class="position-absolute top-50 start-50 translate-middle" src="{% static "img/radio-icon.svg" %}"/>
+              </div>
+            </div>
+        </div>
         <script>
             Array.from(document.querySelectorAll('[data-autofocus-show]')).forEach(modal => {
                 modal.addEventListener('shown.bs.modal', () => {

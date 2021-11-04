@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'wagtail_content_import',
     "wagtail_footnotes",
     'import_export',
+    'mapwidgets',
 
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -59,6 +60,7 @@ INSTALLED_APPS = [
     'wagtail.contrib.modeladmin',
     'modelcluster',
     'taggit',
+    'wagtailmedia',
 
     'webpack_loader',
     "anymail",
@@ -263,3 +265,10 @@ WAGTAILAPI_LIMIT_MAX = None
 
 
 MAPBOX_API_PUBLIC_TOKEN = os.getenv('MAPBOX_API_PUBLIC_TOKEN')
+
+MAP_WIDGETS = {
+    "MapboxPointFieldWidget": (
+        ("access_token", MAPBOX_API_PUBLIC_TOKEN),
+    ),
+    "MAPBOX_API_KEY": MAPBOX_API_PUBLIC_TOKEN
+}
