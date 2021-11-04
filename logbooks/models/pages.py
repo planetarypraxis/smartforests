@@ -138,13 +138,6 @@ class LogbookEntryPage(ArticlePage):
 
         return f'{self.get_parent().url}#{self.slug}'
 
-    def get_url(self, request=None, current_site=None):
-        return self.get_parent().get_url(request=request)
-
-    @property
-    def full_url(self):
-        return self.get_parent().full_url
-
 
 class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
     '''
