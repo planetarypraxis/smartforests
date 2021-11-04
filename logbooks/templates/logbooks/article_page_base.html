@@ -6,6 +6,18 @@
 {% block article_header %}
 {% endblock %}
 
+<div
+  class="offcanvas offcanvas-end flex flex-column h-100 overflow-auto"
+  tabindex="-1"
+  id="tagpanel-offcanvas"
+  aria-labelledby="tagpanel-title"
+  data-bs-scroll="true"
+  data-bs-backdrop="false"
+>
+  <turbo-frame id="tagpanel-turboframe" target="_top">
+  </turbo-frame>
+</div>
+
 <main class="container-fluid mb-7">
   <div class="row gx-0 mt-3 mt-lg-7">
     <div class="d-block d-lg-none mb-5 text-reset text-decoration-none text-mid-green">
@@ -42,7 +54,7 @@
 <h3 class="bg-dark-green p-3 py-2 microcopy-small text-white m-0">
   Related Tags
 </h3>
-<div id="tag-cloud" data-tag-cloud-data="tag_cloud"></div>
+<div id="tag-cloud" data-tag-offcanvas="tagpanel-offcanvas" data-tag-frame="tagpanel-turboframe" data-tag-cloud-data="tag_cloud"></div>
 {{self.tag_cloud|json_script:"tag_cloud"}}
 
 {% endblock %}

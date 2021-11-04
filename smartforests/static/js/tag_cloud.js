@@ -31,6 +31,10 @@ const init = () => {
       return;
     }
 
+    // Get the sidpanel elements for navigation
+    const sidepanel = document.getElementById(el.dataset.tagOffcanvas);
+    const sidepanelFrame = el.dataset.tagFrame ?? "_top";
+
     el.classList.add("tag-cloud");
     el.style.backgroundColor = GRADIENT_OUTER;
 
@@ -143,7 +147,19 @@ const init = () => {
         .selectAll(".related-tag")
         .data(realGraphNodes, (d) => d.slug)
         .join((enter) => {
-          const a = enter.append("a").attr("class", "related-tag");
+          const a = enter
+            .append("a")
+            .attr("class", "related-tag")
+            .attr("data-turbo-frame", sidepanelFrame)
+            .attr("href", (d) => `/_tags/${d.slug}/`)
+            .on("click", () => {
+              if (sidepanel) {
+                const instance =
+                  bootstrap.Offcanvas.getInstance(sidepanel) ||
+                  new bootstrap.Offcanvas(sidepanel);
+                instance.show();
+              }
+            });
 
           a.append("span").attr("class", "tag-handle");
 
