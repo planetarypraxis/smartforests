@@ -8,12 +8,13 @@ from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.core.fields import RichTextField
+from wagtailmedia.edit_handlers import MediaChooserPanel
 from commonknowledge.wagtail.helpers import get_children_of_type
 from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
 from wagtail.api import APIField
-from logbooks.models.helpers import group_by_title
-from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, DescendantPageContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager, SidebarRenderableMixin, TurboFrameMixin
+from smartforests.util import group_by_title
+from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, DescendantPageContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager, SidebarRenderableMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
 from django.shortcuts import redirect
@@ -54,6 +55,46 @@ class StoryIndexPage(ChildListMixin, BaseLogbooksPage):
 
     def get_child_list_queryset(self, *args, **kwargs):
         return self.get_children().order_by('-last_published_at').specific()
+
+    show_in_menus_default = True
+    parent_page_types = ['home.HomePage']
+    max_count = 1
+
+
+class EpisodePage(ArticlePage):
+    '''
+    Episodes are individual items for the radio.
+    '''
+
+    show_in_menus_default = True
+    parent_page_types = ['logbooks.RadioIndexPage']
+
+    image = ForeignKey(CmsImage, on_delete=models.SET_NULL,
+                       null=True, blank=True)
+    audio = models.ForeignKey(
+        'wagtailmedia.Media',
+        null=True,
+        blank=False,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    content_panels = ArticlePage.content_panels + [
+        ImageChooserPanel('image'),
+        MediaChooserPanel('audio', media_type='audio'),
+    ]
+
+    def cover_image(self):
+        return self.image
+
+
+class RadioIndexPage(ChildListMixin, BaseLogbooksPage):
+    '''
+    Index page for the Radio. A collection of episodes.
+    '''
+
+    class Meta:
+        verbose_name = "Radio index page"
 
     show_in_menus_default = True
     parent_page_types = ['home.HomePage']

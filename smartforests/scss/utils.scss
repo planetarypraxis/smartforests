@@ -48,7 +48,7 @@
 }
 
 .opacity-8 {
-  opacity: 0.8;
+  opacity: 0.8 !important;
 }
 
 .h-48px {
@@ -95,6 +95,10 @@
   width: max-content !important;
 }
 
+.drop-shadow-mid-green-glow {
+  filter: drop-shadow(0px -4px 15px rgba($mid-green, 0.3));
+}
+
 .input-group-focus {
   &:focus-within {
     border-color: $input-focus-border-color;
@@ -120,5 +124,14 @@
   &:hover,
   &:focus {
     background-color: transparentize($color: $dark-green, $amount: 0.9);
+  }
+}
+
+.fade-inout {
+  transition: opacity 0.25s ease-in-out;
+
+  &.hidden {
+    opacity: 0;
+    visibility: hidden;
   }
 }

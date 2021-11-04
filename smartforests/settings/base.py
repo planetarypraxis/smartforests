@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'wagtail_content_import',
     "wagtail_footnotes",
     'import_export',
+    'mapwidgets',
 
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -59,6 +60,7 @@ INSTALLED_APPS = [
     'wagtail.contrib.modeladmin',
     'modelcluster',
     'taggit',
+    'wagtailmedia',
 
     'webpack_loader',
     "anymail",
@@ -276,3 +278,10 @@ SETTINGS_EXPORT = [
 ]
 
 SETTINGS_EXPORT_VARIABLE_NAME = 'environment'
+
+MAP_WIDGETS = {
+    "MapboxPointFieldWidget": (
+        ("access_token", MAPBOX_API_PUBLIC_TOKEN),
+    ),
+    "MAPBOX_API_KEY": MAPBOX_API_PUBLIC_TOKEN
+}
