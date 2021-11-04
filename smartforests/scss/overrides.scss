@@ -160,3 +160,8 @@ a.card {
     text-transform: none;
   }
 }
+
+.offcanvas-end {
+  border-left: none;
+  box-shadow: 0px 0px 20px 0px rgba($dark-green, 0.2);
+}

@@ -1,7 +1,7 @@
 {% load ckdjango_tags ckbootstrap_tags wagtailcore_tags wagtailimages_tags %}
 
 <turbo-frame id="sidepanel-turboframe">
-  <div class="container gx-2 py-2 bg-yellow" style="mix-blend-mode: multiply">
+  <div class="container gx-2 py-2 bg-yellow opacity-8" style="mix-blend-mode: multiply">
     <button
       type='button'
       data-bs-dismiss="offcanvas"
@@ -17,9 +17,9 @@
     <div class="offcanvas-header align-items-stretch flex-column py-3">
       <div class="caption text-dark-grey">{{ page.label }}</div>
 
-      <h5 id="offcanvasMapTitle" class="text-dark-green fw-bold mt-1 mb-0">
+      <h5 id="offcanvasMapTitle" class="text-dark-green fw-bold mt-1 mb-0 fs-6">
         {{page.title}}
-        <i class="icon icon-20 bg-primary float-end {{page.icon_class}}"></i>
+        <i class="icon icon-20 bg-faded-green float-end {{page.icon_class}}"></i>
       </h5>
       
       {% if page.geographical_location %}
@@ -48,7 +48,7 @@
       <div>
         <hr class="mt-0" />
       </div>
-      {% include "logbooks/metadata.html" with page=page %}
+      {% include "logbooks/metadata.html" with page=page tag_background_class="bg-off-white" %}
     </div>
   </div>
 </turbo-frame>
