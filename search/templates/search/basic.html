@@ -16,7 +16,7 @@
         </div>
         <div class="mt-3">
           {% for tag in item.page.tags.all %}
-            {% include "logbooks/include/tag_label.html" with tag=tag orientation="vertical" extra_classes="bg-off-white" %}
+            {% include "logbooks/include/tag_label.html" with tag=tag orientation="vertical" tag_background_class="bg-off-white" %}
           {% endfor %}
           </div>
       </div>
