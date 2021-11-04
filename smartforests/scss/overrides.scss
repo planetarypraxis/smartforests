@@ -144,6 +144,10 @@ a.card {
   @extend .font-serif;
 }
 
+.modal-backdrop {
+  mix-blend-mode: multiply;
+}
+
 .metadata {
   font-style: normal;
   font-size: $small-font-size !important;

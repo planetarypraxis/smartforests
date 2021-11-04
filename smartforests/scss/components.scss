@@ -120,9 +120,17 @@
 .search-item {
   display: block;
 
-  &.active {
-    background-color: $primary;
+  &:hover {
+    background-color: $mid-green;
     color: $white;
+
+    a:hover {
+      color: $white;
+    }
+
+    .text-dark-grey {
+      color: $white !important;
+    }
   }
 }
 
@@ -141,6 +149,7 @@
 .sidebar-sized {
   width: 320px;
 }
+
 .sidebar {
   @extend .sidebar-sized;
   background: $white;
