@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static ckdjango_tags ckbootstrap_tags %}
+{% load static ckdjango_tags ckbootstrap_tags wagtailimages_tags %}
 
 {% block content %}
 
@@ -22,7 +22,6 @@
       </div>
     </div>
   </div>
-
 
   <div class="container-fluid mt-0 filter-page__content">
     <div class="mb-5">
@@ -53,20 +52,47 @@
         {% endif %}
       </div>
     </div>
-    
-    {% include "logbooks/include/masonry.html" with contents=child_list_page %}
+
+    <div>
+      <main class="container-fluid">
+        {% for episode in child_list_page %}
+          <div class="row g-0 border-bottom pt-3 pb-2">
+            <div class="col d-flex align-items-start">
+              {% include 'logbooks/include/episode_button.html' with episode=episode extra_classes="me-2 p-0" %}
+              <div>
+                <div class="d-flex align-items-center mb-2">
+                  <a class="link-reset me-3" href="{{episode.url}}" >
+                    {{episode.title}}
+                  </a>
+                  <div class="font-monospace color-dark-grey small">
+                    {% if episode.audio.duration != 0.0 %}
+                      {{ episode.audio.duration }}
+                    {% endif %}
+                  </div>
+                </div>
+                <div>
+                  {% for tag in episode.tags.all %}
+                    {% include 'logbooks/include/tag_label.html' with tag=tag %}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <div class="col-2 d-flex align-items-start justify-content-end">
+              {% if episode.image %}
+                  {% image episode.image height-60%}
+                {% else %}
+                <img src="{% static "img/radio-icon.svg" %}"/>
+                {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </main>
+    </div>
   </div>
 </div>
 
 {% endblock %}
 
-<!-- The masonry component doesn't get on with the flex: 1 we usually stick at the bottom of the page -->
-{% block spacer %}
-{% endblock %}
-
 {% block extra_js %}
-<script defer src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4/dist/masonry.pkgd.min.js" crossorigin="anonymous"></script>
-<script defer src="{% static 'js/masonry.js' %}"></script>
 <script defer src="{% static 'js/filters.js' %}"></script>
 {% endblock %}

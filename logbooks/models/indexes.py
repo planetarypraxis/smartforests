@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.postgres.indexes import GinIndex
+from django.contrib.gis.db.models import PointField
 from wagtail.core.models import Page, PageManager
 
 

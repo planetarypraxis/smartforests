@@ -120,6 +120,10 @@ $spacers: (
   7: 90px,
 );
 
+// Cards
+$card-spacer-y: #{map-get($spacers, 2)};
+$card-spacer-x: #{map-get($spacers, 2)};
+
 // Allow negative margins
 $enable-negative-margins: true;
 
