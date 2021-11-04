@@ -121,17 +121,18 @@ function FilterIcon({ className = "" }) {
     </svg>
   );
 }
+
 const FilterView: FC<{ onClose: () => void; open: boolean }> = ({
   onClose,
   open,
 }) => {
   return (
     <div
-      className={`mapboxgl-ctrl-filters-content top-0 fade-inout ${
+      className={`mapboxgl-ctrl-filters-content top-0 fade-inout p-2 ${
         open ? "" : "hidden"
       }`}
     >
-      <div className="position-sticky top-0 bg-white p-3 d-flex flex-row justify-content-start">
+      <div className="position-sticky top-0 bg-white d-flex flex-row justify-content-start pb-4">
         <h2 className="heading-small fw-normal flex-grow-1">Filter by tag</h2>
 
         <button onClick={onClose} className="icon-btn" aria-label="Close">
@@ -139,7 +140,7 @@ const FilterView: FC<{ onClose: () => void; open: boolean }> = ({
         </button>
       </div>
 
-      <div className="p-3 pt-0">
+      <div>
         {/* @ts-ignore */}
         <turbo-frame
           id="filters"
