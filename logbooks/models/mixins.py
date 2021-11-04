@@ -19,6 +19,7 @@ from wagtail.api.conf import APIField
 from wagtail.core.models import Page, PageManager, PageRevision
 from django.contrib.gis.db import models as geo
 from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin
+from mapwidgets.widgets import MapboxPointFieldWidget
 
 
 class IndexedPageManager(PageManager):
@@ -131,7 +132,7 @@ class GeocodedMixin(Page):
         MultiFieldPanel(
             [
                 FieldPanel('geographical_location'),
-                FieldPanel('coordinates')
+                FieldPanel('coordinates', widget=MapboxPointFieldWidget)
             ],
             heading="Geographical data",
         )
