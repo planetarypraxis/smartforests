@@ -9,9 +9,21 @@
   
       <h5 class="offcanvas-title text-capitalize text-reset fw-bold mt-1" id="offcanvasLabel">{{tag.name}}</h5>
     </div>
+    
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
 
-  <div class="offcanvas-body">
+  {% if tag.thumbnail %}
+    <img src="{{tag.thumbnail.url}}" class="h-100px w-100 object-cover">
+  {% endif %}
+
+  <div class="offcanvas-body text-dark-green">
+    {% if tag.description %}
+    <div class="mb-2">
+      {{ tag.description|richtext }}
+    </div>
+    {% endif %}
+
     <div class="accordion" id="tag-accordion">
       {% for page_type, page_list in pages %}
         {% if page_list %}

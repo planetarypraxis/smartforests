@@ -1,12 +1,15 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
+from django.dispatch.dispatcher import receiver
 from taggit.models import TagBase
+from wagtail.core.fields import RichTextField
 from wagtail.images.models import AbstractImage, AbstractRendition
 from wagtail.documents.models import Document, AbstractDocument
 from wagtail.core.models import Page
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from django.apps import apps
+from commonknowledge.django.images import render_image_grid
 import re
 
 from wagtail.snippets.models import register_snippet
@@ -14,7 +17,40 @@ from wagtail.snippets.models import register_snippet
 
 @register_snippet
 class Tag(TagBase):
-    pass
+    description = RichTextField(blank=True, default="")
+    thumbnail = models.ImageField(null=True, blank=True)
+
+    @staticmethod
+    def regenerate_thumbnails():
+        for tag in Tag.objects.iterator():
+            tag.regenerate_thumbnail()
+
+    def regenerate_thumbnail(self):
+        thumbnails = []
+
+        for tagging in self.logbooks_atlastag_items.all():
+            if hasattr(tagging.content_object.specific, 'get_thumbnail_images'):
+                thumbnails += tagging.content_object.specific.get_thumbnail_images()
+
+            if len(thumbnails) >= 3:
+                break
+
+        thumbnails = thumbnails[:3]
+
+        if len(thumbnails) > 0:
+            self.thumbnail = render_image_grid(
+                thumbnails,
+                rows=1,
+                cols=len(thumbnails),
+                format='JPEG',
+                filename=f'tagthumb_{self.slug}.jpeg',
+                width=800,
+                height=400
+            )
+        else:
+            self.thumbnail = None
+
+        self.save()
 
 
 class MapPage(RoutablePageMixin, Page):

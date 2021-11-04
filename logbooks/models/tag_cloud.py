@@ -2,9 +2,11 @@ from typing import DefaultDict
 from dataclasses import dataclass
 
 from django.db import models
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 from wagtail.core.models import Page
+from logbooks.models.snippets import AtlasTag
 from smartforests.models import Tag
 
 
@@ -49,7 +51,7 @@ class TagCloud(models.Model):
     @staticmethod
     def reindex():
         for tag in Tag.objects.iterator():
-            TagCloud.handle_tag_association(Tag, tag)
+            TagCloud.build_for_tag(tag)
 
     @staticmethod
     def get_start(limit=100, clouds=5):
@@ -68,8 +70,15 @@ class TagCloud(models.Model):
 
         lookup = DefaultDict(list)
 
+        def get_cloud(tag) -> TagCloud:
+            try:
+                return tag.tag_cloud
+            except ObjectDoesNotExist:
+                return None
+
         for tag in tags:
-            cloud: TagCloud = tag.tag_cloud
+            cloud = get_cloud(tag)
+
             if cloud is None:
                 continue
 
@@ -79,8 +88,8 @@ class TagCloud(models.Model):
         stack = [
             tag.id
             for tag in tags
-            if tag.tag_cloud is not None
-            and len(tag.tag_cloud.value) > 0
+            if get_cloud(tag) is not None
+            and len(get_cloud(tag).value) > 0
         ]
         merged_cloud = {}
 
@@ -120,9 +129,8 @@ class TagCloud(models.Model):
             item.to_json(lookup[item.id]) for item in items
         ]
 
-    @ staticmethod
-    @ receiver(m2m_changed, sender=Tag)
-    def handle_tag_association(sender, instance: Tag, **kwargs):
+    @staticmethod
+    def build_for_tag(instance: Tag):
         '''
         Breadth-first search on tags related to the saved tag, limited to 100.
 
@@ -130,8 +138,6 @@ class TagCloud(models.Model):
 
         Metadata about the tag's surrounding graph is saved as a json object (TagCloud.Item).
         '''
-
-        from logbooks.models.snippets import AtlasTag
 
         stack = [instance]
         visited = {}
