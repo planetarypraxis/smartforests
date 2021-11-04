@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from rest_framework import serializers, viewsets
 from rest_framework_gis.serializers import GeoFeatureModelSerializer, GeometrySerializerMethodField
 from django.urls import path
-from taggit.models import Tag
+from smartforests.models import Tag
 from wagtail.api.v2.utils import BadRequestError
 from logbooks.models.pages import LogbookEntryPage, LogbookPage, StoryPage
 

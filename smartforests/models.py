@@ -1,13 +1,20 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
-from turbo_response.frame import TurboFrame
-from wagtail.images.models import AbstractImage, AbstractRendition, Image
+from taggit.models import TagBase
+from wagtail.images.models import AbstractImage, AbstractRendition
 from wagtail.documents.models import Document, AbstractDocument
 from wagtail.core.models import Page
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from django.apps import apps
 import re
+
+from wagtail.snippets.models import register_snippet
+
+
+@register_snippet
+class Tag(TagBase):
+    pass
 
 
 class MapPage(RoutablePageMixin, Page):

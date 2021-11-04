@@ -4,7 +4,7 @@ from django.db.models.fields.related import ForeignKey
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
 from modelcluster.contrib.taggit import ClusterTaggableManager
-from taggit.models import Tag
+from smartforests.models import Tag
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.images.edit_handlers import ImageChooserPanel

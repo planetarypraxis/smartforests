@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 from wagtail.core.models import Page
-from taggit.models import Tag
+from smartforests.models import Tag
 
 
 class TagCloud(models.Model):
