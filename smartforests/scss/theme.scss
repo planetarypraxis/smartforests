@@ -16,7 +16,7 @@ $yellow: #ffff9b;
 $body-bg: $off-white;
 $primary: $mid-green;
 $secondary: $grey;
-$primary-hover-light: $light-grey;
+$primary-hover-light: rgba($soft-green, 0.5);
 $custom-colors: (
   dark-green: $dark-green,
   dark-green-transparent: rgba($dark-green, 0.8),
@@ -33,6 +33,19 @@ $custom-colors: (
 );
 $dark: $dark-green;
 
+// Spacers
+$spacer: 1rem;
+$spacers: (
+  0: 0,
+  1: 5px,
+  2: 10px,
+  3: 20px,
+  4: 30px,
+  5: 40px,
+  6: 60px,
+  7: 90px,
+);
+
 // Card
 $card-border-width: 0;
 
@@ -43,13 +56,21 @@ $form-label-margin-bottom: 0;
 
 // Borders
 $border-radius: 0;
+$badge-border-radius: 100px;
 
 // List group
 $list-group-color: inherit;
 $list-group-bg: inherit;
 $list-group-item-padding-x: 1rem;
 $list-group-item-padding-y: 1rem;
-$list-group-hover-bg: $primary-hover-light;
+
+// Accordion
+$accordion-padding-y: 10px;
+$accordion-padding-x: 0;
+$accordion-bg: none;
+$accordion-button-bg: transparent;
+$accordion-button-active-bg: transparent;
+$accordion-border-width: 0;
 
 // Layout
 $container-max-widths: (
@@ -106,20 +127,6 @@ $font-family-serif: Georgia, Times, "Times New Roman", serif;
 .font-serif {
   font-family: $font-family-serif;
 }
-
-// Spacers
-$spacer: 1rem;
-$spacers: (
-  0: 0,
-  1: 5px,
-  2: 10px,
-  "2-5": 15px,
-  3: 20px,
-  4: 30px,
-  5: 40px,
-  6: 60px,
-  7: 90px,
-);
 
 // Cards
 $card-spacer-y: #{map-get($spacers, 2)};

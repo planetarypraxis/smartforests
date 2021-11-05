@@ -1,6 +1,6 @@
 from django.contrib.contenttypes import models
 from django.db.models.functions import Lower
-from taggit.models import Tag
+from smartforests.models import Tag
 
 from commonknowledge.django.cache import django_cached_model
 

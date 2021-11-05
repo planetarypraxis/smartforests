@@ -55,10 +55,18 @@
   height: 48px !important;
 }
 
+.h-100px {
+  height: 100px !important;
+}
+
 .links-white {
   a {
     @extend .text-white;
   }
+}
+
+.object-cover {
+  object-fit: cover !important;
 }
 
 .child-mb-0 > *:last-child {

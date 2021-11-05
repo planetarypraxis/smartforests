@@ -36,3 +36,6 @@ nltk = "*"
 sumy = "*"
 numpy = "*"
 wagtail-footnotes = "*"
+django-map-widgets = {editable = true, ref = "master", git = "https://git@github.com/commonknowledge/django-map-widgets.git"}
+django-settings-export = "*"
+posthog = "*"

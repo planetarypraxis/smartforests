@@ -1,6 +1,7 @@
 from random import randint, shuffle
 
 from django.core.files.images import ImageFile
+from logbooks.models.pages import StoryPage
 from smartforests.models import CmsImage
 from django.core.management.base import BaseCommand
 from django.core.files.temp import NamedTemporaryFile
@@ -112,6 +113,16 @@ class Command(BaseCommand):
 
         def populate_logbook(logbook: LogbookPage):
             apply_tags(logbook, options.get('tags_per_logbook'))
+
+            if logbook.is_leaf():
+                for _ in range(random_distribution()):
+                    entry = LogbookEntryPage(title=fake.sentence())
+                    entry.body = [
+                        generate_story_block(), generate_story_block()
+                    ]
+                    apply_tags(logbook, options.get('tags_per_story'))
+                    logbook.add_child(instance=entry)
+
             logbook.save()
 
         def populate_story(story: LogbookEntryPage):
@@ -139,7 +150,7 @@ class Command(BaseCommand):
         for index in StoryIndexPage.objects.all():
             if index.is_leaf():
                 for _ in range(options.get('stories')):
-                    story = LogbookEntryPage(
+                    story = StoryPage(
                         title=fake.sentence(),
                         first_published_at=fake.past_datetime(
                             start_date='-60d')

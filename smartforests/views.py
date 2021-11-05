@@ -4,7 +4,7 @@ from django.http.request import HttpRequest
 from django.http.response import HttpResponseNotFound
 from django.shortcuts import get_object_or_404, render
 from wagtail.core.models import Page
-from taggit.models import Tag
+from smartforests.models import Tag
 from commonknowledge.django.cache import django_cached
 
 from smartforests.util import group_by_title

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'wagtail_content_import',
     "wagtail_footnotes",
     'import_export',
+    'mapwidgets',
 
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -108,6 +109,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'wagtail.contrib.settings.context_processors.settings',
                 'wagtailmenus.context_processors.wagtailmenus',
+                'django_settings_export.settings_export',
             ],
         },
     },
@@ -264,3 +266,22 @@ WAGTAILAPI_LIMIT_MAX = None
 
 
 MAPBOX_API_PUBLIC_TOKEN = os.getenv('MAPBOX_API_PUBLIC_TOKEN')
+
+POSTHOG_PUBLIC_TOKEN = None
+POSTHOG_URL = 'https://app.posthog.com'
+
+# Settings accessible via {{ settings.XXX }} in templates
+SETTINGS_EXPORT = [
+    'DEBUG',
+    'POSTHOG_URL',
+    'POSTHOG_PUBLIC_TOKEN',
+]
+
+SETTINGS_EXPORT_VARIABLE_NAME = 'environment'
+
+MAP_WIDGETS = {
+    "MapboxPointFieldWidget": (
+        ("access_token", MAPBOX_API_PUBLIC_TOKEN),
+    ),
+    "MAPBOX_API_KEY": MAPBOX_API_PUBLIC_TOKEN
+}
