@@ -113,6 +113,7 @@ TEMPLATES = [
                 'wagtail.contrib.settings.context_processors.settings',
                 'wagtailmenus.context_processors.wagtailmenus',
                 'django_settings_export.settings_export',
+                'django.template.context_processors.i18n',
             ],
         },
     },
