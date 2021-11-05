@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from wagtail.core.models import Page, PageRevision
 import posthog
 
+from logbooks.models.pages import ContributorPage, ContributorsIndexPage
+
 
 def identify_user(user):
     posthog.identify(
@@ -44,6 +46,8 @@ def create_user(sender, instance=None, created=False, **kwargs):
             user.id,
             event='user registered'
         )
+
+        ContributorPage.create_for_user(user)
 
 
 def page_published(sender, instance, **kwargs):

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "wagtail_footnotes",
     'import_export',
     'mapwidgets',
+    'wagtailautocomplete',
 
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',

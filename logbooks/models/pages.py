@@ -1,10 +1,13 @@
 from django.db import models
 from django.conf import settings
+from django.db.models.fields import CharField
 from django.db.models.fields.related import ForeignKey
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
+from django.utils.text import slugify
 from modelcluster.contrib.taggit import ClusterTaggableManager
-from smartforests.models import Tag
+from wagtail.search.index import AutocompleteField
+from smartforests.models import Tag, User
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.images.edit_handlers import ImageChooserPanel
@@ -20,6 +23,7 @@ from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
 from logbooks.models.tag_cloud import TagCloud
 from django.shortcuts import redirect
+from wagtailautocomplete.edit_handlers import AutocompletePanel
 
 
 class StoryPage(ArticlePage):
@@ -267,7 +271,7 @@ class LogbookIndexPage(ChildListMixin, RoutablePageMixin, BaseLogbooksPage):
         return context
 
 
-class ContributorsPage(BaseLogbooksPage):
+class ContributorsIndexPage(BaseLogbooksPage):
     '''
     Display of people
     '''
@@ -279,3 +283,43 @@ class ContributorsPage(BaseLogbooksPage):
 
     if not settings.DEBUG:
         max_count = 1
+
+
+class ContributorPage(GeocodedMixin, BaseLogbooksPage):
+    allow_search = True
+    page_size = 50
+    show_in_menus_default = True
+    parent_page_types = ['logbooks.ContributorsIndexPage']
+
+    # If a user is defined on the ContributorPage, we can load up contributions and tags and so on
+    # But we leave this optional in case non-editor users also want to be biographied in the Atlas
+    user = models.OneToOneField(
+        User,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
+
+    byline = CharField(max_length=1000, blank=True, null=True)
+    avatar = ForeignKey(CmsImage, on_delete=models.SET_NULL,
+                        null=True, blank=True)
+    bio = RichTextField(blank=True, null=True)
+
+    content_panels = [
+        FieldPanel('title', classname="full title"),
+        FieldPanel('byline'),
+        ImageChooserPanel('avatar'),
+        AutocompletePanel('user'),
+        FieldPanel('bio')
+    ] + GeocodedMixin.content_panels
+
+    @classmethod
+    def create_for_user(cls, user):
+        contributors = ContributorsIndexPage.objects.first()
+        title = user.get_full_name() or user.username
+        contributor_page = ContributorPage(
+            title=title,
+            slug=slugify(title)
+        )
+        contributors.add_child(contributor_page)
+        contributor_page.save()

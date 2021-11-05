@@ -10,6 +10,7 @@ from wagtail.documents import urls as wagtaildocs_urls
 from wagtail_transfer import urls as wagtailtransfer_urls
 from wagtail_content_import import urls as wagtail_content_import_urls
 from wagtail_footnotes import urls as footnotes_urls
+from wagtailautocomplete.urls.admin import urlpatterns as autocomplete_admin_urls
 
 from commonknowledge.django import rest
 from .api import wagtail_api_router
@@ -21,7 +22,7 @@ from logbooks import views as logbook_views
 
 urlpatterns = [
     path('django-admin/', admin.site.urls),
-
+    re_path(r'^admin/autocomplete/', include(autocomplete_admin_urls)),
     path('admin/', include(wagtailadmin_urls)),
     path('documents/', include(wagtaildocs_urls)),
 
