@@ -36,12 +36,17 @@
                       <img src="{% static 'img/radio.svg' %}" />
                     </a>
                 </li>
-                <li class="nav-item d-lg-none p-2 text-truncate border-soft-green overflow-hidden w-100">
+                <li class="nav-item d-lg-none p-2 text-truncate border-bottom border-soft-green overflow-hidden w-100">
                     {% for page in menu_items %}
                     <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ page.href }}">
                         {{ page.text }}
                     </a>
                     {% endfor %}
+                </li>
+                <li class="nav-item d-lg-none border-bottom border-soft-green p-2 w-100">
+                    <a class="text-dark-green text-decoration-none px-2 d-flex justify-content-start align-items-center" href="{{ settings.logbooks.ImportantPages.page_url.radio_index_page }}" data-bs-toggle="modal" data-bs-target="#searchToggle" aria-controls="searchToggle" aria-expanded="false" aria-label="Toggle search">
+                        Search <i class="ms-2 icon icon-13 bg-dark icon-search"></i>
+                    </a>
                 </li>
                 <a class="navbar-brand text-black fw-normal text-decoration-none d-inline-block d-none d-lg-block" href="/">
                     <img src="{% static 'img/smart-forests-logo.svg' %}" />
