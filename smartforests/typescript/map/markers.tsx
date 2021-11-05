@@ -60,22 +60,19 @@ export const ClusterMarker: React.FC<{
 export const AtlasPageMarker: React.FC<{
   feature: Feature<Point, SmartForest.MapItem>;
 }> = memo(({ feature }) => {
-  const {
-    properties: { page },
-    geometry,
-  } = feature;
-  const [isFocusing, setIsFocusing] = useFocusContext(page.id, "");
+  const { properties, geometry } = feature;
+  const [isFocusing, setIsFocusing] = useFocusContext(properties.id, "");
   const [offcanvas, sidebarEl] = useOffcanvas("sidepanel-offcanvas");
   const frame = useMemo(
     () => document.querySelector<TurboFrameElement>("#sidepanel-turboframe"),
     []
   );
 
-  const frameUrl = pageToFrameURL(page);
+  const frameUrl = pageToFrameURL(properties);
   const activeUrl = useFrameSrc(frame);
 
   const active = equalUrls(frameUrl, activeUrl);
-  const iconClass = active ? `icon-30 icon-cursor` : page.icon_class;
+  const iconClass = active ? `icon-30 icon-cursor` : properties.icon_class;
 
   return (
     <Fragment>
@@ -123,24 +120,22 @@ function AtlasPageCard({
 }: {
   feature: Feature<Point, SmartForest.MapItem>;
 }) {
-  const {
-    properties: { page },
-  } = feature;
+  const { properties } = feature;
 
   return (
     <div className="p-2 w-popover bg-white elevated">
-      <div className="caption text-dark-grey">{page.title}</div>
+      <div className="caption text-dark-grey">{properties.title}</div>
 
       <h5 id="offcanvasMapTitle" className="text-dark-green fw-bold mt-1 mb-0">
         <i
-          className={`icon icon-20 bg-primary ms-2 align-bottom float-end ${page.icon_class}`}
+          className={`icon icon-20 bg-primary ms-2 align-bottom float-end ${properties.icon_class}`}
         />
-        {page.title}
+        {properties.title}
       </h5>
 
-      {page.geographical_location && (
+      {properties.geographical_location && (
         <div className="mt-1 caption text-dark-grey">
-          {page.geographical_location}
+          {properties.geographical_location}
         </div>
       )}
     </div>

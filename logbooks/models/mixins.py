@@ -29,15 +29,6 @@ from smartforests.models import Tag
 from smartforests.util import group_by_title
 
 
-class IndexedPageManager(PageManager):
-    '''
-    Optimization for pages that use the page index. Fetches their index_entry attribute eagerly in queries.
-    '''
-
-    def get_queryset(self):
-        return super().get_queryset().select_related('index_entry')
-
-
 class BaseLogbooksPage(Page):
     '''
     Common utilities for pages in this module
@@ -45,6 +36,8 @@ class BaseLogbooksPage(Page):
 
     class Meta:
         abstract = True
+
+    icon_class = None
 
     @classmethod
     def content_type_id(cls):
@@ -198,6 +191,10 @@ class ThumbnailMixin(Page):
             'self': self
         })
 
+    def save(self, *args, **kwargs):
+        self.thumbnail_image = self.regenerate_thumbnail()
+        return super().save(*args, **kwargs)
+
 
 class SidebarRenderableMixin:
     def get_sidebar_frame_response(self, request, *args, **kwargs):
@@ -260,8 +257,6 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
     '''
     class Meta:
         abstract = True
-
-    objects = IndexedPageManager()
 
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
     body = ArticleContentStream()
