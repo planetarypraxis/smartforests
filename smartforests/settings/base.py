@@ -285,3 +285,7 @@ MAP_WIDGETS = {
     ),
     "MAPBOX_API_KEY": MAPBOX_API_PUBLIC_TOKEN
 }
+
+POSTHOG_DJANGO = {
+    "distinct_id": lambda request: request.user and request.user.distinct_id
+}
