@@ -203,6 +203,7 @@
   @extend .microcopy;
   @extend .small;
   @extend .text-decoration-none;
+  @extend .max-content;
 
   cursor: pointer;
   background: $off-white;
@@ -226,6 +227,10 @@
     background: $dark-green;
     color: $white;
   }
+}
+
+.filter-tag-white {
+  background: $white;
 }
 
 /** Tag cloud */
