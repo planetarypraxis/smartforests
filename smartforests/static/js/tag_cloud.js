@@ -14,6 +14,7 @@ window.addEventListener("resize", () => {
 const init = () => {
   // Downsample the canvas to produce the pixelated effect.
   const PIXEL_SIZE = 32;
+  const MOBILE_BREAKPOINT = 540;
 
   // Color configs for the background.
   const GRADIENT_INNER = "#63E364";
@@ -24,18 +25,27 @@ const init = () => {
   resizeHandlers = [];
 
   // Bind to data-tags
-  $("[data-tag-cloud-data]").each((_, el) => {
-    const configElement = document.getElementById(el.dataset.tagCloudData);
+  $("[data-tag-cloud-data]").each((_, parentEl) => {
+    const configElement = document.getElementById(
+      parentEl.dataset.tagCloudData
+    );
     if (!configElement) {
       console.error("No config element found for tag cloud");
       return;
     }
 
     // Get the sidpanel elements for navigation
-    const sidepanel = document.getElementById(el.dataset.tagOffcanvas);
-    const sidepanelFrame = el.dataset.tagFrame ?? "_top";
+    const sidepanel = document.getElementById(parentEl.dataset.tagOffcanvas);
+    const sidepanelFrame = parentEl.dataset.tagFrame ?? "_top";
 
-    el.classList.add("tag-cloud");
+    parentEl.classList.add("tag-cloud");
+
+    const el = d3
+      .select(parentEl)
+      .append("div")
+      .attr("class", "tag-cloud-content")
+      .node();
+
     el.style.backgroundColor = GRADIENT_OUTER;
 
     // Prepare the data for d3
@@ -116,6 +126,8 @@ const init = () => {
       }
     };
 
+    let usingMobileLayout = false;
+
     // Use webcola's constraint-based graph layout plugin for d3 to lay out the tags, ensuring that we respect the
     // following constrants:
     //
@@ -141,6 +153,21 @@ const init = () => {
       };
       const brIndex = nodes.push(bottomRight) - 1;
       const constraints = [];
+
+      if (window.innerWidth <= MOBILE_BREAKPOINT) {
+        // Center the scroll position on entering mobile view
+
+        if (!usingMobileLayout) {
+          parentEl.scroll({
+            left: Math.round(el.clientWidth / 2 - parentEl.clientWidth / 2),
+            top: Math.round(el.clientHeight / 2 - parentEl.clientHeight / 2),
+          });
+        }
+
+        usingMobileLayout = true;
+      } else {
+        usingMobileLayout = false;
+      }
 
       // Render a tag for each node.
       const tags = container
