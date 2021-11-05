@@ -95,6 +95,18 @@
   border-color: $black !important;
 }
 
+@include media-breakpoint-down(md) {
+  .footer-link {
+    text-decoration: none;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .border-lg-0 {
+    border: none !important;
+  }
+}
+
 .max-content {
   width: max-content !important;
 }
