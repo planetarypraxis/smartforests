@@ -22,10 +22,3 @@ class ImportantPages(BaseSetting):
         PageChooserPanel('stories_index_page'),
         PageChooserPanel('map_page')
     ]
-
-    def to_dict(self):
-        return {
-            "logbooks": self.logbooks_index_page.localized.url,
-            "stories_index_page": self.stories_index_page.localized.url,
-            "map_page": self.map_page.localized.url
-        }
