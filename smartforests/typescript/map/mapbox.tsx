@@ -146,7 +146,7 @@ const FilterView: FC<{ onClose: () => void; open: boolean }> = ({
           id="filters"
           target="_top"
           loading="lazy"
-          src={`/_tags`}
+          src={`/_filters/`}
           data-turbo-permanent=""
         />
       </div>

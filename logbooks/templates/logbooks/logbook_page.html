@@ -1,5 +1,5 @@
 {% extends "logbooks/article_page_base.html" %}
-{% load ckdjango_tags ckbootstrap_tags wagtailcore_tags %}
+{% load ckdjango_tags ckbootstrap_tags static wagtailcore_tags %}
 
 {% block article %}
   <div class="mb-7">
@@ -18,4 +18,18 @@
       {% endfor %}
     </div>
   </div>
+  <script>
+    let hasNavigatedToHash = false
+    // `turbo:load` is a proxy for 'Has Turbo the library loaded'.
+    // It normally fires on every Turbo.visit, so we disable it after the first try.
+    window.addEventListener('turbo:load', () => {
+      const hash = "{{hash}}".replace(/\//, '')
+      const url = "{{self.url}}"
+      if (hash && !hasNavigatedToHash) {
+        // Pretend this logbook entry page never existed...
+        Turbo.visit(url + '#' + hash, { action: "replace" })
+        hasNavigatedToHash = true
+      }
+    })
+  </script>
 {% endblock %}

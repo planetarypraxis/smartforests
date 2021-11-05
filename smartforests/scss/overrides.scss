@@ -5,16 +5,21 @@ $small-font-size: $font-size-base * 0.7777777778;
   --bs-font-sans-serif: "MarrSans", "sans-serif";
 }
 
+@mixin body-text {
+  font-size: 16px;
+  font-weight: normal;
+
+  @include media-breakpoint-up(md) {
+    font-size: 18px;
+  }
+}
+
 body {
   ::selection {
     background: $primary-hover-light;
   }
 
-  font-size: 16px;
-
-  @include media-breakpoint-up(md) {
-    font-size: 18px;
-  }
+  @include body-text;
 
   display: flex;
   flex-direction: column;
@@ -168,4 +173,15 @@ a.card {
 .offcanvas-end {
   border-left: none;
   box-shadow: 0px 0px 20px 0px rgba($dark-green, 0.2);
+}
+.text-reset {
+  @include body-text;
+}
+
+.accordion {
+  border-top: 1px solid $light-grey;
+
+  .accordion-item {
+    border-bottom: 1px solid $light-grey;
+  }
 }
