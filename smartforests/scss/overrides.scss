@@ -107,6 +107,28 @@ a.card {
   overflow: hidden;
 }
 
+.turbo-progress-bar {
+  background: $dark-green;
+}
+
+.dropdown-toggle.show {
+  @extend .shadow-sm;
+  background-color: $off-white;
+}
+
+.navbar {
+  padding-bottom: 0;
+
+  @include media-breakpoint-up(lg) {
+    padding-bottom: $spacer * 0.5;
+  }
+}
+
+// Remove this for the moment, but return as it makes this inaccessible.
+.navbar-toggler:focus {
+  box-shadow: none;
+}
+
 .nav-link {
   font-weight: bold;
   color: $secondary;
@@ -120,28 +142,6 @@ a.card {
 
 .nav-link:hover {
   text-decoration: underline;
-}
-
-.turbo-progress-bar {
-  background: $dark-green;
-}
-
-.dropdown-toggle.show {
-  @extend .shadow-sm;
-  background-color: $off-white;
-}
-
-// Remove this for the moment, but return as it makes this inaccessible.
-.navbar-toggler:focus {
-  box-shadow: none;
-}
-
-.navbar {
-  padding-bottom: 0;
-
-  @include media-breakpoint-up(lg) {
-    padding-bottom: $spacer * 0.5;
-  }
 }
 
 .model-storypage .block-text {
