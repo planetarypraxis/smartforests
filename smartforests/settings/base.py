@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     "anymail",
     "rest_framework",
     "rest_framework_gis",
+    "django_cron",
     # 'debug_toolbar',
 
     'django.contrib.gis',

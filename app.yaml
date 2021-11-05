@@ -75,7 +75,7 @@ services:
     name: server
     routes:
       - path: /
-    run_command: pipenv run gunicorn --worker-tmp-dir /dev/shm smartforests.wsgi
+    run_command: pipenv run bash .bin/run.sh
 static_sites:
   - dockerfile_path: Dockerfile
     github:
