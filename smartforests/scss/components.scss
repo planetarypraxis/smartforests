@@ -203,6 +203,7 @@
   @extend .microcopy;
   @extend .small;
   @extend .text-decoration-none;
+  @extend .max-content;
 
   background: $off-white;
   color: $mid-green;
