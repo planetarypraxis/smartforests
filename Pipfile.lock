@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "9f345037987bdb1c091911ef4f6abe42bc97a84b526578c88fd190ac5523e154"
+            "sha256": "3489e333ce09bd8b01f43f3bd886913f33c88444f657cadae90872cac6c1359b"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -31,6 +31,14 @@
             ],
             "markers": "python_version >= '3.6'",
             "version": "==3.4.1"
+        },
+        "backoff": {
+            "hashes": [
+                "sha256:61928f8fa48d52e4faa81875eecf308eccfb1016b018bb6bd21e05b5d90a96c5",
+                "sha256:ccb962a2378418c667b3c979b504fdeb7d9e0d29c0579e3b13b86467177728cb"
+            ],
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'",
+            "version": "==1.11.1"
         },
         "beautifulsoup4": {
             "hashes": [
@@ -177,6 +185,13 @@
             ],
             "markers": "python_version >= '3.5'",
             "version": "==5.2"
+        },
+        "django-settings-export": {
+            "hashes": [
+                "sha256:fceeae49fc597f654c1217415d8e049fc81c930b7154f5d8f28c432db738ff79"
+            ],
+            "index": "pypi",
+            "version": "==1.2.1"
         },
         "django-storages": {
             "hashes": [
@@ -390,6 +405,13 @@
             ],
             "version": "==1.14"
         },
+        "monotonic": {
+            "hashes": [
+                "sha256:3a55207bcfed53ddd5c5bae174524062935efed17792e9de2ad0205ce9ad63f7",
+                "sha256:68687e19a14f11f26d140dd5c86f3dba4bf5df58003000ed467e0e2a69bca96c"
+            ],
+            "version": "==1.6"
+        },
         "nltk": {
             "hashes": [
                 "sha256:834d1a8e38496369390be699be9bca4f2a0f2175b50327272b2ec7a98ffda2a0",
@@ -501,6 +523,14 @@
                 "sha256:e02c355ae5e054912e3b0d16febc56510eff7e49d60bf22aecb463bd2f2a2dfa"
             ],
             "version": "==1.1.1"
+        },
+        "posthog": {
+            "hashes": [
+                "sha256:1e9a8ed225d1d8c83d5fc94fe36fc1c71fea9fdd5d1ed7d099a0c869842d10ed",
+                "sha256:3a64924856fcd61092386d0b8071e3292fb8af3940d62d41ef2d3998329ee5df"
+            ],
+            "index": "pypi",
+            "version": "==1.4.3"
         },
         "psycopg2": {
             "hashes": [
