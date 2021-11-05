@@ -123,37 +123,23 @@ class LogbookEntryPage(ArticlePage):
             'self': self
         })
 
-    def serve(self, request, *args, **kwargs):
+    def serve(self, *args, **kwargs):
         '''
         Never allow logbook entries to be visited on their own.
         '''
-        return redirect(self.get_parent().get_url(request) + '#' + str(self.id))
+        return redirect(self.link_url)
 
     @property
     def link_url(self):
         '''
         Wrapper for url allowing us to link to a page embedded in a parent (as with logbook entries) without
         overriding any wagtail internals
-
         '''
 
         return f'{self.get_parent().url}#{self.slug}'
 
-    def get_url(self, request=None, current_site=None):
-        return self.get_parent().get_url(request=request)
 
-    def relative_url(self, request=None, current_site=None):
-        return self.get_parent().relative_url(request=request)
-
-    def get_url_parts(self, request=None, current_site=None):
-        return self.get_parent().get_url_parts(request=request)
-
-    @property
-    def full_url(self):
-        return self.get_parent().full_url
-
-
-class LogbookPage(SidebarRenderableMixin, ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
+class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
     '''
     Collection of logbook entries.
     '''
@@ -210,6 +196,16 @@ class LogbookPage(SidebarRenderableMixin, ChildListMixin, ContributorMixin, Geoc
     @property
     def preview_text(self):
         return self.description
+
+    @route(r'^(?P<path>.*)/?$')
+    def serve_subpages_too(self, request, path, *args, **kwargs):
+        '''
+        LogbookEntryPage URLs will be captured by LogbookPage.
+        The path will be converted into a hash by frontend javascript.
+        '''
+        return self.render(request, context_overrides={
+            'hash': path
+        })
 
 
 class LogbookIndexPage(ChildListMixin, RoutablePageMixin, BaseLogbooksPage):
