@@ -168,13 +168,10 @@ class ThumbnailMixin(Page):
     class Meta:
         abstract = True
 
+    thumbnail_image = models.ImageField(null=True, blank=True)
+
     def get_thumbnail_images(self):
         return []
-
-    @property
-    def thumbnail_image(self):
-        if self.index_entry and self.index_entry.thumbnail_image:
-            return self.index_entry.thumbnail_image
 
     def get_thumbnail_slug(self):
         return f'{self._meta.model_name}thumbnail_{self.slug}'
@@ -299,18 +296,6 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
 
     def get_thumbnail_images(self):
         return self.body_images()
-
-    @property
-    def thumbnail_image(self):
-        '''
-        Return this page's pre-generated thumbnail image.
-        '''
-
-        try:
-            if self.index_entry and self.index_entry.thumbnail_image:
-                return self.index_entry.thumbnail_image
-        except ObjectDoesNotExist:
-            pass
 
     @property
     def preview_text(self):
