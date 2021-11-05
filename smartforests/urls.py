@@ -29,6 +29,7 @@ urlpatterns = [
     path("footnotes/", include(footnotes_urls)),
     path('_frame/<page_id>/', sf_views.frame_content),
     path('_tags/<slug>/', logbook_views.tag_panel),
+    path('_filters/', sf_views.filters_frame),
     # path('api/', include(rest.get_urls())),
     # path('__debug__/', include(debug_toolbar.urls)),
 ]
