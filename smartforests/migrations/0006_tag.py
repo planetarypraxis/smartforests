@@ -3,24 +3,6 @@
 from django.db import migrations, models
 
 
-def _copy_tags(*args, **kwargs):
-    try:
-        from taggit.models import Tag
-        from smartforests.models import Tag as SFTag
-    except ImportError:
-        return
-
-    SFTag.objects.bulk_create(
-        SFTag(id=tag.id, slug=tag.slug, name=tag.name)
-        for tag
-        in Tag.objects.iterator()
-    )
-
-
-def _noop(*args, **kwargs):
-    pass
-
-
 class Migration(migrations.Migration):
     dependencies = [
         ('smartforests', '0005_mappage'),
@@ -40,5 +22,12 @@ class Migration(migrations.Migration):
                 'abstract': False,
             },
         ),
-        migrations.RunPython(code=_copy_tags, reverse_code=_noop)
+        migrations.RunSQL(
+            sql='''
+                INSERT INTO smartforests_tag (id, name, slug)
+                SELECT id, name, slug
+                FROM taggit_tag
+            ''',
+            reverse_sql=migrations.RunSQL.noop,
+        )
     ]
