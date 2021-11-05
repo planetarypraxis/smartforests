@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'import_export',
     'mapwidgets',
 
+    "wagtail_localize",
+    "wagtail_localize.locales",
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.embeds',
@@ -58,7 +60,6 @@ INSTALLED_APPS = [
     'wagtail.api.v2',
     "wagtail.contrib.routable_page",
     'wagtail.contrib.modeladmin',
-    'wagtail.locales',
     'modelcluster',
     'taggit',
     'wagtailmedia',
@@ -82,7 +83,6 @@ MIDDLEWARE = [
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
     'turbo_response.middleware.TurboMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -91,6 +91,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
 
+    'django.middleware.locale.LocaleMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 
