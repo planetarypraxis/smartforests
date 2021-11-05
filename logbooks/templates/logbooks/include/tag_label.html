@@ -1,6 +1,6 @@
-<span class="badge rounded-pill text-mid-green caption align-baseline max-content {% if orientation == 'vertical' %}mb-2{% endif %} {% if tag_background_class %}{{ tag_background_class }}{% else %}bg-white{% endif %}">
+<span class="filter-tag {% if orientation == 'vertical' %}mb-2{% endif %} {% if tag_background_class %}{{ tag_background_class }}{% else %}filter-tag-white{% endif %}">
   <a
-    class="text-reset text-decoration-none"
+    class="text-decoration-none"
     href="{{ settings.logbooks.ImportantPages.page_url.stories_index_page }}?tag={{ tag.name }}"
   >
     {{tag.name}}

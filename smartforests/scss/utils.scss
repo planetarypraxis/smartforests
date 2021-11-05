@@ -99,6 +99,28 @@
   color: $black !important;
 }
 
+.border-black {
+  border-color: $black !important;
+}
+
+@include media-breakpoint-down(md) {
+  .footer-link {
+    text-decoration: none;
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  .border-sm-0 {
+    border: none !important;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .border-md-0 {
+    border: none !important;
+  }
+}
+
 .max-content {
   width: max-content !important;
 }
