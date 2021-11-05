@@ -1,3 +1,4 @@
+from logbooks.models.tag_cloud import TagCloud
 from logbooks.thumbnail import generate_thumbnail
 from logbooks.models.snippets import AtlasTag
 from logbooks.models.serializers import PageCoordinatesSerializer, UserSerializer
@@ -283,3 +284,7 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
             return summary
         else:
             return self.indexed_streamfield_text
+
+    @property
+    def tag_cloud(self):
+        return TagCloud.get_related(self.tags)
