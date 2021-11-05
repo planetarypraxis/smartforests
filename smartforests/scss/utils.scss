@@ -109,6 +109,12 @@
   }
 }
 
+@include media-breakpoint-down(sm) {
+  .border-sm-0 {
+    border: none !important;
+  }
+}
+
 @include media-breakpoint-up(md) {
   .border-md-0 {
     border: none !important;
