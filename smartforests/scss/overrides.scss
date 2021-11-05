@@ -148,6 +148,19 @@ a.card {
   mix-blend-mode: multiply;
 }
 
+@include media-breakpoint-down(lg) {
+  .navbar-collapse {
+    background-color: $white;
+    height: 100vh;
+
+    // Override collapse animation to make hamburger menu open instantly on navbar.
+    // See https://github.com/twbs/bootstrap/blob/359ed099e5b2f82bd602f2a6c45f43af8f2c87e8/scss/_transitions.scss#L16-L26
+    &.collapsing {
+      transition: none;
+    }
+  }
+}
+
 .metadata {
   font-style: normal;
   font-size: $small-font-size !important;
