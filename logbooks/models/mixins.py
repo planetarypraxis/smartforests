@@ -231,7 +231,6 @@ class IndexPage(ChildListMixin, BaseLogbooksPage):
 
         return filter
 
-    @django_cached_model('logbooks.IndexPage.relevant_tags')
     def relevant_tags(self):
         children = self.get_child_list_queryset(request=None)
 
