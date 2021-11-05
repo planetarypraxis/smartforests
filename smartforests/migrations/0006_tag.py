@@ -5,7 +5,7 @@ from django.db import migrations, models
 
 def _copy_tags(*args, **kwargs):
     try:
-        from smartforests.models import Tag
+        from taggit.models import Tag
         from smartforests.models import Tag as SFTag
     except ImportError:
         return
