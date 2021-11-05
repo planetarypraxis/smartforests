@@ -1,57 +1,7 @@
-{% extends "base.html" %}
+{% extends "logbooks/index_page_base.html" %}
 {% load static ckdjango_tags ckbootstrap_tags wagtailimages_tags %}
 
-{% block content %}
-
-<div id="filter-page" class="filter-page">
-  <div id="filters" class="filter-sidebar collapse-horizontal" data-turbo-permanent>
-    <div class="sidebar filter-bar">
-      <div class="index-header justify-content-end px-2">
-        <div>
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" id="close-svg">
-            <path d="M7.00033 2.33334L7.82283 3.15584L4.56783 6.41668H11.667V7.58334H4.56783L7.82283 10.8442L7.00033 11.6667L2.33366 7.00001L7.00033 2.33334Z" fill="#043003"/>
-          </svg>
-      
-          <a class="btn btn-link" data-bs-toggle="collapse" href="#filters">Filters</a>
-        </div>
-      </div>
-      <div class="p-3">
-        <h3 class="fw-bold">Tags</h3>
-
-        {% include "smartforests/include/tag_list.html" with tags=self.relevant_tags target="logbook-search-results" %}
-      </div>
-    </div>
-  </div>
-
-  <div class="container-fluid mt-0 filter-page__content">
-    <div class="mb-5">
-      <div class="index-header">
-        <div id="sidebar-show" class="filters-reveal collapse-horizontal" data-turbo-permanent>
-          <div class="sidebar-sized">
-            <a data-bs-toggle="collapse" href="#filters" class="btn btn-link" aria-expanded="false" aria-controls="filters">
-
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" id="open-svg">
-                <path d="M7.00016 2.33334L6.17766 3.15584L9.43266 6.41668H2.3335V7.58334H9.43266L6.17766 10.8442L7.00016 11.6667L11.6668 7.00001L7.00016 2.33334Z" fill="#043003"/>
-              </svg>
-              
-              Filters
-            </a>
-        
-          </div>
-        </div>
-        <h1 class="col">{{self.title}}</h1>
-        
-      </div>
-      <div>
-        {% if tag_filter %}
-        <div
-          class="filter-tag active"
-        >
-          {{ tag_filter }}
-        </div>
-        {% endif %}
-      </div>
-    </div>
+{% block index_content %}
 
     <div>
       <main class="container-fluid">
@@ -93,14 +43,16 @@
               {% endif %}
             </div>
           </div>
-        {% endfor %}
-      </main>
-    </div>
-  </div>
+        </div>
+        <div class="col-2 d-flex align-items-start justify-content-end">
+          {% if episode.image %}
+              {% image episode.image height-60%}
+            {% else %}
+            <img src="{% static "img/radio-icon.svg" %}"/>
+            {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </main>
 </div>
-
-{% endblock %}
-
-{% block extra_js %}
-<script defer src="{% static 'js/filters.js' %}"></script>
 {% endblock %}

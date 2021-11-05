@@ -180,6 +180,10 @@
     }
   }
 
+  .filter-sidebar {
+    background-color: $white;
+  }
+
   &:not(.filters-visible) {
     .filter-sidebar {
       @extend .collapse;
