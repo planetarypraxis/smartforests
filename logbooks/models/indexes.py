@@ -58,40 +58,11 @@ class LogbookPageIndex(models.Model):
 
     @staticmethod
     @receiver(post_save, sender=LogbookEntryPage)
-    def handle_story_updated(sender, instance: LogbookEntryPage, *args, **kwargs):
+    def handle_updated(sender, instance, *args, **kwargs):
         idx = LogbookPageIndex.get_for_instance(instance)
 
         idx.update_tags(instance)
-        idx.update_pages_related_to(LogbookPage)
-        idx.update_related_pages(LogbookPage)
         idx.save()
-
-    @staticmethod
-    @receiver(post_save, sender=LogbookPage)
-    def handle_logbook_updated(sender, instance: LogbookEntryPage, *args, **kwargs):
-        idx = LogbookPageIndex.get_for_instance(instance)
-
-        idx.update_tags(instance)
-        idx.update_pages_related_to(LogbookEntryPage)
-        idx.update_related_pages(LogbookEntryPage)
-        idx.save()
-
-    def get_related_page_indexes(self, related_type):
-        tag_query = or_all(
-            models.Q(metadata__tags__contains=tag)
-            for tag
-            in self.metadata.get('tags', [])
-        )
-
-        if tag_query is None:
-            return LogbookPageIndex.objects.none()
-
-        return LogbookPageIndex.objects.filter(
-            ~models.Q(page=self.page),
-            tag_query,
-            metadata__content_type=ContentType.objects.get_for_model(
-                related_type).id,
-        )
 
     @staticmethod
     def filter_pages(**filter):

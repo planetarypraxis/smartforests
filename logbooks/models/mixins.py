@@ -1,3 +1,7 @@
+from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
+from commonknowledge.django.cache import django_cached_model
+from commonknowledge.wagtail.models import ChildListMixin
 from logbooks.models.tag_cloud import TagCloud
 from logbooks.thumbnail import generate_thumbnail
 from logbooks.models.snippets import AtlasTag
@@ -21,6 +25,8 @@ from wagtail.core.models import Page, PageManager, PageRevision
 from django.contrib.gis.db import models as geo
 from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin
 from mapwidgets.widgets import MapboxPointFieldWidget
+from smartforests.models import Tag
+from smartforests.util import group_by_title
 
 
 class IndexedPageManager(PageManager):
@@ -203,6 +209,51 @@ class SidebarRenderableMixin:
         return TemplateResponse(request, 'logbooks/content_entry/sidepanel.html', context)
 
 
+class IndexPage(ChildListMixin, BaseLogbooksPage):
+    '''
+    Common configuration for index pages for logbooks, stories and radio episodes.
+    '''
+    class Meta:
+        abstract = True
+
+    allow_search = True
+    page_size = 50
+    show_in_menus_default = True
+    parent_page_types = ['home.HomePage']
+
+    if not settings.DEBUG:
+        max_count = 1
+
+    def get_filters(self, request):
+        filter = {}
+
+        tag_filter = request.GET.get('filter', None)
+        if tag_filter is not None:
+            try:
+                tag = Tag.objects.get(slug=tag_filter)
+                filter['tagged_items__tag_id'] = tag.id
+            except Tag.DoesNotExist:
+                pass
+
+        return filter
+
+    @django_cached_model('logbooks.IndexPage.relevant_tags')
+    def relevant_tags(self):
+        children = self.get_child_list_queryset(request=None)
+
+        tags = Tag.objects.filter(
+            logbooks_atlastag_items__content_object__in=children
+        ).distinct()
+
+        return group_by_title(tags, key='name')
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context['tag_filter'] = request.GET.get('filter', None)
+
+        return context
+
+
 class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, GeocodedMixin, SidebarRenderableMixin, BaseLogbooksPage):
     '''
     Common configuration for logbook entries, stories and radio episodes.
@@ -260,8 +311,11 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
         Return this page's pre-generated thumbnail image.
         '''
 
-        if self.index_entry and self.index_entry.thumbnail_image:
-            return self.index_entry.thumbnail_image
+        try:
+            if self.index_entry and self.index_entry.thumbnail_image:
+                return self.index_entry.thumbnail_image
+        except ObjectDoesNotExist:
+            pass
 
     @property
     def preview_text(self):
@@ -287,4 +341,4 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
 
     @property
     def tag_cloud(self):
-        return TagCloud.get_related(self.tags)
+        return TagCloud.get_related(self.tags.all())
