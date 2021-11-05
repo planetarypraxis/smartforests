@@ -53,9 +53,7 @@
                 </a>
                 <li class="nav-item dropdown d-none d-lg-block">
                     <a class="fw-normal nav-link dropdown-toggle text-dark-green" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      {% if page.content_type.model == 'homepage' %}
-                        Atlas
-                      {% elif page.content_type.model == 'logbookpage' %}
+                      {% if page.content_type.model == 'logbookpage' %}
                         {{ page.get_parent.title }}
                       {% else %}
                         {{ page.title }}
