@@ -39,7 +39,7 @@ def next_page_path(context):
 
 
 @register.simple_tag(takes_context=True)
-def render_streamfield(context, value):
+def render_streamfield(context, value, **kwargs):
     def get_context(self, value):
         return dict(context.flatten(), **{
             'self': value,

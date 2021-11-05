@@ -1,6 +1,1 @@
-worker() {
-  sleep 720
-  python manage.py runcrons
-}
-
-worker & gunicorn --worker-tmp-dir /dev/shm smartforests.wsgi
+python manage.py process_tasks & gunicorn --worker-tmp-dir /dev/shm smartforests.wsgi
