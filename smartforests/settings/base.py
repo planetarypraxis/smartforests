@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'wagtail.api.v2',
     "wagtail.contrib.routable_page",
     'wagtail.contrib.modeladmin',
+    'wagtail.locales',
     'modelcluster',
     'taggit',
     'wagtailmedia',
@@ -81,6 +82,7 @@ MIDDLEWARE = [
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'turbo_response.middleware.TurboMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -167,6 +169,17 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Wagtail internationalisation
+# https://docs.wagtail.io/en/stable/advanced_topics/i18n.html
+
+USE_I18N = True
+WAGTAIL_I18N_ENABLED = True
+
+WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
+    ('en', "English"),
+    ('fr', "French"),
+    ('es', "Spanish"),
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
