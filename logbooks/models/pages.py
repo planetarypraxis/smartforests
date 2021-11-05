@@ -1,9 +1,10 @@
 from django.db import models
+from django.conf import settings
 from django.db.models.fields.related import ForeignKey
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
 from modelcluster.contrib.taggit import ClusterTaggableManager
-from taggit.models import Tag
+from smartforests.models import Tag
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.images.edit_handlers import ImageChooserPanel
@@ -17,6 +18,7 @@ from smartforests.util import group_by_title
 from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, DescendantPageContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager, SidebarRenderableMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
+from logbooks.models.tag_cloud import TagCloud
 from django.shortcuts import redirect
 
 
@@ -58,7 +60,8 @@ class StoryIndexPage(ChildListMixin, BaseLogbooksPage):
 
     show_in_menus_default = True
     parent_page_types = ['home.HomePage']
-    max_count = 1
+    if not settings.DEBUG:
+        max_count = 1
 
 
 class EpisodePage(ArticlePage):
@@ -194,8 +197,24 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
         return get_children_of_type(self, LogbookEntryPage)
 
     @property
+    def entry_tags(self):
+        return [
+            tag
+            for entry in self.logbook_entries
+            for tag in entry.tags.all()
+        ]
+
+    @property
+    def all_tags(self):
+        return self.entry_tags + list(self.tags.all())
+
+    @property
     def preview_text(self):
         return self.description
+
+    @property
+    def tag_cloud(self):
+        return TagCloud.get_related(self.all_tags)
 
     @route(r'^(?P<path>.*)/?$')
     def serve_subpages_too(self, request, path, *args, **kwargs):
@@ -217,7 +236,9 @@ class LogbookIndexPage(ChildListMixin, RoutablePageMixin, BaseLogbooksPage):
     page_size = 50
     show_in_menus_default = True
     parent_page_types = ['home.HomePage']
-    max_count = 1
+
+    if not settings.DEBUG:
+        max_count = 1
 
     def get_child_list_queryset(self, request):
         from .indexes import LogbookPageIndex
@@ -233,7 +254,7 @@ class LogbookIndexPage(ChildListMixin, RoutablePageMixin, BaseLogbooksPage):
                 pass
 
         return LogbookPageIndex.filter_pages(
-            **filter, content_type=LogbookPage.content_type_id()).specific()
+            **filter, content_type=LogbookPage.content_type_id()).specific().child_of(self)
 
     @django_cached_model('logbooks.LogbookIndexPage.relevant_tags')
     def relevant_tags(self):

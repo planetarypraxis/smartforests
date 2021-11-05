@@ -197,13 +197,14 @@
 
 /** Filters **/
 
-.filter-tag {
+@mixin tag-base {
   @extend .badge;
   @extend .rounded-pill;
   @extend .microcopy;
   @extend .small;
   @extend .text-decoration-none;
 
+  cursor: pointer;
   background: $off-white;
   color: $mid-green;
   text-transform: uppercase;
@@ -212,6 +213,10 @@
       $map: $spacers,
       $key: 2
     )};
+}
+
+.filter-tag {
+  @include tag-base;
 
   &:not(.active) {
     @extend .hoverable;
@@ -220,6 +225,65 @@
   &.active {
     background: $dark-green;
     color: $white;
+  }
+}
+
+/** Tag cloud */
+
+.tag-cloud {
+  position: relative;
+  background-color: $faded-green;
+  overflow: hidden;
+
+  height: 40vw;
+  width: 100%;
+
+  @include media-breakpoint-down(sm) {
+    overflow: auto;
+
+    height: 400px;
+  }
+
+  &-content {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+
+    @include media-breakpoint-down(sm) {
+      overflow: auto;
+      width: 755px;
+      height: 755px;
+    }
+  }
+}
+
+.related-tag {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: map-get($map: $spacers, $key: 2);
+  will-change: transform;
+
+  &:hover > * {
+    background-color: $off-white !important;
+  }
+
+  .tag-label {
+    @include tag-base;
+
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+
+  .tag-handle {
+    position: absolute;
+    background-color: $white;
+    border-radius: 9px;
+    width: 9px;
+    height: 9px;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
   }
 }
 
@@ -236,5 +300,20 @@
   &:focus {
     opacity: 0.6;
     background-color: transparent !important;
+  }
+}
+
+/** Mini-card */
+
+.mini-card {
+  border-radius: 3px;
+  border: 1px solid $soft-green;
+  padding: map-get($map: $spacers, $key: 2);
+  display: block;
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    background-color: $primary-hover-light;
   }
 }
