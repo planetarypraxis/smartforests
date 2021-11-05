@@ -265,3 +265,17 @@ class LogbookIndexPage(ChildListMixin, RoutablePageMixin, BaseLogbooksPage):
         context['tag_filter'] = request.GET.get('filter', None)
 
         return context
+
+
+class ContributorsPage(BaseLogbooksPage):
+    '''
+    Display of people
+    '''
+
+    allow_search = True
+    page_size = 50
+    show_in_menus_default = True
+    parent_page_types = ['home.HomePage']
+
+    if not settings.DEBUG:
+        max_count = 1
