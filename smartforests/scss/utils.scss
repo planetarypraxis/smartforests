@@ -109,8 +109,8 @@
   }
 }
 
-@include media-breakpoint-up(lg) {
-  .border-lg-0 {
+@include media-breakpoint-up(md) {
+  .border-md-0 {
     border: none !important;
   }
 }
