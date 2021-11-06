@@ -20,28 +20,29 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ContributorsIndexPage',
             fields=[
-                ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
+                ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE,
+                 parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
             ],
             options={
                 'abstract': False,
             },
             bases=('wagtailcore.page',),
         ),
-        migrations.AlterField(
-            model_name='tagcloud',
-            name='tag',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='tag_cloud', to='smartforests.tag'),
-        ),
         migrations.CreateModel(
             name='ContributorPage',
             fields=[
-                ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
-                ('geographical_location', models.CharField(blank=True, max_length=250, null=True)),
-                ('coordinates', django.contrib.gis.db.models.fields.PointField(blank=True, null=True, srid=4326)),
+                ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE,
+                 parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
+                ('geographical_location', models.CharField(
+                    blank=True, max_length=250, null=True)),
+                ('coordinates', django.contrib.gis.db.models.fields.PointField(
+                    blank=True, null=True, srid=4326)),
                 ('byline', models.CharField(blank=True, max_length=1000, null=True)),
                 ('bio', wagtail.core.fields.RichTextField(blank=True, null=True)),
-                ('avatar', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='smartforests.cmsimage')),
-                ('user', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
+                ('avatar', models.ForeignKey(blank=True, null=True,
+                 on_delete=django.db.models.deletion.SET_NULL, to='smartforests.cmsimage')),
+                ('user', models.OneToOneField(blank=True, null=True,
+                 on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'verbose_name': 'Location',
