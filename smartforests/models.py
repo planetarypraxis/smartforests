@@ -88,7 +88,10 @@ class MapPage(RoutablePageMixin, Page):
 
 
 class User(AbstractUser):
-    pass
+    def autocomplete_label(self):
+        return self.get_full_name() or self.username
+
+    autocomplete_search_field = 'username'
 
 
 class CmsImage(AbstractImage):
