@@ -18,7 +18,7 @@ from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
 from wagtail.api import APIField
 from smartforests.util import group_by_title
-from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, DescendantPageContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager, SidebarRenderableMixin
+from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContentPageMixin, ContributorMixin, DescendantPageContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager, SidebarRenderableMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
 from logbooks.models.tag_cloud import TagCloud
@@ -26,7 +26,7 @@ from django.shortcuts import redirect
 from wagtailautocomplete.edit_handlers import AutocompletePanel
 
 
-class StoryPage(ArticlePage):
+class StoryPage(ContentPageMixin, ArticlePage):
     '''
     Stories are longer, self-contained articles.
     '''
@@ -68,7 +68,7 @@ class StoryIndexPage(ChildListMixin, BaseLogbooksPage):
         max_count = 1
 
 
-class EpisodePage(ArticlePage):
+class EpisodePage(ContentPageMixin, ArticlePage):
     '''
     Episodes are individual items for the radio.
     '''
@@ -108,7 +108,7 @@ class RadioIndexPage(ChildListMixin, BaseLogbooksPage):
     max_count = 1
 
 
-class LogbookEntryPage(ArticlePage):
+class LogbookEntryPage(ContentPageMixin, ArticlePage):
     '''
     Logbook entry pages are typically short articles, produced by consistent authors, associated with a single logbook.
     '''
@@ -146,7 +146,7 @@ class LogbookEntryPage(ArticlePage):
         return f'{self.get_parent().url}#{self.slug}'
 
 
-class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
+class LogbookPage(ContentPageMixin, RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
     '''
     Collection of logbook entries.
     '''
@@ -284,6 +284,22 @@ class ContributorsIndexPage(BaseLogbooksPage):
     if not settings.DEBUG:
         max_count = 1
 
+    def get_child_list_queryset(self, request):
+        from .indexes import LogbookPageIndex
+
+        tag_filter = request.GET.get('filter', None)
+        filter = {}
+
+        if tag_filter is not None:
+            try:
+                tag = Tag.objects.get(slug=tag_filter)
+                filter['tags__contains'] = tag.id
+            except Tag.DoesNotExist:
+                pass
+
+        return LogbookPageIndex.filter_pages(
+            **filter, content_type=ContributorPage.content_type_id()).specific().child_of(self)
+
 
 class ContributorPage(GeocodedMixin, BaseLogbooksPage):
     allow_search = True
@@ -323,3 +339,14 @@ class ContributorPage(GeocodedMixin, BaseLogbooksPage):
         )
         contributors.add_child(contributor_page)
         contributor_page.save()
+
+    def card_content_html(self):
+        return render_to_string('logbooks/thumbnails/basic_thumbnail.html', {
+            'self': self
+        })
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        if self.user:
+            context['self'].tags = self.user.edited_tags()
+        return context

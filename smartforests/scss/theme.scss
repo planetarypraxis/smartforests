@@ -1,3 +1,5 @@
+$enable-rounded: true;
+
 // Colors
 $off-white: #f9f9f9;
 
@@ -55,7 +57,7 @@ $form-label-font-weight: bold;
 $form-label-margin-bottom: 0;
 
 // Borders
-$border-radius: 0;
+$border-radius: 0.1rem;
 $badge-border-radius: 100px;
 
 // List group

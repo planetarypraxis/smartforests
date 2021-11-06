@@ -22,12 +22,16 @@
     {% endif %}
   </section>
   {% endif %}
+  {% with page.tags.all as tags %}
+  {% if tags|length %}
   <section class="d-flex flex-column">
     <h4>Tags</h4>
     <div class="d-flex flex-column">
-    {% for tag in page.tags.all %}
+    {% for tag in tags %}
       {% include "logbooks/include/tag_label.html" with tag=tag orientation="vertical" tag_background_class=tag_background_class %}
     {% endfor %}
     </div>
   </section>
+  {% endif %}
+  {% endwith %}
 </div>

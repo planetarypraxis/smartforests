@@ -1,0 +1,36 @@
+{% extends "logbooks/article_page_base.html" %}
+{% load ckdjango_tags wagtailimages_tags wagtailcore_tags static %}
+
+{% block article_title %}
+  <h1 class="mb-3 mb-md-5 d-flex align-items-center">
+    <span>{{self.title}}</span>
+  </h1>
+{% endblock %}
+
+{% block article %}
+  <div class="mb-7">
+    {{self.bio|richtext}}
+  </div>
+{% endblock %}
+
+{% block article_footer %}
+{% with self.user.edited_content_pages as pages %}
+{% if pages|length %}
+<section class='container-fluid border-top border-light-grey py-6'>
+  <header class='row'>
+    <h3 class='col'>{{ pages|length }} {{ pages|length|pluralize:"contribution,contributions"}}</h3>
+  </header>
+  <div class='row'>
+    {% for page in pages %}
+      <a class='col-lg-3 col-md-4 col-sm-6 col text-reset text-decoration-none' href="{{page.url}}">
+        <article class='bg-white border-soft-green border rounded p-2'>
+          <div class='mb-1'>{{page.title}}</div>
+          <div class='microcopy-small'>{{page.label}}</div>
+        </article>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endwith %}
+{% endblock %}

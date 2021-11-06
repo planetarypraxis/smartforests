@@ -1,12 +1,13 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
+from django.db.models.query import QuerySet
 from django.dispatch.dispatcher import receiver
 from taggit.models import TagBase
 from wagtail.core.fields import RichTextField
 from wagtail.images.models import AbstractImage, AbstractRendition
 from wagtail.documents.models import Document, AbstractDocument
-from wagtail.core.models import Page
+from wagtail.core.models import Page, PageRevision
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from django.apps import apps
 from commonknowledge.django.images import render_image_grid
@@ -92,6 +93,17 @@ class User(AbstractUser):
         return self.get_full_name() or self.username
 
     autocomplete_search_field = 'username'
+
+    def edited_content_pages(self):
+        return set([
+            page
+            for page in Page.objects.filter(revisions__user=self).specific()
+            if hasattr(page, 'is_content_page')
+        ])
+
+    def edited_tags(self):
+        from smartforests.models import Tag
+        return Tag.objects.filter(logbooks_atlastag_items__content_object__in=self.edited_content_pages())
 
 
 class CmsImage(AbstractImage):

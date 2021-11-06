@@ -51,6 +51,10 @@ class BaseLogbooksPage(Page):
         '''
         return cls._meta
 
+    @classmethod
+    def label(self):
+        return self._meta.verbose_name
+
     @property
     def link_url(self):
         '''
@@ -149,10 +153,6 @@ class GeocodedMixin(Page):
             heading="Geographical data",
         )
     ]
-
-    @classmethod
-    def label(self):
-        return self._meta.verbose_name
 
     api_fields = [
         APIField('label'),
@@ -288,3 +288,21 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
     @property
     def tag_cloud(self):
         return TagCloud.get_related(self.tags)
+
+
+class IndexPageMixin(BaseLogbooksPage):
+    class Meta:
+        abstract = True
+
+    is_index_page = True
+
+
+class ContentPageMixin(BaseLogbooksPage):
+    '''
+    Tag page models that should show up in lists of contributions.
+    '''
+
+    class Meta:
+        abstract = True
+
+    is_content_page = True
