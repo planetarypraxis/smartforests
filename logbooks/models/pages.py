@@ -242,6 +242,9 @@ class ContributorPage(GeocodedMixin, BaseLogbooksPage):
     show_in_menus_default = True
     parent_page_types = ['logbooks.ContributorsIndexPage']
 
+    class Meta:
+        verbose_name = "Contributor"
+
     # If a user is defined on the ContributorPage, we can load up contributions and tags and so on
     # But we leave this optional in case non-editor users also want to be biographied in the Atlas
     user = models.OneToOneField(
@@ -276,15 +279,11 @@ class ContributorPage(GeocodedMixin, BaseLogbooksPage):
         contributor_page.save()
 
     def card_content_html(self):
-        return render_to_string('logbooks/thumbnails/basic_thumbnail.html', {
+        return render_to_string('logbooks/thumbnails/contributor_thumbnail.html', {
             'self': self
         })
 
-    def get_context(self, request, *args, **kwargs):
-        context = super().get_context(request, *args, **kwargs)
+    @property
+    def tags(self):
         if self.user:
-            context['self'].tags = self.user.edited_tags()
-        return context
-
-    class Meta:
-        verbose_name = "Logbooks index page"
+            return self.user.edited_tags()

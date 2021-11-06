@@ -5,6 +5,7 @@
 
 {% block content %}
 
+{% if self.relevant_tags %}
 <div id="filters" class="filter-sidebar collapse-horizontal" data-turbo-permanent>
   <div class="sidebar filter-bar">
     <div class="index-header justify-content-end px-2">
@@ -23,6 +24,7 @@
     </div>
   </div>
 </div>
+{% endif %}
 
 
 <div class="container-fluid mt-0 filter-page__content">
@@ -30,6 +32,7 @@
     <div class="index-header">
       <div id="sidebar-show" class="filters-reveal collapse-horizontal" data-turbo-permanent>
         <div class="sidebar-sized">
+          {% if self.relevant_tags %}
           <a data-bs-toggle="collapse" href="#filters" class="btn btn-link" aria-expanded="false" aria-controls="filters">
 
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" id="open-svg">
@@ -38,6 +41,7 @@
             
             Filters
           </a>
+          {% endif %}
       
         </div>
       </div>
