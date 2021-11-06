@@ -1,8 +1,12 @@
 <span class="filter-tag {% if orientation == 'vertical' %}mb-2{% endif %} {% if tag_background_class %}{{ tag_background_class }}{% else %}filter-tag-white{% endif %}">
+  {% if link is not False %}
   <a
     class="text-decoration-none"
     href="{{ settings.logbooks.ImportantPages.page_url.stories_index_page }}?tag={{ tag.name }}"
   >
     {{tag.name}}
   </a>
+  {% else %}
+  <span>{{tag.name}}</span>
+  {% endif %}
 </span>

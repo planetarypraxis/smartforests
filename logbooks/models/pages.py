@@ -235,6 +235,11 @@ class ContributorsIndexPage(IndexPage):
     class Meta:
         verbose_name = "Contributors index page"
 
+    def relevant_tags(self):
+        tags = Tag.objects.all()
+
+        return group_by_title(tags, key='name')
+
 
 class ContributorPage(GeocodedMixin, BaseLogbooksPage):
     allow_search = True
