@@ -8,6 +8,13 @@
 {% endblock %}
 
 {% block article %}
+{% if self.byline %}
+  <div class="mb-7">
+    <div class="bg-white rounded-1 p-3">
+      {{self.byline}}
+    </div>
+  </div>
+  {% endif %}
   <div class="mb-7">
     {{self.bio|richtext}}
   </div>
