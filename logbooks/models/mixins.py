@@ -1,3 +1,7 @@
+from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
+from commonknowledge.django.cache import django_cached_model
+from commonknowledge.wagtail.models import ChildListMixin
 from logbooks.models.tag_cloud import TagCloud
 from logbooks.thumbnail import generate_thumbnail
 from logbooks.models.snippets import AtlasTag
@@ -21,15 +25,8 @@ from wagtail.core.models import Page, PageManager, PageRevision
 from django.contrib.gis.db import models as geo
 from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin
 from mapwidgets.widgets import MapboxPointFieldWidget
-
-
-class IndexedPageManager(PageManager):
-    '''
-    Optimization for pages that use the page index. Fetches their index_entry attribute eagerly in queries.
-    '''
-
-    def get_queryset(self):
-        return super().get_queryset().select_related('index_entry')
+from smartforests.models import Tag
+from smartforests.util import group_by_title
 
 
 class BaseLogbooksPage(Page):
@@ -39,6 +36,8 @@ class BaseLogbooksPage(Page):
 
     class Meta:
         abstract = True
+
+    icon_class = None
 
     @classmethod
     def content_type_id(cls):
@@ -169,13 +168,10 @@ class ThumbnailMixin(Page):
     class Meta:
         abstract = True
 
+    thumbnail_image = models.ImageField(null=True, blank=True)
+
     def get_thumbnail_images(self):
         return []
-
-    @property
-    def thumbnail_image(self):
-        if self.index_entry and self.index_entry.thumbnail_image:
-            return self.index_entry.thumbnail_image
 
     def get_thumbnail_slug(self):
         return f'{self._meta.model_name}thumbnail_{self.slug}'
@@ -192,6 +188,10 @@ class ThumbnailMixin(Page):
             'self': self
         })
 
+    def save(self, *args, **kwargs):
+        self.thumbnail_image = self.regenerate_thumbnail()
+        return super().save(*args, **kwargs)
+
 
 class SidebarRenderableMixin:
     def get_sidebar_frame_response(self, request, *args, **kwargs):
@@ -203,14 +203,56 @@ class SidebarRenderableMixin:
         return TemplateResponse(request, 'logbooks/content_entry/sidepanel.html', context)
 
 
+class IndexPage(ChildListMixin, BaseLogbooksPage):
+    '''
+    Common configuration for index pages for logbooks, stories and radio episodes.
+    '''
+    class Meta:
+        abstract = True
+
+    allow_search = True
+    page_size = 50
+    show_in_menus_default = True
+    parent_page_types = ['home.HomePage']
+
+    if not settings.DEBUG:
+        max_count = 1
+
+    def get_filters(self, request):
+        filter = {}
+
+        tag_filter = request.GET.get('filter', None)
+        if tag_filter is not None:
+            try:
+                tag = Tag.objects.get(slug=tag_filter)
+                filter['tagged_items__tag_id'] = tag.id
+            except Tag.DoesNotExist:
+                pass
+
+        return filter
+
+    def relevant_tags(self):
+        children = self.get_child_list_queryset(request=None)
+
+        tags = Tag.objects.filter(
+            logbooks_atlastag_items__content_object__in=children
+        ).distinct()
+
+        return group_by_title(tags, key='name')
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context['tag_filter'] = request.GET.get('filter', None)
+
+        return context
+
+
 class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, GeocodedMixin, SidebarRenderableMixin, BaseLogbooksPage):
     '''
     Common configuration for logbook entries, stories and radio episodes.
     '''
     class Meta:
         abstract = True
-
-    objects = IndexedPageManager()
 
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
     body = ArticleContentStream()
@@ -255,15 +297,6 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
         return self.body_images()
 
     @property
-    def thumbnail_image(self):
-        '''
-        Return this page's pre-generated thumbnail image.
-        '''
-
-        if self.index_entry and self.index_entry.thumbnail_image:
-            return self.index_entry.thumbnail_image
-
-    @property
     def preview_text(self):
         language = 'english'
 
@@ -287,7 +320,7 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
 
     @property
     def tag_cloud(self):
-        return TagCloud.get_related(self.tags)
+        return TagCloud.get_related(self.tags.all())
 
 
 class IndexPageMixin(BaseLogbooksPage):

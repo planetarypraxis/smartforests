@@ -2,13 +2,11 @@ from django.shortcuts import get_object_or_404, render
 from rest_framework import serializers, viewsets
 from rest_framework_gis.serializers import GeoFeatureModelSerializer, GeometrySerializerMethodField
 from django.urls import path
+from wagtail.core.models import Page
 from smartforests.models import Tag
 from wagtail.api.v2.utils import BadRequestError
-from logbooks.models.pages import LogbookEntryPage, LogbookPage, StoryPage
 
-from logbooks.models.snippets import AtlasTag
-
-from .models import LogbookPageIndex
+from logbooks.models.pages import EpisodePage, LogbookEntryPage, LogbookPage, StoryPage
 
 
 def tag_panel(request, slug):
@@ -43,32 +41,26 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet):
         tag = serializers.ListField(child=serializers.CharField(), default=())
 
     class ResultSerializer(GeoFeatureModelSerializer):
-        class PageSerializer(serializers.Serializer):
-            id = serializers.IntegerField()
-            link_url = serializers.CharField()
-            title = serializers.CharField()
-            icon_class = serializers.CharField()
-            geographical_location = serializers.CharField()
-            tags = serializers.StringRelatedField(many=True)
-
-            def to_representation(self, instance):
-                # Cast to the specific page class
-                return super().to_representation(instance.specific)
-
         class Meta:
-            model = LogbookPageIndex
+            model = LogbookPage
             geo_field = 'coordinates'
-            fields = ('page',)
+            fields = ('id', 'link_url', 'title', 'icon_class',
+                      'geographical_location', 'tags')
 
         coordinates = GeometrySerializerMethodField()
-        page = PageSerializer()
+        id = serializers.IntegerField()
+        title = serializers.CharField()
+        icon_class = serializers.CharField()
+        link_url = serializers.CharField()
+        geographical_location = serializers.CharField()
+        tags = serializers.StringRelatedField(many=True)
 
-        def get_coordinates(self, obj: LogbookPageIndex):
-            page = obj.page.specific
-            if hasattr(page, 'coordinates'):
-                return page.coordinates
+        def get_coordinates(self, obj):
+            return getattr(obj, 'coordinates', None)
 
-    queryset = LogbookPageIndex.objects.all().select_related('page')
+    queryset = Page.objects.live().specific().type(
+        LogbookPage, LogbookEntryPage, StoryPage, EpisodePage
+    )
     serializer_class = ResultSerializer
 
     def get_queryset(self):
@@ -78,12 +70,11 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet):
             raise BadRequestError()
 
         tag = params.data.get('tag', ())
-        content_type = params.data.get('type', ())
 
         if tag:
             tag_objects = tuple(x.id for x in Tag.objects.filter(slug__in=tag))
             if tag_objects:
-                qs = qs.filter(metadata__tags__contains=tag_objects)
+                qs = qs.filter(tagged_items__tag_id__in=tag_objects)
             else:
                 qs = qs.none()
 

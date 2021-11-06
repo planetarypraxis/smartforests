@@ -1,46 +1,57 @@
 {% load menu_tags static %}
 
-<nav class="navbar py-1 {% block header_position %}fixed-top{% endblock %} navbar-expand-lg navbar-light bg-faded-yellow">
+<nav class="navbar py-0 {% block header_position %}fixed-top{% endblock %} navbar-expand-lg navbar-light bg-faded-yellow">
     <div class="container-fluid">
         <a class="navbar-brand text-black fw-normal text-decoration-none d-flex d-lg-none align-items-center" href="/">
             <div class="d-flex align-items-center">
                 <img src="{% static 'img/smart-forests-logo.svg' %}" />
             </div>
         </a>
-        <button class="navbar-toggler fs-6 border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler fs-6 border-0 pe-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="col-lg-3 collapse navbar-collapse mx-n3 mx-lg-0" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto align-items-center">
-                <li class="nav-item d-lg-none border-bottom p-2">
+                <li class="nav-item d-lg-none border-bottom border-soft-green p-2 w-100">
                     <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ settings.logbooks.ImportantPages.page_url.logbooks_index_page}}">
                         <span>{{ settings.logbooks.ImportantPages.logbooks_index_page.title }}</span>
                         <img src="{% static 'img/logbooks.svg' %}" />
                     </a>
                 </li>
-                <li class="nav-item d-lg-none border-bottom p-2">
+                <li class="nav-item d-lg-none border-bottom border-soft-green p-2 w-100">
                   <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ settings.logbooks.ImportantPages.page_url.stories_index_page }}">
                       <span>{{ settings.logbooks.ImportantPages.stories_index_page.title }}</span>
                       <img src="{% static 'img/stories.svg' %}" />
                   </a>
                 </li>
-                <li class="nav-item d-lg-none border-bottom p-2">
+                <li class="nav-item d-lg-none border-bottom border-soft-green p-2 w-100">
                   <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ settings.logbooks.ImportantPages.page_url.map_page }}">
                     <span>{{ settings.logbooks.ImportantPages.map_page.title }}</span>
                     <img src="{% static 'img/map.svg' %}" />
                   </a>
                 </li>
-                <li class="nav-item d-lg-none p-2 text-truncate overflow-hidden">
+                <li class="nav-item d-lg-none border-bottom border-soft-green p-2 w-100">
+                    <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ settings.logbooks.ImportantPages.page_url.radio_index_page }}">
+                      <span>{{ settings.logbooks.ImportantPages.radio_index_page.title }}</span>
+                      <img src="{% static 'img/radio.svg' %}" />
+                    </a>
+                </li>
+                <li class="nav-item d-lg-none p-2 text-truncate border-bottom border-soft-green overflow-hidden w-100">
                     {% for page in menu_items %}
                     <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ page.href }}">
                         {{ page.text }}
                     </a>
                     {% endfor %}
                 </li>
+                <li class="nav-item d-lg-none border-bottom border-soft-green p-2 w-100">
+                    <a class="text-dark-green text-decoration-none px-2 d-flex justify-content-start align-items-center" href="{{ settings.logbooks.ImportantPages.page_url.radio_index_page }}" data-bs-toggle="modal" data-bs-target="#searchToggle" aria-controls="searchToggle" aria-expanded="false" aria-label="Toggle search">
+                        Search <i class="ms-2 icon icon-13 bg-dark icon-search"></i>
+                    </a>
+                </li>
                 <a class="navbar-brand text-black fw-normal text-decoration-none d-inline-block d-none d-lg-block" href="/">
                     <img src="{% static 'img/smart-forests-logo.svg' %}" />
                 </a>
-                <li class="nav-item dropdown visible-lg-block">
+                <li class="nav-item dropdown d-none d-lg-block">
                     <a class="fw-normal nav-link dropdown-toggle text-dark-green" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                       {% if page.content_type.model == 'logbookpage' %}
                         {{ page.get_parent.title }}
@@ -67,6 +78,12 @@
                             <img src="{% static 'img/map.svg' %}" />
                           </a>
                       </li>
+                      <li>
+                          <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ settings.logbooks.ImportantPages.page_url.radio_index_page }}">
+                            <span>{{ settings.logbooks.ImportantPages.radio_index_page.title }}</span>
+                            <img src="{% static 'img/radio.svg' %}" />
+                          </a>
+                      </li>
                       {% for page in menu_items %}
                         <li><a class="dropdown-item text-dark-green" href="{{ page.href }}">{{ page.text }}</a></li>
                       {% endfor %}
@@ -79,7 +96,7 @@
           {{ page.title }}
         </a>
         {% endif %}
-        <button class="col-lg-1 btn p-0 ms-5 d-none d-lg-block" type="button" data-bs-toggle="modal" data-bs-target="#searchToggle" aria-controls="searchToggle" aria-expanded="false" aria-label="Toggle search">
+        <button class="col-lg-1 btn p-0 d-none d-lg-block" type="button" data-bs-toggle="modal" data-bs-target="#searchToggle" aria-controls="searchToggle" aria-expanded="false" aria-label="Toggle search">
             Search<i class="ms-3 icon bg-dark icon-search"></i>
         </button>
     </div>

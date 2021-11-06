@@ -18,7 +18,7 @@ from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
 from wagtail.api import APIField
 from smartforests.util import group_by_title
-from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContentPageMixin, ContributorMixin, DescendantPageContributorMixin, GeocodedMixin, ThumbnailMixin, IndexedPageManager, SidebarRenderableMixin
+from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContentPageMixin, ContributorMixin, DescendantPageContributorMixin, GeocodedMixin, IndexPage, ThumbnailMixin, SidebarRenderableMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
 from logbooks.models.tag_cloud import TagCloud
@@ -51,21 +51,13 @@ class StoryPage(ContentPageMixin, ArticlePage):
         return self.image
 
 
-class StoryIndexPage(ChildListMixin, BaseLogbooksPage):
+class StoryIndexPage(IndexPage):
     '''
     Collection of stories.
     '''
 
     class Meta:
         verbose_name = "Stories index page"
-
-    def get_child_list_queryset(self, *args, **kwargs):
-        return self.get_children().order_by('-last_published_at').specific()
-
-    show_in_menus_default = True
-    parent_page_types = ['home.HomePage']
-    if not settings.DEBUG:
-        max_count = 1
 
 
 class EpisodePage(ContentPageMixin, ArticlePage):
@@ -95,17 +87,13 @@ class EpisodePage(ContentPageMixin, ArticlePage):
         return self.image
 
 
-class RadioIndexPage(ChildListMixin, BaseLogbooksPage):
+class RadioIndexPage(IndexPage):
     '''
     Index page for the Radio. A collection of episodes.
     '''
 
     class Meta:
         verbose_name = "Radio index page"
-
-    show_in_menus_default = True
-    parent_page_types = ['home.HomePage']
-    max_count = 1
 
 
 class LogbookEntryPage(ContentPageMixin, ArticlePage):
@@ -156,7 +144,6 @@ class LogbookPage(ContentPageMixin, RoutablePageMixin, SidebarRenderableMixin, C
 
     icon_class = 'icon-logbooks'
 
-    objects = IndexedPageManager()
     show_in_menus_default = True
     parent_page_types = ['logbooks.LogbookIndexPage']
 
@@ -231,74 +218,22 @@ class LogbookPage(ContentPageMixin, RoutablePageMixin, SidebarRenderableMixin, C
         })
 
 
-class LogbookIndexPage(ChildListMixin, RoutablePageMixin, BaseLogbooksPage):
+class LogbookIndexPage(IndexPage):
     '''
     Collection of logbooks.
     '''
 
-    allow_search = True
-    page_size = 50
-    show_in_menus_default = True
-    parent_page_types = ['home.HomePage']
-
-    if not settings.DEBUG:
-        max_count = 1
-
-    def get_child_list_queryset(self, request):
-        from .indexes import LogbookPageIndex
-
-        tag_filter = request.GET.get('filter', None)
-        filter = {}
-
-        if tag_filter is not None:
-            try:
-                tag = Tag.objects.get(slug=tag_filter)
-                filter['tags__contains'] = tag.id
-            except Tag.DoesNotExist:
-                pass
-
-        return LogbookPageIndex.filter_pages(
-            **filter, content_type=LogbookPage.content_type_id()).specific().child_of(self)
-
-    @django_cached_model('logbooks.LogbookIndexPage.relevant_tags')
-    def relevant_tags(self):
-        return group_by_title(Tag.objects.filter(logbooks_atlastag_items__isnull=False).distinct(), key='name')
-
-    def get_context(self, request, *args, **kwargs):
-        context = super().get_context(request, *args, **kwargs)
-        context['tag_filter'] = request.GET.get('filter', None)
-
-        return context
+    class Meta:
+        verbose_name = "Logbooks index page"
 
 
-class ContributorsIndexPage(BaseLogbooksPage):
+class ContributorsIndexPage(IndexPage):
     '''
-    Display of people
+    Collection of people
     '''
 
-    allow_search = True
-    page_size = 50
-    show_in_menus_default = True
-    parent_page_types = ['home.HomePage']
-
-    if not settings.DEBUG:
-        max_count = 1
-
-    def get_child_list_queryset(self, request):
-        from .indexes import LogbookPageIndex
-
-        tag_filter = request.GET.get('filter', None)
-        filter = {}
-
-        if tag_filter is not None:
-            try:
-                tag = Tag.objects.get(slug=tag_filter)
-                filter['tags__contains'] = tag.id
-            except Tag.DoesNotExist:
-                pass
-
-        return LogbookPageIndex.filter_pages(
-            **filter, content_type=ContributorPage.content_type_id()).specific().child_of(self)
+    class Meta:
+        verbose_name = "Contributors index page"
 
 
 class ContributorPage(GeocodedMixin, BaseLogbooksPage):
@@ -350,3 +285,6 @@ class ContributorPage(GeocodedMixin, BaseLogbooksPage):
         if self.user:
             context['self'].tags = self.user.edited_tags()
         return context
+
+    class Meta:
+        verbose_name = "Logbooks index page"
