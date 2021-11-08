@@ -1,3 +1,5 @@
+import "./sidepanel";
+
 load();
 
 document.addEventListener("turbo:load", async (event) => {
