@@ -46,6 +46,19 @@
         {{ self.full_url|json_script:"routing_configuration" }} 
         {% wagtailuserbar %}
 
+        <div
+        class="offcanvas offcanvas-end flex flex-column h-100 overflow-auto"
+        tabindex="-1"
+        id="tagpanel-offcanvas"
+        aria-labelledby="tagpanel-title"
+        data-bs-scroll="true"
+        data-bs-backdrop="false"
+        >
+            <turbo-frame id="tagpanel-turboframe" target="_top">
+            </turbo-frame>
+        </div>
+
+
         {% block body %}
         {% block header %}
         {% main_menu max_levels=1 template="menus/header.html" %}
