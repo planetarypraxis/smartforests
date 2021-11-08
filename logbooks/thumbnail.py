@@ -4,7 +4,7 @@ from commonknowledge.django.images import get_aspect_ratio, render_image_grid
 MAX_IMAGE_GRID_DIMENSION = 4
 
 
-def generate_thumbnail(images, fileslug):
+def get_thumbnail_opts(images):
     '''
     Generate an appropriate thumbnail image value (or None) by combining 0 or more
     source images. This can be saved to a django imagefield and then accessed by templates.
@@ -33,15 +33,16 @@ def generate_thumbnail(images, fileslug):
 
         dims = {
             'rows': image_dims,
-            'cols': image_dims
+            'cols': image_dims,
+            'width': 400,
+            'height': 400
         }
 
-    return render_image_grid(
-        images[:num_images],
-        filename=f'{fileslug}.jpeg',
-        format='JPEG',
+    return {
+        'format': 'JPEG',
+        'imgs': images[:num_images],
         **dims
-    )
+    }
 
 
 def calculate_aspect_ratio(images):

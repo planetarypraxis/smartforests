@@ -1,8 +1,12 @@
+import hashlib
+import base64
+import json
 from io import BytesIO
 
 from PIL import Image, ImageOps
 from django.core.files.base import ContentFile
 from django.core.files.images import ImageFile
+from django.core.files.storage import default_storage
 
 
 def render_image_grid(imgs, rows, cols, format, filename='image-grid', width=400, height=400):
@@ -14,7 +18,7 @@ def render_image_grid(imgs, rows, cols, format, filename='image-grid', width=400
 
     for row in range(rows):
         for col in range(cols):
-            with Image.open(imgs[i].file.file.open()) as img:
+            with Image.open(imgs[i].file.open()) as img:
                 img = ImageOps.fit(img, (int(col_w), int(row_h)),
                                    Image.ANTIALIAS, 0, (0.5, 0.5))
                 new_im.paste(img, (int(col * col_w), int(row * row_h)))
@@ -33,4 +37,14 @@ def render_image_grid(imgs, rows, cols, format, filename='image-grid', width=400
 
 
 def get_aspect_ratio(image):
-    return image.file.width / image.file.height
+    return image.width / image.height
+
+
+def generate_imagegrid_filename(imgs, rows, cols, format, slug, prefix, width, height):
+    extension = format.lower()
+    hash = hashlib.sha256(
+        json.dumps([[img.name for img in imgs], rows, cols]).encode()
+    )
+    digest = base64.urlsafe_b64encode(hash.digest()).decode()[:16]
+
+    return f'{prefix}/{slug}{digest}_{width}x{height}.{extension}'

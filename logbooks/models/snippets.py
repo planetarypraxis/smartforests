@@ -5,6 +5,7 @@ from modelcluster.fields import ParentalKey
 from taggit.models import ItemBase
 from wagtail.core.models import Page
 from wagtail.snippets.models import register_snippet
+from logbooks.tasks import regenerate_page_thumbnails, regenerate_tag_cloud, regenerate_tag_thumbnails
 
 from smartforests.models import Tag
 
@@ -16,3 +17,15 @@ class AtlasTag(ItemBase):
 
     content_object = ParentalKey(
         Page, related_name='tagged_items', on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        regenerate_tag_thumbnails(self.tag.id)
+        regenerate_tag_cloud(self.tag.id)
+
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        regenerate_tag_thumbnails(self.tag.id)
+        regenerate_tag_cloud(self.tag.id)
+
+        return super().delete(*args, **kwargs)
