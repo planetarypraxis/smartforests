@@ -1,8 +1,10 @@
 const init = () => {
   document
-    .querySelectorAll<HTMLElement>("[data-sidepanel-open]")
+    .querySelectorAll<HTMLElement>("[data-smartforests-sidepanel-open]")
     .forEach((el) => {
-      const sidepanel = document.querySelector(el.dataset.sidepanelOpen);
+      const sidepanel = document.querySelector(
+        el.dataset.smartforestsSidepanelOpen
+      );
 
       el.addEventListener("click", () => {
         if (sidepanel) {
