@@ -292,3 +292,24 @@ class ContributorsIndexPage(IndexPage):
 
     class Meta:
         verbose_name = "Contributors index page"
+
+    def relevant_tags(self):
+        return group_by_title(Tag.objects.all(), key='name')
+
+    def get_child_list_queryset(self, request):
+        return ContributorPage.objects.child_of(self).live()
+
+    def get_filters(self, request):
+        filter = {}
+
+        tag_filter = request.GET.get('filter', None)
+        if tag_filter is not None:
+            try:
+                tag = Tag.objects.get(slug=tag_filter)
+                users = User.objects.filter(pagerevision__page__tagged_items__tag=tag)
+                filter['user__in'] = tuple(users)
+
+            except Tag.DoesNotExist:
+                pass
+
+        return filter
