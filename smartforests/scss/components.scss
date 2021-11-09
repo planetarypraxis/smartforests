@@ -155,6 +155,7 @@
   background: $white;
 
   @include media-breakpoint-down(md) {
+    height: 100vh;
     width: 100vh;
   }
 }
