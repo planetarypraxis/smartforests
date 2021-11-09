@@ -168,6 +168,7 @@
   height: 128px;
 
   @include media-breakpoint-down(md) {
+    padding-top: #{map-get($spacers, 3)};
     flex-direction: column-reverse;
     align-items: flex-start;
     height: auto;
