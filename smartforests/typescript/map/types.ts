@@ -26,13 +26,11 @@ export namespace SmartForest {
   }
 
   export interface MapItem {
-    page: {
-      id: number;
-      link_url: string;
-      title: string;
-      icon_class: string;
-      geographical_location: string;
-      tags: string[];
-    };
+    id: number;
+    link_url: string;
+    title: string;
+    icon_class: string;
+    geographical_location: string;
+    tags: string[];
   }
 }

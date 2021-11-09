@@ -49,6 +49,19 @@
         </script>
         {% wagtailuserbar %}
 
+        <div
+        class="offcanvas offcanvas-end flex flex-column h-100 overflow-auto"
+        tabindex="-1"
+        id="tagpanel-offcanvas"
+        aria-labelledby="tagpanel-title"
+        data-bs-scroll="true"
+        data-bs-backdrop="false"
+        >
+            <turbo-frame id="tagpanel-turboframe" target="_top">
+            </turbo-frame>
+        </div>
+
+
         {% block body %}
         {% block header %}
         {% main_menu max_levels=1 template="menus/header.html" %}
@@ -57,7 +70,7 @@
         </div>
         {% endblock %}
 
-        <div class='flex-grow-1 overflow-auto h-100'>
+        <div class='flex-grow-1 overflow-auto {% block content_wrapper_class %}{% endblock %}'>
         {% block content %}
         {% endblock %}
         </div>
@@ -69,21 +82,19 @@
 
         {% block footer %}
         <div class="bg-panel bg-dark-green text-white links-white flex-grow-1">
-            <footer class="container py-3 fs-6 text">
-                <div class="row">
-                    <div class="col-8 d-flex flex-column flex-md-row align-items-start">
-                        <div class="mb-3 me-3">
-                            <p>
-                                &copy; <a target="_blank" target="_blank" rel="noopener noreferrer" href="https://planetarypraxis.org/">Planetary Praxis</a> {% now "Y" %}
-                            </p>
-                        </div>
+            <footer class="container fs-6 text">
+                <div class="row flex-column flex-lg-row py-md-5">
+                    <div class="col d-flex flex-column flex-md-row align-items-start border-bottom border-black border-md-0 p-2-5">
+                        <p class="mb-0">
+                            &copy; <a class="footer-link" target="_blank" target="_blank" rel="noopener noreferrer" href="https://planetarypraxis.org/">Planetary Praxis</a> {% now "Y" %}
+                        </p>
                     </div>
 
-                    <div class="col d-flex flex-column flex-md-row align-items-start align-items-md-start justify-content-end">
+                    <div class="col d-flex flex-column flex-md-row align-items-start align-items-md-start justify-content-end p-2-5">
                         {% flat_menu 'footer' max_levels=1 show_menu_heading=False template="menus/footer.html" %}
 
                         <div>
-                            Site by <a target="_blank" target="_blank" rel="noopener noreferrer" href="https://commonknowledge.coop">Common Knowledge</a>
+                            Site by <a class="footer-link" target="_blank" target="_blank" rel="noopener noreferrer" href="https://commonknowledge.coop">Common Knowledge</a>
                         </div>
                     </div>
                 </div>
@@ -124,7 +135,6 @@
                 })
             })
         </script>
-
         {% include "posthog/identify.html" %}
     </body>
 </html>

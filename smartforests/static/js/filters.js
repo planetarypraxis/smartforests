@@ -3,7 +3,7 @@
    * When a page has the .filter-page class applied, set relevant body classes when the sidebar is visible/invisible.
    */
   const initSidebarExpand = () => {
-    const page = document.getElementById("filter-page");
+    const page = document.querySelector(".filter-page");
     const filters = document.getElementById("filters");
     if (!page || !filters) {
       return;

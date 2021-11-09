@@ -39,6 +39,7 @@ $spacers: (
   0: 0,
   1: 5px,
   2: 10px,
+  "2-5": 15px,
   3: 20px,
   4: 30px,
   5: 40px,
@@ -138,6 +139,10 @@ $enable-negative-margins: true;
 // Modal
 $modal-backdrop-bg: $dark-green;
 $modal-backdrop-opacity: 0.9;
+
+// Navbar
+$navbar-dark-toggler-icon-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path stroke='#{$dark-green}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>");
+$navbar-light-toggler-icon-bg: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'><path stroke='#{$dark-green}' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/></svg>");
 
 // Merge with Bootstrap
 @import "~bootstrap/scss/functions";

@@ -7,6 +7,8 @@ class SmartForestsConfig(AppConfig):
     name = 'smartforests'
 
     def ready(self):
+        import smartforests.signals
+
         if settings.POSTHOG_PUBLIC_TOKEN:
             posthog.api_key = settings.POSTHOG_PUBLIC_TOKEN
             posthog.host = settings.POSTHOG_URL

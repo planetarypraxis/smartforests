@@ -22,6 +22,15 @@
       "django": true
     },
     {
+      "name": "Python: Run background tasks",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/manage.py",
+      "args": ["process_tasks"],
+      "justMyCode": true,
+      "django": true
+    },
+    {
       "name": "Python: Regenerate logbook index",
       "type": "python",
       "request": "launch",
@@ -69,7 +78,12 @@
   "compounds": [
     {
       "name": "App",
-      "configurations": ["Python: Django", "Webpack", "Supercluster"]
+      "configurations": [
+        "Python: Django",
+        "Webpack",
+        "Supercluster",
+        "Python: Run background tasks"
+      ]
     }
   ]
 }

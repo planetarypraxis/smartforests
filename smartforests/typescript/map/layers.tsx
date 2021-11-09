@@ -43,7 +43,7 @@ export const AtlasPageFeatureLayer: FC<{
 
         return (
           <AtlasPageMarker
-            key={"page:" + featureProperties.page.id}
+            key={"page:" + featureProperties.id}
             feature={{ ...feature, properties: featureProperties }}
           />
         );

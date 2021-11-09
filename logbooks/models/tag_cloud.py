@@ -6,7 +6,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 from wagtail.core.models import Page
-from logbooks.models.snippets import AtlasTag
 from smartforests.models import Tag
 
 
@@ -45,6 +44,14 @@ class TagCloud(models.Model):
         return tuple(
             TagCloud.Item(**json)
             for json
+            in self.value
+        )
+
+    @property
+    def tag_set(self):
+        return set(
+            item['id']
+            for item
             in self.value
         )
 
@@ -138,6 +145,7 @@ class TagCloud(models.Model):
 
         Metadata about the tag's surrounding graph is saved as a json object (TagCloud.Item).
         '''
+        from logbooks.models.snippets import AtlasTag
 
         stack = [instance]
         visited = {}
@@ -169,3 +177,4 @@ class TagCloud(models.Model):
 
         cloud.score = sum(x.score() for x in visited.values())
         cloud.save()
+        return cloud

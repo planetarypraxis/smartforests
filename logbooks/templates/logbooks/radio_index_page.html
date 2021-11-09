@@ -1,70 +1,28 @@
-{% extends "base.html" %}
+{% extends "logbooks/index_page_base.html" %}
 {% load static ckdjango_tags ckbootstrap_tags wagtailimages_tags %}
 
-{% block content %}
-
-<div id="filter-page" class="filter-page">
-  <div id="filters" class="filter-sidebar collapse-horizontal" data-turbo-permanent>
-    <div class="sidebar filter-bar">
-      <div class="index-header justify-content-end px-2">
-        <div>
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" id="close-svg">
-            <path d="M7.00033 2.33334L7.82283 3.15584L4.56783 6.41668H11.667V7.58334H4.56783L7.82283 10.8442L7.00033 11.6667L2.33366 7.00001L7.00033 2.33334Z" fill="#043003"/>
-          </svg>
-      
-          <a class="btn btn-link" data-bs-toggle="collapse" href="#filters">Filters</a>
-        </div>
-      </div>
-      <div class="p-3">
-        <h3 class="fw-bold">Tags</h3>
-
-        {% include "smartforests/include/tag_list.html" with tags=self.relevant_tags target="logbook-search-results" %}
-      </div>
-    </div>
-  </div>
-
-  <div class="container-fluid mt-0 filter-page__content">
-    <div class="mb-5">
-      <div class="index-header">
-        <div id="sidebar-show" class="filters-reveal collapse-horizontal" data-turbo-permanent>
-          <div class="sidebar-sized">
-            <a data-bs-toggle="collapse" href="#filters" class="btn btn-link" aria-expanded="false" aria-controls="filters">
-
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" id="open-svg">
-                <path d="M7.00016 2.33334L6.17766 3.15584L9.43266 6.41668H2.3335V7.58334H9.43266L6.17766 10.8442L7.00016 11.6667L11.6668 7.00001L7.00016 2.33334Z" fill="#043003"/>
-              </svg>
-              
-              Filters
-            </a>
-        
-          </div>
-        </div>
-        <h1 class="col">{{self.title}}</h1>
-        
-      </div>
-      <div>
-        {% if tag_filter %}
-        <div
-          class="filter-tag active"
-        >
-          {{ tag_filter }}
-        </div>
-        {% endif %}
-      </div>
-    </div>
+{% block index_content %}
 
     <div>
       <main class="container-fluid">
         {% for episode in child_list_page %}
-          <div class="row g-0 border-bottom pt-3 pb-2">
+          <div class="row g-0 border-sm-0 border-bottom pt-3 pb-2">
             <div class="col d-flex align-items-start">
-              {% include 'logbooks/include/episode_button.html' with episode=episode extra_classes="me-2 p-0" %}
+              {% include 'logbooks/include/episode_button.html' with episode=episode extra_classes="me-2 p-0 d-none d-md-block" %}
               <div>
-                <div class="d-flex align-items-center mb-2">
-                  <a class="link-reset me-3" href="{{episode.url}}" >
-                    {{episode.title}}
+                <div class="d-flex align-items-md-center mb-2 flex-column flex-md-row">
+                  <div class="d-md-none">
+                    {% if episode.image %}
+                      {% image episode.image height-194 %}
+                    {% endif %}
+                  </div>
+                  <a class="link-reset me-3 d-flex d-md-block flex-column mt-2 mt-md-0" href="{{episode.url}}" >
+                    <div class="mb-2 mb-md-0">
+                      <img class="d-md-none" src="{% static "img/radio-icon.svg" %}"/>
+                    </div>
+                    <span class="fs-6">{{ episode.title }}</span>
                   </a>
-                  <div class="font-monospace color-dark-grey small">
+                  <div class="font-monospace color-dark-grey small d-none d-md-block">
                     {% if episode.audio.duration != 0.0 %}
                       {{ episode.audio.duration }}
                     {% endif %}
@@ -77,22 +35,24 @@
                 </div>
               </div>
             </div>
-            <div class="col-2 d-flex align-items-start justify-content-end">
+            <div class="col-2 align-items-start justify-content-end d-none d-md-flex">
               {% if episode.image %}
                   {% image episode.image height-60%}
-                {% else %}
+              {% else %}
                 <img src="{% static "img/radio-icon.svg" %}"/>
-                {% endif %}
+              {% endif %}
             </div>
           </div>
-        {% endfor %}
-      </main>
-    </div>
-  </div>
+        </div>
+        <div class="col-2 d-flex align-items-start justify-content-end">
+          {% if episode.image %}
+              {% image episode.image height-60%}
+            {% else %}
+            <img src="{% static "img/radio-icon.svg" %}"/>
+            {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </main>
 </div>
-
-{% endblock %}
-
-{% block extra_js %}
-<script defer src="{% static 'js/filters.js' %}"></script>
 {% endblock %}

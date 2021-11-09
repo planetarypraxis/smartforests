@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     "anymail",
     "rest_framework",
     "rest_framework_gis",
+    "background_task",
     # 'debug_toolbar',
 
     'django.contrib.gis',
@@ -303,3 +304,7 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
     if locale[1].get('name_local', None)
     and locale[1].get('name', None)
 ]
+
+POSTHOG_DJANGO = {
+    "distinct_id": lambda request: request.user and request.user.distinct_id
+}

@@ -1,5 +1,12 @@
+from django.conf import settings
+from django.core.files.storage import default_storage
+from commonknowledge.django.cache import django_cached_model
+from commonknowledge.django.images import generate_imagegrid_filename, render_image_grid
+from commonknowledge.wagtail.models import ChildListMixin
+from django.db.models.query_utils import subclasses
 from logbooks.models.tag_cloud import TagCloud
-from logbooks.thumbnail import generate_thumbnail
+from logbooks.tasks import regenerate_page_thumbnails
+from logbooks.thumbnail import get_thumbnail_opts
 from logbooks.models.snippets import AtlasTag
 from logbooks.models.serializers import PageCoordinatesSerializer, UserSerializer
 from logbooks.models.blocks import ArticleContentStream
@@ -21,15 +28,8 @@ from wagtail.core.models import Page, PageManager, PageRevision
 from django.contrib.gis.db import models as geo
 from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin
 from mapwidgets.widgets import MapboxPointFieldWidget
-
-
-class IndexedPageManager(PageManager):
-    '''
-    Optimization for pages that use the page index. Fetches their index_entry attribute eagerly in queries.
-    '''
-
-    def get_queryset(self):
-        return super().get_queryset().select_related('index_entry')
+from smartforests.models import Tag
+from smartforests.util import group_by_title
 
 
 class BaseLogbooksPage(Page):
@@ -40,9 +40,29 @@ class BaseLogbooksPage(Page):
     class Meta:
         abstract = True
 
+    icon_class = None
+
     @classmethod
     def content_type_id(cls):
         return ContentType.objects.get_for_model(cls).id
+
+    @classmethod
+    def all_subclasses(cls):
+        return cls.__subclasses__() + [
+            subclass
+            for immediate_subclass in cls._subclasses__()
+            for subclass in immediate_subclass.all_subclasses()
+        ]
+
+    @classmethod
+    def concrete_classes(cls):
+        return [
+            x for x in cls.all_subclasses() + [cls]
+            if not cls.Meta.abstract
+        ]
+
+    def page_types():
+        return
 
     @classmethod
     def model_info(cls):
@@ -62,7 +82,7 @@ class BaseLogbooksPage(Page):
         return self.url
 
 
-class ContributorMixin(Page):
+class ContributorMixin(BaseLogbooksPage):
     '''
     Common configuration for pages that want to track their contributors.
     '''
@@ -90,7 +110,7 @@ class ContributorMixin(Page):
     content_panels = []
 
 
-class DescendantPageContributorMixin(Page):
+class DescendantPageContributorMixin(BaseLogbooksPage):
     '''
     Common configuration for pages that want to track their contributors.
     '''
@@ -116,7 +136,7 @@ class DescendantPageContributorMixin(Page):
     content_panels = []
 
 
-class GeocodedMixin(Page):
+class GeocodedMixin(BaseLogbooksPage):
     '''
     Common configuration for pages that want to track a geographical location.
     '''
@@ -161,7 +181,7 @@ class GeocodedMixin(Page):
     ]
 
 
-class ThumbnailMixin(Page):
+class ThumbnailMixin(BaseLogbooksPage):
     '''
     Common configuration for pages that want to generate a thumbnail image derived from a subclass-defined list of images.
     '''
@@ -169,20 +189,30 @@ class ThumbnailMixin(Page):
     class Meta:
         abstract = True
 
+    thumbnail_image = models.ImageField(null=True, blank=True)
+
     def get_thumbnail_images(self):
         return []
 
-    @property
-    def thumbnail_image(self):
-        if self.index_entry and self.index_entry.thumbnail_image:
-            return self.index_entry.thumbnail_image
-
-    def get_thumbnail_slug(self):
-        return f'{self._meta.model_name}thumbnail_{self.slug}'
-
     def regenerate_thumbnail(self):
-        images = self.get_thumbnail_images()
-        return generate_thumbnail(images, fileslug=self.get_thumbnail_slug())
+        images = [img.file for img in self.get_thumbnail_images()]
+        imagegrid_opts = get_thumbnail_opts(images)
+
+        if imagegrid_opts is None:
+            self.thumbnail_image.name = None
+            return
+
+        filename = generate_imagegrid_filename(
+            prefix='page_thumbs', slug=self.slug, **imagegrid_opts)
+
+        if default_storage.exists(filename):
+            self.thumbnail_image.name = filename
+            return
+
+        self.thumbnail_image = render_image_grid(
+            filename=filename,
+            **imagegrid_opts
+        )
 
     def card_content_html(self):
         '''
@@ -192,8 +222,21 @@ class ThumbnailMixin(Page):
             'self': self
         })
 
+    def save(self, *args, regenerate_thumbnails=True, **kwargs):
+        if regenerate_thumbnails:
 
-class SidebarRenderableMixin:
+            page = self
+            while isinstance(page, ThumbnailMixin):
+                regenerate_page_thumbnails(page.id)
+                page = page.get_parent().specific
+
+        return super().save(*args, **kwargs)
+
+
+class SidebarRenderableMixin(BaseLogbooksPage):
+    class Meta:
+        abstract = True
+
     def get_sidebar_frame_response(self, request, *args, **kwargs):
         '''
         Render the sidebar frame's html.
@@ -203,14 +246,56 @@ class SidebarRenderableMixin:
         return TemplateResponse(request, 'logbooks/content_entry/sidepanel.html', context)
 
 
+class IndexPage(ChildListMixin, BaseLogbooksPage):
+    '''
+    Common configuration for index pages for logbooks, stories and radio episodes.
+    '''
+    class Meta:
+        abstract = True
+
+    allow_search = True
+    page_size = 50
+    show_in_menus_default = True
+    parent_page_types = ['home.HomePage']
+
+    if not settings.DEBUG:
+        max_count = 1
+
+    def get_filters(self, request):
+        filter = {}
+
+        tag_filter = request.GET.get('filter', None)
+        if tag_filter is not None:
+            try:
+                tag = Tag.objects.get(slug=tag_filter)
+                filter['tagged_items__tag_id'] = tag.id
+            except Tag.DoesNotExist:
+                pass
+
+        return filter
+
+    def relevant_tags(self):
+        children = self.get_child_list_queryset(request=None)
+
+        tags = Tag.objects.filter(
+            logbooks_atlastag_items__content_object__in=children
+        ).distinct()
+
+        return group_by_title(tags, key='name')
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context['tag_filter'] = request.GET.get('filter', None)
+
+        return context
+
+
 class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, GeocodedMixin, SidebarRenderableMixin, BaseLogbooksPage):
     '''
     Common configuration for logbook entries, stories and radio episodes.
     '''
     class Meta:
         abstract = True
-
-    objects = IndexedPageManager()
 
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
     body = ArticleContentStream()
@@ -255,15 +340,6 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
         return self.body_images()
 
     @property
-    def thumbnail_image(self):
-        '''
-        Return this page's pre-generated thumbnail image.
-        '''
-
-        if self.index_entry and self.index_entry.thumbnail_image:
-            return self.index_entry.thumbnail_image
-
-    @property
     def preview_text(self):
         language = 'english'
 
@@ -287,4 +363,4 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
 
     @property
     def tag_cloud(self):
-        return TagCloud.get_related(self.tags)
+        return TagCloud.get_related(self.tags.all())
