@@ -288,4 +288,3 @@ const init = () => {
 const px = (val) => Math.round(val) + "px";
 
 window.addEventListener("turbo:load", init);
-init();
