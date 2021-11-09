@@ -286,5 +286,5 @@ const init = () => {
 
 const px = (val) => Math.round(val) + "px";
 
-$().on("turbo:load", init);
+window.addEventListener("turbo:load", init);
 init();
