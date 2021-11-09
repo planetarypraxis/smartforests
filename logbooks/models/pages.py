@@ -260,13 +260,18 @@ class ContributorPage(GeocodedMixin, BaseLogbooksPage):
 
     @classmethod
     def create_for_user(cls, user):
+        if ContributorPage.objects.filter(user=user).exists():
+            return
+
         contributor_index = ContributorsIndexPage.objects.first()
+
         title = user.get_full_name() or user.username
         contributor_page = ContributorPage(
             title=title,
-            slug=slugify(title)
+            slug=slugify(title),
+            user=user
         )
-        contributor_index.add_child(contributor_page)
+        contributor_index.add_child(instance=contributor_page)
         contributor_page.save()
 
     def card_content_html(self):
