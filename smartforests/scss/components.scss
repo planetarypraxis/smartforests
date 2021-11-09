@@ -158,10 +158,15 @@
 /** Sizing **/
 
 .index-header {
-  height: 128px;
+  align-items: flex-end;
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
+  height: 128px;
+
+  @include media-breakpoint-down(md) {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+  }
 }
 
 /** Filter bar **/
