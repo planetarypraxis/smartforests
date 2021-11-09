@@ -108,6 +108,10 @@ class User(AbstractUser):
 
     autocomplete_search_field = 'username'
 
+    @classmethod
+    def with_edited_tags(cls, *tags):
+        return User.objects.filter(pagerevision__page__tagged_items__tag__in=tags).distinct()
+
     def edited_content_pages(self):
         return set([
             page

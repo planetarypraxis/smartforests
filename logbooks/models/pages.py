@@ -67,6 +67,7 @@ class EpisodePage(ArticlePage):
 
     show_in_menus_default = True
     parent_page_types = ['logbooks.RadioIndexPage']
+    icon_class = "icon-radio"
 
     image = ForeignKey(CmsImage, on_delete=models.SET_NULL,
                        null=True, blank=True)
@@ -232,6 +233,7 @@ class ContributorPage(GeocodedMixin, BaseLogbooksPage):
     page_size = 50
     show_in_menus_default = True
     parent_page_types = ['logbooks.ContributorsIndexPage']
+    icon_class = 'icon-contributor'
 
     class Meta:
         verbose_name = "Contributor"
@@ -284,6 +286,12 @@ class ContributorPage(GeocodedMixin, BaseLogbooksPage):
         if self.user:
             return self.user.edited_tags()
 
+    @classmethod
+    def for_tag(cls, tag):
+        return cls.objects.live().filter(
+            user__in=User.with_edited_tags(tag)
+        )
+
 
 class ContributorsIndexPage(IndexPage):
     '''
@@ -306,8 +314,7 @@ class ContributorsIndexPage(IndexPage):
         if tag_filter is not None:
             try:
                 tag = Tag.objects.get(slug=tag_filter)
-                users = User.objects.filter(pagerevision__page__tagged_items__tag=tag)
-                filter['user__in'] = tuple(users)
+                filter['user__in'] = User.with_edited_tags(tag)
 
             except Tag.DoesNotExist:
                 pass
