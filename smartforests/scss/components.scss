@@ -153,6 +153,10 @@
 .sidebar {
   @extend .sidebar-sized;
   background: $white;
+
+  @include media-breakpoint-down(md) {
+    width: 100vh;
+  }
 }
 
 /** Sizing **/
@@ -166,6 +170,7 @@
   @include media-breakpoint-down(md) {
     flex-direction: column-reverse;
     align-items: flex-start;
+    height: auto;
   }
 }
 
