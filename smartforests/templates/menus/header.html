@@ -1,4 +1,4 @@
-{% load menu_tags static %}
+{% load menu_tags static i18n wagtailcore_tags %}
 
 <nav class="navbar py-0 {% block header_position %}fixed-top{% endblock %} navbar-expand-lg navbar-light bg-faded-yellow">
     <div class="container-fluid">
@@ -96,6 +96,24 @@
           {{ page.title }}
         </a>
         {% endif %}
+        {% if page.get_translations.live|length %}
+        <div class="nav-item dropdown visible-lg-block">
+          <a class="fw-normal nav-link dropdown-toggle text-dark-green" href="#" id="languageSelector" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {% get_language_info for page.localized.locale.language_code as lang %}
+            {{ lang.name_local }}
+          </a>
+          <ul class="dropdown-menu border-0 mt-0 bg-off-white shadow-sm" aria-labelledby="languageSelector">
+            {% for translation in page.get_translations.live %}
+              {% get_language_info for translation.locale.language_code as lang %}
+              <li>
+                <a rel="alternate" hreflang="{{ language_code }}" href="{% pageurl translation %}" class="dropdown-item text-dark-green d-flex justify-content-between align-items-center">
+                  <span>{{ lang.name_local }} {% if lang.name_local != lang.name %}({{ lang.name }}){% endif %}</span>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
         <button class="col-lg-1 btn p-0 d-none d-lg-block" type="button" data-bs-toggle="modal" data-bs-target="#searchToggle" aria-controls="searchToggle" aria-expanded="false" aria-label="Toggle search">
             Search<i class="ms-3 icon bg-dark icon-search"></i>
         </button>
@@ -122,7 +140,7 @@
 </form>
 
 <script>
-    window.addEventListener('turbo:load', () => {
+    (() => {
         const search = document.getElementById('search-box')
         const searchResults = document.getElementById('search-results')
         const modal = new bootstrap.Modal(document.getElementById('searchToggle'))
@@ -172,5 +190,5 @@
                 }
             })
         })
-    })
+    })()
 </script>

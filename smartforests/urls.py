@@ -10,6 +10,7 @@ from wagtail.documents import urls as wagtaildocs_urls
 from wagtail_transfer import urls as wagtailtransfer_urls
 from wagtail_content_import import urls as wagtail_content_import_urls
 from wagtail_footnotes import urls as footnotes_urls
+from django.conf.urls.i18n import i18n_patterns
 
 from commonknowledge.django import rest
 from .api import wagtail_api_router
@@ -44,8 +45,11 @@ if settings.DEBUG:
 urlpatterns += [
     path('api/v2/', wagtail_api_router.urls),
     re_path(r'^wagtail-transfer/', include(wagtailtransfer_urls)),
-    re_path(r'^', include(wagtail_urls)),
 ]
+
+urlpatterns += i18n_patterns(
+    re_path(r'^', include(wagtail_urls)),
+)
 
 urlpatterns += [
     re_path(r'', include(wagtail_content_import_urls)),
