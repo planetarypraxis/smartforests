@@ -18,4 +18,3 @@ const init = () => {
 };
 
 window.addEventListener("turbo:load", init);
-init();
