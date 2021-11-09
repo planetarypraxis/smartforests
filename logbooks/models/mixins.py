@@ -1,9 +1,12 @@
 from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.files.storage import default_storage
 from commonknowledge.django.cache import django_cached_model
+from commonknowledge.django.images import generate_imagegrid_filename, render_image_grid
 from commonknowledge.wagtail.models import ChildListMixin
+from django.db.models.query_utils import subclasses
 from logbooks.models.tag_cloud import TagCloud
-from logbooks.thumbnail import generate_thumbnail
+from logbooks.tasks import regenerate_page_thumbnails
+from logbooks.thumbnail import get_thumbnail_opts
 from logbooks.models.snippets import AtlasTag
 from logbooks.models.serializers import PageCoordinatesSerializer, UserSerializer
 from logbooks.models.blocks import ArticleContentStream
@@ -44,6 +47,24 @@ class BaseLogbooksPage(Page):
         return ContentType.objects.get_for_model(cls).id
 
     @classmethod
+    def all_subclasses(cls):
+        return cls.__subclasses__() + [
+            subclass
+            for immediate_subclass in cls._subclasses__()
+            for subclass in immediate_subclass.all_subclasses()
+        ]
+
+    @classmethod
+    def concrete_classes(cls):
+        return [
+            x for x in cls.all_subclasses() + [cls]
+            if not cls.Meta.abstract
+        ]
+
+    def page_types():
+        return
+
+    @classmethod
     def model_info(cls):
         ''''
         Expose the meta attr to templates
@@ -65,7 +86,7 @@ class BaseLogbooksPage(Page):
         return self.url
 
 
-class ContributorMixin(Page):
+class ContributorMixin(BaseLogbooksPage):
     '''
     Common configuration for pages that want to track their contributors.
     '''
@@ -93,7 +114,7 @@ class ContributorMixin(Page):
     content_panels = []
 
 
-class DescendantPageContributorMixin(Page):
+class DescendantPageContributorMixin(BaseLogbooksPage):
     '''
     Common configuration for pages that want to track their contributors.
     '''
@@ -119,7 +140,7 @@ class DescendantPageContributorMixin(Page):
     content_panels = []
 
 
-class GeocodedMixin(Page):
+class GeocodedMixin(BaseLogbooksPage):
     '''
     Common configuration for pages that want to track a geographical location.
     '''
@@ -160,7 +181,7 @@ class GeocodedMixin(Page):
     ]
 
 
-class ThumbnailMixin(Page):
+class ThumbnailMixin(BaseLogbooksPage):
     '''
     Common configuration for pages that want to generate a thumbnail image derived from a subclass-defined list of images.
     '''
@@ -173,12 +194,25 @@ class ThumbnailMixin(Page):
     def get_thumbnail_images(self):
         return []
 
-    def get_thumbnail_slug(self):
-        return f'{self._meta.model_name}thumbnail_{self.slug}'
-
     def regenerate_thumbnail(self):
-        images = self.get_thumbnail_images()
-        return generate_thumbnail(images, fileslug=self.get_thumbnail_slug())
+        images = [img.file for img in self.get_thumbnail_images()]
+        imagegrid_opts = get_thumbnail_opts(images)
+
+        if imagegrid_opts is None:
+            self.thumbnail_image.name = None
+            return
+
+        filename = generate_imagegrid_filename(
+            prefix='page_thumbs', slug=self.slug, **imagegrid_opts)
+
+        if default_storage.exists(filename):
+            self.thumbnail_image.name = filename
+            return
+
+        self.thumbnail_image = render_image_grid(
+            filename=filename,
+            **imagegrid_opts
+        )
 
     def card_content_html(self):
         '''
@@ -188,12 +222,21 @@ class ThumbnailMixin(Page):
             'self': self
         })
 
-    def save(self, *args, **kwargs):
-        self.thumbnail_image = self.regenerate_thumbnail()
+    def save(self, *args, regenerate_thumbnails=True, **kwargs):
+        if regenerate_thumbnails:
+
+            page = self
+            while isinstance(page, ThumbnailMixin):
+                regenerate_page_thumbnails(page.id)
+                page = page.get_parent().specific
+
         return super().save(*args, **kwargs)
 
 
-class SidebarRenderableMixin:
+class SidebarRenderableMixin(BaseLogbooksPage):
+    class Meta:
+        abstract = True
+
     def get_sidebar_frame_response(self, request, *args, **kwargs):
         '''
         Render the sidebar frame's html.

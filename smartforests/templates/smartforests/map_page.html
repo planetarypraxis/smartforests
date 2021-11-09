@@ -1,12 +1,7 @@
-{% extends "base.html" %}
-{% load static ckbootstrap_tags menu_tags %}
+{% extends "base_fullscreen.html" %}
+{% load static ckbootstrap_tags %}
 
-{% block body_height %}vh-100 overflow-hidden{% endblock %}
-
-{% block body %}
-  <!-- No floating header -->
-  {% main_menu max_levels=1 template="menus/header_static.html" %}
-
+{% block content %}
   <div
     data-turbo-permanent
     data-mapbox-token="{{mapbox_token}}"
@@ -42,5 +37,3 @@
 {% block extra_js %}
 <script defer src="{% static 'js/filters.js' %}"></script>
 {% endblock %}
-
-{% block footer %}{% endblock %}

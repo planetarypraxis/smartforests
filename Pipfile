@@ -40,3 +40,5 @@ django-map-widgets = {editable = true, ref = "master", git = "https://git@github
 django-settings-export = "*"
 posthog = "*"
 wagtail-autocomplete = "*"
+wagtail-localize = "*"
+django-background-tasks = "*"

@@ -1,3 +1,5 @@
+import "./sidepanel";
+
 load();
 
 document.addEventListener("turbo:load", async (event) => {
@@ -5,12 +7,14 @@ document.addEventListener("turbo:load", async (event) => {
 });
 
 async function load() {
-  if (window.location.pathname.startsWith("/map")) {
+  const modelInfo = JSON.parse(document.getElementById('model-info').innerHTML) as { app_label: string, model: string }
+
+  if (modelInfo?.model?.toLowerCase() === 'mappage') {
     const { main } = await import("./map");
     main();
   }
 
-  if (window.location.pathname.startsWith("/radio")) {
+  if (modelInfo?.model?.toLowerCase() === 'radiopage') {
     const { main } = await import("./radio");
     main();
   }

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from django.conf.locale import LANG_INFO
 import os
 import re
 import dj_database_url
@@ -42,6 +43,8 @@ INSTALLED_APPS = [
     'mapwidgets',
     'wagtailautocomplete',
 
+    "wagtail_localize",
+    "wagtail_localize.locales",
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.embeds',
@@ -67,6 +70,7 @@ INSTALLED_APPS = [
     "anymail",
     "rest_framework",
     "rest_framework_gis",
+    "background_task",
     # 'debug_toolbar',
 
     'django.contrib.gis',
@@ -90,6 +94,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
 
+    'django.middleware.locale.LocaleMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 
@@ -111,6 +116,7 @@ TEMPLATES = [
                 'wagtail.contrib.settings.context_processors.settings',
                 'wagtailmenus.context_processors.wagtailmenus',
                 'django_settings_export.settings_export',
+                'django.template.context_processors.i18n',
             ],
         },
     },
@@ -169,6 +175,11 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Wagtail internationalisation
+# https://docs.wagtail.io/en/stable/advanced_topics/i18n.html
+
+USE_I18N = True
+WAGTAIL_I18N_ENABLED = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
@@ -286,6 +297,14 @@ MAP_WIDGETS = {
     ),
     "MAPBOX_API_KEY": MAPBOX_API_PUBLIC_TOKEN
 }
+
+# Allow any language that Django supports
+WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
+    (locale[0], locale[1]['name_local'] + ' (' + locale[1]['name'] + ')')
+    for locale in LANG_INFO.items()
+    if locale[1].get('name_local', None)
+    and locale[1].get('name', None)
+]
 
 POSTHOG_DJANGO = {
     "distinct_id": lambda request: request.user and request.user.distinct_id

@@ -24,10 +24,7 @@
         <script defer src="https://cdn.jsdelivr.net/npm/@hotwired/turbo@7.0.1/dist/turbo.es2017-umd.min.js"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
         <script defer src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.19/lodash.min.js"></script>
-        {% if environment.POSTHOG_PUBLIC_TOKEN %}
         {% include "posthog/initialise.html" %}
-        {% endif %}
-
         {% webpack_bundle 'main' %}
 
         {% block extra_js %}
@@ -43,8 +40,24 @@
     </head>
 
     <body class="{% block body_height %}min-vh-100{% endblock %} {% block body_class %}{% endblock %} app-{{ self.content_type.app_label }} model-{{ self.content_type.model }}">
-        {{ self.full_url|json_script:"routing_configuration" }} 
+        {{ self.full_url|json_script:"routing_configuration" }}
+        <script id='model-info'>
+          { "app_label": "{{self.content_type.app_label}}", "model": "{{ self.content_type.model }}" }
+        </script>
         {% wagtailuserbar %}
+
+        <div
+        class="offcanvas offcanvas-end flex flex-column h-100 overflow-auto"
+        tabindex="-1"
+        id="tagpanel-offcanvas"
+        aria-labelledby="tagpanel-title"
+        data-bs-scroll="true"
+        data-bs-backdrop="false"
+        >
+            <turbo-frame id="tagpanel-turboframe" target="_top">
+            </turbo-frame>
+        </div>
+
 
         {% block body %}
         {% block header %}

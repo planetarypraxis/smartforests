@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.files.storage import default_storage
 from django.db import models
 from django.conf import settings
 from django.db.models.query import QuerySet
@@ -10,7 +11,7 @@ from wagtail.documents.models import Document, AbstractDocument
 from wagtail.core.models import Page, PageRevision
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from django.apps import apps
-from commonknowledge.django.images import render_image_grid
+from commonknowledge.django.images import generate_imagegrid_filename, render_image_grid
 import re
 
 from wagtail.snippets.models import register_snippet
@@ -25,6 +26,7 @@ class Tag(TagBase):
     def regenerate_thumbnails():
         for tag in Tag.objects.iterator():
             tag.regenerate_thumbnail()
+            tag.save()
 
     def regenerate_thumbnail(self):
         thumbnails = []
@@ -38,20 +40,32 @@ class Tag(TagBase):
 
         thumbnails = thumbnails[:3]
 
-        if len(thumbnails) > 0:
-            self.thumbnail = render_image_grid(
-                thumbnails,
-                rows=1,
-                cols=len(thumbnails),
-                format='JPEG',
-                filename=f'tagthumb_{self.slug}.jpeg',
-                width=800,
-                height=400
-            )
-        else:
-            self.thumbnail = None
+        if len(thumbnails) == 0:
+            self.thumbnail.name = None
+            return
 
-        self.save()
+        grid_opts = {
+            'imgs': [img.file for img in thumbnails],
+            'rows': 1,
+            'cols': len(thumbnails),
+            'format': 'JPEG',
+            'width': 800,
+            'height': 400
+        }
+        filename = generate_imagegrid_filename(
+            prefix='tag_thumbs',
+            slug=self.slug,
+            **grid_opts,
+        )
+
+        if default_storage.exists(filename):
+            self.thumbnail.name = filename
+            return
+
+        self.thumbnail = render_image_grid(
+            filename=filename,
+            **grid_opts
+        )
 
 
 class MapPage(RoutablePageMixin, Page):
