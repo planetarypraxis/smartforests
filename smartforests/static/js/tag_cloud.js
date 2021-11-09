@@ -135,14 +135,15 @@ const init = () => {
     // * Tags are all within the bounds of the tag area.
     // * Tags do not overlap.
     const layout = () => {
-      const width = el.clientWidth;
-      const height = el.clientHeight;
+      const PADDING = 16;
+      const width = el.clientWidth - 2 * PADDING;
+      const height = el.clientHeight - 2 * PADDING;
 
       const container = d3.select(el);
       const cola = webcola.d3adaptor(d3).size([width, height]);
 
       const realGraphNodes = nodes.slice(0);
-      const pageBounds = { x: 0, y: 0, width, height };
+      const pageBounds = { x: PADDING, y: PADDING, width, height };
       const fixedNode = { fixed: true, fixedWeight: 100 };
       const topLeft = { ...fixedNode, x: pageBounds.x, y: pageBounds.y };
       const tlIndex = nodes.push(topLeft) - 1;
@@ -248,7 +249,7 @@ const init = () => {
           type: "separation",
           left: i,
           right: brIndex,
-          gap: nodeEl.clientHeight + 32,
+          gap: nodeEl.clientHeight,
         });
       }
 
@@ -264,7 +265,7 @@ const init = () => {
         .links(links)
         .avoidOverlaps(true)
         .constraints(constraints)
-        .jaccardLinkLengths(80, 0.7)
+        .jaccardLinkLengths(80, 0.4)
         .handleDisconnected(false)
         .start(30);
 
@@ -286,5 +287,5 @@ const init = () => {
 
 const px = (val) => Math.round(val) + "px";
 
-$().on("turbo:load", init);
+window.addEventListener("turbo:load", init);
 init();
