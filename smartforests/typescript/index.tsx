@@ -8,9 +8,16 @@ document.addEventListener("turbo:load", async (event) => {
 });
 
 async function load() {
-  const modelInfo = JSON.parse(
-    document.getElementById("model-info").innerHTML
-  ) as { app_label: string; model: string };
+  const modelInfoInDOM = document.getElementById("model-info");
+
+  if (!modelInfoInDOM) {
+    return;
+  }
+
+  const modelInfo = JSON.parse(modelInfoInDOM.innerHTML) as {
+    app_label: string;
+    model: string;
+  };
 
   if (modelInfo?.model?.toLowerCase() === "mappage") {
     const { main } = await import("./map");
