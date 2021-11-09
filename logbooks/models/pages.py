@@ -18,7 +18,7 @@ from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
 from wagtail.api import APIField
 from smartforests.util import group_by_title
-from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContentPageMixin, ContributorMixin, DescendantPageContributorMixin, GeocodedMixin, IndexPage, ThumbnailMixin, SidebarRenderableMixin
+from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, DescendantPageContributorMixin, GeocodedMixin, IndexPage, ThumbnailMixin, SidebarRenderableMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
 from logbooks.models.tag_cloud import TagCloud
@@ -26,7 +26,7 @@ from django.shortcuts import redirect
 from wagtailautocomplete.edit_handlers import AutocompletePanel
 
 
-class StoryPage(ContentPageMixin, ArticlePage):
+class StoryPage(ArticlePage):
     '''
     Stories are longer, self-contained articles.
     '''
@@ -60,7 +60,7 @@ class StoryIndexPage(IndexPage):
         verbose_name = "Stories index page"
 
 
-class EpisodePage(ContentPageMixin, ArticlePage):
+class EpisodePage(ArticlePage):
     '''
     Episodes are individual items for the radio.
     '''
@@ -96,7 +96,7 @@ class RadioIndexPage(IndexPage):
         verbose_name = "Radio index page"
 
 
-class LogbookEntryPage(ContentPageMixin, ArticlePage):
+class LogbookEntryPage(ArticlePage):
     '''
     Logbook entry pages are typically short articles, produced by consistent authors, associated with a single logbook.
     '''
@@ -134,7 +134,7 @@ class LogbookEntryPage(ContentPageMixin, ArticlePage):
         return f'{self.get_parent().url}#{self.slug}'
 
 
-class LogbookPage(ContentPageMixin, RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
+class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
     '''
     Collection of logbook entries.
     '''
@@ -143,7 +143,7 @@ class LogbookPage(ContentPageMixin, RoutablePageMixin, SidebarRenderableMixin, C
         verbose_name_plural = "Logbooks"
 
     icon_class = 'icon-logbooks'
-
+    is_content_page = True
     show_in_menus_default = True
     parent_page_types = ['logbooks.LogbookIndexPage']
 
@@ -227,15 +227,6 @@ class LogbookIndexPage(IndexPage):
         verbose_name = "Logbooks index page"
 
 
-class ContributorsIndexPage(IndexPage):
-    '''
-    Collection of people
-    '''
-
-    class Meta:
-        verbose_name = "Contributors index page"
-
-
 class ContributorPage(GeocodedMixin, BaseLogbooksPage):
     allow_search = True
     page_size = 50
@@ -287,3 +278,12 @@ class ContributorPage(GeocodedMixin, BaseLogbooksPage):
     def tags(self):
         if self.user:
             return self.user.edited_tags()
+
+
+class ContributorsIndexPage(IndexPage):
+    '''
+    Collection of people
+    '''
+
+    class Meta:
+        verbose_name = "Contributors index page"

@@ -253,6 +253,7 @@ class IndexPage(ChildListMixin, BaseLogbooksPage):
     class Meta:
         abstract = True
 
+    is_index_page = True
     allow_search = True
     page_size = 50
     show_in_menus_default = True
@@ -364,21 +365,3 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
     @property
     def tag_cloud(self):
         return TagCloud.get_related(self.tags.all())
-
-
-class IndexPageMixin(BaseLogbooksPage):
-    class Meta:
-        abstract = True
-
-    is_index_page = True
-
-
-class ContentPageMixin(BaseLogbooksPage):
-    '''
-    Tag page models that should show up in lists of contributions.
-    '''
-
-    class Meta:
-        abstract = True
-
-    is_content_page = True
