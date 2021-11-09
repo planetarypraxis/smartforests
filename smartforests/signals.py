@@ -6,8 +6,13 @@ from django.contrib.auth.models import User
 from wagtail.core.models import Page, PageRevision
 import posthog
 
+from logbooks.models.pages import ContributorPage, ContributorsIndexPage
+
 
 def identify_user(user):
+    if user is None:
+        return
+
     posthog.identify(
         user.id,
         {
@@ -19,6 +24,9 @@ def identify_user(user):
 
 @receiver(user_logged_in)
 def login(sender, user, request, **kwargs):
+    if user is None:
+        return
+
     identify_user(user)
     posthog.capture(
         user.id,
@@ -28,6 +36,9 @@ def login(sender, user, request, **kwargs):
 
 @receiver(user_logged_out)
 def logout(sender, user, request, **kwargs):
+    if user is None:
+        return
+
     identify_user(user)
     posthog.capture(
         user.id,
@@ -37,6 +48,9 @@ def logout(sender, user, request, **kwargs):
 
 @receiver(post_save, sender=User)
 def create_user(sender, instance=None, created=False, **kwargs):
+    if instance is None:
+        return
+
     if created:
         user = instance
         identify_user(user)
@@ -45,9 +59,14 @@ def create_user(sender, instance=None, created=False, **kwargs):
             event='user registered'
         )
 
+        ContributorPage.create_for_user(user)
+
 
 def page_published(sender, instance, **kwargs):
     user = instance.owner
+    if user is None:
+        return
+
     identify_user(user)
     posthog.capture(
         user.id,
@@ -64,6 +83,9 @@ wagtail.core.signals.page_published.connect(page_published)
 def page_revision_created(sender, instance=None, created=False, **kwargs):
     if created:
         user = instance.user
+        if user is None:
+            return
+
         identify_user(user)
         posthog.capture(
             user.id,
@@ -76,6 +98,9 @@ def page_revision_created(sender, instance=None, created=False, **kwargs):
 
 def page_deleted(sender, instance, **kwargs):
     user = instance.owner
+    if user is None:
+        return
+
     identify_user(user)
     posthog.capture(
         user.id,
@@ -89,7 +114,11 @@ wagtail.core.signals.page_unpublished.connect(page_deleted)
 
 
 def workflow_submitted(sender, instance, user, **kwargs):
+    if user is None:
+        return
+
     identify_user(user)
+
     posthog.capture(
         user.id,
         event='workflow submitted',
@@ -103,7 +132,11 @@ wagtail.core.signals.workflow_submitted.connect(workflow_submitted)
 
 
 def workflow_rejected(sender, instance, user, **kwargs):
+    if user is None:
+        return
+
     identify_user(user)
+
     posthog.capture(
         user.id,
         event='workflow rejected',
@@ -117,7 +150,11 @@ wagtail.core.signals.workflow_rejected.connect(workflow_rejected)
 
 
 def workflow_approved(sender, instance, user, **kwargs):
+    if user is None:
+        return
+
     identify_user(user)
+
     posthog.capture(
         user.id,
         event='workflow approved',
@@ -132,6 +169,9 @@ wagtail.core.signals.workflow_approved.connect(workflow_approved)
 
 def workflow_cancelled(sender, instance, user, **kwargs):
     identify_user(user)
+    if user is None:
+        return
+
     posthog.capture(
         user.id,
         event='workflow cancelled',
@@ -145,8 +185,12 @@ wagtail.core.signals.workflow_cancelled.connect(workflow_cancelled)
 
 
 def task_submitted(sender, instance, user, **kwargs):
+    if user is None:
+        return
+
     page = instance.workflow_state.page
     identify_user(user)
+
     posthog.capture(
         user.id,
         event='task submitted',
@@ -161,7 +205,11 @@ wagtail.core.signals.task_submitted.connect(task_submitted)
 
 
 def task_rejected(sender, instance, user, **kwargs):
+    if user is None:
+        return
+
     page = instance.workflow_state.page
+
     identify_user(user)
     posthog.capture(
         user.id,
@@ -177,6 +225,9 @@ wagtail.core.signals.task_rejected.connect(task_rejected)
 
 
 def task_approved(sender, instance, user, **kwargs):
+    if user is None:
+        return
+
     page = instance.workflow_state.page
     identify_user(user)
     posthog.capture(
@@ -193,6 +244,9 @@ wagtail.core.signals.task_approved.connect(task_approved)
 
 
 def task_cancelled(sender, instance, user, **kwargs):
+    if user is None:
+        return
+
     page = instance.workflow_state.page
     identify_user(user)
     posthog.capture(

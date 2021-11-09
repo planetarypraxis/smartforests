@@ -71,6 +71,10 @@ class BaseLogbooksPage(Page):
         '''
         return cls._meta
 
+    @classmethod
+    def label(self):
+        return self._meta.verbose_name
+
     @property
     def link_url(self):
         '''
@@ -170,10 +174,6 @@ class GeocodedMixin(BaseLogbooksPage):
         )
     ]
 
-    @classmethod
-    def label(self):
-        return self._meta.verbose_name
-
     api_fields = [
         APIField('label'),
         APIField('geographical_location'),
@@ -253,6 +253,7 @@ class IndexPage(ChildListMixin, BaseLogbooksPage):
     class Meta:
         abstract = True
 
+    is_index_page = True
     allow_search = True
     page_size = 50
     show_in_menus_default = True

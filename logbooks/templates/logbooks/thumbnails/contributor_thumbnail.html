@@ -1,0 +1,32 @@
+{% load wagtailimages_tags %}
+
+
+<div>
+  <div class="d-flex align-items-start flex-row {{class}}">
+    <div class="flex-grow-1">
+      <div class='mb-2'>
+        {% if self.avatar %}
+          {% image self.avatar fill-40x40 style='border-radius: 100%; width: 40px; height: 40px;' %}
+        {% else %}
+          <div class='bg-bright-green' style='border-radius: 100%; width: 40px; height: 40px'></div>
+        {% endif %}
+      </div>
+
+      <div class="fw-bold text-dark-green">
+        {{self.title}}
+      </div>
+      
+      {% if self.byline %}
+        <div class="pt-1 fs-6a">
+          {{self.byline}}
+        </div>
+      {% endif %}
+      
+      {% if self.geographical_location %}
+        <div class="pt-1 fs-6a text-mid-green">
+          {{self.geographical_location}}
+        </div>
+      {% endif %}
+    </div>
+  </div> 
+</div>
