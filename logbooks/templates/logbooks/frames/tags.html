@@ -28,15 +28,15 @@
       {% for page_type, page_list in pages %}
         {% if page_list %}
           <div class="accordion-item">
-            <h2 class="accordion-header" id="{{page_type.model_info.verbose_name}}-heading">
-              <button class="accordion-button text-dark-green" type="button" data-bs-toggle="collapse" data-bs-target="#{{page_type.model_info.verbose_name}}-collapse" aria-controls="{{page_type.model_info.verbose_name}}-collapse">
+            <h2 class="accordion-header" id="{{ page_type.model_info.verbose_name | slugify }}-heading">
+              <button class="accordion-button text-dark-green" type="button" data-bs-toggle="collapse" data-bs-target="#{{page_type.model_info.verbose_name  | slugify }}-collapse" aria-controls="{{page_type.model_info.verbose_name  | slugify }}-collapse">
                 <i class="icon {{page_type.icon_class}} icon-20 bg-primary me-2"></i>
                 {{page_type.model_info.verbose_name_plural}}
                 <span class="ms-2 badge bg-off-white microcopy-small text-dark-green">{{page_list|length}}</span>
               </button>
             </h2>
     
-            <div id="{{page_type.model_info.verbose_name}}-collapse" class="accordion-collapse collapse" aria-labelledby="{{page_type.model_info.verbose_name}}-heading" data-bs-parent="#tag-accordion">
+            <div id="{{ page_type.model_info.verbose_name | slugify }}-collapse" class="accordion-collapse open" aria-labelledby="{{ page_type.model_info.verbose_name  | slugify }}-heading" data-bs-parent="#tag-accordion">
               <div class="accordion-body mt-2">
                 {% for page in page_list %}
                   <a class="mini-card mb-2 text-dark-green" href="{{page.link_url}}">
