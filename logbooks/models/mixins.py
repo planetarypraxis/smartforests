@@ -47,22 +47,13 @@ class BaseLogbooksPage(Page):
         return ContentType.objects.get_for_model(cls).id
 
     @classmethod
-    def all_subclasses(cls):
-        return cls.__subclasses__() + [
-            subclass
-            for immediate_subclass in cls._subclasses__()
-            for subclass in immediate_subclass.all_subclasses()
-        ]
-
-    @classmethod
-    def concrete_classes(cls):
-        return [
-            x for x in cls.all_subclasses() + [cls]
-            if not cls.Meta.abstract
-        ]
-
-    def page_types():
-        return
+    def for_tag(cls, tag):
+        '''
+        Return all live instances matching the tag
+        '''
+        return cls.objects.filter(
+            tagged_items__tag=tag
+        ).live()
 
     @classmethod
     def model_info(cls):

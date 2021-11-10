@@ -6,12 +6,13 @@ from wagtail.core.models import Page
 from smartforests.models import Tag
 from wagtail.api.v2.utils import BadRequestError
 
-from logbooks.models.pages import EpisodePage, LogbookEntryPage, LogbookPage, StoryPage
+from logbooks.models.pages import ContributorPage, EpisodePage, LogbookEntryPage, LogbookPage, StoryPage
 
 
 def tag_panel(request, slug):
     tag = get_object_or_404(Tag.objects.filter(slug=slug))
-    page_types = (LogbookPage, StoryPage, LogbookEntryPage)
+    page_types = (LogbookPage, StoryPage, EpisodePage,
+                  LogbookEntryPage, ContributorPage)
 
     return render(
         request,
@@ -21,9 +22,7 @@ def tag_panel(request, slug):
             'pages': (
                 (
                     page_type,
-                    page_type.objects.filter(
-                        tagged_items__tag__slug=slug
-                    )
+                    page_type.for_tag(tag)
                 )
                 for page_type
                 in page_types

@@ -27,6 +27,14 @@
           {{self.geographical_location}}
         </div>
       {% endif %}
+      
+      {% if self.tags %}
+        <div class="d-flex">
+        {% for tag in self.tags %}
+          {% include "logbooks/include/tag_label.html" with tag=tag link=False %}
+        {% endfor %}
+        </div>
+      {% endif %}
     </div>
   </div> 
 </div>

@@ -67,6 +67,7 @@ class EpisodePage(ArticlePage):
 
     show_in_menus_default = True
     parent_page_types = ['logbooks.RadioIndexPage']
+    icon_class = "icon-radio"
 
     image = ForeignKey(CmsImage, on_delete=models.SET_NULL,
                        null=True, blank=True)
@@ -232,6 +233,7 @@ class ContributorPage(GeocodedMixin, BaseLogbooksPage):
     page_size = 50
     show_in_menus_default = True
     parent_page_types = ['logbooks.ContributorsIndexPage']
+    icon_class = 'icon-contributor'
 
     class Meta:
         verbose_name = "Contributor"
@@ -260,13 +262,18 @@ class ContributorPage(GeocodedMixin, BaseLogbooksPage):
 
     @classmethod
     def create_for_user(cls, user):
+        if ContributorPage.objects.filter(user=user).exists():
+            return
+
         contributor_index = ContributorsIndexPage.objects.first()
+
         title = user.get_full_name() or user.username
         contributor_page = ContributorPage(
             title=title,
-            slug=slugify(title)
+            slug=slugify(title),
+            user=user
         )
-        contributor_index.add_child(contributor_page)
+        contributor_index.add_child(instance=contributor_page)
         contributor_page.save()
 
     def card_content_html(self):
@@ -279,6 +286,12 @@ class ContributorPage(GeocodedMixin, BaseLogbooksPage):
         if self.user:
             return self.user.edited_tags()
 
+    @classmethod
+    def for_tag(cls, tag):
+        return cls.objects.live().filter(
+            user__in=User.with_edited_tags(tag)
+        )
+
 
 class ContributorsIndexPage(IndexPage):
     '''
@@ -287,3 +300,23 @@ class ContributorsIndexPage(IndexPage):
 
     class Meta:
         verbose_name = "Contributors index page"
+
+    def relevant_tags(self):
+        return group_by_title(Tag.objects.all(), key='name')
+
+    def get_child_list_queryset(self, request):
+        return ContributorPage.objects.child_of(self).live()
+
+    def get_filters(self, request):
+        filter = {}
+
+        tag_filter = request.GET.get('filter', None)
+        if tag_filter is not None:
+            try:
+                tag = Tag.objects.get(slug=tag_filter)
+                filter['user__in'] = User.with_edited_tags(tag)
+
+            except Tag.DoesNotExist:
+                pass
+
+        return filter

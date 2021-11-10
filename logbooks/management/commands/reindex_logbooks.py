@@ -1,9 +1,9 @@
-from logbooks.models.pages import LogbookPage, LogbookEntryPage, StoryPage
+from logbooks.models.pages import ContributorPage, LogbookPage, LogbookEntryPage, StoryPage
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
 from logbooks.models.tag_cloud import TagCloud
-from smartforests.models import Tag
+from smartforests.models import Tag, User
 
 
 class Command(BaseCommand):
@@ -22,3 +22,6 @@ class Command(BaseCommand):
 
         Tag.regenerate_thumbnails()
         TagCloud.reindex()
+
+        for user in User.objects.all():
+            ContributorPage.create_for_user(user)
