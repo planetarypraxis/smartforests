@@ -4,6 +4,7 @@ import * as geo from "https://cdn.skypack.dev/geometric";
 import * as chroma from "https://cdn.skypack.dev/chroma-js";
 import concaveman from "https://cdn.skypack.dev/concaveman";
 import debounce from "https://cdn.skypack.dev/lodash.debounce";
+import uniqBy from "https://cdn.skypack.dev/lodash.uniqby";
 
 // Re-layout on window resize
 let resizeHandlers = [];
@@ -29,12 +30,13 @@ const init = () => {
     const configElement = document.getElementById(
       parentEl.dataset.tagCloudData
     );
+
     if (!configElement) {
       console.error("No config element found for tag cloud");
       return;
     }
 
-    // Get the sidpanel elements for navigation
+    // Get the sidepanel elements for navigation
     const sidepanel = document.getElementById(parentEl.dataset.tagOffcanvas);
     const sidepanelFrame = parentEl.dataset.tagFrame ?? "_top";
 
@@ -49,7 +51,9 @@ const init = () => {
     el.style.backgroundColor = GRADIENT_OUTER;
 
     // Prepare the data for d3
-    const nodes = JSON.parse(configElement.innerHTML);
+    const rawData = JSON.parse(configElement.innerHTML);
+    const nodes = uniqBy(rawData, "id");
+
     const nodeMap = d3.index(nodes, (x) => x.id);
 
     const links = nodes.flatMap((node) => {
