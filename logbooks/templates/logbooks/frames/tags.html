@@ -39,21 +39,7 @@
             <div id="{{ page_type.model_info.verbose_name | slugify }}-collapse" class="accordion-collapse open" aria-labelledby="{{ page_type.model_info.verbose_name  | slugify }}-heading" data-bs-parent="#tag-accordion">
               <div class="accordion-body mt-2">
                 {% for page in page_list %}
-                  <a class="mini-card mb-2 text-dark-green" href="{{page.link_url}}">
-                    <div>
-                      {{page.title}}
-                    </div>
-    
-                    <span class="microcopy-small text-black">
-                      {{page_type.model_info.verbose_name}}
-                    </span>
-    
-                    {% if page.owner %}
-                      <span class="d-inline-block microcopy-small">
-                        {{page.owner.get_full_name}}
-                      </span>
-                    {% endif %}
-                  </a>
+                  {% include "logbooks/thumbnails/related_page_thumbnail.html" with page=page %}
                 {% endfor %}
               </div>
             </div>
