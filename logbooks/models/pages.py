@@ -246,6 +246,7 @@ class ContributorPage(GeocodedMixin, BaseLogbooksPage):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
+        related_name='contributor_pages'
     )
 
     byline = CharField(max_length=1000, blank=True, null=True)
