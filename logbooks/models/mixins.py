@@ -43,10 +43,6 @@ class BaseLogbooksPage(Page):
     icon_class = None
 
     @classmethod
-    def content_type_id(cls):
-        return ContentType.objects.get_for_model(cls).id
-
-    @classmethod
     def for_tag(cls, tag):
         '''
         Return all live instances matching the tag
