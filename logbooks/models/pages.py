@@ -6,6 +6,7 @@ from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
 from django.utils.text import slugify
 from modelcluster.contrib.taggit import ClusterTaggableManager
+from wagtail.core.models import Page
 from wagtail.search.index import AutocompleteField
 from smartforests.models import Tag, User
 from wagtail.admin.edit_handlers import FieldPanel
@@ -79,10 +80,10 @@ class EpisodePage(ArticlePage):
         related_name='+'
     )
 
-    content_panels = ArticlePage.content_panels + [
-        ImageChooserPanel('image'),
+    content_panels = Page.content_panels + [
         MediaChooserPanel('audio', media_type='audio'),
-    ]
+        ImageChooserPanel('image'),
+    ] + ArticlePage.additional_content_panels
 
     def cover_image(self):
         return self.image

@@ -288,11 +288,13 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
     body = ArticleContentStream()
 
-    content_panels = Page.content_panels + [
+    additional_content_panels = [
         FieldPanel('tags'),
         StreamFieldPanel('body'),
         InlinePanel("footnotes", label="Footnotes"),
     ] + ContributorMixin.content_panels + GeocodedMixin.content_panels
+
+    content_panels = Page.content_panels + additional_content_panels
 
     api_fields = [
         APIField('tags'),
