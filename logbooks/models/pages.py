@@ -237,10 +237,11 @@ class ContributorPage(GeocodedMixin, BaseLogbooksPage):
 
     class Meta:
         verbose_name = "Contributor"
+        # constraints = [
+        #   models.UniqueConstraint(fields=['user', 'locale'], name="contributor-user-locale")
+        # ]
 
-    # If a user is defined on the ContributorPage, we can load up contributions and tags and so on
-    # But we leave this optional in case non-editor users also want to be biographied in the Atlas
-    user = models.OneToOneField(
+    user = models.ForeignKey(
         User,
         null=True,
         blank=True,
