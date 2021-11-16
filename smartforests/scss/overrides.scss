@@ -92,6 +92,10 @@ h4 {
   text-transform: uppercase;
 }
 
+h3.microcopy-small {
+  letter-spacing: 0;
+}
+
 .small {
   font-size: 12px !important;
 }
@@ -186,6 +190,7 @@ a.card {
     font-size: $small-font-size !important;
     font-family: $font-family-sans-serif !important;
     text-transform: none;
+    letter-spacing: 0;
   }
 }
 

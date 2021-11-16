@@ -43,10 +43,6 @@ class BaseLogbooksPage(Page):
     icon_class = None
 
     @classmethod
-    def content_type_id(cls):
-        return ContentType.objects.get_for_model(cls).id
-
-    @classmethod
     def for_tag(cls, tag):
         '''
         Return all live instances matching the tag
@@ -292,11 +288,13 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
     body = ArticleContentStream()
 
-    content_panels = Page.content_panels + [
+    additional_content_panels = [
         FieldPanel('tags'),
         StreamFieldPanel('body'),
         InlinePanel("footnotes", label="Footnotes"),
     ] + ContributorMixin.content_panels + GeocodedMixin.content_panels
+
+    content_panels = Page.content_panels + additional_content_panels
 
     api_fields = [
         APIField('tags'),

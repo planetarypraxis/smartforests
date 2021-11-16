@@ -39,8 +39,8 @@ def next_page_path(context):
 
 
 @register.simple_tag(takes_context=True)
-def render_streamfield(context, value, **kwargs):
-    def get_context(self, value):
+def render_streamfield(context, value, *args, **kwargs):
+    def get_context(self, value, *args, **kwargs):
         return dict(context.flatten(), **{
             'self': value,
             self.TEMPLATE_VAR: value,

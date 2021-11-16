@@ -29,12 +29,9 @@
   </header>
   <div class='row'>
     {% for page in pages %}
-      <a class='col-lg-3 col-md-4 col-sm-6 col text-reset text-decoration-none' href="{{page.url}}">
-        <article class='bg-white border-soft-green border rounded p-2'>
-          <div class='mb-1'>{{page.title}}</div>
-          <div class='microcopy-small'>{{page.label}}</div>
-        </article>
-      </a>
+      <div class='col-lg-3 col-md-4 col-sm-6 col'>
+        {% include "logbooks/thumbnails/related_page_thumbnail.html" with page=page show_owner=False %}
+      </div>
     {% endfor %}
   </div>
 </section>

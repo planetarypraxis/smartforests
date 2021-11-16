@@ -6,6 +6,7 @@ from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
 from django.utils.text import slugify
 from modelcluster.contrib.taggit import ClusterTaggableManager
+from wagtail.core.models import Page
 from wagtail.search.index import AutocompleteField
 from smartforests.models import Tag, User
 from wagtail.admin.edit_handlers import FieldPanel
@@ -79,10 +80,10 @@ class EpisodePage(ArticlePage):
         related_name='+'
     )
 
-    content_panels = ArticlePage.content_panels + [
-        ImageChooserPanel('image'),
+    content_panels = Page.content_panels + [
         MediaChooserPanel('audio', media_type='audio'),
-    ]
+        ImageChooserPanel('image'),
+    ] + ArticlePage.additional_content_panels
 
     def cover_image(self):
         return self.image
@@ -238,13 +239,12 @@ class ContributorPage(GeocodedMixin, BaseLogbooksPage):
     class Meta:
         verbose_name = "Contributor"
 
-    # If a user is defined on the ContributorPage, we can load up contributions and tags and so on
-    # But we leave this optional in case non-editor users also want to be biographied in the Atlas
-    user = models.OneToOneField(
+    user = models.ForeignKey(
         User,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
+        related_name='contributor_pages'
     )
 
     byline = CharField(max_length=1000, blank=True, null=True)
