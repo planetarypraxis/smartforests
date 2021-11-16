@@ -238,9 +238,6 @@ class ContributorPage(GeocodedMixin, BaseLogbooksPage):
 
     class Meta:
         verbose_name = "Contributor"
-        # constraints = [
-        #   models.UniqueConstraint(fields=['user', 'locale'], name="contributor-user-locale")
-        # ]
 
     user = models.ForeignKey(
         User,
