@@ -22,7 +22,7 @@ def tag_panel(request, slug):
             'pages': (
                 (
                     page_type,
-                    page_type.for_tag(tag)
+                    set(map(lambda p: p.localized, page_type.for_tag(tag)))
                 )
                 for page_type
                 in page_types

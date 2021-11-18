@@ -44,6 +44,9 @@
         <script type="application/json" id="model-info">
           { "app_label": "{{self.content_type.app_label}}", "model": "{{ self.content_type.model }}" }
         </script>
+        <script type="application/json" id="request-info">
+          { "languageCode": "{{ LANGUAGE_CODE }}" }
+        </script>
         {% wagtailuserbar %}
 
         <div
