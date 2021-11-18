@@ -1,15 +1,21 @@
-<a class="mini-card mb-2 text-dark-green bg-white" href="{{page.link_url}}">
+<a class="overflow-hidden mini-card mb-2 text-dark-green bg-white" href="{{page.link_url}}">
   <div>
     {{page.title}}
   </div>
 
-  <span class="microcopy-small text-black">
-    {{page.label}}
-  </span>
+  <div class='d-flex flex-row justify-content-between'>
+    <span>
+      <span class="microcopy-small text-black flex">
+        <span>{{page.label}}</span>
+      </span>
 
-  {% if page.owner and show_owner is not False %}
-    <span class="d-inline-block microcopy-small text-mid-green">
-      {{page.owner.get_full_name}}
+      {% if page.owner and show_owner is not False %}
+        <span class="d-inline-block microcopy-small text-mid-green">
+          {{page.owner.get_full_name}}
+        </span>
+      {% endif %}
     </span>
-  {% endif %}
+
+    <span class="microcopy-small text-light-grey flex">{{page.locale.language_code}}</span>
+  </div>
 </a>

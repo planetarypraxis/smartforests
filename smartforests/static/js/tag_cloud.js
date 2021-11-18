@@ -13,6 +13,8 @@ window.addEventListener("resize", () => {
 });
 
 const init = () => {
+  const { languageCode } = JSON.parse(document.getElementById('request-info').innerHTML)
+
   // Downsample the canvas to produce the pixelated effect.
   const PIXEL_SIZE = 32;
   const MOBILE_BREAKPOINT = 540;
@@ -183,7 +185,7 @@ const init = () => {
             .append("a")
             .attr("class", "related-tag")
             .attr("data-turbo-frame", sidepanelFrame)
-            .attr("href", (d) => `/_tags/${d.slug}/`)
+            .attr("href", (d) => `/${languageCode}/_tags/${d.slug}/`)
             .on("click", () => {
               if (sidepanel) {
                 const instance =
