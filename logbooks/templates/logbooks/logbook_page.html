@@ -23,6 +23,7 @@
     window.addEventListener('turbo:load', () => {
       const hash = "{{hash}}".replace(/\//, '')
       const url = "{{self.url}}"
+      let hasNavigatedToHash = false
       if (hash && !hasNavigatedToHash) {
         // Pretend this logbook entry page never existed...
         Turbo.visit(url + '#' + hash, { action: "replace" })
