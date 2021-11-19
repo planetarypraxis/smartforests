@@ -5,7 +5,7 @@
     <section class='caption text-grey fw-lighter'>
       <div class="d-flex">
         <div class="me-2">
-          Added by <a class='d-block' href='{{ self.owner.contributor_pages.first.localized.link_url }}'>{% include 'logbooks/username.html' with user=self.owner %}</a>
+          Added by <a href='{{ self.owner.contributor_pages.first.localized.link_url }}'>{% include 'logbooks/username.html' with user=self.owner %}</a>
         </div>
         <time class="opacity-8" datetime="{{ self.first_published_at|date:"Y-m-d" }}">
           {{ self.first_published_at|date:"d E Y" }}
