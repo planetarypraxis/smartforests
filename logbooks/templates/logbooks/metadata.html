@@ -10,7 +10,7 @@
   <section class="d-flex flex-column mb-3">
     <h4 class="mb-0">Contributors</h4>
     {% for user in page.contributors %}
-      <a class='d-block' href='{{user.contributor_pages.first.link_url}}'>{% include 'logbooks/username.html' with user=user %}</a>
+      <a class='d-block' href='{{ user.contributor_pages.first.localized.link_url }}'>{% include 'logbooks/username.html' with user=user %}</a>
     {% endfor %}
   </section>
   {% if page.geographical_location %}
