@@ -19,13 +19,20 @@ async function load() {
     model: string;
   };
 
-  if (modelInfo?.model?.toLowerCase() === "mappage") {
-    const { main } = await import("./map");
-    main();
+  const modelName = modelInfo?.model?.toLowerCase();
+
+  let main = () => {};
+
+  switch (modelName) {
+    case "mappage":
+      ({ main } = await import("./map"));
+      break;
+
+    case "radioindexpage":
+    case "episodepage":
+      ({ main } = await import("./radio"));
+      break;
   }
 
-  if (modelInfo?.model?.toLowerCase() === "radiopage") {
-    const { main } = await import("./radio");
-    main();
-  }
+  main();
 }
