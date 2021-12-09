@@ -134,6 +134,7 @@ class TagCloud(models.Model):
 
         return [
             item.to_json(lookup[item.id]) for item in items
+            if item.id in lookup
         ]
 
     @staticmethod
