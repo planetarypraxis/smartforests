@@ -19,7 +19,7 @@ export const AtlasPageFeatureLayer: FC<{
     size,
     viewport,
     () => ({ tag, languageCode }),
-    [tag]
+    [tag, languageCode]
   );
 
   if (!data) {
