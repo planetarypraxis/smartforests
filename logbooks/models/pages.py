@@ -25,6 +25,7 @@ from smartforests.models import CmsImage
 from logbooks.models.tag_cloud import TagCloud
 from django.shortcuts import redirect
 from wagtailautocomplete.edit_handlers import AutocompletePanel
+from django.utils import translation
 
 
 class StoryPage(ArticlePage):
@@ -117,7 +118,8 @@ class LogbookEntryPage(ArticlePage):
         '''
 
         return render_to_string('logbooks/content_entry/logbook_entry.html', {
-            'self': self
+            'self': self,
+            'LANGUAGE_CODE': translation.get_language()
         })
 
     def serve(self, *args, **kwargs):
@@ -200,7 +202,7 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
     @property
     def all_tags(self):
         return list(set(
-          self.entry_tags + list(self.tags.all())
+            self.entry_tags + list(self.tags.all())
         ))
 
     @property
