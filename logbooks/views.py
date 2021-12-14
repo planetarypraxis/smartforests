@@ -84,8 +84,17 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet):
 
     def get_locale(self):
         language_code = self.request.GET.get('language_code', 'en')
-        locale = Locale.objects.get(language_code=language_code)
-        return locale
+        try:
+            locale = Locale.objects.get(language_code=language_code)
+            return locale
+        except:
+            try:
+                # E.g. for en-gb, try en
+                locale = Locale.objects.get(
+                    language_code="-".split(language_code)[0])
+                return locale
+            except:
+                return Locale.objects.get(language_code='en')
 
     def list(self, request):
         list = self.get_queryset()
