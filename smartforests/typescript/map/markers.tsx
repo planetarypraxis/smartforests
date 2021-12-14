@@ -8,12 +8,13 @@ import {
 import { SmartForest } from "./types";
 import { Marker, Popup } from "@urbica/react-map-gl";
 import { useFocusContext, viewportAtom } from "./state";
-import { equalUrls, useFrameSrc, useOffcanvas } from "../bootstrap";
+import { equalUrls, useOffcanvas } from "../bootstrap";
 import { Feature, Point } from "geojson";
 import { TurboFrameElement } from "../turbo";
-import { Cluster } from "./data";
-import { useAtomCallback } from "jotai/utils";
+import { useAtomCallback, useAtomValue } from "jotai/utils";
 import { useAtom } from "jotai";
+import { frameAtomFamily } from "../pageContext";
+import { Cluster } from "superclusterd";
 
 export const ClusterMarker: React.FC<{
   feature: Feature<Point, Cluster>;
@@ -63,15 +64,12 @@ export const AtlasPageMarker: React.FC<{
   const { properties, geometry } = feature;
   const [isFocusing, setIsFocusing] = useFocusContext(properties.id, "");
   const [offcanvas, sidebarEl] = useOffcanvas("sidepanel-offcanvas");
-  const frame = useMemo(
-    () => document.querySelector<TurboFrameElement>("#sidepanel-turboframe"),
-    []
-  );
 
   const frameUrl = pageToFrameURL(properties);
-  const activeUrl = useFrameSrc(frame);
+  const sidebarFrame = useAtomValue(frameAtomFamily("#sidepanel-turboframe"));
 
-  const active = equalUrls(frameUrl, activeUrl);
+  const active = equalUrls(frameUrl, sidebarFrame.src);
+
   const iconClass = active ? `icon-30 icon-cursor` : properties.icon_class;
 
   return (
@@ -89,7 +87,7 @@ export const AtlasPageMarker: React.FC<{
           onClick={() => {
             // Remove children from frame before showing to prevent flash of stale content
             if (sidebarEl.style.visibility !== "visible") {
-              Array.from(frame.children).forEach((x) => x.remove());
+              Array.from(sidebarFrame.el.children).forEach((x) => x.remove());
             }
             offcanvas.show();
           }}

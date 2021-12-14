@@ -3,15 +3,17 @@ import { render } from "react-dom";
 import { Provider as StateContext } from "jotai";
 import { MapVisual } from "./mapbox";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import { PageContext } from "../pageContext";
+import { LanguageContext, TurboContext } from "../pageContext";
 
 function MapApp() {
   return (
     <Router>
       <StateContext>
-        <PageContext>
-          <MapVisual />
-        </PageContext>
+        <LanguageContext>
+          <TurboContext>
+            <MapVisual />
+          </TurboContext>
+        </LanguageContext>
       </StateContext>
     </Router>
   );

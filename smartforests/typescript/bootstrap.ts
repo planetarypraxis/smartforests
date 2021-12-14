@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo } from "react";
 
 export function useOffcanvas<T extends HTMLElement>(offcanvasId: string) {
   const offcanvasElement = useMemo(
@@ -15,25 +15,6 @@ export function useOffcanvas<T extends HTMLElement>(offcanvasId: string) {
   );
 
   return [offcanvas, offcanvasElement as T] as const;
-}
-
-export function useFrameSrc(id: string | HTMLElement) {
-  const el = useMemo<any>(
-    () => (typeof id === "string" ? document.getElementById(id) : id),
-    [id]
-  );
-  const [url, setUrl] = useState<string>(el.src);
-
-  useEffect(() => {
-    const listener = () => {
-      setUrl(el.src);
-    };
-    el.addEventListener("turbo:frame-load", listener);
-
-    return () => el.removeEventListener("turbo:frame-load", listener);
-  }, [el]);
-
-  return url;
 }
 
 export const equalUrls = (a?: string, b?: string) => {
