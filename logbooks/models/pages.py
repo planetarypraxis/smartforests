@@ -158,7 +158,7 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
         FieldPanel('title', classname="full title"),
         FieldPanel('description'),
         FieldPanel('tags'),
-    ] + DescendantPageContributorMixin.content_panels + GeocodedMixin.content_panels
+    ] + DescendantPageContributorMixin.content_panels + GeocodedMixin.content_panels + ContributorMixin.content_panels
 
     api_fields = [
         APIField('icon_class'),

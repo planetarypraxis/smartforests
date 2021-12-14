@@ -108,6 +108,9 @@ class User(AbstractUser):
 
     autocomplete_search_field = 'username'
 
+    def contributor_page(self):
+        return self.contributor_pages.first()
+
     @classmethod
     def with_edited_tags(cls, *tags):
         return User.objects.filter(pagerevision__page__tagged_items__tag__in=tags).distinct()
