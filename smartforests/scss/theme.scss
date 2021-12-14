@@ -131,6 +131,10 @@ $font-family-serif: Georgia, Times, "Times New Roman", serif;
   font-family: $font-family-serif;
 }
 
+.font-sans-serif {
+  font-family: $font-family-sans-serif;
+}
+
 // Cards
 $card-spacer-y: #{map-get($spacers, 2)};
 $card-spacer-x: #{map-get($spacers, 2)};

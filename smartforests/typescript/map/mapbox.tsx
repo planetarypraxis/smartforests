@@ -129,13 +129,13 @@ const FilterView: FC<{ onClose: () => void; open: boolean }> = ({
 }) => {
   return (
     <div
-      className={`mapboxgl-ctrl-filters-content top-0 fade-inout p-2 ${open ? "" : "hidden"
+      className={`mapboxgl-ctrl-filters-content top-0 fade-inout p-3 ${open ? "" : "hidden"
         }`}
     >
       <div className="position-sticky top-0 bg-white d-flex flex-row justify-content-start pb-4">
-        <h2 className="heading-small fw-normal flex-grow-1">Filter by tag</h2>
+        <h2 className="heading-small fw-bold flex-grow-1 font-sans-serif">Filter by tag</h2>
 
-        <button onClick={onClose} className="icon-btn" aria-label="Close">
+        <button onClick={onClose} className="icon-btn" style={{ marginTop: -5 }} aria-label="Close">
           <i className="icon bg-dark icon-close"></i>
         </button>
       </div>
