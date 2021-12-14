@@ -29,7 +29,7 @@
                   </div>
                 </div>
                 <div>
-                  {% for tag in episode.tags.all %}
+                  {% for tag in episode.all_tags %}
                     {% include 'logbooks/include/tag_label.html' with tag=tag %}
                   {% endfor %}
                 </div>

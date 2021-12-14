@@ -191,15 +191,17 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
 
     @property
     def entry_tags(self):
-        return [
+        return list(set(
             tag
             for entry in self.logbook_entries
             for tag in entry.tags.all()
-        ]
+        ))
 
     @property
     def all_tags(self):
-        return self.entry_tags + list(self.tags.all())
+        return list(set(
+          self.entry_tags + list(self.tags.all())
+        ))
 
     @property
     def preview_text(self):

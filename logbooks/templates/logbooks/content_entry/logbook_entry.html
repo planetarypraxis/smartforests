@@ -42,7 +42,7 @@
   {% endfor %}
   </section>
   <footer class='col'>
-    {% for tag in self.tags.all %}
+    {% for tag in self.all_tags %}
       {% include 'logbooks/include/tag_label.html' with tag=tag %}
     {% endfor %}
   </footer>

@@ -354,3 +354,7 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
     @property
     def tag_cloud(self):
         return TagCloud.get_related(self.tags.all())
+
+    @property
+    def all_tags(self):
+        return list(self.tags.all())
