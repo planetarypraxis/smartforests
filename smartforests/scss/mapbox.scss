@@ -52,7 +52,7 @@
 }
 
 .mapboxgl-control-container > * {
-  padding: map-get($map: $spacers, $key: 2);
+  padding: map-get($map: $spacers, $key: 3);
 
   @include media-breakpoint-down(sm) {
     width: 100%;

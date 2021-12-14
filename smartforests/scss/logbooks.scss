@@ -21,3 +21,14 @@
 #filter-popover {
   overflow: visible;
 }
+
+.selected-tag {
+  position: absolute;
+  top: map-get($map: $spacers, $key: 3);
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50px;
+  padding: 5px 10px;
+  text-transform: uppercase;
+  text-decoration: none;
+}

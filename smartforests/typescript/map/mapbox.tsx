@@ -21,6 +21,7 @@ export function MapVisual() {
   const [viewport, setViewport] = useAtom(viewportAtom);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const size = useSize(mapContainerRef);
+  const [params, _] = useTurboURLParams()
 
   return (
     <div style={{ width: "100%", height: "100%" }} ref={mapContainerRef}>
@@ -46,6 +47,15 @@ export function MapVisual() {
         <FilterControl />
         <AtlasPageFeatureLayer size={size} viewport={viewport} />
       </MapGL>
+      {!!params['filter'] && (
+        <a href={window.location.pathname} className='d-none d-sm-block font-monospace bg-white selected-tag fs-7'>
+          {params['filter']}
+          <button className="icon-btn" aria-label="Close">
+            {/* @ts-ignore */}
+            <i className="icon bg-mid-green icon-close ms-1" style={{ '--icon-size': '8px' }}></i>
+          </button>
+        </a>
+      )}
     </div>
   );
 }

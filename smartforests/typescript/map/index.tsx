@@ -4,6 +4,7 @@ import { Provider as StateContext } from "jotai";
 import { MapVisual } from "./mapbox";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { LanguageContext, TurboContext } from "../pageContext";
+import { TurboURLParamsContextProvider } from "../turbo";
 
 function MapApp() {
   return (
@@ -11,7 +12,9 @@ function MapApp() {
       <StateContext>
         <LanguageContext>
           <TurboContext>
-            <MapVisual />
+            <TurboURLParamsContextProvider>
+              <MapVisual />
+            </TurboURLParamsContextProvider>
           </TurboContext>
         </LanguageContext>
       </StateContext>
