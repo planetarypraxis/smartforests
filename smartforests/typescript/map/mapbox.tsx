@@ -141,6 +141,10 @@ const FilterView: FC<{ onClose: () => void; open: boolean }> = ({
       <div className="position-sticky top-0 bg-white d-flex flex-row justify-content-start pb-4">
         <h2 className="heading-small fw-bold flex-grow-1 font-sans-serif">Filter by tag</h2>
 
+        <a href={window.location.pathname} className='font-monospace text-uppercase px-2 cursor-pointer'>
+          Clear All
+        </a>
+
         <button onClick={onClose} className="icon-btn" style={{ marginTop: -5 }} aria-label="Close">
           <i className="icon bg-dark icon-close"></i>
         </button>
@@ -153,7 +157,6 @@ const FilterView: FC<{ onClose: () => void; open: boolean }> = ({
           target="_top"
           loading="lazy"
           src={`/_filters/`}
-          data-turbo-permanent=""
         />
       </div>
     </div>
@@ -167,7 +170,6 @@ function FilterPopover() {
   return (
     <div
       id="filter-popover"
-      data-turbo-permanent
       aria-label={open ? undefined : "Show filters"}
       role={open ? undefined : "button"}
       className={`mapboxgl-ctrl mapboxgl-ctrl-filters fade-inout ${open ? "" : "mapboxgl-ctrl-filters--collapsed"
