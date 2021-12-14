@@ -36,9 +36,10 @@ export const useSize = (target: RefObject<HTMLElement>) => {
   return size;
 };
 
-const getFeaturesUrl = (opts: { tag?: string }) => {
+const getFeaturesUrl = (opts: { tag?: string, languageCode?: string }) => {
   const q = stringifyQuery({
     ...(opts.tag ? { tag: opts.tag } : {}),
+    ...(opts.languageCode ? { language_code: opts.languageCode } : {}),
   });
 
   return `${window.location.host}/api/v2/geo/${q}`;
