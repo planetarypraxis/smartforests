@@ -13,6 +13,7 @@ import { AtlasPageFeatureLayer } from "./layers";
 import { unmountComponentAtNode } from "react-dom";
 import { useAtom } from "jotai";
 import { viewportAtom } from "./state";
+import { TurboURLParamsContextProvider, useTurboURLParams } from "../turbo";
 
 const MAPBOX_TOKEN = document.getElementById("MAP_APP")?.dataset.mapboxToken;
 
@@ -94,7 +95,12 @@ class FilterControlRenderer extends Evented {
   onAdd(map) {
     this._map = map;
     this._container = document.createElement("div");
-    ReactDOM.render(<FilterPopover />, this._container);
+    ReactDOM.render(
+      <TurboURLParamsContextProvider>
+        <FilterPopover />
+      </TurboURLParamsContextProvider>,
+      this._container
+    );
     return this._container;
   }
 
@@ -156,6 +162,7 @@ const FilterView: FC<{ onClose: () => void; open: boolean }> = ({
 
 function FilterPopover() {
   const [open, setOpen] = useState(false);
+  const [params, _] = useTurboURLParams()
 
   return (
     <div
@@ -174,6 +181,7 @@ function FilterPopover() {
         }}
       />
       <FilterIcon className={open ? "hidden" : ""} />
+      {!!params['filter'] && <div className='filter-counter bg-dark-green text-white'>1</div>}
     </div>
   );
 }
