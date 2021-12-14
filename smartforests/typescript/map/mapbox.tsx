@@ -2,7 +2,7 @@ import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import React, { FC } from "react";
-import MapGL, { MapContext } from "@urbica/react-map-gl";
+import MapGL, { MapContext, ScaleControl, NavigationControl } from "@urbica/react-map-gl";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import mapboxgl, { Evented } from "mapbox-gl";
 import { Fragment, useContext, useEffect, useRef, useState } from "react";
@@ -40,6 +40,7 @@ export function MapVisual() {
         minZoom={2}
         maxZoom={16}
       >
+        <NavigationControl showCompass={false} showZoom position='top-left' />
         <GeocodeControl position="top-left" accessToken={MAPBOX_TOKEN} />
         <FilterControl />
         <AtlasPageFeatureLayer size={size} viewport={viewport} />
@@ -128,9 +129,8 @@ const FilterView: FC<{ onClose: () => void; open: boolean }> = ({
 }) => {
   return (
     <div
-      className={`mapboxgl-ctrl-filters-content top-0 fade-inout p-2 ${
-        open ? "" : "hidden"
-      }`}
+      className={`mapboxgl-ctrl-filters-content top-0 fade-inout p-2 ${open ? "" : "hidden"
+        }`}
     >
       <div className="position-sticky top-0 bg-white d-flex flex-row justify-content-start pb-4">
         <h2 className="heading-small fw-normal flex-grow-1">Filter by tag</h2>
@@ -163,9 +163,8 @@ function FilterPopover() {
       data-turbo-permanent
       aria-label={open ? undefined : "Show filters"}
       role={open ? undefined : "button"}
-      className={`mapboxgl-ctrl mapboxgl-ctrl-filters fade-inout ${
-        open ? "" : "mapboxgl-ctrl-filters--collapsed"
-      }`}
+      className={`mapboxgl-ctrl mapboxgl-ctrl-filters fade-inout ${open ? "" : "mapboxgl-ctrl-filters--collapsed"
+        }`}
       onClick={open ? undefined : () => setOpen(true)}
     >
       <FilterView
