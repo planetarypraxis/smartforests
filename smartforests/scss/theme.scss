@@ -127,10 +127,6 @@ $font-family-sans-serif: MarrSans, system-ui, "Segoe UI", Roboto,
   "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 $font-family-serif: Georgia, Times, "Times New Roman", serif;
 
-.font-serif {
-  font-family: $font-family-serif;
-}
-
 // Cards
 $card-spacer-y: #{map-get($spacers, 2)};
 $card-spacer-x: #{map-get($spacers, 2)};

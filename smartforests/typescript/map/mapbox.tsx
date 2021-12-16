@@ -2,7 +2,7 @@ import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import React, { FC } from "react";
-import MapGL, { MapContext } from "@urbica/react-map-gl";
+import MapGL, { MapContext, ScaleControl, NavigationControl } from "@urbica/react-map-gl";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import mapboxgl, { Evented } from "mapbox-gl";
 import { Fragment, useContext, useEffect, useRef, useState } from "react";
@@ -13,6 +13,7 @@ import { AtlasPageFeatureLayer } from "./layers";
 import { unmountComponentAtNode } from "react-dom";
 import { useAtom } from "jotai";
 import { viewportAtom } from "./state";
+import { TurboURLParamsContextProvider, useTurboURLParams } from "../turbo";
 
 const MAPBOX_TOKEN = document.getElementById("MAP_APP")?.dataset.mapboxToken;
 
@@ -20,6 +21,7 @@ export function MapVisual() {
   const [viewport, setViewport] = useAtom(viewportAtom);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const size = useSize(mapContainerRef);
+  const [params, _] = useTurboURLParams()
 
   return (
     <div style={{ width: "100%", height: "100%" }} ref={mapContainerRef}>
@@ -40,10 +42,20 @@ export function MapVisual() {
         minZoom={2}
         maxZoom={16}
       >
+        <NavigationControl showCompass={false} showZoom position='top-left' />
         <GeocodeControl position="top-left" accessToken={MAPBOX_TOKEN} />
         <FilterControl />
         <AtlasPageFeatureLayer size={size} viewport={viewport} />
       </MapGL>
+      {!!params['filter'] && (
+        <a href={window.location.pathname} className='d-none d-sm-block font-monospace bg-white selected-tag fs-7'>
+          {params['filter']}
+          <button className="icon-btn" aria-label="Close">
+            {/* @ts-ignore */}
+            <i className="icon icon-8 bg-mid-green icon-close ms-1"></i>
+          </button>
+        </a>
+      )}
     </div>
   );
 }
@@ -93,7 +105,12 @@ class FilterControlRenderer extends Evented {
   onAdd(map) {
     this._map = map;
     this._container = document.createElement("div");
-    ReactDOM.render(<FilterPopover />, this._container);
+    ReactDOM.render(
+      <TurboURLParamsContextProvider>
+        <FilterPopover />
+      </TurboURLParamsContextProvider>,
+      this._container
+    );
     return this._container;
   }
 
@@ -128,14 +145,17 @@ const FilterView: FC<{ onClose: () => void; open: boolean }> = ({
 }) => {
   return (
     <div
-      className={`mapboxgl-ctrl-filters-content top-0 fade-inout p-2 ${
-        open ? "" : "hidden"
-      }`}
+      className={`mapboxgl-ctrl-filters-content top-0 fade-inout p-3 ${open ? "" : "hidden"
+        }`}
     >
       <div className="position-sticky top-0 bg-white d-flex flex-row justify-content-start pb-4">
-        <h2 className="heading-small fw-normal flex-grow-1">Filter by tag</h2>
+        <h2 className="heading-small fw-bold flex-grow-1 font-sans-serif">Filter by tag</h2>
 
-        <button onClick={onClose} className="icon-btn" aria-label="Close">
+        <a href={window.location.pathname} className='font-monospace text-uppercase px-2 cursor-pointer'>
+          Clear All
+        </a>
+
+        <button onClick={onClose} className="icon-btn" style={{ marginTop: -5 }} aria-label="Close">
           <i className="icon bg-dark icon-close"></i>
         </button>
       </div>
@@ -147,7 +167,6 @@ const FilterView: FC<{ onClose: () => void; open: boolean }> = ({
           target="_top"
           loading="lazy"
           src={`/_filters/`}
-          data-turbo-permanent=""
         />
       </div>
     </div>
@@ -156,16 +175,15 @@ const FilterView: FC<{ onClose: () => void; open: boolean }> = ({
 
 function FilterPopover() {
   const [open, setOpen] = useState(false);
+  const [params, _] = useTurboURLParams()
 
   return (
     <div
       id="filter-popover"
-      data-turbo-permanent
       aria-label={open ? undefined : "Show filters"}
       role={open ? undefined : "button"}
-      className={`mapboxgl-ctrl mapboxgl-ctrl-filters fade-inout ${
-        open ? "" : "mapboxgl-ctrl-filters--collapsed"
-      }`}
+      className={`mapboxgl-ctrl mapboxgl-ctrl-filters fade-inout ${open ? "" : "mapboxgl-ctrl-filters--collapsed"
+        }`}
       onClick={open ? undefined : () => setOpen(true)}
     >
       <FilterView
@@ -175,6 +193,7 @@ function FilterPopover() {
         }}
       />
       <FilterIcon className={open ? "hidden" : ""} />
+      {!!params['filter'] && <div className='filter-counter bg-dark-green text-white'>1</div>}
     </div>
   );
 }

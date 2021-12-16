@@ -87,6 +87,10 @@
   font-family: $font-family-serif !important;
 }
 
+.font-sans-serif {
+  font-family: $font-family-sans-serif !important;
+}
+
 .bg-faded-yellow {
   background-color: rgba($yellow, 0.8);
 }
@@ -164,4 +168,8 @@
     opacity: 0;
     visibility: hidden;
   }
+}
+
+.cursor-pointer {
+  cursor: pointer !important;
 }

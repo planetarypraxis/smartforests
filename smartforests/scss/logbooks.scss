@@ -1,6 +1,34 @@
 .logbook-entry-embed {
-    div {
-      @extend .ratio;
-      @extend .ratio-16x9;
-    }
+  div {
+    @extend .ratio;
+    @extend .ratio-16x9;
   }
+}
+
+.filter-counter {
+  border-radius: 100%;
+  padding: 0px;
+  display: flex;
+  place-content: center;
+  font-size: 12px;
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 20px;
+  height: 20px;
+}
+
+#filter-popover {
+  overflow: visible;
+}
+
+.selected-tag {
+  position: absolute;
+  top: map-get($map: $spacers, $key: 3);
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50px;
+  padding: 5px 10px;
+  text-transform: uppercase;
+  text-decoration: none;
+}

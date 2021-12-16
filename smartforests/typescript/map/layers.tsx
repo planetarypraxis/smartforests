@@ -1,4 +1,6 @@
-import React, { FC, Fragment } from "react";
+import { useAtomValue } from "jotai/utils";
+import React, { FC, Fragment, useEffect, useRef, useState } from "react";
+import { languageCodeAtom } from "../pageContext";
 import { MapViewport, useFeatures } from "./data";
 import { AtlasPageMarker, ClusterMarker } from "./markers";
 import { stringifyQuery, useFilterParam } from "./state";
@@ -10,11 +12,14 @@ export const AtlasPageFeatureLayer: FC<{
 }> = ({ size, viewport }) => {
   const tag = useFilterParam();
 
+  // @ts-ignore
+  const languageCode = useAtomValue(languageCodeAtom)
+
   const data = useFeatures<SmartForest.MapItem>(
     size,
     viewport,
-    () => ({ tag }),
-    [tag]
+    () => ({ tag, languageCode }),
+    [tag, languageCode]
   );
 
   if (!data) {

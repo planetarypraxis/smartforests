@@ -1,8 +1,10 @@
 from django.shortcuts import get_object_or_404, render
 from rest_framework import serializers, viewsets
+from rest_framework.response import Response
 from rest_framework_gis.serializers import GeoFeatureModelSerializer, GeometrySerializerMethodField
 from django.urls import path
 from wagtail.core.models import Page
+from wagtail.core.models.i18n import Locale
 from smartforests.models import Tag
 from wagtail.api.v2.utils import BadRequestError
 
@@ -38,6 +40,7 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet):
 
     class RequestSerializer(serializers.Serializer):
         tag = serializers.ListField(child=serializers.CharField(), default=())
+        language_code = serializers.CharField(default='en')
 
     class ResultSerializer(GeoFeatureModelSerializer):
         class Meta:
@@ -78,6 +81,33 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet):
                 qs = qs.none()
 
         return qs
+
+    def get_locale(self):
+        language_code = self.request.GET.get('language_code', 'en')
+        try:
+            locale = Locale.objects.get(language_code=language_code)
+            return locale
+        except:
+            try:
+                # E.g. for en-gb, try en
+                locale = Locale.objects.get(
+                    language_code="-".split(language_code)[0])
+                return locale
+            except:
+                return Locale.objects.get(language_code='en')
+
+    def list(self, request):
+        list = self.get_queryset()
+        locale = self.get_locale()
+        localized_pages = set([page.get_translation_or_none(
+            locale) or page for page in list])
+        return Response(self.ResultSerializer(localized_pages, many=True).data)
+
+    def get_object(self, request):
+        page = self.get_queryset()
+        locale = self.get_locale()
+        localized_page = page.get_translation_or_none(locale) or page
+        return Response(self.ResultSerializer(localized_page).data)
 
     @classmethod
     def get_urlpatterns(cls):
