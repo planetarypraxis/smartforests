@@ -43,15 +43,14 @@
       </div>
       <div class="col-md mb-4 mb-md-0">
         <h1>{{self.title}}</h1>
+        {% if tag_filter %}
         <div>
-          {% if tag_filter %}
-          <div
-            class="filter-tag active"
-          >
+          <a href="{% qs_link 'filter' None %}" class="filter-tag active">
             {{ tag_filter }}
-          </div>
-          {% endif %}
+            <i aria-label="Close" className="icon icon-8 icon-close bg-white ms-1"></i>
+          </a>
         </div>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -71,4 +70,5 @@
 <script defer src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4/dist/masonry.pkgd.min.js" crossorigin="anonymous"></script>
 <script defer src="{% static 'js/masonry.js' %}"></script>
+<script defer src="{% static 'js/filters.js' %}"></script>
 {% endblock %}
