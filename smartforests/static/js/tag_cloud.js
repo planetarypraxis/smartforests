@@ -12,8 +12,21 @@ window.addEventListener("resize", () => {
   resizeHandlers.forEach((fn) => fn());
 });
 
+export const getLanguageCode = () => {
+  try {
+    const requestInfoElement = document.getElementById('request-info')
+    if (!requestInfoElement) throw new Error("Request info was not provided by Django")
+    const { languageCode } = JSON.parse(requestInfoElement.innerHTML)
+    if (!languageCode || typeof languageCode !== 'string') throw new Error("Language code was not defined")
+    return languageCode
+  } catch (e) {
+    // In case of malformed JSON
+    return 'en'
+  }
+}
+
 const init = () => {
-  const { languageCode } = JSON.parse(document.getElementById('request-info').innerHTML)
+  const languageCode = getLanguageCode()
 
   // Downsample the canvas to produce the pixelated effect.
   const PIXEL_SIZE = 32;
