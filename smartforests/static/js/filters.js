@@ -1,24 +1,15 @@
 (() => {
-  /**
-   * When a page has the .filter-page class applied, set relevant body classes when the sidebar is visible/invisible.
-   */
-  const initSidebarExpand = () => {
+  const initSidebar = () => {
     const page = document.querySelector(".filter-page");
     const filters = document.getElementById("filters");
     if (!page || !filters) {
       return;
     }
 
-    filters.addEventListener("show.bs.collapse", () => {
-      page.classList.add("filters-visible");
-
-      filters.dispatchEvent(new CustomEvent("sf:layout", { bubbles: true }));
-    });
-    filters.addEventListener("hidden.bs.collapse", () => {
-      page.classList.remove("filters-visible");
-
-      filters.dispatchEvent(new CustomEvent("sf:layout", { bubbles: true }));
-    });
+    // When a tag is clicked, `hide.bs.offcanvas` does not fire,
+    // so do this manually to prevent glitchy behaviour on subsequent Turbo visits.
+    let offcanvas = bootstrap.Offcanvas.getInstance(filters)
+    if (offcanvas) offcanvas.hide()
   };
 
   /**
@@ -42,11 +33,12 @@
 
   const init = () => {
     initFilters();
-    initSidebarExpand();
+    initSidebar();
   };
 
   const handleVisit = () => {
     initFilters();
+    initSidebar();
   };
 
   window.addEventListener("turbo:visit", handleVisit);
