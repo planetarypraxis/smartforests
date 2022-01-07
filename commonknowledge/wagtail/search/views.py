@@ -47,10 +47,10 @@ class BasicSearchView(TemplateView):
             query = Query.get(search_query)
             query.add_hit()
 
-            return list(set([
+            return [
                 page.specific
                 for page in self.search_queryset(self.get_queryset(), search_query)
-            ]))
+            ]
 
         else:
             return self.get_queryset().none()
