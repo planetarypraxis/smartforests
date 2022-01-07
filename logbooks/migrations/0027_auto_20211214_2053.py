@@ -17,54 +17,65 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='episodepage',
             name='additional_contributing_users',
-            field=modelcluster.fields.ParentalManyToManyField(blank=True, help_text='Contributors who have not directly edited this page', to=settings.AUTH_USER_MODEL),
+            field=modelcluster.fields.ParentalManyToManyField(
+                blank=True, help_text='Contributors who have not directly edited this page', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='logbookentrypage',
             name='additional_contributing_users',
-            field=modelcluster.fields.ParentalManyToManyField(blank=True, help_text='Contributors who have not directly edited this page', to=settings.AUTH_USER_MODEL),
+            field=modelcluster.fields.ParentalManyToManyField(
+                blank=True, help_text='Contributors who have not directly edited this page', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='logbookpage',
             name='additional_contributing_users',
-            field=modelcluster.fields.ParentalManyToManyField(blank=True, help_text='Contributors who have not directly edited this page', to=settings.AUTH_USER_MODEL),
+            field=modelcluster.fields.ParentalManyToManyField(
+                blank=True, help_text='Contributors who have not directly edited this page', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='storypage',
             name='additional_contributing_users',
-            field=modelcluster.fields.ParentalManyToManyField(blank=True, help_text='Contributors who have not directly edited this page', to=settings.AUTH_USER_MODEL),
+            field=modelcluster.fields.ParentalManyToManyField(
+                blank=True, help_text='Contributors who have not directly edited this page', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AlterField(
             model_name='contributorpage',
             name='user',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='contributor_pages', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL,
+                                    related_name='contributor_pages', to=settings.AUTH_USER_MODEL),
         ),
         migrations.CreateModel(
-            name='NonUserContributor',
+            name='Person',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=500)),
-                ('contributor_page', modelcluster.fields.ParentalKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='logbooks.contributorpage')),
+                ('contributor_page', modelcluster.fields.ParentalKey(blank=True, null=True,
+                 on_delete=django.db.models.deletion.CASCADE, to='logbooks.contributorpage')),
             ],
         ),
         migrations.AddField(
             model_name='episodepage',
-            name='additional_contributing_nonusers',
-            field=modelcluster.fields.ParentalManyToManyField(blank=True, help_text='Contributors who are not users of the Atlas', to='logbooks.NonUserContributor'),
+            name='additional_contributing_people',
+            field=modelcluster.fields.ParentalManyToManyField(
+                blank=True, help_text='Contributors who are not users of the Atlas', to='logbooks.Person'),
         ),
         migrations.AddField(
             model_name='logbookentrypage',
-            name='additional_contributing_nonusers',
-            field=modelcluster.fields.ParentalManyToManyField(blank=True, help_text='Contributors who are not users of the Atlas', to='logbooks.NonUserContributor'),
+            name='additional_contributing_people',
+            field=modelcluster.fields.ParentalManyToManyField(
+                blank=True, help_text='Contributors who are not users of the Atlas', to='logbooks.Person'),
         ),
         migrations.AddField(
             model_name='logbookpage',
-            name='additional_contributing_nonusers',
-            field=modelcluster.fields.ParentalManyToManyField(blank=True, help_text='Contributors who are not users of the Atlas', to='logbooks.NonUserContributor'),
+            name='additional_contributing_people',
+            field=modelcluster.fields.ParentalManyToManyField(
+                blank=True, help_text='Contributors who are not users of the Atlas', to='logbooks.Person'),
         ),
         migrations.AddField(
             model_name='storypage',
-            name='additional_contributing_nonusers',
-            field=modelcluster.fields.ParentalManyToManyField(blank=True, help_text='Contributors who are not users of the Atlas', to='logbooks.NonUserContributor'),
+            name='additional_contributing_people',
+            field=modelcluster.fields.ParentalManyToManyField(
+                blank=True, help_text='Contributors who are not users of the Atlas', to='logbooks.Person'),
         ),
     ]

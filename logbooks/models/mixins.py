@@ -91,8 +91,8 @@ class ContributorMixin(BaseLogbooksPage):
         help_text="Contributors who have not directly edited this page"
     )
 
-    additional_contributing_nonusers = ParentalManyToManyField(
-        'logbooks.NonUserContributor',
+    additional_contributing_people = ParentalManyToManyField(
+        'logbooks.Person',
         blank=True,
         help_text="Contributors who are not users of the Atlas"
     )
@@ -110,7 +110,7 @@ class ContributorMixin(BaseLogbooksPage):
             ] + list(
                 p.additional_contributing_users.all()
             ) + list(
-                p.additional_contributing_nonusers.all()
+                p.additional_contributing_people.all()
             )
         )
 
@@ -132,11 +132,11 @@ class ContributorMixin(BaseLogbooksPage):
 
     content_panels = [
         AutocompletePanel('additional_contributing_users'),
-        AutocompletePanel('additional_contributing_nonusers'),
+        AutocompletePanel('additional_contributing_people'),
     ]
 
 
-class NonUserContributor(Model):
+class Person(Model):
     '''
     Non-users who are manually tagged as contributors
     '''
@@ -159,7 +159,7 @@ class NonUserContributor(Model):
     def edited_content_pages(self):
         return set([
             page
-            for page in Page.objects.filter(additional_contributing_nonusers=self).specific()
+            for page in Page.objects.filter(additional_contributing_people=self).specific()
             if hasattr(page, 'is_content_page')
         ])
 
