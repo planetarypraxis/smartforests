@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.core.files.storage import default_storage
-from django.db.models.base import Model
+from django.db import models
 from django.db.models.fields import CharField
 from wagtailautocomplete.edit_handlers import AutocompletePanel
 from commonknowledge.django.cache import django_cached_model
@@ -34,6 +34,7 @@ from mapwidgets.widgets import MapboxPointFieldWidget
 from smartforests.models import Tag, User
 from smartforests.util import group_by_title
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
+from wagtail.snippets.models import register_snippet
 
 
 class BaseLogbooksPage(Page):
@@ -136,7 +137,11 @@ class ContributorMixin(BaseLogbooksPage):
     ]
 
 
-class Person(Model):
+@register_snippet
+class Person(models.Model):
+    class Meta:
+        verbose_name_plural = 'People'
+
     '''
     Non-users who are manually tagged as contributors
     '''
