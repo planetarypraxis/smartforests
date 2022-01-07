@@ -7,12 +7,14 @@
       Last edited {{ page.last_published_at|date:"d E Y" }}
     </time>
   </section>
+  {% if page.contributors|length %}
   <section class="d-flex flex-column mb-3">
     <h4 class="mb-0">Contributors</h4>
     {% for user in page.contributors %}
       <a class='d-block' href='{{ user.contributor_page.localized.link_url }}'>{% include 'logbooks/username.html' with user=user %}</a>
     {% endfor %}
   </section>
+  {% endif %}
   {% if page.geographical_location %}
   <section class="d-flex flex-column mb-3">
     <h4 class="mb-0">Location</h4>
