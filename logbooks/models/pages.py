@@ -19,7 +19,7 @@ from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
 from wagtail.api import APIField
 from smartforests.util import group_by_title
-from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, DescendantPageContributorMixin, GeocodedMixin, IndexPage, ThumbnailMixin, SidebarRenderableMixin
+from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, DescendantPageContributorMixin, GeocodedMixin, IndexPage, Person, ThumbnailMixin, SidebarRenderableMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
 from logbooks.models.tag_cloud import TagCloud
@@ -147,7 +147,6 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
         verbose_name_plural = "Logbooks"
 
     icon_class = 'icon-logbooks'
-    is_content_page = True
     show_in_menus_default = True
     parent_page_types = ['logbooks.LogbookIndexPage']
 
@@ -158,7 +157,7 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
         FieldPanel('title', classname="full title"),
         FieldPanel('description'),
         FieldPanel('tags'),
-    ] + DescendantPageContributorMixin.content_panels + GeocodedMixin.content_panels
+    ] + DescendantPageContributorMixin.content_panels + GeocodedMixin.content_panels + ContributorMixin.content_panels
 
     api_fields = [
         APIField('icon_class'),
@@ -264,6 +263,16 @@ class ContributorPage(GeocodedMixin, BaseLogbooksPage):
         FieldPanel('bio')
     ] + GeocodedMixin.content_panels
 
+    @property
+    def person(self):
+        if self.user:
+            return self.user
+        try:
+            person = Person.objects.get(contributor_page=self)
+            return person
+        except:
+            return None
+
     @classmethod
     def create_for_user(cls, user):
         if ContributorPage.objects.filter(user=user).exists():
@@ -287,8 +296,8 @@ class ContributorPage(GeocodedMixin, BaseLogbooksPage):
 
     @property
     def tags(self):
-        if self.user:
-            return self.user.edited_tags()
+        if self.person:
+            return self.person.edited_tags()
 
     @classmethod
     def for_tag(cls, tag):

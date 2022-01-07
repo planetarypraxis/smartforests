@@ -21,7 +21,7 @@
 {% endblock %}
 
 {% block article_footer %}
-{% with self.user.edited_content_pages as pages %}
+{% with self.person.edited_content_pages as pages %}
 {% if pages|length %}
 <section class='container-fluid border-top border-light-grey py-6'>
   <header class='row'>

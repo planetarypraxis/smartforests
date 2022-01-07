@@ -108,15 +108,19 @@ class User(AbstractUser):
 
     autocomplete_search_field = 'username'
 
+    def contributor_page(self):
+        return self.contributor_pages.first()
+
     @classmethod
     def with_edited_tags(cls, *tags):
         return User.objects.filter(pagerevision__page__tagged_items__tag__in=tags).distinct()
 
     def edited_content_pages(self):
+        from logbooks.models.pages import LogbookPage
         return set([
             page
-            for page in Page.objects.filter(revisions__user=self).specific()
-            if hasattr(page, 'is_content_page')
+            for page in
+            LogbookPage.objects.filter(revisions__user=self).specific()
         ])
 
     def edited_tags(self):

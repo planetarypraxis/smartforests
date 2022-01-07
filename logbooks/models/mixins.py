@@ -1,5 +1,8 @@
 from django.conf import settings
 from django.core.files.storage import default_storage
+from django.db import models
+from django.db.models.fields import CharField
+from wagtailautocomplete.edit_handlers import AutocompletePanel
 from commonknowledge.django.cache import django_cached_model
 from commonknowledge.django.images import generate_imagegrid_filename, render_image_grid
 from commonknowledge.wagtail.models import ChildListMixin
@@ -28,8 +31,10 @@ from wagtail.core.models import Page, PageManager, PageRevision
 from django.contrib.gis.db import models as geo
 from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin
 from mapwidgets.widgets import MapboxPointFieldWidget
-from smartforests.models import Tag
+from smartforests.models import Tag, User
 from smartforests.util import group_by_title
+from modelcluster.fields import ParentalKey, ParentalManyToManyField
+from wagtail.snippets.models import register_snippet
 
 
 class BaseLogbooksPage(Page):
@@ -81,24 +86,93 @@ class ContributorMixin(BaseLogbooksPage):
     class Meta:
         abstract = True
 
+    additional_contributing_users = ParentalManyToManyField(
+        User,
+        blank=True,
+        help_text="Contributors who have not directly edited this page"
+    )
+
+    additional_contributing_people = ParentalManyToManyField(
+        'logbooks.Person',
+        blank=True,
+        help_text="Contributors who are not users of the Atlas"
+    )
+
+    def get_contributors(self):
+        p = self
+        return set(
+            [p.owner] + [
+                user
+                for user in [
+                    revision.user
+                    for revision in PageRevision.objects.filter(page=p)
+                ]
+                if user is not None
+            ] + list(
+                p.additional_contributing_users.all()
+            ) + list(
+                p.additional_contributing_people.all()
+            )
+        )
+
     def contributors(self):
         '''
-        Return all the people who have contributed to this page
+        Return all the people who have contributed to this page and its subpages
         '''
-        return list(
-            user
-            for user in set([
-                revision.user
-                for revision in PageRevision.objects.filter(page=self)
-            ] + [self.owner])
-            if user is not None
-        )
+        pages = Page.objects.type(
+            ContributorMixin).descendant_of(self, inclusive=True).specific()
+        contributors = []
+        for page in pages:
+            contributors += list(page.get_contributors())
+
+        return list(set(contributors))
 
     api_fields = [
         APIField('contributors', serializer=UserSerializer(many=True)),
     ]
 
-    content_panels = []
+    content_panels = [
+        AutocompletePanel('additional_contributing_users'),
+        AutocompletePanel('additional_contributing_people'),
+    ]
+
+
+@register_snippet
+class Person(models.Model):
+    class Meta:
+        verbose_name_plural = 'People'
+
+    '''
+    Non-users who are manually tagged as contributors
+    '''
+    name = CharField(max_length=500)
+    contributor_page = ParentalKey(
+        'logbooks.ContributorPage', null=True, blank=True)
+
+    autocomplete_search_field = 'name'
+
+    @classmethod
+    def autocomplete_create(kls: type, value: str):
+        return kls.objects.create(name=value)
+
+    def __str__(self) -> str:
+        return self.name
+
+    def autocomplete_label(self):
+        return str(self)
+
+    def edited_content_pages(self):
+        from logbooks.models.pages import LogbookPage
+        return set([
+            page
+            for page in
+            LogbookPage.objects.filter(
+                additional_contributing_people=self).specific()
+        ])
+
+    def edited_tags(self):
+        from smartforests.models import Tag
+        return Tag.objects.filter(logbooks_atlastag_items__content_object__in=self.edited_content_pages())
 
 
 class DescendantPageContributorMixin(BaseLogbooksPage):
@@ -294,7 +368,8 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
         InlinePanel("footnotes", label="Footnotes"),
     ] + ContributorMixin.content_panels + GeocodedMixin.content_panels
 
-    content_panels = Page.content_panels + additional_content_panels
+    content_panels = Page.content_panels + \
+        additional_content_panels + ContributorMixin.content_panels
 
     api_fields = [
         APIField('tags'),
