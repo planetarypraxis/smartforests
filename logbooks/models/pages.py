@@ -188,7 +188,7 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
 
     @property
     def logbook_entries(self):
-        return get_children_of_type(self, LogbookEntryPage)
+        return self.get_children().live().specific()
 
     @property
     def entry_tags(self):
@@ -318,7 +318,7 @@ class ContributorsIndexPage(IndexPage):
         return group_by_title(Tag.objects.all(), key='name')
 
     def get_child_list_queryset(self, request):
-        return ContributorPage.objects.child_of(self).live()
+        return self.get_children().live().specific()
 
     def get_filters(self, request):
         filter = {}
