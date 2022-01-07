@@ -7,7 +7,7 @@
 
 <!-- Filter sidepanel -->
 {% if self.relevant_tags %}
-<div id='filters' class="offcanvas offcanvas-start" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
+<div id='filters' class="offcanvas offcanvas-start" tabindex="-1" aria-labelledby="offcanvasLabel">
   <div class="offcanvas-header d-flex align-items-center justify-content-end cursor-pointer" data-bs-dismiss="offcanvas">
     <svg class='d-inline-block' width="15" height="15" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M7.00033 2.33334L7.82283 3.15584L4.56783 6.41668H11.667V7.58334H4.56783L7.82283 10.8442L7.00033 11.6667L2.33366 7.00001L7.00033 2.33334Z" fill="#043003"/>
@@ -43,15 +43,14 @@
       </div>
       <div class="col-md mb-4 mb-md-0">
         <h1>{{self.title}}</h1>
+        {% if tag_filter %}
         <div>
-          {% if tag_filter %}
-          <div
-            class="filter-tag active"
-          >
+          <a href="{% qs_link 'filter' None %}" class="filter-tag active">
             {{ tag_filter }}
-          </div>
-          {% endif %}
+            <i aria-label="Close" className="icon icon-8 icon-close bg-white ms-1"></i>
+          </a>
         </div>
+        {% endif %}
       </div>
     </div>
   </div>

@@ -47,7 +47,11 @@ def qs_link(context, key, value, **kwargs):
     request: HttpRequest = context.get('request')
 
     params = request.GET.dict()
-    params[key] = value
+    if value is None:
+        params.pop(key, None)
+    else:
+        params[key] = value
+
     return '?' + parse.urlencode(params)
 
 

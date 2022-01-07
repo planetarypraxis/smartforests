@@ -52,7 +52,7 @@ export function MapVisual() {
           {params['filter']}
           <button className="icon-btn" aria-label="Close">
             {/* @ts-ignore */}
-            <i className="icon bg-mid-green icon-close ms-1" style={{ '--icon-size': '8px' }}></i>
+            <i className="icon icon-8 bg-mid-green icon-close ms-1"></i>
           </button>
         </a>
       )}
