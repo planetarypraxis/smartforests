@@ -100,16 +100,14 @@ class ContributorMixin(BaseLogbooksPage):
     def get_contributors(self):
         p = self
         return set(
-            list(
-                [p.owner] + [
-                    user
-                    for user in [
-                        revision.user
-                        for revision in PageRevision.objects.filter(page=p)
-                    ]
-                    if user is not None
+            [p.owner] + [
+                user
+                for user in [
+                    revision.user
+                    for revision in PageRevision.objects.filter(page=p)
                 ]
-            ) + list(
+                if user is not None
+            ] + list(
                 p.additional_contributing_users.all()
             ) + list(
                 p.additional_contributing_nonusers.all()
