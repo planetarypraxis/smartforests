@@ -2,7 +2,7 @@ $enable-rounded: true;
 
 // Colors
 $off-white: #f9f9f9;
-
+$soft-black: #343e3c;
 $grey: #545454;
 $light-grey: #c5c5c5;
 
@@ -20,6 +20,7 @@ $primary: $mid-green;
 $secondary: $grey;
 $primary-hover-light: rgba($soft-green, 0.5);
 $custom-colors: (
+  soft-black: $soft-black,
   dark-green: $dark-green,
   dark-green-transparent: rgba($dark-green, 0.8),
   mid-green: $mid-green,
@@ -47,6 +48,7 @@ $spacers: (
   5: 40px,
   6: 60px,
   7: 90px,
+  8: 120px,
 );
 
 // Card
