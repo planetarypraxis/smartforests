@@ -162,10 +162,12 @@ class Person(models.Model):
         return str(self)
 
     def edited_content_pages(self):
+        from logbooks.models.pages import LogbookPage
         return set([
             page
-            for page in Page.objects.filter(additional_contributing_people=self).specific()
-            if hasattr(page, 'is_content_page')
+            for page in
+            LogbookPage.objects.filter(
+                additional_contributing_people=self).specific()
         ])
 
     def edited_tags(self):
