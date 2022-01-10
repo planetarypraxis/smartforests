@@ -10,15 +10,18 @@ class ImportantPagesMiddleware(object):
     def __call__(self, request):
         return self.get_response(request)
 
-    # @django_cached('important_pages', ttl=60)
     def process_template_response(self, request, response):
         if response.context_data:
-            response.context_data['important_pages'] = {
-                'contributors': ContributorsIndexPage.objects.first(),
-                'map': MapPage.objects.first(),
-                'logbooks': LogbookIndexPage.objects.first(),
-                'stories': StoryIndexPage.objects.first(),
-                'radio': RadioIndexPage.objects.first()
-            }
+            response.context_data['important_pages'] = self.get_menu_items()
 
         return response
+
+    @django_cached('important_pages', ttl=60)
+    def get_menu_items(self):
+        return {
+            'contributors': ContributorsIndexPage.objects.first(),
+            'map': MapPage.objects.first(),
+            'logbooks': LogbookIndexPage.objects.first(),
+            'stories': StoryIndexPage.objects.first(),
+            'radio': RadioIndexPage.objects.first()
+        }
