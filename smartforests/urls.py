@@ -12,6 +12,7 @@ from wagtail_content_import import urls as wagtail_content_import_urls
 from wagtail_footnotes import urls as footnotes_urls
 from wagtailautocomplete.urls.admin import urlpatterns as autocomplete_admin_urls
 from django.conf.urls.i18n import i18n_patterns
+from django.views.generic import TemplateView
 
 from commonknowledge.django import rest
 from .api import wagtail_api_router
@@ -33,6 +34,10 @@ urlpatterns = [
     path('_filters/', sf_views.filters_frame),
     # path('api/', include(rest.get_urls())),
     # path('__debug__/', include(debug_toolbar.urls)),
+    path('400', TemplateView.as_view(template_name='400.html')),
+    path('403', TemplateView.as_view(template_name='403.html')),
+    path('404', TemplateView.as_view(template_name='404.html')),
+    path('500', TemplateView.as_view(template_name='500.html')),
 ]
 
 

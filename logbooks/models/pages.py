@@ -165,11 +165,8 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
         APIField('description'),
     ] + DescendantPageContributorMixin.api_fields + GeocodedMixin.api_fields
 
-    def get_child_list_queryset(self, _request):
-        return self.logbook_entries
-
     def get_thumbnail_images(self):
-        return tuple(x.cover_image() for x in self.logbook_entries if x.cover_image() is not None)
+        return tuple(x.cover_image() for x in self.get_child_list_queryset() if x.cover_image() is not None)
 
     def card_content_html(self):
         return render_to_string('logbooks/thumbnails/basic_thumbnail.html', {
@@ -187,14 +184,10 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
         return None if len(images) == 0 else images[0]
 
     @property
-    def logbook_entries(self):
-        return get_children_of_type(self, LogbookEntryPage)
-
-    @property
     def entry_tags(self):
         return list(set(
             tag
-            for entry in self.logbook_entries
+            for entry in self.get_child_list_queryset()
             for tag in entry.tags.all()
         ))
 
@@ -316,9 +309,6 @@ class ContributorsIndexPage(IndexPage):
 
     def relevant_tags(self):
         return group_by_title(Tag.objects.all(), key='name')
-
-    def get_child_list_queryset(self, request):
-        return ContributorPage.objects.child_of(self).live()
 
     def get_filters(self, request):
         filter = {}

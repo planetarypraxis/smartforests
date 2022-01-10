@@ -2,7 +2,10 @@
 {% load ckdjango_tags wagtailimages_tags wagtailcore_tags static %}
 
 {% block article_title %}
-  <h1 class="mb-3 mb-md-5 d-flex align-items-center">
+  <h1 class="mb-3 mb-md-5 d-flex">
+    {% if self.avatar %}
+      {% image self.avatar fill-60x60 style='border-radius: 100%; width: 60px; height: 60px; margin-right: 20px; vertical-align: middle;' %}
+    {% endif %}
     <span>{{self.title}}</span>
   </h1>
 {% endblock %}
