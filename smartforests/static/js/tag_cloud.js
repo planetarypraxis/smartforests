@@ -161,17 +161,17 @@ const init = () => {
       const container = d3.select(el);
       const cola = webcola.d3adaptor(d3).size([width, height]);
 
-      const realGraphNodes = nodes.slice(0);
+      const realGraphNodes = nodes.slice();
       const pageBounds = { x: PADDING, y: PADDING, width, height };
       const fixedNode = { fixed: true, fixedWeight: 100 };
       const topLeft = { ...fixedNode, x: pageBounds.x, y: pageBounds.y };
-      const tlIndex = nodes.push(topLeft) - 1;
+      const tlIndex = realGraphNodes.push(topLeft) - 1;
       const bottomRight = {
         ...fixedNode,
         x: pageBounds.x + pageBounds.width,
         y: pageBounds.y + pageBounds.height,
       };
-      const brIndex = nodes.push(bottomRight) - 1;
+      const brIndex = realGraphNodes.push(bottomRight) - 1;
       const constraints = [];
 
       if (window.innerWidth <= MOBILE_BREAKPOINT) {
@@ -280,7 +280,7 @@ const init = () => {
 
       // Configure and start the layout
       cola
-        .nodes(nodes)
+        .nodes(realGraphNodes)
         .links(links)
         .avoidOverlaps(true)
         .constraints(constraints)
@@ -295,7 +295,7 @@ const init = () => {
       // Animate the layout.
       cola.on("tick", () => {
         tags.style("transform", (d) => `translate(${px(d.x)},${px(d.y)})`);
-        updateBackground(nodes);
+        updateBackground(realGraphNodes);
       });
     };
 
