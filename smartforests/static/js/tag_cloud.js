@@ -196,7 +196,7 @@ const init = () => {
         .join((enter) => {
           const a = enter
             .append("a")
-            .attr("class", "related-tag")
+            .attr("class", d => d.fixed ? "layout-tag" : "related-tag")
             .attr("data-turbo-frame", sidepanelFrame)
             .attr("href", (d) => `/${languageCode}/_tags/${d.slug}/`)
             .on("click", () => {
