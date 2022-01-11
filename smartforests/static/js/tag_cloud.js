@@ -297,7 +297,6 @@ const init = () => {
               } else {
                 setSelectedTag(e.target.dataset.filter)
               }
-              // showTagSidepanel()
             })
 
           return a;
