@@ -1,15 +1,25 @@
+import qs from 'query-string'
+import { getLanguageCode } from './pageContext';
+
 const init = () => {
   const search = document.getElementById("search-box");
   const searchResults = document.getElementById("search-results");
   const searchToggle = document.getElementById("searchToggle");
   const modal = new bootstrap.Modal(searchToggle);
+  const languageCode = getLanguageCode()
 
   searchToggle.addEventListener("submit", (e) => e.preventDefault());
 
   search.addEventListener(
     "input",
     _.debounce(() => {
-      searchResults.src = "/search/?query=" + encodeURIComponent(search.value);
+      searchResults.src = qs.stringifyUrl({
+        url: '/search/',
+        query: {
+          query: search.value,
+          language_code: languageCode
+        }
+      })
     }, 300)
   );
 
