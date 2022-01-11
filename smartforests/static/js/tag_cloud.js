@@ -6,11 +6,96 @@ import concaveman from "https://cdn.skypack.dev/concaveman";
 import debounce from "https://cdn.skypack.dev/lodash.debounce";
 import uniqBy from "https://cdn.skypack.dev/lodash.uniqby";
 
+const getPageElements = () => {
+  const parentEl = document.querySelector("[data-tag-cloud-data]")
+  if (!parentEl) return
+  const dict = Object.entries(parentEl.dataset).reduce((dict, [key, value]) => {
+    dict[key] = value ? document.getElementById(value) : null
+    return dict
+  }, {})
+  dict.tagOffcanvasInstance = bootstrap.Offcanvas.getInstance(dict.tagOffcanvas) || new bootstrap.Offcanvas(dict.tagOffcanvas);
+  return dict
+}
+
 // Re-layout on window resize
 let resizeHandlers = [];
 window.addEventListener("resize", () => {
   resizeHandlers.forEach((fn) => fn());
 });
+
+// Manage highlighted tag state
+
+let selectedTag = null
+
+function isTagSelected(slug) {
+  if (slug) {
+    return selectedTag === slug
+  } else {
+    return !!selectedTag
+  }
+}
+
+function setSelectedTag(slug) {
+  if (slug) {
+    selectedTag = slug
+  } else {
+    selectedTag = null
+  }
+  syncState()
+}
+
+function resetSelectedTag() {
+  if (!isTagSelected()) return
+  setSelectedTag(null)
+}
+
+function showTagSidepanel() {
+  const { tagOffcanvasInstance } = getPageElements()
+  if (!tagOffcanvasInstance) return
+  tagOffcanvasInstance.show();
+}
+
+function hideTagSidepanel() {
+  const { tagOffcanvasInstance } = getPageElements()
+  if (!tagOffcanvasInstance) return
+  tagOffcanvasInstance.hide();
+}
+
+// Offcanvas close handler should update state
+
+window.addEventListener('hide.bs.offcanvas', e => {
+  const { tagOffcanvas } = getPageElements()
+  if (!tagOffcanvas || e.target.id !== tagOffcanvas.id) return
+  resetSelectedTag()
+})
+
+// Sync the tag / sidepanel state on first load
+
+function syncState() {
+  if (isTagSelected()) {
+    showTagSidepanel()
+  } else {
+    hideTagSidepanel()
+  }
+  updateSelectedTagStyle()
+}
+
+window.addEventListener('turbo:visit', () => {
+  selectedTag = false
+  syncState()
+})
+
+syncState()
+
+// Styling derived from state
+
+function tagStyleFn(d) {
+  return d.fixed ? "layout-tag" : `related-tag ${isTagSelected(d.slug) && 'related-tag--selected'}`
+}
+
+function updateSelectedTagStyle() {
+  d3.selectAll('.related-tag').attr('class', tagStyleFn)
+}
 
 export const getLanguageCode = () => {
   try {
@@ -52,7 +137,6 @@ const init = () => {
     }
 
     // Get the sidepanel elements for navigation
-    const sidepanel = document.getElementById(parentEl.dataset.tagOffcanvas);
     const sidepanelFrame = parentEl.dataset.tagFrame ?? "_top";
 
     parentEl.classList.add("tag-cloud");
@@ -161,17 +245,17 @@ const init = () => {
       const container = d3.select(el);
       const cola = webcola.d3adaptor(d3).size([width, height]);
 
-      const realGraphNodes = nodes.slice(0);
+      const realGraphNodes = nodes.slice();
       const pageBounds = { x: PADDING, y: PADDING, width, height };
       const fixedNode = { fixed: true, fixedWeight: 100 };
       const topLeft = { ...fixedNode, x: pageBounds.x, y: pageBounds.y };
-      const tlIndex = nodes.push(topLeft) - 1;
+      const tlIndex = realGraphNodes.push(topLeft) - 1;
       const bottomRight = {
         ...fixedNode,
         x: pageBounds.x + pageBounds.width,
         y: pageBounds.y + pageBounds.height,
       };
-      const brIndex = nodes.push(bottomRight) - 1;
+      const brIndex = realGraphNodes.push(bottomRight) - 1;
       const constraints = [];
 
       if (window.innerWidth <= MOBILE_BREAKPOINT) {
@@ -196,23 +280,24 @@ const init = () => {
         .join((enter) => {
           const a = enter
             .append("a")
-            .attr("class", "related-tag")
+            .attr("class", tagStyleFn)
+            .attr("data-filter", (d) => d.slug)
             .attr("data-turbo-frame", sidepanelFrame)
             .attr("href", (d) => `/${languageCode}/_tags/${d.slug}/`)
-            .on("click", () => {
-              if (sidepanel) {
-                const instance =
-                  bootstrap.Offcanvas.getInstance(sidepanel) ||
-                  new bootstrap.Offcanvas(sidepanel);
-                instance.show();
-              }
-            });
 
           a.append("span").attr("class", "tag-handle");
 
           a.append("span")
             .attr("class", "tag-label")
-            .text((node) => node.name);
+            .text((node) => node.name)
+            .attr("data-filter", (d) => d.slug)
+            .on('click', (e) => {
+              if (isTagSelected(e.target.dataset.filter)) {
+                resetSelectedTag() // Toggle off
+              } else {
+                setSelectedTag(e.target.dataset.filter)
+              }
+            })
 
           return a;
         });
@@ -280,7 +365,7 @@ const init = () => {
 
       // Configure and start the layout
       cola
-        .nodes(nodes)
+        .nodes(realGraphNodes)
         .links(links)
         .avoidOverlaps(true)
         .constraints(constraints)
@@ -295,7 +380,7 @@ const init = () => {
       // Animate the layout.
       cola.on("tick", () => {
         tags.style("transform", (d) => `translate(${px(d.x)},${px(d.y)})`);
-        updateBackground(nodes);
+        updateBackground(realGraphNodes);
       });
     };
 
