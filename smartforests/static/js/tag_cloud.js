@@ -22,6 +22,10 @@ window.addEventListener("resize", () => {
 });
 
 // Manage highlighted tag state (via URL)
+function tagStyleFn(d) {
+  return d.fixed ? "layout-tag" : `related-tag ${isTagSelected(d.slug) && 'related-tag--selected'}`
+}
+
 function isTagSelected(slug) {
   const url = new URL(window.location);
   if (slug) {
@@ -52,6 +56,7 @@ function showTagSidepanel() {
   if (!tagOffcanvas) return
   const instance = bootstrap.Offcanvas.getInstance(tagOffcanvas) || new bootstrap.Offcanvas(tagOffcanvas);
   instance.show();
+  d3.selectAll('.related-tag').attr('class', tagStyleFn)
 }
 
 // Hide the selected tag stylings when the sidepanel closes
@@ -62,6 +67,7 @@ window.addEventListener('hide.bs.offcanvas', e => {
 })
 function resetSelectedTag() {
   setSelectedTag(null)
+  d3.selectAll('.related-tag').attr('class', tagStyleFn)
 }
 
 // Sync the tag / sidepanel state on first load
@@ -252,7 +258,7 @@ const init = () => {
         .join((enter) => {
           const a = enter
             .append("a")
-            .attr("class", d => d.fixed ? "layout-tag" : "related-tag")
+            .attr("class", tagStyleFn)
             .attr("data-filter", (d) => d.slug)
             .attr("data-turbo-frame", sidepanelFrame)
             .attr("href", (d) => `/${languageCode}/_tags/${d.slug}/`)

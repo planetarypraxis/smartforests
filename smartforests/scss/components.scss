@@ -287,6 +287,7 @@
 
   &:hover > * {
     background-color: $off-white !important;
+    color: $dark-green !important;
   }
 
   .tag-label {
@@ -305,6 +306,17 @@
     left: 10px;
     top: 50%;
     transform: translateY(-50%);
+  }
+
+  &--selected {
+    .tag-label {
+      background: $dark-green;
+      color: white;
+    }
+
+    .tag-handle {
+      background: $dark-green;
+    }
   }
 }
 
