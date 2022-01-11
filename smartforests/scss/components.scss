@@ -317,6 +317,11 @@
     .tag-handle {
       background: $dark-green;
     }
+
+    &:hover > * {
+      background-color: $mid-green !important;
+      color: $off-white !important;
+    }
   }
 }
 
