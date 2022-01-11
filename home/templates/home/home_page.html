@@ -8,6 +8,13 @@
 {{self.tag_cloud|json_script:"tag_cloud"}}
   
 {% endblock %}
+
+<!-- Preload tag metadata based on the filter querystring -->
+{% block tagpanel_config %}
+  {% if request.GET.filter %}
+    src="/_tags/{{ request.GET.filter }}"
+  {% endif %}
+{% endblock %}
   
 {% block extra_js %}
   <script defer type="module" src="{% static 'js/tag_cloud.js' %}"></script>

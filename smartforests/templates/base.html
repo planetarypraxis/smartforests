@@ -57,7 +57,21 @@
         data-bs-scroll="true"
         data-bs-backdrop="false"
         >
-            <turbo-frame id="tagpanel-turboframe" target="_top">
+            <turbo-frame id="tagpanel-turboframe" target="_top" {% block tagpanel_config %}{% endblock %}>
+              <!-- Default HTML -->
+              <div class="offcanvas-header text-dark-green">
+                <div>
+                  <div class="microcopy-small">
+                    Tag
+                  </div>
+              
+                  <h5 class="offcanvas-title text-capitalize text-reset fw-bold mt-1" id="offcanvasLabel">
+                    Loading...
+                  </h5>
+                </div>
+                
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+              </div>
             </turbo-frame>
         </div>
 

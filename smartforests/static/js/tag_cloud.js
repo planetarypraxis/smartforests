@@ -6,11 +6,68 @@ import concaveman from "https://cdn.skypack.dev/concaveman";
 import debounce from "https://cdn.skypack.dev/lodash.debounce";
 import uniqBy from "https://cdn.skypack.dev/lodash.uniqby";
 
+const getPageElements = () => {
+  const parentEl = document.querySelector("[data-tag-cloud-data]")
+  if (!parentEl) return
+  return Object.entries(parentEl.dataset).reduce((dict, [key, value]) => {
+    dict[key] = document.getElementById(value)
+    return dict
+  }, {})
+}
+
 // Re-layout on window resize
 let resizeHandlers = [];
 window.addEventListener("resize", () => {
   resizeHandlers.forEach((fn) => fn());
 });
+
+// Manage highlighted tag state (via URL)
+function isTagSelected(slug) {
+  const url = new URL(window.location);
+  if (slug) {
+    return url.searchParams.get('filter') === slug
+  } else {
+    return !!url.searchParams.get('filter')
+  }
+}
+
+function setSelectedTag(slug) {
+  const url = new URL(window.location);
+  if (slug) {
+    url.searchParams.set('filter', slug);
+  } else {
+    url.searchParams.delete('filter');
+  }
+  window.history.replaceState(null, '', url.toString());
+}
+
+// Show the sidepanel when the sidepanel opens
+window.addEventListener('turbo:frame-load', e => {
+  const { tagFrame } = getPageElements()
+  if (!tagFrame || e.target.id !== tagFrame.id) return
+  showTagSidepanel()
+})
+function showTagSidepanel() {
+  const { tagOffcanvas } = getPageElements()
+  if (!tagOffcanvas) return
+  const instance = bootstrap.Offcanvas.getInstance(tagOffcanvas) || new bootstrap.Offcanvas(tagOffcanvas);
+  instance.show();
+}
+
+// Hide the selected tag stylings when the sidepanel closes
+window.addEventListener('hide.bs.offcanvas', e => {
+  const { tagOffcanvas } = getPageElements()
+  if (!tagOffcanvas || e.target.id !== tagOffcanvas.id) return
+  resetSelectedTag()
+})
+function resetSelectedTag() {
+  setSelectedTag(null)
+}
+
+// Sync the tag / sidepanel state on first load
+if (isTagSelected()) {
+  showTagSidepanel()
+}
 
 export const getLanguageCode = () => {
   try {
@@ -52,7 +109,6 @@ const init = () => {
     }
 
     // Get the sidepanel elements for navigation
-    const sidepanel = document.getElementById(parentEl.dataset.tagOffcanvas);
     const sidepanelFrame = parentEl.dataset.tagFrame ?? "_top";
 
     parentEl.classList.add("tag-cloud");
@@ -197,22 +253,19 @@ const init = () => {
           const a = enter
             .append("a")
             .attr("class", d => d.fixed ? "layout-tag" : "related-tag")
+            .attr("data-filter", (d) => d.slug)
             .attr("data-turbo-frame", sidepanelFrame)
             .attr("href", (d) => `/${languageCode}/_tags/${d.slug}/`)
-            .on("click", () => {
-              if (sidepanel) {
-                const instance =
-                  bootstrap.Offcanvas.getInstance(sidepanel) ||
-                  new bootstrap.Offcanvas(sidepanel);
-                instance.show();
-              }
-            });
 
           a.append("span").attr("class", "tag-handle");
 
           a.append("span")
             .attr("class", "tag-label")
-            .text((node) => node.name);
+            .text((node) => node.name)
+            .attr("data-filter", (d) => d.slug)
+            .on('click', (e) => {
+              setSelectedTag(e.target.dataset.filter)
+            })
 
           return a;
         });
