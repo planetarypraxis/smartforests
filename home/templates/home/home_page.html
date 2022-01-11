@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<main id="tag-cloud" class="h-100" data-tag-offcanvas="tagpanel-offcanvas" data-tag-frame="tagpanel-turboframe" data-tag-cloud-data="tag_cloud"></div>
+<main data-turbo-permanent id="tag-cloud" class="h-100" data-tag-offcanvas="tagpanel-offcanvas" data-tag-frame="tagpanel-turboframe" data-tag-cloud-data="tag_cloud"></div>
 
 {{self.tag_cloud|json_script:"tag_cloud"}}
   
@@ -17,5 +17,5 @@
 {% endblock %}
   
 {% block extra_js %}
-  <script defer type="module" src="{% static 'js/tag_cloud.js' %}"></script>
+  <script data-turbo-permanent defer type="module" src="{% static 'js/tag_cloud.js' %}"></script>
 {% endblock %}
