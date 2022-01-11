@@ -13,27 +13,32 @@
         <div class="col-lg-3 collapse navbar-collapse mx-n3 mx-lg-0" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto align-items-center">
                 <li class="nav-item d-lg-none border-bottom border-soft-green p-2 w-100">
-                    <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ settings.logbooks.ImportantPages.page_url.logbooks_index_page}}">
-                        <span>{{ settings.logbooks.ImportantPages.logbooks_index_page.title }}</span>
+                    <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ important_pages.logbooks.localized.url }}">
+                        <span>{{ important_pages.logbooks.localized.title }}</span>
                         <img src="{% static 'img/logbooks.svg' %}" />
                     </a>
                 </li>
                 <li class="nav-item d-lg-none border-bottom border-soft-green p-2 w-100">
-                  <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ settings.logbooks.ImportantPages.page_url.stories_index_page }}">
-                      <span>{{ settings.logbooks.ImportantPages.stories_index_page.title }}</span>
+                  <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ important_pages.stories.localized.url }}">
+                      <span>{{ important_pages.stories.localized.title }}</span>
                       <img src="{% static 'img/stories.svg' %}" />
                   </a>
                 </li>
                 <li class="nav-item d-lg-none border-bottom border-soft-green p-2 w-100">
-                  <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ settings.logbooks.ImportantPages.page_url.map_page }}">
-                    <span>{{ settings.logbooks.ImportantPages.map_page.title }}</span>
+                  <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ important_pages.map.localized.url }}">
+                    <span>{{ important_pages.map.localized.title }}</span>
                     <img src="{% static 'img/map.svg' %}" />
                   </a>
                 </li>
                 <li class="nav-item d-lg-none border-bottom border-soft-green p-2 w-100">
-                    <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ settings.logbooks.ImportantPages.page_url.radio_index_page }}">
-                      <span>{{ settings.logbooks.ImportantPages.radio_index_page.title }}</span>
+                    <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ important_pages.radio.localized.url }}">
+                      <span>{{ important_pages.radio.localized.title }}</span>
                       <img src="{% static 'img/radio.svg' %}" />
+                    </a>
+                </li>
+                <li class="nav-item d-lg-none border-bottom border-soft-green p-2 w-100">
+                    <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ important_pages.contributors.localized.url }}">
+                      <span>{{ important_pages.contributors.localized.title }}</span>
                     </a>
                 </li>
                 <li class="nav-item d-lg-none p-2 text-truncate border-bottom border-soft-green overflow-hidden w-100">
@@ -44,7 +49,7 @@
                     {% endfor %}
                 </li>
                 <li class="nav-item d-lg-none border-bottom border-soft-green p-2 w-100">
-                    <a class="text-dark-green text-decoration-none px-2 d-flex justify-content-start align-items-center" href="{{ settings.logbooks.ImportantPages.page_url.radio_index_page }}" data-bs-toggle="modal" data-bs-target="#searchToggle" aria-controls="searchToggle" aria-expanded="false" aria-label="Toggle search">
+                    <a class="text-dark-green text-decoration-none px-2 d-flex justify-content-start align-items-center" href="{{ important_pages.radio }}" data-bs-toggle="modal" data-bs-target="#searchToggle" aria-controls="searchToggle" aria-expanded="false" aria-label="Toggle sea.localized.urlrch">
                         Search <i class="ms-2 icon icon-13 bg-dark icon-search"></i>
                     </a>
                 </li>
@@ -54,34 +59,39 @@
                 <li class="nav-item dropdown d-none d-lg-block">
                     <a class="fw-normal nav-link dropdown-toggle text-dark-green" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                       {% if page.content_type.model == 'logbookpage' %}
-                        {{ page.get_parent.title }}
+                        {{ page.get_parent.localized.title }}
                       {% else %}
-                        {{ page.title }}
+                        {{ page.localized.title }}
                       {% endif %}
                     </a>
                     <ul class="dropdown-menu border-0 mt-0 bg-off-white shadow-sm" aria-labelledby="navbarDropdown">
                       <li>
-                        <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ settings.logbooks.ImportantPages.page_url.logbooks_index_page }}">
-                            <span>{{ settings.logbooks.ImportantPages.logbooks_index_page.title }}</span>
+                        <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ important_pages.logbooks.localized.url }}">
+                            <span>{{ important_pages.logbooks.localized.title }}</span>
                             <img src="{% static 'img/logbooks.svg' %}" />
                         </a>
                       </li>
                       <li>
-                          <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ settings.logbooks.ImportantPages.page_url.stories_index_page }}">
-                              <span>{{ settings.logbooks.ImportantPages.stories_index_page.title }}</span>
+                          <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ important_pages.stories.localized.url }}">
+                              <span>{{ important_pages.stories.localized.title }}</span>
                               <img src="{% static 'img/stories.svg' %}" />
                           </a>
                       </li>
                       <li>
-                          <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ settings.logbooks.ImportantPages.page_url.map_page }}">
-                            <span>{{ settings.logbooks.ImportantPages.map_page.title }}</span>
+                          <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ important_pages.map.localized.url }}">
+                            <span>{{ important_pages.map.localized.title }}</span>
                             <img src="{% static 'img/map.svg' %}" />
                           </a>
                       </li>
                       <li>
-                          <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ settings.logbooks.ImportantPages.page_url.radio_index_page }}">
-                            <span>{{ settings.logbooks.ImportantPages.radio_index_page.title }}</span>
+                          <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ important_pages.radio.localized.url }}">
+                            <span>{{ important_pages.radio.localized.title }}</span>
                             <img src="{% static 'img/radio.svg' %}" />
+                          </a>
+                      </li>
+                      <li>
+                          <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ important_pages.contributors.localized.url }}">
+                            <span>{{ important_pages.contributors.localized.title }}</span>
                           </a>
                       </li>
                       {% for page in menu_items %}
@@ -93,7 +103,7 @@
         </div>
         {% if page.content_type.model == 'logbookpage' %}
         <a class="col-lg-8 d-none d-lg-block text-decoration-none text-dark-green" href="#" role="button">
-          {{ page.title }}
+          {{ page.localized.title }}
         </a>
         {% endif %}
         {% if page.get_translations.live|length %}
