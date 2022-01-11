@@ -9,10 +9,12 @@ import uniqBy from "https://cdn.skypack.dev/lodash.uniqby";
 const getPageElements = () => {
   const parentEl = document.querySelector("[data-tag-cloud-data]")
   if (!parentEl) return
-  return Object.entries(parentEl.dataset).reduce((dict, [key, value]) => {
-    dict[key] = document.getElementById(value)
+  const dict = Object.entries(parentEl.dataset).reduce((dict, [key, value]) => {
+    dict[key] = value ? document.getElementById(value) : null
     return dict
   }, {})
+  dict.tagOffcanvasInstance = bootstrap.Offcanvas.getInstance(dict.tagOffcanvas) || new bootstrap.Offcanvas(dict.tagOffcanvas);
+  return dict
 }
 
 // Re-layout on window resize
@@ -21,58 +23,78 @@ window.addEventListener("resize", () => {
   resizeHandlers.forEach((fn) => fn());
 });
 
-// Manage highlighted tag state (via URL)
-function tagStyleFn(d) {
-  return d.fixed ? "layout-tag" : `related-tag ${isTagSelected(d.slug) && 'related-tag--selected'}`
-}
+// Manage highlighted tag state
+
+let selectedTag = null
 
 function isTagSelected(slug) {
-  const url = new URL(window.location);
   if (slug) {
-    return url.searchParams.get('filter') === slug
+    return selectedTag === slug
   } else {
-    return !!url.searchParams.get('filter')
+    return !!selectedTag
   }
 }
 
 function setSelectedTag(slug) {
-  const url = new URL(window.location);
   if (slug) {
-    url.searchParams.set('filter', slug);
+    selectedTag = slug
   } else {
-    url.searchParams.delete('filter');
+    selectedTag = null
   }
-  window.history.replaceState(null, '', url.toString());
+  syncState()
 }
 
-// Show the sidepanel when the sidepanel opens
-window.addEventListener('turbo:frame-load', e => {
-  const { tagFrame } = getPageElements()
-  if (!tagFrame || e.target.id !== tagFrame.id) return
-  showTagSidepanel()
-})
+function resetSelectedTag() {
+  if (!isTagSelected()) return
+  setSelectedTag(null)
+}
+
 function showTagSidepanel() {
-  const { tagOffcanvas } = getPageElements()
-  if (!tagOffcanvas) return
-  const instance = bootstrap.Offcanvas.getInstance(tagOffcanvas) || new bootstrap.Offcanvas(tagOffcanvas);
-  instance.show();
-  d3.selectAll('.related-tag').attr('class', tagStyleFn)
+  const { tagOffcanvasInstance } = getPageElements()
+  if (!tagOffcanvasInstance) return
+  tagOffcanvasInstance.show();
 }
 
-// Hide the selected tag stylings when the sidepanel closes
+function hideTagSidepanel() {
+  const { tagOffcanvasInstance } = getPageElements()
+  if (!tagOffcanvasInstance) return
+  tagOffcanvasInstance.hide();
+}
+
+// Offcanvas close handler should update state
+
 window.addEventListener('hide.bs.offcanvas', e => {
   const { tagOffcanvas } = getPageElements()
   if (!tagOffcanvas || e.target.id !== tagOffcanvas.id) return
   resetSelectedTag()
 })
-function resetSelectedTag() {
-  setSelectedTag(null)
-  d3.selectAll('.related-tag').attr('class', tagStyleFn)
-}
 
 // Sync the tag / sidepanel state on first load
-if (isTagSelected()) {
-  showTagSidepanel()
+
+function syncState() {
+  if (isTagSelected()) {
+    showTagSidepanel()
+  } else {
+    hideTagSidepanel()
+  }
+  updateSelectedTagStyle()
+}
+
+window.addEventListener('turbo:visit', () => {
+  selectedTag = false
+  syncState()
+})
+
+syncState()
+
+// Styling derived from state
+
+function tagStyleFn(d) {
+  return d.fixed ? "layout-tag" : `related-tag ${isTagSelected(d.slug) && 'related-tag--selected'}`
+}
+
+function updateSelectedTagStyle() {
+  d3.selectAll('.related-tag').attr('class', tagStyleFn)
 }
 
 export const getLanguageCode = () => {
@@ -271,10 +293,11 @@ const init = () => {
             .attr("data-filter", (d) => d.slug)
             .on('click', (e) => {
               if (isTagSelected(e.target.dataset.filter)) {
-                setSelectedTag(null) // Toggle off
+                resetSelectedTag() // Toggle off
               } else {
                 setSelectedTag(e.target.dataset.filter)
               }
+              // showTagSidepanel()
             })
 
           return a;
