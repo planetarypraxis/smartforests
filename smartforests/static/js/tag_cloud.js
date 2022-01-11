@@ -270,7 +270,11 @@ const init = () => {
             .text((node) => node.name)
             .attr("data-filter", (d) => d.slug)
             .on('click', (e) => {
-              setSelectedTag(e.target.dataset.filter)
+              if (isTagSelected(e.target.dataset.filter)) {
+                setSelectedTag(null) // Toggle off
+              } else {
+                setSelectedTag(e.target.dataset.filter)
+              }
             })
 
           return a;
