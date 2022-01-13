@@ -4,6 +4,7 @@ from django.http.request import HttpRequest
 from django.http.response import HttpResponseNotFound
 from django.shortcuts import get_object_or_404, render
 from wagtail.core.models import Page
+from wagtail.core.models.i18n import Locale
 from smartforests.models import Tag
 from commonknowledge.django.cache import django_cached
 
@@ -31,3 +32,23 @@ def filters_frame(request: HttpRequest):
             'tag_filter': request.GET.get('current')
         }
     )
+
+
+class LocaleFromLanguageCode:
+    '''
+    Can be used for API requests and so on.
+    '''
+
+    def get_locale(self):
+        language_code = self.request.GET.get('language_code', 'en')
+        try:
+            locale = Locale.objects.get(language_code=language_code)
+            return locale
+        except:
+            try:
+                # E.g. for en-gb, try en
+                locale = Locale.objects.get(
+                    language_code="-".split(language_code)[0])
+                return locale
+            except:
+                return Locale.objects.get(language_code='en')

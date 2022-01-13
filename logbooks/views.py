@@ -9,6 +9,7 @@ from smartforests.models import Tag
 from wagtail.api.v2.utils import BadRequestError
 
 from logbooks.models.pages import ContributorPage, EpisodePage, LogbookEntryPage, LogbookPage, StoryPage
+from smartforests.views import LocaleFromLanguageCode
 
 
 def tag_panel(request, slug):
@@ -33,7 +34,7 @@ def tag_panel(request, slug):
     )
 
 
-class MapSearchViewset(viewsets.ReadOnlyModelViewSet):
+class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
     '''
     Query the page metadata index, filtering by tag, returning a geojson FeatureCollection
     '''
@@ -81,20 +82,6 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet):
                 qs = qs.none()
 
         return qs
-
-    def get_locale(self):
-        language_code = self.request.GET.get('language_code', 'en')
-        try:
-            locale = Locale.objects.get(language_code=language_code)
-            return locale
-        except:
-            try:
-                # E.g. for en-gb, try en
-                locale = Locale.objects.get(
-                    language_code="-".split(language_code)[0])
-                return locale
-            except:
-                return Locale.objects.get(language_code='en')
 
     def list(self, request):
         list = self.get_queryset()
