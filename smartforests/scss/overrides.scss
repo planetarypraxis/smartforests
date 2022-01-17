@@ -209,3 +209,7 @@ a.card {
     border-bottom: 1px solid $light-grey;
   }
 }
+
+.content-copy > * + * {
+  margin-top: map-get($map: $spacers, $key: 5);
+}
