@@ -8,7 +8,6 @@ export function findAncestor(element, selector) {
 }
 
 export function formatDuration(seconds: number): string {
-  console.log(seconds)
   var date = new Date()
   date.setUTCHours(0, 0, 0, 0)
   date.setSeconds(seconds);
