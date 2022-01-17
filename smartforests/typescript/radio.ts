@@ -9,12 +9,12 @@ export function main() {
 
   const radioPlayer = document.getElementById("radioPlayer");
 
-  const radioPlayerAudio = document.getElementById("radioPlayerAudio");
+  const radioPlayerAudio = document.getElementById("radioPlayerAudio") as HTMLAudioElement;
   const radioPlayerPlayButton = document.getElementById(
     "radioPlayerPlayButton"
   );
 
-  let radioIsPlaying = false;
+  let radioIsPlaying = () => !radioPlayerAudio.paused;
 
   const radioPlayerOffCanvasElement = document.getElementById("radioPlayer");
 
@@ -25,10 +25,9 @@ export function main() {
   radioPlayerPlayButton.addEventListener("click", (event) => {
     event.stopImmediatePropagation();
 
-    if (!radioIsPlaying) {
+    if (!radioIsPlaying()) {
       console.log("Starting radio");
       radioPlayerAudio.play();
-      radioIsPlaying = true;
 
       radioPlayerPlayButton
         .querySelector(".play-button")
@@ -40,7 +39,6 @@ export function main() {
     }
 
     console.log("Stopping radio");
-    radioIsPlaying = false;
     radioPlayerAudio.pause();
 
     radioPlayerPlayButton
@@ -77,15 +75,13 @@ export function main() {
 
     radioPlayerAudio.src = audioUrl;
     radioPlayerAudio.play();
-
-    radioIsPlaying = true;
   }
 
   Array.from(playButtons).forEach((playButton) => {
     playButton.addEventListener("click", (event) => {
       event.stopImmediatePropagation();
 
-      if (radioIsPlaying) {
+      if (radioIsPlaying()) {
         radioPlayerAudio.pause();
       }
 
