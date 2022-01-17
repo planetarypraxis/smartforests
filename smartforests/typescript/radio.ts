@@ -1,4 +1,4 @@
-import { findAncestor } from "./util";
+import { findAncestor, formatDuration } from "./util";
 
 export function main() {
   /**
@@ -58,7 +58,16 @@ export function main() {
    */
   radioPlayerAudio.addEventListener('timeupdate', updatePlayerTime)
   function updatePlayerTime(e) {
-    // TODO:
+    radioPlayer.querySelector(
+      "[data-smartforests-radio-episode-elapsed-time]"
+    ).innerHTML = formatDuration(radioPlayerAudio.currentTime);
+  }
+
+  radioPlayerAudio.addEventListener('durationchange', updatePlayerDuration)
+  function updatePlayerDuration() {
+    radioPlayer.querySelector(
+      "[data-smartforests-radio-episode-duration]"
+    ).innerHTML = formatDuration(radioPlayerAudio.duration);
   }
 
   /**
@@ -88,7 +97,6 @@ export function main() {
     radioPlayer.querySelector(
       "[data-smartforests-radio-episode-last-published-at]"
     ).innerHTML = lastPublishedAt;
-    // TODO: Add duration
 
     radioPlayer.querySelector("[data-smartforests-radio-episode-image]").src =
       image;
