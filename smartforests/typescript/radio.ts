@@ -1,65 +1,84 @@
 import { findAncestor } from "./util";
 
 export function main() {
+  /**
+   * Control the audio player from any number of play buttons in the UI
+   */
   const playButtons = document.querySelectorAll(
     "[data-smartforests-radio-play-button]"
   );
-
   console.log(`Found ${playButtons.length} play buttons on page.`);
 
+  /**
+   * Define the actual radio player
+   */
   const radioPlayer = document.getElementById("radioPlayer");
-
   const radioPlayerAudio = document.getElementById("radioPlayerAudio") as HTMLAudioElement;
-  const radioPlayerPlayButton = document.getElementById(
-    "radioPlayerPlayButton"
-  );
-
-  let radioIsPlaying = () => !radioPlayerAudio.paused;
-
+  const radioPlayerPlayButton = document.getElementById("radioPlayerPlayButton");
   const radioPlayerOffCanvasElement = document.getElementById("radioPlayer");
+  const radioPlayerOffCanvas = new bootstrap.Offcanvas(radioPlayerOffCanvasElement);
 
-  const radioPlayerOffCanvas = new bootstrap.Offcanvas(
-    radioPlayerOffCanvasElement
-  );
+  /**
+   * Update all play buttons in response to radioPlayerAudio status
+   */
+  radioPlayerAudio.addEventListener('ended', updateButtonState)
+  radioPlayerAudio.addEventListener('pause', updateButtonState)
+  radioPlayerAudio.addEventListener('play', updateButtonState)
+  radioPlayerAudio.addEventListener('playing', updateButtonState)
+
+  function isPlayerButtonActive(somePlayButton) {
+    // (We rebuild the URL because one might be a relative URL, the other might be absolute)
+    if (!somePlayButton.dataset.smartforestsAudio || !radioPlayerAudio.src) return false
+    const buttonURL = new URL(somePlayButton.dataset.smartforestsAudio, radioPlayerAudio.src).toString()
+    const playerURL = new URL(radioPlayerAudio.src).toString()
+    return buttonURL === playerURL
+  }
+
+  function updateButtonState() {
+    // Main radio player
+    radioPlayerPlayButton.querySelector(radioPlayerAudio.paused ? ".pause-button" : ".play-button").classList.add("d-none");
+    radioPlayerPlayButton.querySelector(radioPlayerAudio.paused ? ".play-button" : ".pause-button").classList.remove("d-none");
+
+    // Other play/pause buttons in the UI
+    Array.from(playButtons).forEach((somePlayButton) => {
+      // Default all buttons to pause, just in case
+      somePlayButton.querySelector(".pause-button").classList.add("d-none");
+      somePlayButton.querySelector(".play-button").classList.remove("d-none");
+
+      // // If the button refers to the same audio, then sync its visual state to the radio player
+      if (isPlayerButtonActive(somePlayButton)) {
+        somePlayButton.querySelector(radioPlayerAudio.paused ? ".pause-button" : ".play-button").classList.add("d-none");
+        somePlayButton.querySelector(radioPlayerAudio.paused ? ".play-button" : ".pause-button").classList.remove("d-none");
+      }
+    });
+  }
+
+  /**
+   * Update the current time / bar / etc. according to current status
+   */
+  radioPlayerAudio.addEventListener('timeupdate', updatePlayerTime)
+  function updatePlayerTime(e) {
+    // TODO:
+  }
+
+  /**
+   * Control the radio player with the buttons
+   */
 
   radioPlayerPlayButton.addEventListener("click", (event) => {
     event.stopImmediatePropagation();
-
-    if (!radioIsPlaying()) {
-      console.log("Starting radio");
-      radioPlayerAudio.play();
-
-      radioPlayerPlayButton
-        .querySelector(".play-button")
-        .classList.add("d-none");
-      radioPlayerPlayButton
-        .querySelector(".pause-button")
-        .classList.remove("d-none");
-      return;
+    if (radioPlayerAudio.paused) {
+      radioPlayerAudio.play()
+    } else {
+      radioPlayerAudio.pause()
     }
-
-    console.log("Stopping radio");
-    radioPlayerAudio.pause();
-
-    radioPlayerPlayButton
-      .querySelector(".play-button")
-      .classList.remove("d-none");
-    radioPlayerPlayButton
-      .querySelector(".pause-button")
-      .classList.add("d-none");
-
-    Array.from(playButtons).forEach((otherPlaybutton) => {
-      otherPlaybutton.querySelector(".pause-button").classList.add("d-none");
-      otherPlaybutton.querySelector(".play-button").classList.remove("d-none");
-    });
   });
 
-  function startRadioPlayer(audioUrl, title, owner, lastPublishedAt, image) {
-    radioPlayerPlayButton.querySelector(".play-button").classList.add("d-none");
-    radioPlayerPlayButton
-      .querySelector(".pause-button")
-      .classList.remove("d-none");
+  /**
+   * Load audio into player from any 'play' button in the UI
+   */
 
+  function startRadioPlayer(audioUrl, title, owner, lastPublishedAt, image) {
     radioPlayer.querySelector(
       "[data-smartforests-radio-episode-title]"
     ).innerHTML = title;
@@ -69,6 +88,7 @@ export function main() {
     radioPlayer.querySelector(
       "[data-smartforests-radio-episode-last-published-at]"
     ).innerHTML = lastPublishedAt;
+    // TODO: Add duration
 
     radioPlayer.querySelector("[data-smartforests-radio-episode-image]").src =
       image;
@@ -80,10 +100,7 @@ export function main() {
   Array.from(playButtons).forEach((playButton) => {
     playButton.addEventListener("click", (event) => {
       event.stopImmediatePropagation();
-
-      if (radioIsPlaying()) {
-        radioPlayerAudio.pause();
-      }
+      radioPlayerAudio.pause();
 
       let buttonElement;
 
@@ -102,20 +119,6 @@ export function main() {
       const owner = buttonElement.dataset.smartforestsOwner;
       const image = buttonElement.dataset.smartforestsImage;
 
-      buttonElement.querySelector(".play-button").classList.add("d-none");
-      buttonElement.querySelector(".pause-button").classList.remove("d-none");
-
-      Array.from(playButtons).forEach((otherPlaybutton) => {
-        if (otherPlaybutton === buttonElement) {
-          return;
-        }
-
-        otherPlaybutton.querySelector(".pause-button").classList.add("d-none");
-        otherPlaybutton
-          .querySelector(".play-button")
-          .classList.remove("d-none");
-      });
-
       console.log(`Loading ${audioUrl}`);
 
       radioPlayerOffCanvas.show();
@@ -123,4 +126,8 @@ export function main() {
       startRadioPlayer(audioUrl, title, owner, lastPublishedAt, image);
     });
   });
+
+  // Update the button state on each new visit
+  // in case something is already playing
+  updateButtonState()
 }
