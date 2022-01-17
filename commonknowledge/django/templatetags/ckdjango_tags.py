@@ -1,3 +1,4 @@
+from datetime import timedelta, datetime
 from urllib import parse
 import json
 
@@ -79,3 +80,14 @@ def previous(some_list, current_index):
         return some_list[int(current_index) - 1]  # access the previous element
     except:
         return ''  # return empty string in case of exception
+
+
+@register.filter()
+def duration(secs):
+    """Convert a datetime.timedelta object into Days, Hours, Minutes, Seconds."""
+    if type(secs) is not float and type(secs) is not int:
+        secs = secs.total_seconds()
+    delta = timedelta(seconds=secs)
+    d1 = datetime(2000, 1, 1, 0, 0, 0)
+    d2 = d1 + delta
+    return d2-d1

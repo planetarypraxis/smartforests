@@ -23,8 +23,8 @@
                     <span class="fs-6">{{ episode.title }}</span>
                   </a>
                   <div class="font-monospace color-dark-grey small d-none d-md-block">
-                    {% if episode.audio.duration != 0.0 %}
-                      {{ episode.audio.duration }}
+                    {% if episode.audio.duration > 0 %}
+                      {{ episode.audio.duration|duration }}
                     {% endif %}
                   </div>
                 </div>
