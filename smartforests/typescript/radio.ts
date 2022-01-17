@@ -100,6 +100,19 @@ export function main() {
   Array.from(playButtons).forEach((playButton) => {
     playButton.addEventListener("click", (event) => {
       event.stopImmediatePropagation();
+
+      // If this audio track was already playing,
+      // then treat this as a normal play/pause button
+      if (isPlayerButtonActive(playButton)) {
+        if (radioPlayerAudio.paused) {
+          radioPlayerAudio.play();
+        } else {
+          radioPlayerAudio.pause();
+        }
+        return
+      }
+
+      // Else treat this as a "load new track" button
       radioPlayerAudio.pause();
 
       let buttonElement;
