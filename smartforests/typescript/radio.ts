@@ -16,6 +16,7 @@ export function main() {
   const radioPlayerAudio = document.getElementById("radioPlayerAudio") as HTMLAudioElement;
   const radioPlayerPlayButton = document.getElementById("radioPlayerPlayButton");
   const radioPlayerOffCanvasElement = document.getElementById("radioPlayer");
+  const radioPlayerSeeker = document.getElementById('radioPlayerSeeker')
   const radioPlayerOffCanvas = new bootstrap.Offcanvas(radioPlayerOffCanvasElement);
 
   /**
@@ -58,16 +59,21 @@ export function main() {
    */
   radioPlayerAudio.addEventListener('timeupdate', updatePlayerTime)
   function updatePlayerTime(e) {
-    radioPlayer.querySelector(
-      "[data-smartforests-radio-episode-elapsed-time]"
-    ).innerHTML = formatDuration(radioPlayerAudio.currentTime);
+    requestAnimationFrame(() => {
+      radioPlayer.querySelector(
+        "[data-smartforests-radio-episode-elapsed-time]"
+      ).innerHTML = formatDuration(radioPlayerAudio.currentTime);
+      radioPlayerSeeker.value = radioPlayerAudio.currentTime / radioPlayerAudio.duration
+    })
   }
 
   radioPlayerAudio.addEventListener('durationchange', updatePlayerDuration)
   function updatePlayerDuration() {
-    radioPlayer.querySelector(
-      "[data-smartforests-radio-episode-duration]"
-    ).innerHTML = formatDuration(radioPlayerAudio.duration);
+    requestAnimationFrame(() => {
+      radioPlayer.querySelector(
+        "[data-smartforests-radio-episode-duration]"
+      ).innerHTML = formatDuration(radioPlayerAudio.duration);
+    })
   }
 
   /**
@@ -82,6 +88,14 @@ export function main() {
       radioPlayerAudio.pause()
     }
   });
+
+  /**
+   * Control the current time via the seeker
+   */
+  radioPlayerSeeker.addEventListener('change', (event) => {
+    event.stopImmediatePropagation()
+    radioPlayerAudio.currentTime = event.target.value * radioPlayerAudio.duration
+  })
 
   /**
    * Load audio into player from any 'play' button in the UI

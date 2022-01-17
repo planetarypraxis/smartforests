@@ -117,7 +117,8 @@
         </div>
         {% endblock %}
         <div id="radioPlayer" data-turbo-permanent class="offcanvas offcanvas-bottom h-48px bg-dark-green border-0 drop-shadow-mid-green-glow" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" aria-labelledby="radioPlayerLabel">
-            <div class="text-white ps-3 d-flex align-items-center justify-content-between" style="height: 100%;">
+            <div class="position-relative text-white ps-3 d-flex align-items-center justify-content-between" style="height: 100%;">
+              <input type="range" id='radioPlayerSeeker' max="1" value="0" step="0.0000000001" data-smartforests-radio-episode-seeker />
               <div>
                 <button id="radioPlayerPlayButton" class="btn btn-link" title="Play episode: {{self.title}}" type="button">
                   <svg class="play-button" width="11" height="14" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">
