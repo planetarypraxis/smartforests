@@ -1,5 +1,7 @@
 import { findAncestor, formatDuration } from "./util";
 
+const radioPlayerAudio = new Audio();
+
 export function main() {
   /**
    * Control the audio player from any number of play buttons in the UI
@@ -13,7 +15,6 @@ export function main() {
    * Define the actual radio player
    */
   const radioPlayer = document.getElementById("radioPlayer");
-  const radioPlayerAudio = new Audio();
   const radioPlayerPlayButton = document.getElementById("radioPlayerPlayButton");
   const radioPlayerOffCanvasElement = document.getElementById("radioPlayer");
   const radioPlayerSeeker = document.getElementById('radioPlayerSeeker')
