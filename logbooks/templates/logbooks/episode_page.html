@@ -15,7 +15,7 @@
   {% if self.audio.duration > 0 %}
   <div class="mb-7">
     <div class="bg-white rounded-1 p-3">
-      {{ self.audio.duration|duration_words }}
+      Duration: {{ self.audio.duration|duration_numbers }}
     </div>
   </div>
   {% endif %}

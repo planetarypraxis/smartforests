@@ -24,7 +24,7 @@
                   </a>
                   <div class="font-monospace color-dark-grey small d-none d-md-block">
                     {% if episode.audio.duration > 0 %}
-                      {{ episode.audio.duration|duration_words }}
+                      {{ episode.audio.duration|duration_numbers }}
                     {% endif %}
                   </div>
                 </div>
