@@ -2,21 +2,21 @@
 {% load ckdjango_tags ckbootstrap_tags static wagtailcore_tags %}
 
 {% block article %}
-  <div class="mb-7">
+  <div class="mb-6">
     {% if self.description %}
-    <div class="bg-white rounded-1 p-3">
-      {{self.description|richtext}}
+    <div class='logbook-entry'>
+      <div class="logbook-entry-card border-2">
+        {{self.description|richtext}}
+      </div>
     </div>
     {% endif %}
   </div>
-  <div class="row gx-0">
-    <div class="row row-cols-1 gx-0 gy-7 mt-0">
-      {% for entry in child_list_page %}
-      <article class="col {% if forloop.first %}mt-0{% endif %}" id="{{ entry.id }}">
-        {{entry.content_html}}
-      </article>
-      {% endfor %}
-    </div>
+  <div class="mt-0">
+    {% for entry in child_list_page %}
+    <article class="logbook-entry {% if forloop.first %}mt-0{% endif %}" id="{{ entry.id }}">
+      {{entry.content_html}}
+    </article>
+    {% endfor %}
   </div>
 
   <script>

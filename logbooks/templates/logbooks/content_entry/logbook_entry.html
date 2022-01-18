@@ -1,49 +1,51 @@
 {% load ckdjango_tags wagtailimages_tags wagtailcore_tags %}
 
-<article class='row row-cols-1 gy-2' id="{{self.slug}}">
-  <header class='col'>
-    <section class='caption text-grey fw-lighter'>
-      <div class="d-flex">
-        <div class="me-2">
-          Added by <a href='{{ self.owner.contributor_pages.first.localized.link_url }}'>{% include 'logbooks/username.html' with user=self.owner %}</a>
+<article class='logbook-entry-card' id="{{self.slug}}">
+  <div class='row row-cols-1 gy-2'>
+    <header class='col'>
+      <section class='caption text-grey fw-lighter'>
+        <div class="d-flex flex-column flex-sm-row">
+          <div class="me-2">
+            Added by <a href='{{ self.owner.contributor_pages.first.localized.link_url }}'>{% include 'logbooks/username.html' with user=self.owner %}</a>
+          </div>
+          <time class="opacity-8" datetime="{{ self.first_published_at|date:"Y-m-d" }}">
+            {{ self.first_published_at|date:"d E Y" }}
+          </time>
         </div>
-        <time class="opacity-8" datetime="{{ self.first_published_at|date:"Y-m-d" }}">
-          {{ self.first_published_at|date:"d E Y" }}
-        </time>
-      </div>
-      {% if self.geographical_location %}
-        <div>{{ self.geographical_location }}</div>
-      {% endif %}
-    </section>
-  </header>
-  <h3 class='fs-4 fw-bolder'>{{ self.title }}</h3>
-  <section class='row gy-3 my-0'>
-  {% for block in self.body %}  
-      {% with next_block=self.body|next:forloop.counter0 %}
-      {% with previous_block=self.body|previous:forloop.counter0 %}
-      <section class="
-        block-{{ block.block_type }}
-        col
-        {% if block.block_type == 'image' %}
-          {% if not forloop.last and next_block.block_type == 'image' %}
-            col-12 col-md-6
-          {% elif not forloop.first and previous_block.block_type == 'image' %}
-            col-12 col-md-6
+        {% if self.geographical_location %}
+          <div>{{ self.geographical_location }}</div>
+        {% endif %}
+      </section>
+    </header>
+    <h3 class='fs-4 fw-bolder'>{{ self.title }}</h3>
+    <section class='row gy-3 my-0'>
+    {% for block in self.body %}  
+        {% with next_block=self.body|next:forloop.counter0 %}
+        {% with previous_block=self.body|previous:forloop.counter0 %}
+        <section class="
+          block-{{ block.block_type }}
+          col
+          {% if block.block_type == 'image' %}
+            {% if not forloop.last and next_block.block_type == 'image' %}
+              col-12 col-md-6
+            {% elif not forloop.first and previous_block.block_type == 'image' %}
+              col-12 col-md-6
+            {% else %}
+              col-12
+            {% endif %}
           {% else %}
             col-12
-          {% endif %}
-        {% else %}
-          col-12
-        {% endif %}">
-        {% include_block block %}
-      </section>
-      {% endwith %}
-      {% endwith %}
-  {% endfor %}
-  </section>
-  <footer class='col'>
-    {% for tag in self.all_tags %}
-      {% include 'logbooks/include/tag_label.html' with tag=tag %}
+          {% endif %}">
+          {% include_block block %}
+        </section>
+        {% endwith %}
+        {% endwith %}
     {% endfor %}
-  </footer>
+    </section>
+    <footer class='col'>
+      {% for tag in self.all_tags %}
+        {% include 'logbooks/include/tag_label.html' with tag=tag tag_background_class='bg-off-white' %}
+      {% endfor %}
+    </footer>
+  </div>
 </article>
