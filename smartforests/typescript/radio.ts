@@ -101,7 +101,7 @@ export function main() {
    * Load audio into player from any 'play' button in the UI
    */
 
-  function startRadioPlayer(audioUrl, title, owner, lastPublishedAt, image) {
+  function startRadioPlayer(audioUrl, title, owner, lastPublishedAt, image, pageURL) {
     radioPlayer.querySelector(
       "[data-smartforests-radio-episode-title]"
     ).innerHTML = title;
@@ -111,6 +111,9 @@ export function main() {
     radioPlayer.querySelector(
       "[data-smartforests-radio-episode-last-published-at]"
     ).innerHTML = lastPublishedAt;
+    Array.from(radioPlayer.querySelectorAll<HTMLAnchorElement>(
+      "[data-smartforests-radio-episode-page-url]"
+    )).map(el => el.href = pageURL)
 
     radioPlayer.querySelector("[data-smartforests-radio-episode-image]").src =
       image;
@@ -153,12 +156,13 @@ export function main() {
       const lastPublishedAt = buttonElement.dataset.smartforestsLastPublishedAt;
       const owner = buttonElement.dataset.smartforestsOwner;
       const image = buttonElement.dataset.smartforestsImage;
+      const pageURL = buttonElement.dataset.smartforestsPageUrl;
 
       console.log(`Loading ${audioUrl}`);
 
       radioPlayerOffCanvas.show();
 
-      startRadioPlayer(audioUrl, title, owner, lastPublishedAt, image);
+      startRadioPlayer(audioUrl, title, owner, lastPublishedAt, image, pageURL);
     });
   });
 
