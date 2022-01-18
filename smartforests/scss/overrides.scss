@@ -210,6 +210,10 @@ a.card {
   }
 }
 
+.content-copy > * + * {
+  margin-top: map-get($map: $spacers, $key: 5);
+}
+
 #radioPlayerSeeker {
   $progress-color: $faded-green;
   $background-color: white;

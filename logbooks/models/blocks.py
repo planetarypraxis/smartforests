@@ -32,7 +32,7 @@ class ImageBlock(blocks.StructBlock):
 def ArticleContentStream(block_types=None, **kwargs):
     common_block_types = [
         ('text', RichTextBlockWithFootnotes(features=[
-            'h3', 'bold', 'italic', 'link', 'ol', 'ul', 'footnotes',
+            'h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'footnotes',
         ], template='logbooks/story_blocks/text.html')),
         ('quote', QuoteBlock()),
         ('embed', EmbedBlock(template='logbooks/story_blocks/embed.html')),
