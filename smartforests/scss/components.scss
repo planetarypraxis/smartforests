@@ -366,7 +366,7 @@
   padding: $timeline-gap 0;
 
   &:before {
-    margin-left: $timeline-gap;
+    margin-left: 50%;
     z-index: 1;
     position: absolute;
     top: 0;
@@ -392,7 +392,7 @@
     max-width: 100%;
   }
 
-  &__card {
+  &-card {
     @extend .rounded-3;
     @extend .border;
     @extend .border-soft-green;
