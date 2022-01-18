@@ -13,8 +13,10 @@
 {% block article %}
 {% if self.byline %}
   <div class="mb-7">
-    <div class="bg-white rounded-1 p-3">
-      {{self.byline}}
+    <div class='logbook-entry'>
+      <div class="logbook-entry__card border-2">
+        {{self.byline}}
+      </div>
     </div>
   </div>
   {% endif %}
