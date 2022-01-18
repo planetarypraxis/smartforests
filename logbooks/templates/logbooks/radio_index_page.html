@@ -9,11 +9,11 @@
           <div class="row g-0 border-sm-0 border-bottom pt-3 pb-2 {% if forloop.last %}mb-6{% endif %}">
             <div class="col d-flex align-items-start">
               {% include 'logbooks/include/episode_button.html' with episode=episode extra_classes="me-2 p-0 d-none d-md-block" %}
-              <div>
+              <div class='w-100'>
                 <div class="d-flex align-items-md-center mb-2 flex-column flex-md-row">
-                  <div class="d-md-none">
+                  <div class="d-md-none text-center">
                     {% if episode.image %}
-                      {% image episode.image height-194 %}
+                      {% image episode.image height-194 class='mx-auto' %}
                     {% endif %}
                   </div>
                   <a class="link-reset me-3 d-flex d-md-block flex-column mt-2 mt-md-0" href="{{episode.url}}" >
@@ -23,8 +23,8 @@
                     <span class="fs-6">{{ episode.title }}</span>
                   </a>
                   <div class="font-monospace color-dark-grey small d-none d-md-block">
-                    {% if episode.audio.duration != 0.0 %}
-                      {{ episode.audio.duration }}
+                    {% if episode.audio.duration > 0 %}
+                      {{ episode.audio.duration|duration_words }}
                     {% endif %}
                   </div>
                 </div>

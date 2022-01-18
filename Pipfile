@@ -42,3 +42,4 @@ posthog = "*"
 wagtail-autocomplete = "*"
 wagtail-localize = "*"
 django-background-tasks = "*"
+human-readable = '>= 1.1.0'
