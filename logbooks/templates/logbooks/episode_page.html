@@ -12,13 +12,6 @@
     {% include 'logbooks/include/episode_button.html' with episode=self large=True %}
     <span>{{self.title}}</span>
   </h1>
-  {% if self.audio.duration > 0 %}
-  <div class="mb-7">
-    <div class="bg-white rounded-1 p-3">
-      Duration: {{ self.audio.duration|duration_numbers }}
-    </div>
-  </div>
-  {% endif %}
 {% endblock %}
 
 {% block article %}
