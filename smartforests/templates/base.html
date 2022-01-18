@@ -116,10 +116,11 @@
             </footer>
         </div>
         {% endblock %}
-        <div id="radioPlayer" data-turbo-permanent class="offcanvas offcanvas-bottom h-48px bg-dark-green border-0 drop-shadow-mid-green-glow" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" aria-labelledby="radioPlayerLabel">
-            <div class="text-white ps-3 d-flex align-items-center justify-content-between" style="height: 100%;">
-              <div>
-                <button id="radioPlayerPlayButton" class="btn btn-link" title="Play episode: {{self.title}}" type="button">
+        <div id="radioPlayer" data-turbo-permanent class="offcanvas offcanvas-bottom min-h-48px h-auto bg-dark-green border-0 drop-shadow-mid-green-glow" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" aria-labelledby="radioPlayerLabel">
+            <div class="position-relative text-white ps-md-3 d-flex align-items-center justify-content-between">
+              <progress id="radioPlayerSeeker" min="0" max="1" value="0" data-smartforests-radio-episode-seeker></progress>
+              <div class='w-100'>
+                <button id="radioPlayerPlayButton" class="btn btn-link align-baseline" title="Play episode: {{self.title}}" type="button">
                   <svg class="play-button" width="11" height="14" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M0 0.5V35.5L27.5 18L0 0.5Z" fill="white"/>
                   </svg>
@@ -128,19 +129,25 @@
                     <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
                   </svg>
                 </button>
-                <span class="ps-2" id="radioPlayerLabel" data-smartforests-radio-episode-title></span>
-                <span class="ps-3 small font-monospace text-uppercase" data-smartforests-radio-episode-owner></span>
-                <span class="ps-3 small font-monospace text-uppercase" data-smartforests-radio-episode-last-published-at></span>
-                <audio id="radioPlayerAudio"/>
+                <span class="d-none d-md-inline-block fs-7 font-monospace align-middle text-soft-green text-nowrap">
+                  <span class='text-off-white' id="radioPlayerElapsedTime" data-smartforests-radio-episode-elapsed-time></span>
+                  /
+                  <span id="radioPlayerDuration" data-smartforests-radio-episode-duration></span>
+                </span>
+                <a class='text-decoration-none text-reset' href='' data-smartforests-radio-episode-page-url>
+                  <span class="text-nowrap ps-1 ps-md-2 align-middle d-inline-block text-truncate" style='max-width: max(100px, 66vw);' id="radioPlayerLabel" data-smartforests-radio-episode-title></span>
+                  <span class="text-nowrap ps-1 ps-md-3 small font-monospace text-uppercase d-none d-md-inline-block" data-smartforests-radio-episode-owner></span>
+                  <span class="text-nowrap ps-1 ps-md-3 small font-monospace text-uppercase d-none d-md-inline-block" data-smartforests-radio-episode-last-published-at></span>
+                </a>
               </div>
-              <div class="position-relative">
+              <a class='text-decoration-none text-reset d-block position-relative' href='' data-smartforests-radio-episode-page-url>
                 {% if self.image %}
                     {% image self.image height-48 data-smartforests-radio-episode-image=true %}
                 {% else %}
                     <img height="48" data-smartforests-radio-episode-image>
                 {% endif %}
-                <img class="position-absolute top-50 start-50 translate-middle" src="{% static "img/radio-icon.svg" %}"/>
-              </div>
+                <img class="position-absolute top-50 start-50 translate-middle" src='{% static "img/radio-icon.svg" %}' />
+              </a>
             </div>
         </div>
         <script>

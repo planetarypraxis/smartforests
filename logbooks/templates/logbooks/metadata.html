@@ -1,4 +1,4 @@
-<div class="d-none d-md-flex flex-column metadata">
+<div class="d-none d-lg-flex flex-column metadata">
   <section class="d-flex flex-column mb-3">
     <time class="text-dark-grey" datetime="{{ page.first_published_at|date:"Y-m-d" }}">
       Added {{ page.first_published_at|date:"d E Y" }}
@@ -15,10 +15,12 @@
     {% endfor %}
   </section>
   {% endif %}
-  {% if page.geographical_location %}
+  {% if page.geographical_location or page.coordinates %}
   <section class="d-flex flex-column mb-3">
     <h4 class="mb-0">Location</h4>
+    {% if page.geographical_location %}
     <div>{{ page.geographical_location }}</div>
+    {% endif %}
     {% if page.coordinates %}
       <div>{{ page.latitude | floatformat:4}}° N, {{ page.longitude | floatformat:4}}° E</div>
     {% endif %}

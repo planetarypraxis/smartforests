@@ -21,18 +21,20 @@ async function load() {
 
   const modelName = modelInfo?.model?.toLowerCase();
 
-  let main = () => {};
+  let modules: Array<() => void> = []
 
   switch (modelName) {
     case "mappage":
-      ({ main } = await import("./map"));
-      break;
-
-    case "radioindexpage":
-    case "episodepage":
-      ({ main } = await import("./radio"));
+      const { main } = await import("./map")
+      modules.push(main)
       break;
   }
 
-  main();
+  // Load radio player on all pages
+  {
+    const { main } = await import("./radio")
+    modules.push(main)
+  }
+
+  modules.forEach(fn => fn());
 }
