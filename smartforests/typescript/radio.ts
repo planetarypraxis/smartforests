@@ -64,7 +64,7 @@ export function main() {
       radioPlayer.querySelector(
         "[data-smartforests-radio-episode-elapsed-time]"
       ).innerHTML = formatDuration(radioPlayerAudio.currentTime);
-      radioPlayerSeeker.value = radioPlayerAudio.currentTime / radioPlayerAudio.duration
+      radioPlayerSeeker.value = (radioPlayerAudio.currentTime / radioPlayerAudio.duration).toString()
     })
   }
 
@@ -93,9 +93,10 @@ export function main() {
   /**
    * Control the current time via the seeker
    */
-  radioPlayerSeeker.addEventListener('change', (event) => {
+  radioPlayerSeeker.addEventListener('click', (event) => {
     event.stopImmediatePropagation()
-    radioPlayerAudio.currentTime = event.target.value * radioPlayerAudio.duration
+    const percent = event.offsetX / radioPlayerSeeker.offsetWidth;
+    radioPlayerAudio.currentTime = percent * radioPlayerAudio.duration;
   })
 
   /**
