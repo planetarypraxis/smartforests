@@ -47,7 +47,7 @@ export function main() {
       somePlayButton.querySelector(".pause-button").classList.add("d-none");
       somePlayButton.querySelector(".play-button").classList.remove("d-none");
 
-      // // If the button refers to the same audio, then sync its visual state to the radio player
+      // If the button refers to the same audio, then sync its visual state to the radio player
       if (isPlayerButtonActive(somePlayButton)) {
         somePlayButton.querySelector(radioPlayerAudio.paused ? ".pause-button" : ".play-button").classList.add("d-none");
         somePlayButton.querySelector(radioPlayerAudio.paused ? ".play-button" : ".pause-button").classList.remove("d-none");
