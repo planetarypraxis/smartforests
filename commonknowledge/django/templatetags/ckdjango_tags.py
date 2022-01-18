@@ -1,6 +1,7 @@
 from datetime import timedelta, datetime
 from urllib import parse
 import json
+import human_readable
 
 from webpack_loader.templatetags import webpack_loader
 from django.http.request import HttpRequest
@@ -82,12 +83,29 @@ def previous(some_list, current_index):
         return ''  # return empty string in case of exception
 
 
-@register.filter()
-def duration(secs):
-    """Convert a datetime.timedelta object into Days, Hours, Minutes, Seconds."""
+def get_duration(secs):
     if type(secs) is not float and type(secs) is not int:
         secs = secs.total_seconds()
     delta = timedelta(seconds=secs)
+    return delta
+
+
+@register.filter()
+def duration_words(secs):
+    '''
+    Return as "3 minutes, 20 seconds
+    '''
+    delta = get_duration(secs)
+    string = human_readable.precise_delta(delta, minimum_unit="seconds")
+    return string.replace(" and ", ", ")
+
+
+@register.filter()
+def duration_numbers(secs):
+    '''
+    Return as "0:00:00"
+    '''
+    delta = get_duration(secs)
     d1 = datetime(2000, 1, 1, 0, 0, 0)
     d2 = d1 + delta
     return d2-d1
