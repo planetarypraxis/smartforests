@@ -355,3 +355,53 @@
     background-color: $primary-hover-light;
   }
 }
+
+/** Logbooks */
+
+.logbook-entry {
+  $timeline-gap: 30px;
+
+  position: relative;
+  display: flex;
+  padding: $timeline-gap 0;
+
+  &:before {
+    margin-left: $timeline-gap;
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    display: block;
+    width: 2px;
+    content: "";
+    background-color: $soft-green;
+  }
+
+  &:first-child {
+    padding-top: 0;
+  }
+  &:last-child {
+    padding-bottom: 0;
+  }
+
+  > * {
+    z-index: 2;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  &__card {
+    @extend .rounded-3;
+    @extend .border;
+    @extend .border-soft-green;
+    @extend .p-3;
+    @extend .p-md-4;
+    background: white;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+}

@@ -1,6 +1,7 @@
 {% load ckdjango_tags wagtailimages_tags wagtailcore_tags %}
 
-<article class='row row-cols-1 gy-2' id="{{self.slug}}">
+<article class='logbook-entry__card' id="{{self.slug}}">
+  <div class='row row-cols-1 gy-2'>
   <header class='col'>
     <section class='caption text-grey fw-lighter'>
       <div class="d-flex">
@@ -43,7 +44,8 @@
   </section>
   <footer class='col'>
     {% for tag in self.all_tags %}
-      {% include 'logbooks/include/tag_label.html' with tag=tag %}
+        {% include 'logbooks/include/tag_label.html' with tag=tag tag_background_class='bg-off-white' %}
     {% endfor %}
   </footer>
+  </div>
 </article>
