@@ -13,7 +13,7 @@ export function main() {
    * Define the actual radio player
    */
   const radioPlayer = document.getElementById("radioPlayer");
-  const radioPlayerAudio = document.getElementById("radioPlayerAudio") as HTMLAudioElement;
+  const radioPlayerAudio = new Audio();
   const radioPlayerPlayButton = document.getElementById("radioPlayerPlayButton");
   const radioPlayerOffCanvasElement = document.getElementById("radioPlayer");
   const radioPlayerSeeker = document.getElementById('radioPlayerSeeker')
