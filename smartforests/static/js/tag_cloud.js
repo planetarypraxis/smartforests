@@ -90,7 +90,7 @@ syncState()
 // Styling derived from state
 
 function tagStyleFn(d) {
-  return d.fixed ? "layout-tag" : `related-tag ${isTagSelected(d.slug) && 'related-tag--selected'}`
+  return d.fixed ? "layout-tag" : `related-tag transition fade-in ${isTagSelected(d.slug) && 'related-tag--selected'}`
 }
 
 function updateSelectedTagStyle() {
@@ -379,8 +379,10 @@ const init = () => {
 
       // Animate the layout.
       cola.on("tick", () => {
-        tags.style("transform", (d) => `translate(${px(d.x)},${px(d.y)})`);
-        updateBackground(realGraphNodes);
+        requestAnimationFrame(() => {
+          tags.style("transform", (d) => `translate(${px(d.x)},${px(d.y)})`);
+          updateBackground(realGraphNodes);
+        })
       });
     };
 
