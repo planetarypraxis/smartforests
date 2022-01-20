@@ -233,6 +233,7 @@ const init = () => {
 
     // Use webcola's constraint-based graph layout plugin for d3 to lay out the tags, ensuring that we respect the
     // following constrants:
+    // See: https://ialab.it.monash.edu/webcola/
     //
     // * Related tags are close togehter
     // * Tags are all within the bounds of the tag area.
