@@ -233,7 +233,6 @@ const init = () => {
 
     // Use webcola's constraint-based graph layout plugin for d3 to lay out the tags, ensuring that we respect the
     // following constrants:
-    // See: https://ialab.it.monash.edu/webcola/
     //
     // * Related tags are close togehter
     // * Tags are all within the bounds of the tag area.
@@ -244,7 +243,6 @@ const init = () => {
       const height = el.clientHeight - 2 * PADDING;
 
       const container = d3.select(el);
-      const cola = webcola.d3adaptor(d3).size([width, height]);
 
       const realGraphNodes = nodes.slice();
       const pageBounds = { x: PADDING, y: PADDING, width, height };
@@ -365,13 +363,24 @@ const init = () => {
       }
 
       // Configure and start the layout
-      cola
+      // DOCS: https://ialab.it.monash.edu/webcola/
+      const IDEAL_GAP = 100
+      console.log({ realGraphNodes, links })
+      const cola = webcola.d3adaptor(d3)
         .nodes(realGraphNodes)
         .links(links)
-        .avoidOverlaps(true)
+        .size([width, height])
         .constraints(constraints)
-        .jaccardLinkLengths(80, 0.4)
-        .handleDisconnected(false)
+        .jaccardLinkLengths(
+          // The maximum gap between tags should allow for a few clouds of a few tags horizontally, side by side
+          // but adjust this to the width of the screen,
+          IDEAL_GAP,
+          // Default gap between tags should allow for around 20 tags side by side,
+          // but adjust this to the width of the screen
+          Math.min(3, Math.max(0.5, document.body.clientWidth / (IDEAL_GAP * 2)))
+        )
+        .avoidOverlaps(true)
+        .handleDisconnected(true)
         .start(30);
 
       // Store the things we need for re-layout
