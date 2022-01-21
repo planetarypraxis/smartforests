@@ -114,7 +114,8 @@ const init = () => {
   const languageCode = getLanguageCode()
 
   // Downsample the canvas to produce the pixelated effect.
-  const PIXEL_SIZE = 50;
+  const PIXEL_SIZE = 1;
+  const HEATMAP_GRID_SIZE = 75
   const MOBILE_BREAKPOINT = 540;
 
   // Color configs for the background.
@@ -230,17 +231,17 @@ const init = () => {
        */
 
       // Keeps a count of how many nodes have been in each cell during a "tick"
-      var grid = d3.range(0, ctxHeight / PIXEL_SIZE).map(function () {
-        return d3.range(0, ctxWidth / PIXEL_SIZE).map(function () { return 0 });
+      var grid = d3.range(0, ctxHeight / HEATMAP_GRID_SIZE).map(function () {
+        return d3.range(0, ctxWidth / HEATMAP_GRID_SIZE).map(function () { return 0 });
       });
 
       // Increment the counts
       nodes.forEach(function (d) {
         if (d.score !== undefined) {
-          var row = Math.max(0, Math.min(Math.floor(d.y / PIXEL_SIZE), grid.length - 1));
-          var col = Math.max(0, Math.min(Math.floor(d.x / PIXEL_SIZE), grid[0].length - 1));
+          var row = Math.max(0, Math.min(Math.floor(d.y / HEATMAP_GRID_SIZE), grid.length - 1));
+          var col = Math.max(0, Math.min(Math.floor(d.x / HEATMAP_GRID_SIZE), grid[0].length - 1));
           // console.log(row, col, d, grid)
-          grid[row][col] += d.score;
+          grid[row][col] += Math.max(0, Math.sqrt(Math.sqrt(d.score)) * 0.01) || 0;
         }
       });
 
@@ -253,10 +254,15 @@ const init = () => {
       grid.forEach(function (row, i) {
         row.forEach(function (cell, j) {
           ctx.beginPath();
+          if (cell / gridMax > 0.75) {
+            console.log(row, i, cell, j)
+          }
           ctx.fillStyle = COLOR_SCALE(cell / gridMax);
-          ctx.rect(j * PIXEL_SIZE, i * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
+          ctx.rect(j * HEATMAP_GRID_SIZE, i * HEATMAP_GRID_SIZE, HEATMAP_GRID_SIZE, HEATMAP_GRID_SIZE);
           ctx.fill();
           ctx.closePath();
+          // ctx.strokeStyle = 'white';
+          // ctx.strokeRect(j * HEATMAP_GRID_SIZE, i * HEATMAP_GRID_SIZE, HEATMAP_GRID_SIZE, HEATMAP_GRID_SIZE);
         });
       });
 
