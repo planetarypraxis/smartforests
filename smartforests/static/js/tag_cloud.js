@@ -90,7 +90,7 @@ syncState()
 // Styling derived from state
 
 function tagStyleFn(d) {
-  return d.fixed ? "layout-tag" : `related-tag transition fade-in ${isTagSelected(d.slug) && 'related-tag--selected'}`
+  return d.fixed ? "layout-tag" : `related-tag fade-in ${isTagSelected(d.slug) && 'related-tag--selected'}`
 }
 
 function updateSelectedTagStyle() {
@@ -114,7 +114,7 @@ const init = () => {
   const languageCode = getLanguageCode()
 
   // Downsample the canvas to produce the pixelated effect.
-  const PIXEL_SIZE = 32;
+  const PIXEL_SIZE = 1;
   const MOBILE_BREAKPOINT = 540;
 
   // Color configs for the background.
@@ -173,6 +173,7 @@ const init = () => {
     });
 
     // Canvas element for rendering the background 'elevation effect'
+    /** @type HTMLCanvasElement */
     const canvas = d3
       .select(el)
       .append("canvas")
@@ -206,26 +207,48 @@ const init = () => {
     // filling using the color scale getting lighter as we move in.
 
     // We can't do this with a gradient because it wouldn't trace the outlne of the polygon.
-    const updateBackground = (nodes) => {
+    const DARK_GREEN = "#5C9051"
+    const BRIGHT_GREEN = '#86DE73'
+    const WHITE = '#FFFFFF'
+    const updateBackground = (nodes, links) => {
+      // Set up the canvas
       const ctxWidth = Math.floor(el.clientWidth / PIXEL_SIZE);
       const ctxHeight = Math.floor(el.clientHeight / PIXEL_SIZE);
 
       canvas.width = ctxWidth;
       canvas.height = ctxHeight;
 
-      const outerPolygon = concaveman(
-        nodes.map((node) => [node.x / PIXEL_SIZE, node.y / PIXEL_SIZE])
-      );
-
       ctx.clearRect(0, 0, ctxWidth, ctxHeight);
 
-      for (let i = 0; i < 10; ++i) {
-        const poly = geo.polygonScale(outerPolygon, 2 / (i + 1) + 1);
-        const color = COLOR_SCALE(i / 10);
+      // Default dark green background
+      ctx.fillStyle = DARK_GREEN;
+      ctx.fillRect(0, 0, ctxWidth, ctxHeight);
 
-        drawPath(poly);
-        ctx.fillStyle = color;
-        ctx.fill();
+      // Node height map
+      // const outerPolygon = concaveman(
+      //   nodes.map((node) => [node.x / PIXEL_SIZE, node.y / PIXEL_SIZE])
+      // );
+
+      // for (let i = 0; i < 10; ++i) {
+      //   const poly = geo.polygonScale(outerPolygon, 2 / (i + 1) + 1);
+      //   const color = COLOR_SCALE(i / 10);
+
+      //   drawPath(poly);
+      //   ctx.fillStyle = color;
+      //   ctx.fill();
+      // }
+
+      // Draw lines between nodes
+      links.forEach(drawLink);
+      function drawLink(d) {
+        ctx.beginPath()
+        ctx.strokeStyle = BRIGHT_GREEN;
+        ctx.lineCap = "round"
+        ctx.lineWidth = Math.sqrt(d.value) * 0.05 * PIXEL_SIZE;
+        ctx.moveTo(d.source.x * PIXEL_SIZE, d.source.y * PIXEL_SIZE);
+        ctx.lineTo(d.target.x * PIXEL_SIZE, d.target.y * PIXEL_SIZE);
+        ctx.closePath();
+        ctx.stroke();
       }
     };
 
@@ -255,7 +278,6 @@ const init = () => {
         y: pageBounds.y + pageBounds.height,
       };
       const brIndex = realGraphNodes.push(bottomRight) - 1;
-      const constraints = [];
 
       if (window.innerWidth <= MOBILE_BREAKPOINT) {
         // Center the scroll position on entering mobile view
@@ -311,6 +333,7 @@ const init = () => {
       ];
 
       // Initialize constraints.
+      const constraints = [];
       for (let i = 0; i < realGraphNodes.length; i++) {
         const nodeEl = elements[i];
         const node = realGraphNodes[i];
@@ -364,7 +387,7 @@ const init = () => {
 
       // Configure and start the layout
       // DOCS: https://ialab.it.monash.edu/webcola/
-      const IDEAL_GAP = 100
+      const IDEAL_GAP = 80
       const cola = webcola.d3adaptor(d3)
         .nodes(realGraphNodes)
         .links(links)
@@ -388,7 +411,7 @@ const init = () => {
       cola.on("tick", () => {
         requestAnimationFrame(() => {
           tags.style("transform", (d) => `translate(${px(d.x)},${px(d.y)})`);
-          updateBackground(realGraphNodes);
+          updateBackground(realGraphNodes, links);
         })
       });
     };
