@@ -90,7 +90,7 @@ syncState()
 // Styling derived from state
 
 function tagStyleFn(d) {
-  return d.fixed ? "layout-tag" : `related-tag ${isTagSelected(d.slug) && 'related-tag--selected'}`
+  return d.fixed ? "layout-tag" : `related-tag transition fade-in ${isTagSelected(d.slug) && 'related-tag--selected'}`
 }
 
 function updateSelectedTagStyle() {
@@ -243,7 +243,6 @@ const init = () => {
       const height = el.clientHeight - 2 * PADDING;
 
       const container = d3.select(el);
-      const cola = webcola.d3adaptor(d3).size([width, height]);
 
       const realGraphNodes = nodes.slice();
       const pageBounds = { x: PADDING, y: PADDING, width, height };
@@ -364,13 +363,21 @@ const init = () => {
       }
 
       // Configure and start the layout
-      cola
+      // DOCS: https://ialab.it.monash.edu/webcola/
+      const IDEAL_GAP = 100
+      const cola = webcola.d3adaptor(d3)
         .nodes(realGraphNodes)
         .links(links)
-        .avoidOverlaps(true)
+        .size([width, height])
         .constraints(constraints)
-        .jaccardLinkLengths(80, 0.4)
-        .handleDisconnected(false)
+        .jaccardLinkLengths(
+          IDEAL_GAP,
+          // Default gap between tags should allow for around 20 tags side by side,
+          // but adjust this to the width of the screen
+          Math.min(3, Math.max(0.5, document.body.clientWidth / (IDEAL_GAP * 2)))
+        )
+        .avoidOverlaps(true)
+        .handleDisconnected(true)
         .start(30);
 
       // Store the things we need for re-layout
@@ -379,8 +386,10 @@ const init = () => {
 
       // Animate the layout.
       cola.on("tick", () => {
-        tags.style("transform", (d) => `translate(${px(d.x)},${px(d.y)})`);
-        updateBackground(realGraphNodes);
+        requestAnimationFrame(() => {
+          tags.style("transform", (d) => `translate(${px(d.x)},${px(d.y)})`);
+          updateBackground(realGraphNodes);
+        })
       });
     };
 
@@ -392,3 +401,5 @@ const init = () => {
 const px = (val) => Math.round(val) + "px";
 
 window.addEventListener("turbo:load", init);
+
+init()
