@@ -283,6 +283,8 @@
   left: 0;
   top: 0;
   padding: map-get($map: $spacers, $key: 2);
+  margin: (map-get($map: $spacers, $key: 2) * -2.2)
+    (map-get($map: $spacers, $key: 2) * -1.5);
   will-change: transform;
 
   &:hover > * {
