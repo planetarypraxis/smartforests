@@ -114,13 +114,14 @@ const init = () => {
   const languageCode = getLanguageCode()
 
   // Downsample the canvas to produce the pixelated effect.
-  const PIXEL_SIZE = 1;
+  const PIXEL_SIZE = 50;
   const MOBILE_BREAKPOINT = 540;
 
   // Color configs for the background.
   const GRADIENT_INNER = "#63E364";
-  const GRADIENT_OUTER = "#4A964A";
-  const COLOR_SCALE = chroma.scale([GRADIENT_OUTER, GRADIENT_INNER]);
+  const GRADIENT_MIDDLE = "#4A964A";
+  const GRADIENT_OUTER = "#1F6B1F";
+  const COLOR_SCALE = chroma.scale([GRADIENT_OUTER, GRADIENT_MIDDLE, GRADIENT_INNER]);
 
   // Reset the resize handlers on navigation
   resizeHandlers = [];
@@ -207,11 +208,11 @@ const init = () => {
     // filling using the color scale getting lighter as we move in.
 
     // We can't do this with a gradient because it wouldn't trace the outlne of the polygon.
-    const DARK_GREEN = "#5C9051"
-    const BRIGHT_GREEN = '#86DE73'
-    const WHITE = '#FFFFFF'
     const updateBackground = (nodes, links) => {
-      // Set up the canvas
+      /**
+       * Set up the canvas
+       */
+
       const ctxWidth = Math.floor(el.clientWidth / PIXEL_SIZE);
       const ctxHeight = Math.floor(el.clientHeight / PIXEL_SIZE);
 
@@ -221,32 +222,55 @@ const init = () => {
       ctx.clearRect(0, 0, ctxWidth, ctxHeight);
 
       // Default dark green background
-      ctx.fillStyle = DARK_GREEN;
+      ctx.fillStyle = COLOR_SCALE(0.1);
       ctx.fillRect(0, 0, ctxWidth, ctxHeight);
 
-      // Node height map
-      // const outerPolygon = concaveman(
-      //   nodes.map((node) => [node.x / PIXEL_SIZE, node.y / PIXEL_SIZE])
-      // );
+      /**
+       * Node heat map
+       */
 
-      // for (let i = 0; i < 10; ++i) {
-      //   const poly = geo.polygonScale(outerPolygon, 2 / (i + 1) + 1);
-      //   const color = COLOR_SCALE(i / 10);
+      // Keeps a count of how many nodes have been in each cell during a "tick"
+      var grid = d3.range(0, ctxHeight / PIXEL_SIZE).map(function () {
+        return d3.range(0, ctxWidth / PIXEL_SIZE).map(function () { return 0 });
+      });
 
-      //   drawPath(poly);
-      //   ctx.fillStyle = color;
-      //   ctx.fill();
-      // }
+      // Increment the counts
+      nodes.forEach(function (d) {
+        if (d.score !== undefined) {
+          var row = Math.max(0, Math.min(Math.floor(d.y / PIXEL_SIZE), grid.length - 1));
+          var col = Math.max(0, Math.min(Math.floor(d.x / PIXEL_SIZE), grid[0].length - 1));
+          // console.log(row, col, d, grid)
+          grid[row][col] += d.score;
+        }
+      });
 
-      // Draw lines between nodes
+      // Max cell value, for normalizing
+      var gridMax = d3.max(grid, function (row) {
+        return d3.max(row);
+      });
+
+      // Draw the grid
+      grid.forEach(function (row, i) {
+        row.forEach(function (cell, j) {
+          ctx.beginPath();
+          ctx.fillStyle = COLOR_SCALE(cell / gridMax);
+          ctx.rect(j * PIXEL_SIZE, i * PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
+          ctx.fill();
+          ctx.closePath();
+        });
+      });
+
+      /**
+       * Draw lines between nodes
+       */
       links.forEach(drawLink);
       function drawLink(d) {
         ctx.beginPath()
-        ctx.strokeStyle = BRIGHT_GREEN;
-        ctx.lineCap = "round"
-        ctx.lineWidth = Math.sqrt(d.value) * 0.05 * PIXEL_SIZE;
-        ctx.moveTo(d.source.x * PIXEL_SIZE, d.source.y * PIXEL_SIZE);
-        ctx.lineTo(d.target.x * PIXEL_SIZE, d.target.y * PIXEL_SIZE);
+        ctx.strokeStyle = COLOR_SCALE(0.1);
+        ctx.lineWidth = (Math.sqrt(d.value) * 0.01) / PIXEL_SIZE;
+        ctx.lineCap = "round";
+        ctx.moveTo(d.source.x / PIXEL_SIZE, d.source.y / PIXEL_SIZE);
+        ctx.lineTo(d.target.x / PIXEL_SIZE, d.target.y / PIXEL_SIZE);
         ctx.closePath();
         ctx.stroke();
       }
