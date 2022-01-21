@@ -254,9 +254,6 @@ const init = () => {
       grid.forEach(function (row, i) {
         row.forEach(function (cell, j) {
           ctx.beginPath();
-          if (cell / gridMax > 0.75) {
-            console.log(row, i, cell, j)
-          }
           ctx.fillStyle = COLOR_SCALE(cell / gridMax);
           ctx.rect(j * HEATMAP_GRID_SIZE, i * HEATMAP_GRID_SIZE, HEATMAP_GRID_SIZE, HEATMAP_GRID_SIZE);
           ctx.fill();
