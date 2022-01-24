@@ -120,7 +120,7 @@ const init = () => {
   const GRID_BORDERS = false;
 
   // Color configs for the background.
-  const GRADIENT_LIME = '#C8E1C6';
+  const GRADIENT_LIME = '#A1E19C';
   const GRADIENT_INNER = "#63E364";
   const GRADIENT_MIDDLE = "#4A964A";
   const GRADIENT_OUTER = "#1F6B1F";
@@ -216,6 +216,7 @@ const init = () => {
     // filling using the color scale getting lighter as we move in.
 
     // We can't do this with a gradient because it wouldn't trace the outlne of the polygon.
+
     const updateBackground = (nodes, links) => {
       /**
        * Set up the canvas
@@ -232,22 +233,6 @@ const init = () => {
       // Default dark green background
       ctx.fillStyle = COLOR_SCALE(0);
       ctx.fillRect(0, 0, ctxWidth, ctxHeight);
-
-      /**
-       * Background concave thingy
-       */
-      // const outerPolygon = concaveman(
-      //   nodes.map((node) => [node.x / PIXEL_SIZE, node.y / PIXEL_SIZE])
-      // );
-
-      // for (let i = 0; i < 10; ++i) {
-      //   const poly = geo.polygonScale(outerPolygon, 2 / (i + 1) + 1);
-      //   const color = COLOR_SCALE(i / 10);
-
-      //   drawPath(poly);
-      //   ctx.fillStyle = color;
-      //   ctx.fill();
-      // }
 
       /**
        * Node heat map
@@ -296,12 +281,12 @@ const init = () => {
        * Draw lines between nodes
       */
       var linkMax = d3.max(links, l => l.value);
-      for (const w of [0.1]) {
+      for (const w of [0.1, 0.00025]) {
         links.slice().sort(
           (a, b) => a.value - b.value
         ).forEach((d) => {
           ctx.beginPath()
-          ctx.strokeStyle = COLOR_SCALE(1) // (d.value * 0.025) / Math.sqrt(linkMax));
+          ctx.strokeStyle = COLOR_SCALE(w < 0.1 ? 1 : (d.value * 0.025) / Math.sqrt(linkMax))
           ctx.lineWidth = (Math.sqrt(d.value) * w) / PIXEL_SIZE;
           ctx.lineCap = 'round';
           ctx.moveTo(d.source.x / PIXEL_SIZE, d.source.y / PIXEL_SIZE);
@@ -311,7 +296,11 @@ const init = () => {
         });
       }
 
+      // Blur
+
       StackBlur.canvasRGB(canvas, 0, 0, ctxWidth, ctxHeight, 3);
+
+      // Then it is zoomed in by the PIXEL_SIZE ratio
     };
 
     let usingMobileLayout = false;
