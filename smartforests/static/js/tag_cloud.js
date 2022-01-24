@@ -115,7 +115,8 @@ const init = () => {
   const languageCode = getLanguageCode()
 
   // Downsample the canvas to produce the pixelated effect.
-  const PIXEL_SIZE = 12;
+  const DEBUG_NETWORK = true;
+  const PIXEL_SIZE = DEBUG_NETWORK ? 1 : 12;
   const MOBILE_BREAKPOINT = 540;
   const GRID_BORDERS = false;
 
@@ -191,32 +192,6 @@ const init = () => {
     ctx.webkitImageSmoothingEnabled = false;
     ctx.imageSmoothingEnabled = false;
 
-    // Approximate a curve around a polygon by alternating its points as the control and targets of a quadratic bezier
-    const drawPath = (path) => {
-      const start = path[0];
-      let i = 1;
-
-      ctx.beginPath();
-      ctx.moveTo(...start);
-
-      while (i < path.length - 1) {
-        const ctl = path[i];
-        i += 1;
-
-        const target = path[i] || start;
-        i += 1;
-
-        ctx.quadraticCurveTo(...ctl, ...target);
-      }
-
-      ctx.closePath();
-    };
-
-    // Produce the background elevation effect by taking the concave hull polygon of all tag locations, then repetedly
-    // filling using the color scale getting lighter as we move in.
-
-    // We can't do this with a gradient because it wouldn't trace the outlne of the polygon.
-
     const updateBackground = (nodes, links) => {
       /**
        * Set up the canvas
@@ -239,7 +214,7 @@ const init = () => {
        */
 
       // Keeps a count of how many nodes have been in each cell during a "tick"
-      for (const _GRID_SIZE of (new Array(30).fill(0).map((_, i) => (i + 1) * 6)).reverse()) {
+      for (const _GRID_SIZE of DEBUG_NETWORK ? [10] : (new Array(30).fill(0).map((_, i) => (i + 1) * 6)).reverse()) {
         const GRID_SIZE = _GRID_SIZE / PIXEL_SIZE;
         var grid = d3.range(0, ctxHeight / GRID_SIZE).map(function () {
           return d3.range(0, ctxWidth / GRID_SIZE).map(function () { return 0 });
@@ -281,13 +256,16 @@ const init = () => {
        * Draw lines between nodes
       */
       var linkMax = d3.max(links, l => l.value);
-      for (const w of [0.1, 0.00025]) {
+      for (const w of DEBUG_NETWORK ? [0.01] : [0.1, 0.00025]) {
         links.slice().sort(
           (a, b) => a.value - b.value
         ).forEach((d) => {
           ctx.beginPath()
-          ctx.strokeStyle = COLOR_SCALE(w < 0.1 ? 1 : (d.value * 0.025) / Math.sqrt(linkMax))
-          ctx.lineWidth = (Math.sqrt(d.value) * w) / PIXEL_SIZE;
+          ctx.strokeStyle = COLOR_SCALE(DEBUG_NETWORK
+            ? (d.value / linkMax)
+            : w < 0.1 ? 1 : (d.value * 0.025) / Math.sqrt(linkMax)
+          )
+          ctx.lineWidth = (Math.sqrt(d.value) * (DEBUG_NETWORK ? w * 2 : w)) / PIXEL_SIZE;
           ctx.lineCap = 'round';
           ctx.moveTo(d.source.x / PIXEL_SIZE, d.source.y / PIXEL_SIZE);
           ctx.lineTo(d.target.x / PIXEL_SIZE, d.target.y / PIXEL_SIZE);
@@ -298,7 +276,9 @@ const init = () => {
 
       // Blur
 
-      StackBlur.canvasRGB(canvas, 0, 0, ctxWidth, ctxHeight, 3);
+      if (!DEBUG_NETWORK) {
+        StackBlur.canvasRGB(canvas, 0, 0, ctxWidth, ctxHeight, 3);
+      }
 
       // Then it is zoomed in by the PIXEL_SIZE ratio
     };
