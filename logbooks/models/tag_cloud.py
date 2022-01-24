@@ -13,8 +13,10 @@ class TagCloud(models.Model):
     @dataclass
     class Item:
         id: int
+        # Index in a breadth-first search from start (approximately used as 'distance')
         index: int
         links: list
+        # Number of related nodes - Tag, not AtlasTag
         count: int = 1
 
         def to_json(self, tag=None):
@@ -160,10 +162,15 @@ class TagCloud(models.Model):
 
             visited[tag.id] = TagCloud.Item(index=i, id=tag.id, links=[])
 
+            # Get all pages for this tag
             pages = Page.objects.filter(tagged_items__tag=tag)
 
-            for tagged_item in AtlasTag.objects.filter(content_object__in=pages):
-                if tagged_item.tag_id != tag.id:
+            # Pages that link to — or are tagged with — with this tag
+            taggings = AtlasTag.objects.filter(content_object__in=pages)
+
+            # Get all taggings (page-tags, for this tag, or other tags) for pages with this tag
+            for tagged_item in taggings:
+                if tagged_item.tag_id != tag.id:  # o<-o->o
                     stack.append(tagged_item.tag)
                     visited[tag.id].links.append(tagged_item.tag_id)
 
