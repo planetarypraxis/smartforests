@@ -1,3 +1,5 @@
+from math import ceil, floor
+from random import random
 from typing import DefaultDict
 from dataclasses import dataclass
 
@@ -6,6 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 from wagtail.core.models import Page
+from logbooks.models.snippets import AtlasTag
 from smartforests.models import Tag
 
 
@@ -16,7 +19,7 @@ class TagCloud(models.Model):
         # Index in a breadth-first search from start (approximately used as 'distance')
         index: int
         links: list
-        # Number of related nodes - Tag, not AtlasTag
+        # Number of pages with this tag
         count: int = 1
 
         def to_json(self, tag=None):
@@ -31,7 +34,7 @@ class TagCloud(models.Model):
                 return dict(self.__dict__)
 
         def score(self):
-            return self.count ** 2 - self.index
+            return self.count * (1 / (self.index + 1))
 
     class Meta:
         indexes = (models.indexes.Index(fields=('score',)),)
@@ -59,16 +62,28 @@ class TagCloud(models.Model):
 
     @staticmethod
     def reindex():
-        for tag in Tag.objects.iterator():
+        # Select tags that have published pages associated with them
+        tags_in_use = Tag.objects.filter(
+            logbooks_atlastag_items__content_object__live=True
+        )
+
+        # Delete tag clouds without a published page
+        TagCloud.objects.exclude(tag__in=tags_in_use).delete()
+
+        # Reindex the tag clouds for these tags
+        for tag in tags_in_use:
             TagCloud.build_for_tag(tag)
 
     @staticmethod
-    def get_start(limit=100, clouds=5):
+    def get_start(limit=100, clouds=100):
         '''
         Return a merged tag cloud based on the best-scoring clouds (most densely connected nodes) we know about.
         '''
 
-        clouds = TagCloud.objects.order_by('-score')[:clouds]
+        clouds = TagCloud.objects\
+            .order_by('-score')\
+            .filter(score__gt=1)[:clouds]
+
         return TagCloud.get_related([cloud.tag for cloud in clouds], limit=limit)
 
     @staticmethod

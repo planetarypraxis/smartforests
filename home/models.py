@@ -14,7 +14,7 @@ class HomePage(ChildListMixin, Page):
 
     @property
     def tag_cloud(self):
-        return TagCloud.get_start(clouds=10)
+        return TagCloud.get_start()
 
 
 class InformationPage(Page):
