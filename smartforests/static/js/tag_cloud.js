@@ -115,7 +115,7 @@ const init = () => {
   const languageCode = getLanguageCode()
 
   // Downsample the canvas to produce the pixelated effect.
-  const DEBUG_NETWORK = true;
+  const DEBUG_NETWORK = false;
   const PIXEL_SIZE = DEBUG_NETWORK ? 1 : 12;
   const MOBILE_BREAKPOINT = 540;
   const GRID_BORDERS = false;
@@ -214,7 +214,7 @@ const init = () => {
        */
 
       // Keeps a count of how many nodes have been in each cell during a "tick"
-      for (const _GRID_SIZE of DEBUG_NETWORK ? [10] : (new Array(30).fill(0).map((_, i) => (i + 1) * 6)).reverse()) {
+      for (const _GRID_SIZE of (new Array(30).fill(0).map((_, i) => (i + 1) * 6)).reverse()) {
         const GRID_SIZE = _GRID_SIZE / PIXEL_SIZE;
         var grid = d3.range(0, ctxHeight / GRID_SIZE).map(function () {
           return d3.range(0, ctxWidth / GRID_SIZE).map(function () { return 0 });
@@ -256,23 +256,22 @@ const init = () => {
        * Draw lines between nodes
       */
       var linkMax = d3.max(links, l => l.value);
-      for (const w of DEBUG_NETWORK ? [0.01] : [0.1, 0.00025]) {
-        links.slice().sort(
-          (a, b) => a.value - b.value
-        ).forEach((d) => {
-          ctx.beginPath()
-          ctx.strokeStyle = COLOR_SCALE(DEBUG_NETWORK
-            ? (d.value / linkMax)
-            : w < 0.1 ? 1 : (d.value * 0.025) / Math.sqrt(linkMax)
-          )
-          ctx.lineWidth = (Math.sqrt(d.value) * (DEBUG_NETWORK ? w * 2 : w)) / PIXEL_SIZE;
-          ctx.lineCap = 'round';
-          ctx.moveTo(d.source.x / PIXEL_SIZE, d.source.y / PIXEL_SIZE);
-          ctx.lineTo(d.target.x / PIXEL_SIZE, d.target.y / PIXEL_SIZE);
-          ctx.closePath();
-          ctx.stroke();
-        });
-      }
+      const MIN_LINE_WIDTH = 1.5;
+      const MAX_LINE_WIDTH = 25;
+      links.slice().sort(
+        (a, b) => a.value - b.value
+      ).forEach((d) => {
+        ctx.beginPath()
+        ctx.strokeStyle = COLOR_SCALE(1)
+        ctx.lineWidth = Math.max(MIN_LINE_WIDTH / PIXEL_SIZE, Math.min(MAX_LINE_WIDTH / PIXEL_SIZE,
+          ((d.value / (linkMax ** 0.5))) * (MAX_LINE_WIDTH / PIXEL_SIZE)
+        ))
+        ctx.lineCap = 'round';
+        ctx.moveTo(d.source.x / PIXEL_SIZE, d.source.y / PIXEL_SIZE);
+        ctx.lineTo(d.target.x / PIXEL_SIZE, d.target.y / PIXEL_SIZE);
+        ctx.closePath();
+        ctx.stroke();
+      });
 
       // Blur
 
