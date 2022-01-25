@@ -52,6 +52,18 @@ class StoryPage(ArticlePage):
     def cover_image(self):
         return self.image
 
+    def get_first_image_from_body(self):
+        images = self.body_images()
+        if len(images) > 0:
+            return images[0]
+        return None
+
+    def get_thumbnail_images(self):
+        image = self.get_first_image_from_body()
+        if image is not None:
+            return [image]
+        else:
+            return []
 
 class StoryIndexPage(IndexPage):
     '''
