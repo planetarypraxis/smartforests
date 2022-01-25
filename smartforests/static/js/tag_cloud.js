@@ -121,7 +121,8 @@ const init = () => {
   const GRID_BORDERS = false;
 
   // Color configs for the background.
-  const GRADIENT_LIME = '#A1E19C';
+  const GRADIENT_LINE = '#B9FFA6';
+  const GRADIENT_LIME = '#8DFF85';
   const GRADIENT_INNER = "#63E364";
   const GRADIENT_MIDDLE = "#4A964A";
   const GRADIENT_OUTER = "#1F6B1F";
