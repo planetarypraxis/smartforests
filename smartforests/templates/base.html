@@ -47,7 +47,9 @@
         <script type="application/json" id="request-info">
           { "languageCode": "{{ LANGUAGE_CODE }}" }
         </script>
-        {% wagtailuserbar %}
+        <div id='wagtailuserbar-data-turbo-permanent-wrapper' data-turbo-permanent>
+          {% wagtailuserbar %}
+        </div>
 
         <div
         class="offcanvas offcanvas-end flex flex-column h-100 overflow-auto"
