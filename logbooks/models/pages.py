@@ -300,7 +300,7 @@ class ContributorPage(GeocodedMixin, BaseLogbooksPage):
         })
 
     @property
-    def tags(self):
+    def all_tags(self):
         if self.person:
             return self.person.edited_tags()
 
@@ -309,6 +309,10 @@ class ContributorPage(GeocodedMixin, BaseLogbooksPage):
         return cls.objects.live().filter(
             user__in=User.with_edited_tags(tag)
         )
+
+    @property
+    def tag_cloud(self):
+        return TagCloud.get_related(self.all_tags)
 
 
 class ContributorsIndexPage(IndexPage):
