@@ -51,12 +51,14 @@ function resetSelectedTag() {
 }
 
 function showTagSidepanel() {
+  console.log("showTagSidepanel")
   const elements = getPageElements()
-  if (!elements || elements.tagOffcanvasInstance) return
+  if (!elements || !elements.tagOffcanvasInstance) return
   elements.tagOffcanvasInstance.show();
 }
 
 function hideTagSidepanel() {
+  console.log("hideTagSidepanel")
   const elements = getPageElements()
   if (!elements || !elements.tagOffcanvasInstance) return
   elements.tagOffcanvasInstance.hide();
