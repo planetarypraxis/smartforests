@@ -13,6 +13,13 @@ from smartforests.models import Tag
 
 
 class TagCloud(models.Model):
+    '''
+    The 'heat' (score) for a tag is calculated by counting many times other tags appear in pages that include this tag, and also further afield neighbouring.
+    The further afield the neighbouring tags are (degrees of separation by page), the lower the score modifier.
+    The different clouds for the different tags are combined on the homepage, so that each tag's score is an aggregate of all the clouds' scores for that tag — a tag is 'seen' by its relationship to the other tags.
+    This is a bit complicated to say but, suffice to say, it's a measure of 'centrality' of a tag amongst the page content.
+    '''
+
     @dataclass
     class Item:
         id: int
@@ -34,7 +41,13 @@ class TagCloud(models.Model):
                 return dict(self.__dict__)
 
         def score(self):
-            return self.count * (1 / (self.index + 1))
+            # Taking index as an approximation for 'distance' from the starting Item
+            # the further away, the smaller the distance_factor
+            # and hence the lower the overall score
+            distance_factor = 1 / (self.index + 1)
+            # We multiple the count (of pages with this tag) by the distance_factor
+            # to get a rough score of 'centrality' for this tag
+            return self.count * distance_factor
 
     class Meta:
         indexes = (models.indexes.Index(fields=('score',)),)
@@ -171,7 +184,9 @@ class TagCloud(models.Model):
         i = 0
         while len(stack) > 0 and i < 100:
             tag = stack.pop(0)
+
             if tag.id in visited:
+                # Increment the score for this related tag
                 visited[tag.id].count += 1
                 continue
 
@@ -183,9 +198,10 @@ class TagCloud(models.Model):
             # Pages that link to — or are tagged with — with this tag
             taggings = AtlasTag.objects.filter(content_object__in=pages)
 
-            # Get all taggings (page-tags, for this tag, or other tags) for pages with this tag
+            # Get all tags that are linked to by these pages
+            # so that their score can be incremented
             for tagged_item in taggings:
-                if tagged_item.tag_id != tag.id:  # o<-o->o
+                if tagged_item.tag_id != tag.id:
                     stack.append(tagged_item.tag)
                     visited[tag.id].links.append(tagged_item.tag_id)
 
