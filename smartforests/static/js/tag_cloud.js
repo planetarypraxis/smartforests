@@ -5,6 +5,7 @@ import * as chroma from "https://cdn.skypack.dev/chroma-js";
 import concaveman from "https://cdn.skypack.dev/concaveman";
 import debounce from "https://cdn.skypack.dev/lodash.debounce";
 import uniqBy from "https://cdn.skypack.dev/lodash.uniqby";
+import * as StackBlur from "https://cdn.skypack.dev/stackblur-canvas@2.5"
 
 function getPageElements() {
   const parentEl = document.querySelector("[data-tag-cloud-data]")
@@ -51,7 +52,7 @@ function resetSelectedTag() {
 
 function showTagSidepanel() {
   const elements = getPageElements()
-  if (!elements || elements.tagOffcanvasInstance) return
+  if (!elements || !elements.tagOffcanvasInstance) return
   elements.tagOffcanvasInstance.show();
 }
 
@@ -91,7 +92,7 @@ syncState()
 
 function tagStyleFn(d) {
   if (!d) return ''
-  return d.fixed ? "layout-tag" : `related-tag transition fade-in ${isTagSelected(d.slug) && 'related-tag--selected'}`
+  return d.fixed ? "layout-tag" : `related-tag fade-in ${isTagSelected(d.slug) && 'related-tag--selected'}`
 }
 
 function updateSelectedTagStyle() {
@@ -115,13 +116,18 @@ const init = () => {
   const languageCode = getLanguageCode()
 
   // Downsample the canvas to produce the pixelated effect.
-  const PIXEL_SIZE = 32;
+  const DEBUG_NETWORK = false;
+  const PIXEL_SIZE = DEBUG_NETWORK ? 1 : 12;
   const MOBILE_BREAKPOINT = 540;
+  const GRID_BORDERS = false;
 
   // Color configs for the background.
+  const GRADIENT_LINE = '#B9FFA6';
+  const GRADIENT_LIME = '#8DFF85';
   const GRADIENT_INNER = "#63E364";
-  const GRADIENT_OUTER = "#4A964A";
-  const COLOR_SCALE = chroma.scale([GRADIENT_OUTER, GRADIENT_INNER]);
+  const GRADIENT_MIDDLE = "#4A964A";
+  const GRADIENT_OUTER = "#1F6B1F";
+  const COLOR_SCALE = chroma.scale([GRADIENT_OUTER, GRADIENT_MIDDLE, GRADIENT_INNER, GRADIENT_LIME]);
 
   // Reset the resize handlers on navigation
   resizeHandlers = [];
@@ -174,60 +180,108 @@ const init = () => {
     });
 
     // Canvas element for rendering the background 'elevation effect'
+    /** @type HTMLCanvasElement */
     const canvas = d3
       .select(el)
       .append("canvas")
       .attr("class", "w-100 h-100 position-absolute")
+      .attr("style", "image-rendering: crisp-edges;")
       .node();
 
     const ctx = canvas.getContext("2d");
+    ctx.msImageSmoothingEnabled = false;
+    ctx.mozImageSmoothingEnabled = false;
+    ctx.webkitImageSmoothingEnabled = false;
+    ctx.imageSmoothingEnabled = false;
 
-    // Approximate a curve around a polygon by alternating its points as the control and targets of a quadratic bezier
-    const drawPath = (path) => {
-      const start = path[0];
-      let i = 1;
+    const updateBackground = (nodes, links) => {
+      /**
+       * Set up the canvas
+       */
 
-      ctx.beginPath();
-      ctx.moveTo(...start);
-
-      while (i < path.length - 1) {
-        const ctl = path[i];
-        i += 1;
-
-        const target = path[i] || start;
-        i += 1;
-
-        ctx.quadraticCurveTo(...ctl, ...target);
-      }
-
-      ctx.closePath();
-    };
-
-    // Produce the background elevation effect by taking the concave hull polygon of all tag locations, then repetedly
-    // filling using the color scale getting lighter as we move in.
-
-    // We can't do this with a gradient because it wouldn't trace the outlne of the polygon.
-    const updateBackground = (nodes) => {
       const ctxWidth = Math.floor(el.clientWidth / PIXEL_SIZE);
       const ctxHeight = Math.floor(el.clientHeight / PIXEL_SIZE);
 
       canvas.width = ctxWidth;
       canvas.height = ctxHeight;
 
-      const outerPolygon = concaveman(
-        nodes.map((node) => [node.x / PIXEL_SIZE, node.y / PIXEL_SIZE])
-      );
-
       ctx.clearRect(0, 0, ctxWidth, ctxHeight);
 
-      for (let i = 0; i < 10; ++i) {
-        const poly = geo.polygonScale(outerPolygon, 2 / (i + 1) + 1);
-        const color = COLOR_SCALE(i / 10);
+      // Default dark green background
+      ctx.fillStyle = COLOR_SCALE(0);
+      ctx.fillRect(0, 0, ctxWidth, ctxHeight);
 
-        drawPath(poly);
-        ctx.fillStyle = color;
-        ctx.fill();
+      /**
+       * Node heat map
+       */
+
+      // Keeps a count of how many nodes have been in each cell during a "tick"
+      for (const _GRID_SIZE of (new Array(30).fill(0).map((_, i) => (i + 1) * 6)).reverse()) {
+        const GRID_SIZE = _GRID_SIZE / PIXEL_SIZE;
+        var grid = d3.range(0, ctxHeight / GRID_SIZE).map(function () {
+          return d3.range(0, ctxWidth / GRID_SIZE).map(function () { return 0 });
+        });
+
+        // Increment the counts
+        nodes.forEach(function (d) {
+          if (d.score !== undefined) {
+            var row = Math.max(0, Math.min(Math.floor((d.y / PIXEL_SIZE) / GRID_SIZE), grid.length - 1));
+            var col = Math.max(0, Math.min(Math.floor((d.x / PIXEL_SIZE) / GRID_SIZE), grid[0].length - 1));
+            // console.log(row, col, d, grid)
+            grid[row][col] += Math.max(0, Math.sqrt(d.score) * 0.05) || 0;
+          }
+        });
+
+        // Max cell value, for normalizing
+        var gridMax = d3.max(grid, function (row) {
+          return d3.max(row);
+        });
+
+        // Draw the grid
+        grid.forEach(function (row, i) {
+          row.forEach(function (cell, j) {
+            if (cell <= 0) return
+            ctx.beginPath();
+            ctx.fillStyle = COLOR_SCALE(cell / gridMax);
+            ctx.rect(j * GRID_SIZE, i * GRID_SIZE, GRID_SIZE, GRID_SIZE);
+            ctx.fill();
+            ctx.closePath();
+            if (GRID_BORDERS) {
+              ctx.strokeStyle = 'white';
+              ctx.strokeRect(j * GRID_SIZE, i * GRID_SIZE, GRID_SIZE, GRID_SIZE);
+            }
+          });
+        });
       }
+
+      /**
+       * Draw lines between nodes
+      */
+      var linkMax = d3.max(links, l => l.value);
+      const MIN_LINE_WIDTH = 1.5;
+      const MAX_LINE_WIDTH = 25;
+      links.slice().sort(
+        (a, b) => a.value - b.value
+      ).forEach((d) => {
+        ctx.beginPath()
+        ctx.strokeStyle = COLOR_SCALE(1)
+        ctx.lineWidth = Math.max(MIN_LINE_WIDTH / PIXEL_SIZE, Math.min(MAX_LINE_WIDTH / PIXEL_SIZE,
+          ((d.value / (linkMax ** 0.5))) * (MAX_LINE_WIDTH / PIXEL_SIZE)
+        ))
+        ctx.lineCap = 'round';
+        ctx.moveTo(d.source.x / PIXEL_SIZE, d.source.y / PIXEL_SIZE);
+        ctx.lineTo(d.target.x / PIXEL_SIZE, d.target.y / PIXEL_SIZE);
+        ctx.closePath();
+        ctx.stroke();
+      });
+
+      // Blur
+
+      if (!DEBUG_NETWORK) {
+        StackBlur.canvasRGB(canvas, 0, 0, ctxWidth, ctxHeight, 3);
+      }
+
+      // Then it is zoomed in by the PIXEL_SIZE ratio
     };
 
     let usingMobileLayout = false;
@@ -256,7 +310,6 @@ const init = () => {
         y: pageBounds.y + pageBounds.height,
       };
       const brIndex = realGraphNodes.push(bottomRight) - 1;
-      const constraints = [];
 
       if (window.innerWidth <= MOBILE_BREAKPOINT) {
         // Center the scroll position on entering mobile view
@@ -312,6 +365,7 @@ const init = () => {
       ];
 
       // Initialize constraints.
+      const constraints = [];
       for (let i = 0; i < realGraphNodes.length; i++) {
         const nodeEl = elements[i];
         const node = realGraphNodes[i];
@@ -365,7 +419,7 @@ const init = () => {
 
       // Configure and start the layout
       // DOCS: https://ialab.it.monash.edu/webcola/
-      const IDEAL_GAP = 100
+      const IDEAL_GAP = 80
       const cola = webcola.d3adaptor(d3)
         .nodes(realGraphNodes)
         .links(links)
@@ -389,7 +443,7 @@ const init = () => {
       cola.on("tick", () => {
         requestAnimationFrame(() => {
           tags.style("transform", (d) => `translate(${px(d.x)},${px(d.y)})`);
-          updateBackground(realGraphNodes);
+          updateBackground(realGraphNodes, links);
         })
       });
     };

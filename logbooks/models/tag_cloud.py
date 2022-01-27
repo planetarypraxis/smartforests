@@ -1,3 +1,5 @@
+from math import ceil, floor
+from random import random
 from typing import DefaultDict
 from dataclasses import dataclass
 
@@ -6,15 +8,25 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 from wagtail.core.models import Page
+from logbooks.models.snippets import AtlasTag
 from smartforests.models import Tag
 
 
 class TagCloud(models.Model):
+    '''
+    The 'heat' (score) for a tag is calculated by counting many times other tags appear in pages that include this tag, and also further afield neighbouring.
+    The further afield the neighbouring tags are (degrees of separation by page), the lower the score modifier.
+    The different clouds for the different tags are combined on the homepage, so that each tag's score is an aggregate of all the clouds' scores for that tag — a tag is 'seen' by its relationship to the other tags.
+    This is a bit complicated to say but, suffice to say, it's a measure of 'centrality' of a tag amongst the page content.
+    '''
+
     @dataclass
     class Item:
         id: int
+        # Index in a breadth-first search from start (approximately used as 'distance')
         index: int
         links: list
+        # Number of pages with this tag
         count: int = 1
 
         def to_json(self, tag=None):
@@ -29,7 +41,13 @@ class TagCloud(models.Model):
                 return dict(self.__dict__)
 
         def score(self):
-            return self.count ** 2 - self.index
+            # Taking index as an approximation for 'distance' from the starting Item
+            # the further away, the smaller the distance_factor
+            # and hence the lower the overall score
+            distance_factor = 1 / (self.index + 1)
+            # We multiple the count (of pages with this tag) by the distance_factor
+            # to get a rough score of 'centrality' for this tag
+            return self.count * distance_factor
 
     class Meta:
         indexes = (models.indexes.Index(fields=('score',)),)
@@ -57,16 +75,28 @@ class TagCloud(models.Model):
 
     @staticmethod
     def reindex():
-        for tag in Tag.objects.iterator():
+        # Select tags that have published pages associated with them
+        tags_in_use = Tag.objects.filter(
+            logbooks_atlastag_items__content_object__live=True
+        )
+
+        # Delete tag clouds without a published page
+        TagCloud.objects.exclude(tag__in=tags_in_use).delete()
+
+        # Reindex the tag clouds for these tags
+        for tag in tags_in_use:
             TagCloud.build_for_tag(tag)
 
     @staticmethod
-    def get_start(limit=100, clouds=5):
+    def get_start(limit=100, clouds=100):
         '''
         Return a merged tag cloud based on the best-scoring clouds (most densely connected nodes) we know about.
         '''
 
-        clouds = TagCloud.objects.order_by('-score')[:clouds]
+        clouds = TagCloud.objects\
+            .order_by('-score')\
+            .filter(score__gt=1)[:clouds]
+
         return TagCloud.get_related([cloud.tag for cloud in clouds], limit=limit)
 
     @staticmethod
@@ -154,15 +184,23 @@ class TagCloud(models.Model):
         i = 0
         while len(stack) > 0 and i < 100:
             tag = stack.pop(0)
+
             if tag.id in visited:
+                # Increment the score for this related tag
                 visited[tag.id].count += 1
                 continue
 
             visited[tag.id] = TagCloud.Item(index=i, id=tag.id, links=[])
 
+            # Get all pages for this tag
             pages = Page.objects.filter(tagged_items__tag=tag)
 
-            for tagged_item in AtlasTag.objects.filter(content_object__in=pages):
+            # Pages that link to — or are tagged with — with this tag
+            taggings = AtlasTag.objects.filter(content_object__in=pages)
+
+            # Get all tags that are linked to by these pages
+            # so that their score can be incremented
+            for tagged_item in taggings:
                 if tagged_item.tag_id != tag.id:
                     stack.append(tagged_item.tag)
                     visited[tag.id].links.append(tagged_item.tag_id)
