@@ -49,6 +49,8 @@ if settings.DEBUG:
 
 urlpatterns += [
     path('api/v2/', wagtail_api_router.urls),
+    path('api/v2/geo/',
+         logbook_views.MapSearchViewset.as_view({'get': 'list'}), name='geo'),
     re_path(r'^wagtail-transfer/', include(wagtailtransfer_urls)),
 ]
 
