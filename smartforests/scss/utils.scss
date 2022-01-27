@@ -183,12 +183,11 @@
 }
 
 .fade-in {
-  animation: fadein 3s;
+  animation: fadein 1.5s;
 }
 
 @keyframes fadein {
-  0%,
-  66% {
+  0% {
     opacity: 0;
   }
   100% {
@@ -198,8 +197,7 @@
 
 /* Firefox < 16 */
 @-moz-keyframes fadein {
-  0%,
-  66% {
+  0% {
     opacity: 0;
   }
   100% {
@@ -209,8 +207,7 @@
 
 /* Safari, Chrome and Opera > 12.1 */
 @-webkit-keyframes fadein {
-  0%,
-  66% {
+  0% {
     opacity: 0;
   }
   100% {
@@ -220,8 +217,7 @@
 
 /* Internet Explorer */
 @-ms-keyframes fadein {
-  0%,
-  66% {
+  0% {
     opacity: 0;
   }
   100% {
