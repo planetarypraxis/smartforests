@@ -7,7 +7,7 @@ import debounce from "https://cdn.skypack.dev/lodash.debounce";
 import uniqBy from "https://cdn.skypack.dev/lodash.uniqby";
 import * as StackBlur from "https://cdn.skypack.dev/stackblur-canvas@2.5"
 
-const getPageElements = () => {
+function getPageElements() {
   const parentEl = document.querySelector("[data-tag-cloud-data]")
   if (!parentEl) return
   const dict = Object.entries(parentEl.dataset).reduce((dict, [key, value]) => {
@@ -51,22 +51,22 @@ function resetSelectedTag() {
 }
 
 function showTagSidepanel() {
-  const { tagOffcanvasInstance } = getPageElements()
-  if (!tagOffcanvasInstance) return
-  tagOffcanvasInstance.show();
+  const elements = getPageElements()
+  if (!elements || elements.tagOffcanvasInstance) return
+  elements.tagOffcanvasInstance.show();
 }
 
 function hideTagSidepanel() {
-  const { tagOffcanvasInstance } = getPageElements()
-  if (!tagOffcanvasInstance) return
-  tagOffcanvasInstance.hide();
+  const elements = getPageElements()
+  if (!elements || !elements.tagOffcanvasInstance) return
+  elements.tagOffcanvasInstance.hide();
 }
 
 // Offcanvas close handler should update state
 
 window.addEventListener('hide.bs.offcanvas', e => {
-  const { tagOffcanvas } = getPageElements()
-  if (!tagOffcanvas || e.target.id !== tagOffcanvas.id) return
+  const elements = getPageElements()
+  if (!elements || !elements.tagOffcanvas || e.target.id !== elements.tagOffcanvas.id) return
   resetSelectedTag()
 })
 
@@ -91,6 +91,7 @@ syncState()
 // Styling derived from state
 
 function tagStyleFn(d) {
+  if (!d) return ''
   return d.fixed ? "layout-tag" : `related-tag fade-in ${isTagSelected(d.slug) && 'related-tag--selected'}`
 }
 
