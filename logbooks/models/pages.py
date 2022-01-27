@@ -18,7 +18,7 @@ from commonknowledge.wagtail.helpers import get_children_of_type
 from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
 from wagtail.api import APIField
-from smartforests.util import group_by_title
+from smartforests.util import flatten_list, group_by_title
 from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, DescendantPageContributorMixin, GeocodedMixin, IndexPage, Person, ThumbnailMixin, SidebarRenderableMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
@@ -178,7 +178,10 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
     ] + DescendantPageContributorMixin.api_fields + GeocodedMixin.api_fields
 
     def get_thumbnail_images(self):
-        return tuple(x.cover_image() for x in self.get_child_list_queryset() if x.cover_image() is not None)
+        image_lists = [page.get_thumbnail_images()
+                       for page in self.get_child_list_queryset()]
+        # `set()` in case an image is reused
+        return list(set(flatten_list(image_lists))).reverse()
 
     def card_content_html(self):
         return render_to_string('logbooks/thumbnails/basic_thumbnail.html', {

@@ -22,3 +22,7 @@ def group_by_title(qs, key='title'):
         head.append(item)
 
     return result
+
+
+def flatten_list(the_list):
+    return [item for sublist in the_list for item in sublist]
