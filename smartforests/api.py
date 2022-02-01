@@ -18,3 +18,14 @@ wagtail_api_router = WagtailAPIRouter('wagtailapi')
 wagtail_api_router.register_endpoint('pages', PagesAPIViewSet)
 wagtail_api_router.register_endpoint('images', ImagesAPIViewSet)
 wagtail_api_router.register_endpoint('documents', DocumentsAPIViewSet)
+
+
+def preprocessing_hooks(endpoints):
+    # your modifications to the list of operations that are exposed in the schema
+    new_endpoints = []
+    for (path, path_regex, method, callback) in endpoints:
+        print(path)
+        # If path starts with /api/v2 then add it to new_endpoints
+        if path.startswith('/api/v2'):
+            new_endpoints.append((path, path_regex, method, callback))
+    return new_endpoints

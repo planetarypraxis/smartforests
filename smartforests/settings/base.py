@@ -254,6 +254,9 @@ SPECTACULAR_SETTINGS = {
     'TITLE': 'Smart Forests Atlas',
     'DESCRIPTION': 'Investigating how digital technologies are remaking forests, and how forests are becoming technologies for addressing environmental change',
     'VERSION': '1.0.0',
+    'PREPROCESSING_HOOKS': [
+        'smartforests.api.preprocessing_hooks'
+    ],
     # OTHER SETTINGS
 }
 
