@@ -1,11 +1,20 @@
 import qs from 'query-string'
 import { getLanguageCode } from './pageContext';
 
+const SEARCH_ID = "searchToggle"
+
+document.addEventListener('turbo:before-cache', function cleanUpSearchBar() {
+  const b = window.bootstrap.Modal.getInstance(SEARCH_ID)
+  if (!b) return
+  b.hide()
+  b.dispose()
+})
+
 const init = () => {
   const search = document.getElementById("search-box");
   const searchResults = document.getElementById("search-results");
-  const searchToggle = document.getElementById("searchToggle");
-  const modal = new bootstrap.Modal(searchToggle);
+  const searchToggle = document.getElementById(SEARCH_ID);
+  const modal = new window.bootstrap.Modal(searchToggle);
   const languageCode = getLanguageCode()
 
   searchToggle.addEventListener("submit", (e) => e.preventDefault());
