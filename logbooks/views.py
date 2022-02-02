@@ -10,6 +10,7 @@ from wagtail.api.v2.utils import BadRequestError
 
 from logbooks.models.pages import ContributorPage, EpisodePage, LogbookEntryPage, LogbookPage, StoryPage
 from smartforests.views import LocaleFromLanguageCode
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
 
 
 def tag_panel(request, slug):
@@ -83,6 +84,7 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
 
         return qs
 
+    @extend_schema(parameters=[RequestSerializer])
     def list(self, request):
         list = self.get_queryset()
         locale = self.get_locale()

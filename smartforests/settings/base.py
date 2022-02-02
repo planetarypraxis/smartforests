@@ -57,7 +57,6 @@ INSTALLED_APPS = [
     'wagtail.admin',
     'wagtail.core',
     'wagtail.contrib.postgres_search',
-    'wagtail_transfer',
     'wagtail.contrib.settings',
     'wagtail.api.v2',
     "wagtail.contrib.routable_page",
@@ -70,6 +69,7 @@ INSTALLED_APPS = [
     "anymail",
     "rest_framework",
     "rest_framework_gis",
+    'drf_spectacular',
     "background_task",
     # 'debug_toolbar',
 
@@ -246,9 +246,19 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
-    ]
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Smart Forests Atlas',
+    'DESCRIPTION': 'Investigating how digital technologies are remaking forests, and how forests are becoming technologies for addressing environmental change',
+    'VERSION': '1.0.0',
+    'PREPROCESSING_HOOKS': [
+        'smartforests.api.preprocessing_hooks'
+    ],
+    # OTHER SETTINGS
+}
 
 # Logging
 
