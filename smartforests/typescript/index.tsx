@@ -7,7 +7,7 @@ document.addEventListener("turbo:load", async (event) => {
   load();
 });
 
-async function load() {
+function getModelInfo() {
   const modelInfoInDOM = document.getElementById("model-info");
 
   if (!modelInfoInDOM) {
@@ -17,9 +17,31 @@ async function load() {
   const modelInfo = JSON.parse(modelInfoInDOM.innerHTML) as {
     app_label: string;
     model: string;
+    page_id: string
   };
 
-  const modelName = modelInfo?.model?.toLowerCase();
+  return modelInfo
+}
+
+const PAGE_ID_REGEX = /pages\/[0-9]+/gim
+document.addEventListener("turbo:render", () => {
+  const btns = document.getElementById("wagtail-userbar-items")
+  // get the page ID from the HTML
+  const modelInfo = getModelInfo()
+  if (!modelInfo) return
+  // find all the anchor links
+  const links = btns.querySelectorAll<HTMLAnchorElement>("a[role='menuitem']");
+  // loop over them, replace `page/oldID/` with `page/newID/`
+  for (const link of links) {
+    link.setAttribute("href", link.href.replace(PAGE_ID_REGEX, `pages/${modelInfo.page_id}`));
+  }
+})
+
+async function load() {
+  const modelInfo = getModelInfo()
+  if (!modelInfo) return
+
+  const modelName = modelInfo.model?.toLowerCase();
 
   let modules: Array<() => void> = []
 
