@@ -2,13 +2,7 @@ import qs from 'query-string'
 import { getLanguageCode } from './pageContext';
 
 const SEARCH_ID = "searchToggle"
-
-document.addEventListener('turbo:before-cache', function cleanUpSearchBar() {
-  const b = window.bootstrap.Modal.getInstance(SEARCH_ID)
-  if (!b) return
-  b.hide()
-  b.dispose()
-})
+const SEARCH_BACKDROP_ID = 'search-backdrop'
 
 const init = () => {
   const search = document.getElementById("search-box");
@@ -71,6 +65,57 @@ const init = () => {
       }
     });
   });
+
+  function getBackdropElement() {
+    return document.getElementById(SEARCH_BACKDROP_ID)
+  }
+
+  function getSearchElement() {
+    return document.getElementById(SEARCH_ID)
+  }
+
+  function closeBootstrapSearchOnOutsideClicks(event) {
+    const modalElement = getSearchElement().querySelector('.modal-dialog')
+    const isClickingOutside = !event.composedPath().includes(modalElement)
+    if (isClickingOutside) {
+      // @ts-ignore
+      bootstrap.Modal.getInstance(document.getElementById(SEARCH_ID)).hide()
+    }
+  }
+
+  document.addEventListener("show.bs.modal", showBackdrop)
+  document.addEventListener("hidden.bs.modal", hideBackdrop)
+  document.addEventListener("turbo:before-cache", hideBackdrop)
+
+  function showBackdrop() {
+    console.log('Show Backdrop')
+    document.body.classList.toggle('modal-open', true)
+    //
+    let backdrop = getBackdropElement()
+    if (!backdrop) {
+      backdrop = document.createElement('div')
+      backdrop.classList.add('modal-backdrop')
+      backdrop.classList.add('fade')
+      backdrop.classList.add('show')
+      backdrop.setAttribute('id', SEARCH_BACKDROP_ID)
+      document.body.appendChild(backdrop)
+    }
+    document.addEventListener('click', closeBootstrapSearchOnOutsideClicks)
+  }
+
+  function hideBackdrop() {
+    // Kill the outside click listener
+    document.removeEventListener('click', closeBootstrapSearchOnOutsideClicks)
+    //
+    document.body.classList.toggle('modal-open', false)
+    //
+    const backdrop = getBackdropElement()
+    if (!backdrop) return
+    backdrop.classList.remove('show')
+    backdrop.addEventListener('transitionend', () => {
+      backdrop.remove()
+    });
+  }
 };
 
 window.addEventListener("turbo:load", init);
