@@ -98,6 +98,7 @@ const init = () => {
       backdrop.classList.add('fade')
       backdrop.classList.add('show')
       backdrop.setAttribute('id', SEARCH_BACKDROP_ID)
+      backdrop.setAttribute('data-turbo-cache', 'false')
       document.body.appendChild(backdrop)
     }
     document.addEventListener('click', closeBootstrapSearchOnOutsideClicks)
