@@ -121,16 +121,7 @@
   display: block;
 
   &:hover {
-    background-color: $mid-green;
-    color: $white;
-
-    a:hover {
-      color: $white;
-    }
-
-    .text-dark-grey {
-      color: $white !important;
-    }
+    background-color: $soft-green;
   }
 }
 

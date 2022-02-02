@@ -1,13 +1,25 @@
+{% load wagtailimages_tags %}
 <turbo-frame id="search-results">
   {% for item in search_results %}
-      <div class="search-item p-3 {% if not forloop.last %}border-bottom{% endif %}">
-        <div>
-          <i class="icon icon-20 {{item.page.icon_class}} mb-1"></i>
-          <a class="link-reset" href="{{item.page.url}}">
-            <h2 class="mb-1">{{item.page.title}}</h2>
-          </a>
-          <div class="text-dark-grey font-monospace microcopy-small mb-1">{{ item.page.geographical_location }}</div>
-          <div class="text-dark-grey font-monospace microcopy-small">{{ item.page.last_published_at|date:"d E Y" }}</div>
+      <div class="position-relative search-item p-3 {% if not forloop.last %}border-bottom{% endif %}">
+        <div class="container gx-0">
+          <div class="row gx-3">
+            <div class="col {% if item.page.cover_image %}col-8{% endif %}">
+              <i class="icon icon-20 {{item.page.icon_class}} bg-primary mb-1"></i>
+              <a class="link-reset stretched-link" href="{{item.page.url}}">
+                <h2 class="mb-0">{{item.page.title}}</h2>
+              </a>
+            </div>
+            {% if item.page.cover_image %}
+            <div class="col col-4 d-flex align-content-end flex-wrap">
+              {% image item.page.cover_image fill-140x100 class="align-bottom flex-grow-0" %}
+            </div>
+            {% endif %}
+          </div>
+          <div class='mt-1'>
+            <div class="text-dark-grey font-monospace microcopy-small mb-1">{{ item.page.geographical_location }}</div>
+            <div class="text-dark-grey font-monospace microcopy-small">{{ item.page.last_published_at|date:"d E Y" }}</div>
+          </div>
           {% if item.search_highlight %}
             <div class="mt-3">
               {{item.search_highlight}}
