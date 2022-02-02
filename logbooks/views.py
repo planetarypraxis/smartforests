@@ -14,8 +14,7 @@ from smartforests.views import LocaleFromLanguageCode
 
 def tag_panel(request, slug):
     tag = get_object_or_404(Tag.objects.filter(slug=slug))
-    page_types = (LogbookPage, StoryPage, EpisodePage,
-                  LogbookEntryPage, ContributorPage)
+    page_types = (LogbookPage, StoryPage, EpisodePage, ContributorPage)
 
     return render(
         request,
@@ -62,7 +61,7 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
             return getattr(obj, 'coordinates', None)
 
     queryset = Page.objects.live().specific().type(
-        LogbookPage, LogbookEntryPage, StoryPage, EpisodePage
+        LogbookPage, StoryPage, EpisodePage
     )
     serializer_class = ResultSerializer
 
