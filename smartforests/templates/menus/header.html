@@ -2,150 +2,184 @@
 
 <nav class="navbar py-0 {% block header_position %}fixed-top{% endblock %} navbar-expand-lg navbar-light bg-faded-yellow">
     <div class="container-fluid">
-        <a class="navbar-brand text-black fw-normal text-decoration-none d-flex d-lg-none align-items-center" href="/">
+        <!-- Mobile logo -->
+        <a class="d-flex d-lg-none navbar-brand text-black fw-normal text-decoration-none align-items-center" href="/">
             <div class="d-flex align-items-center">
                 <img src="{% static 'img/smart-forests-logo.svg' %}" />
             </div>
         </a>
+        <!-- Mobile right-side hamburger icon -->
         <button class="navbar-toggler fs-6 border-0 pe-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="col-lg-3 collapse navbar-collapse mx-n3 mx-lg-0" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto align-items-center">
-                <li class="nav-item d-lg-none border-bottom border-soft-green p-2 w-100">
-                    <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ important_pages.logbooks.localized.url }}">
-                        <span>{{ important_pages.logbooks.localized.title }}</span>
-                        <img src="{% static 'img/logbooks.svg' %}" />
-                    </a>
-                </li>
-                <li class="nav-item d-lg-none border-bottom border-soft-green p-2 w-100">
-                  <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ important_pages.stories.localized.url }}">
-                      <span>{{ important_pages.stories.localized.title }}</span>
-                      <img src="{% static 'img/stories.svg' %}" />
+        <!-- All dropdowns -->
+        <div class="collapse navbar-collapse mx-n3 mx-lg-0" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto align-items-center w-100">
+              <!-- Mobile menu items -->
+              <li class="nav-item d-lg-none border-bottom border-soft-green p-2 w-100">
+                  <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ important_pages.logbooks.localized.url }}">
+                      <span>{{ important_pages.logbooks.localized.title }}</span>
+                      <img src="{% static 'img/logbooks.svg' %}" />
                   </a>
-                </li>
-                <li class="nav-item d-lg-none border-bottom border-soft-green p-2 w-100">
-                  <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ important_pages.map.localized.url }}">
-                    <span>{{ important_pages.map.localized.title }}</span>
-                    <img src="{% static 'img/map.svg' %}" />
-                  </a>
-                </li>
-                <li class="nav-item d-lg-none border-bottom border-soft-green p-2 w-100">
-                    <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ important_pages.radio.localized.url }}">
-                      <span>{{ important_pages.radio.localized.title }}</span>
-                      <img src="{% static 'img/radio.svg' %}" />
-                    </a>
-                </li>
-                <li class="nav-item d-lg-none border-bottom border-soft-green p-2 w-100">
-                    <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ important_pages.contributors.localized.url }}">
-                      <span>{{ important_pages.contributors.localized.title }}</span>
-                    </a>
-                </li>
-                <li class="nav-item d-lg-none p-2 text-truncate border-bottom border-soft-green overflow-hidden w-100">
-                    {% for page in menu_items %}
-                    <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ page.href }}">
-                        {{ page.text }}
-                    </a>
-                    {% endfor %}
-                </li>
-                  {% if page.get_translations.live|length %}
-                  <li class="nav-item dropdown d-lg-none w-100">
-                    <span data-bs-toggle="dropdown" class='
-                      dropdown-toggle bg-white shadow-none
-                      px-3 py-2
-                      text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2
-                      border-bottom border-soft-green
-                    '>
-                      {% get_language_info for page.localized.locale.language_code as lang %}
-                      {{ lang.name_local }}
-                    </span>
-                    <ul class="submenu dropdown-menu p-0 border-0">
-                      {% for translation in page.get_translations.live %}
-                        {% get_language_info for translation.locale.language_code as lang %}
-                        <li class='fs-body-text dropdown-item border-bottom border-soft-green px-3 py-2 w-100'>
-                          <a rel="alternate" hreflang="{{ language_code }}" href="{% pageurl translation %}">
-                            <span>{{ lang.name_local }} {% if lang.name_local != lang.name %}({{ lang.name }}){% endif %}</span>
-                          </a>
-                        </li>
-                      {% endfor %}
-                    </ul>
-                  </li>
-                  {% endif %}
-                <li class="nav-item d-lg-none border-bottom border-soft-green p-2 w-100">
-                  <a class="text-dark-green text-decoration-none px-2 d-flex justify-content-between align-items-center" href="{{ important_pages.radio }}" data-bs-toggle="modal" data-bs-target="#searchToggle" aria-controls="searchToggle" aria-expanded="false" aria-label="Toggle sea.localized.urlrch">
-                        Search <i class="ms-2 icon icon-13 bg-dark icon-search"></i>
-                    </a>
-                </li>
-                <a class="navbar-brand text-black fw-normal text-decoration-none d-inline-block d-none d-lg-block" href="/">
-                    <img src="{% static 'img/smart-forests-logo.svg' %}" />
-                </a>
-                <li class="nav-item dropdown dropdown-fixed-width d-none d-lg-block">
-                    <a class="fw-normal nav-link dropdown-toggle text-dark-green" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      {{ page.top_level_category.localized.title | default:page.localized.title }}
-                    </a>
-                    <ul class="dropdown-menu border-0 mt-0 bg-off-white shadow-sm" aria-labelledby="navbarDropdown">
-                      <li>
-                        <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ important_pages.logbooks.localized.url }}">
-                            <span>{{ important_pages.logbooks.localized.title }}</span>
-                            <img src="{% static 'img/logbooks.svg' %}" />
-                        </a>
-                      </li>
-                      <li>
-                          <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ important_pages.stories.localized.url }}">
-                              <span>{{ important_pages.stories.localized.title }}</span>
-                              <img src="{% static 'img/stories.svg' %}" />
-                          </a>
-                      </li>
-                      <li>
-                          <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ important_pages.map.localized.url }}">
-                            <span>{{ important_pages.map.localized.title }}</span>
-                            <img src="{% static 'img/map.svg' %}" />
-                          </a>
-                      </li>
-                      <li>
-                          <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ important_pages.radio.localized.url }}">
-                            <span>{{ important_pages.radio.localized.title }}</span>
-                            <img src="{% static 'img/radio.svg' %}" />
-                          </a>
-                      </li>
-                      <li>
-                          <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ important_pages.contributors.localized.url }}">
-                            <span>{{ important_pages.contributors.localized.title }}</span>
-                          </a>
-                      </li>
-                      {% for page in menu_items %}
-                        <li><a class="dropdown-item text-dark-green" href="{{ page.href }}">{{ page.text }}</a></li>
-                      {% endfor %}
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        {% if page.content_type.model == 'logbookpage' %}
-        <a class="col-lg-8 d-none d-lg-block text-decoration-none text-dark-green" href="#" role="button">
-          {{ page.localized.title }}
-        </a>
-        {% endif %}
-        {% if page.get_translations.live|length %}
-        <div class="nav-item dropdown visible-lg-block">
-          <a class="fw-normal nav-link dropdown-toggle text-dark-green" href="#" id="languageSelector" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            {% get_language_info for page.localized.locale.language_code as lang %}
-            {{ lang.name_local }}
-          </a>
-          <ul class="dropdown-menu border-0 mt-0 bg-off-white shadow-sm" aria-labelledby="languageSelector">
-            {% for translation in page.get_translations.live %}
-              {% get_language_info for translation.locale.language_code as lang %}
-              <li>
-                <a rel="alternate" hreflang="{{ language_code }}" href="{% pageurl translation %}" class="dropdown-item text-dark-green d-flex justify-content-between align-items-center">
-                  <span>{{ lang.name_local }} {% if lang.name_local != lang.name %}({{ lang.name }}){% endif %}</span>
+              </li>
+              <li class="nav-item d-lg-none border-bottom border-soft-green p-2 w-100">
+                <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ important_pages.stories.localized.url }}">
+                    <span>{{ important_pages.stories.localized.title }}</span>
+                    <img src="{% static 'img/stories.svg' %}" />
                 </a>
               </li>
-            {% endfor %}
+              <li class="nav-item d-lg-none border-bottom border-soft-green p-2 w-100">
+                <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ important_pages.map.localized.url }}">
+                  <span>{{ important_pages.map.localized.title }}</span>
+                  <img src="{% static 'img/map.svg' %}" />
+                </a>
+              </li>
+              <li class="nav-item d-lg-none border-bottom border-soft-green p-2 w-100">
+                  <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ important_pages.radio.localized.url }}">
+                    <span>{{ important_pages.radio.localized.title }}</span>
+                    <img src="{% static 'img/radio.svg' %}" />
+                  </a>
+              </li>
+              <li class="nav-item d-lg-none border-bottom border-soft-green p-2 w-100">
+                  <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ important_pages.contributors.localized.url }}">
+                    <span>{{ important_pages.contributors.localized.title }}</span>
+                  </a>
+              </li>
+              <li class="nav-item d-lg-none p-2 text-truncate border-bottom border-soft-green overflow-hidden w-100">
+                  {% for page in menu_items %}
+                  <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ page.href }}">
+                      {{ page.text }}
+                  </a>
+                  {% endfor %}
+              </li>
+              <!-- Language picker -->
+              {% if page.get_translations.live|length %}
+              <li class="nav-item dropdown d-lg-none w-100">
+                <span data-bs-toggle="dropdown" class='
+                  dropdown-toggle bg-white shadow-none
+                  px-3 py-2
+                  text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2
+                  border-bottom border-soft-green
+                '>
+                  {% get_language_info for page.localized.locale.language_code as lang %}
+                  {{ lang.name_local }}
+                </span>
+                <ul class="submenu dropdown-menu p-0 border-0">
+                  {% for translation in page.get_translations.live %}
+                    {% get_language_info for translation.locale.language_code as lang %}
+                    <li class='fs-body-text dropdown-item border-bottom border-soft-green px-3 py-2 w-100'>
+                      <a rel="alternate" hreflang="{{ language_code }}" href="{% pageurl translation %}">
+                        <span>{{ lang.name_local }} {% if lang.name_local != lang.name %}({{ lang.name }}){% endif %}</span>
+                      </a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </li>
+              {% endif %}
+              <!--  -->
+              <li class="nav-item d-lg-none border-bottom border-soft-green p-2 w-100">
+                  <a class="text-dark-green text-decoration-none px-2 d-flex justify-content-between align-items-center" href="{{ important_pages.radio }}" data-bs-toggle="modal" data-bs-target="#searchToggle" aria-controls="searchToggle" aria-expanded="false" aria-label="Toggle sea.localized.urlrch">
+                      Search <i class="ms-2 icon icon-13 bg-dark icon-search"></i>
+                  </a>
+              </li>
+              <!-- Desktop nav dropdown -->
+              <li class="container-fluid d-none d-lg-block">
+                  <div class='row'>
+                    <!-- Left hand segment of desktop nav -->
+                    <div class='
+                      col col-3 d-flex align-items-center
+                    '>
+                      <!-- Desktop logo -->
+                      <a class="navbar-brand text-black fw-normal text-decoration-none" href="/">
+                          <img src="{% static 'img/smart-forests-logo.svg' %}" />
+                      </a>
+                      <!-- Dropdown button -->
+                      <div class='dropdown dropdown-fixed-width'>
+                        <a class="
+                          dropdown-toggle
+                          fw-normal nav-link text-dark-green
+                        " href="#"
+                          id="navbarDropdown"
+                          role="button"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        >
+                          {{ page.top_level_category.localized.title | default:page.localized.title }}
+                        </a>
+                        <!-- Dropdown items -->
+                        <ul class="dropdown-menu border-0 mt-0 bg-off-white shadow-sm" aria-labelledby="navbarDropdown">
+                          <li>
+                            <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ important_pages.logbooks.localized.url }}">
+                                <span>{{ important_pages.logbooks.localized.title }}</span>
+                                <img src="{% static 'img/logbooks.svg' %}" />
+                            </a>
+                          </li>
+                          <li>
+                              <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ important_pages.stories.localized.url }}">
+                                  <span>{{ important_pages.stories.localized.title }}</span>
+                                  <img src="{% static 'img/stories.svg' %}" />
+                              </a>
+                          </li>
+                          <li>
+                              <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ important_pages.map.localized.url }}">
+                                <span>{{ important_pages.map.localized.title }}</span>
+                                <img src="{% static 'img/map.svg' %}" />
+                              </a>
+                          </li>
+                          <li>
+                              <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ important_pages.radio.localized.url }}">
+                                <span>{{ important_pages.radio.localized.title }}</span>
+                                <img src="{% static 'img/radio.svg' %}" />
+                              </a>
+                          </li>
+                          <li>
+                              <a class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" href="{{ important_pages.contributors.localized.url }}">
+                                <span>{{ important_pages.contributors.localized.title }}</span>
+                              </a>
+                          </li>
+                          {% for page in menu_items %}
+                            <li><a class="dropdown-item text-dark-green" href="{{ page.href }}">{{ page.text }}</a></li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+                    </div>
+                    <!-- Middle section for page title -->
+                    <div class='col col-5 d-flex align-items-center ps-0'>
+                      {% if page.content_type.model == 'logbookpage' %}
+                      <a class="text-decoration-none text-dark-green" href="#" role="button">
+                        {{ page.localized.title }}
+                      </a>
+                      {% endif %}
+                    </div>  
+                    <!-- Right hand section for other links -->
+                    <div class='col col-4 d-flex align-items-center justify-content-end'>
+                      {% if page.get_translations.live|length %}
+                      <!-- Language picker -->
+                      <div class="dropdown me-3">
+                        <a class="fw-normal nav-link dropdown-toggle text-dark-green" href="#" id="languageSelector" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          {% get_language_info for page.localized.locale.language_code as lang %}
+                          {{ lang.name_local }}
+                        </a>
+                        <ul class="dropdown-menu border-0 mt-0 bg-off-white shadow-sm" aria-labelledby="languageSelector">
+                          {% for translation in page.get_translations.live %}
+                            {% get_language_info for translation.locale.language_code as lang %}
+                            <li>
+                              <a rel="alternate" hreflang="{{ language_code }}" href="{% pageurl translation %}" class="dropdown-item text-dark-green d-flex justify-content-between align-items-center">
+                                <span>{{ lang.name_local }} {% if lang.name_local != lang.name %}({{ lang.name }}){% endif %}</span>
+                              </a>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                      </div>
+                      {% endif %}
+                      <!-- -->
+                      <button class="btn p-0 text-nowrap" type="button" data-bs-toggle="modal" data-bs-target="#searchToggle" aria-controls="searchToggle" aria-expanded="false" aria-label="Toggle search">
+                          Search<i class="ms-3 icon bg-dark icon-search"></i>
+                      </button>
+                  </div>
+              </li>
           </ul>
-        </div>
-        {% endif %}
-        <button class="col-lg-1 btn p-0 d-none d-lg-block" type="button" data-bs-toggle="modal" data-bs-target="#searchToggle" aria-controls="searchToggle" aria-expanded="false" aria-label="Toggle search">
-            Search<i class="ms-3 icon bg-dark icon-search"></i>
-        </button>
+      </div>
     </div>
 </nav>
 <form data-autofocus-show="1" class="modal fade" id="searchToggle" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
