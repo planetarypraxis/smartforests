@@ -257,3 +257,7 @@ a.card {
   }
   transition: all 0.3s;
 }
+
+html body .shadow-none.shadow-none {
+  box-shadow: none !important;
+}
