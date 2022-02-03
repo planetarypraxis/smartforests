@@ -65,6 +65,7 @@ class StoryPage(ArticlePage):
         else:
             return []
 
+
 class StoryIndexPage(IndexPage):
     '''
     Collection of stories.
@@ -181,7 +182,10 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
         image_lists = [page.get_thumbnail_images()
                        for page in self.get_child_list_queryset()]
         # `set()` in case an image is reused
-        return list(set(flatten_list(image_lists))).reverse()
+        images = list(set(flatten_list(image_lists)))
+        images.reverse()
+
+        return images
 
     def card_content_html(self):
         return render_to_string('logbooks/thumbnails/basic_thumbnail.html', {
