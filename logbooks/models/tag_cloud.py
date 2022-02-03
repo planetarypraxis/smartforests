@@ -157,7 +157,8 @@ class TagCloud(models.Model):
         empty_tags = set(
             tag.id for tag in Tag.objects.filter(
                 id__in=[val.id for val in merged_cloud.values()],
-                logbooks_atlastag_items=None
+            ).exclude(
+                logbooks_atlastag_items__content_object__live=True
             )
         )
         ok_tags = (val for val in merged_cloud.values()
@@ -213,7 +214,7 @@ class TagCloud(models.Model):
             visited[tag.id] = TagCloud.Item(index=i, id=tag.id, links=[])
 
             # Get all pages for this tag
-            pages = Page.objects.filter(tagged_items__tag=tag)
+            pages = Page.objects.filter(tagged_items__tag=tag).live()
 
             # Pages that link to — or are tagged with — with this tag
             taggings = AtlasTag.objects.filter(content_object__in=pages)
