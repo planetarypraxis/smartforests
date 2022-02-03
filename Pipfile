@@ -22,7 +22,6 @@ pytz = '>=2021.1'
 requests = '>=2.25.1'
 urllib3 = '>=1.26.4'
 wagtail = '>=2.14'
-wagtail-transfer = '>=0.8.0'
 wagtail-content-import = "*"
 django-import-export = "*"
 django-storages = "*"
