@@ -77,6 +77,14 @@ class BaseLogbooksPage(Page):
 
         return self.url
 
+    @property
+    def top_level_category(self):
+        parent = self.get_parent().specific
+        if parent is not None and isinstance(parent, BaseLogbooksPage):
+            return parent.top_level_category
+
+        return self
+
 
 class ContributorMixin(BaseLogbooksPage):
     '''

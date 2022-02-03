@@ -58,11 +58,7 @@
                 </a>
                 <li class="nav-item dropdown dropdown-fixed-width d-none d-lg-block">
                     <a class="fw-normal nav-link dropdown-toggle text-dark-green" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      {% if page.content_type.model == 'logbookpage' %}
-                        {{ page.get_parent.localized.title }}
-                      {% else %}
-                        {{ page.localized.title }}
-                      {% endif %}
+                      {{ page.top_level_category.localized.title | default:page.localized.title }}
                     </a>
                     <ul class="dropdown-menu border-0 mt-0 bg-off-white shadow-sm" aria-labelledby="navbarDropdown">
                       <li>
