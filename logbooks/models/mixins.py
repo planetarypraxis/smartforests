@@ -46,6 +46,7 @@ class BaseLogbooksPage(Page):
         abstract = True
 
     icon_class = None
+    show_title = False
 
     @classmethod
     def for_tag(cls, tag):
@@ -369,6 +370,7 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
 
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
     body = ArticleContentStream()
+    show_title = True
 
     additional_content_panels = [
         FieldPanel('tags'),
