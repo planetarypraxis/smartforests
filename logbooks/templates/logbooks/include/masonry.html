@@ -5,14 +5,13 @@
     <div class="grid__col-sizer"></div>
     <div class="grid__gutter-sizer"></div>
     {% if not contents.has_next %}
-      <div class="d-none" data-lastpage="1"></div>
+    <div class="d-none" data-lastpage="1"></div>
     {% endif %}
-    
     {% for child in contents %}
       <a href="{{child.url}}" class="grid__item link-reset">
-        {{child.card_content_html}}
+        {% include child.card_content_html with self=child only %}
       </a>
-    {% empty %}
+      {% empty %}
       <div>Nothing found</div>
     {% endfor %}
 

@@ -127,15 +127,7 @@ class LogbookEntryPage(ArticlePage):
     parent_page_types = ['logbooks.LogbookPage']
     icon_class = 'icon-logbooks'
 
-    def content_html(self):
-        '''
-        Render just the content of the page, for embedding in a logbook
-        '''
-
-        return render_to_string('logbooks/content_entry/logbook_entry.html', {
-            'self': self,
-            'LANGUAGE_CODE': translation.get_language()
-        })
+    content_html = 'logbooks/content_entry/logbook_entry.html'
 
     def serve(self, *args, **kwargs):
         '''
@@ -208,10 +200,7 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
 
         return images
 
-    def card_content_html(self):
-        return render_to_string('logbooks/thumbnails/basic_thumbnail.html', {
-            'self': self
-        })
+    card_content_html = 'logbooks/thumbnails/basic_thumbnail.html'
 
     @property
     def cover_image(self):
@@ -331,10 +320,7 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
         contributor_index.add_child(instance=contributor_page)
         contributor_page.save()
 
-    def card_content_html(self):
-        return render_to_string('logbooks/thumbnails/contributor_thumbnail.html', {
-            'self': self
-        })
+    card_content_html = 'logbooks/thumbnails/contributor_thumbnail.html'
 
     @property
     def all_tags(self):
