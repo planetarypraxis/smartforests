@@ -35,6 +35,8 @@ from smartforests.models import Tag, User
 from smartforests.util import group_by_title
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from wagtail.snippets.models import register_snippet
+from wagtailseo.models import SeoMixin, SeoType, TwitterCard
+from wagtail.core.rich_text import get_text_for_indexing
 
 
 class BaseLogbooksPage(Page):
@@ -242,6 +244,34 @@ class GeocodedMixin(BaseLogbooksPage):
     ]
 
 
+class SeoMetadataMixin(SeoMixin, Page):
+    class Meta:
+        abstract = True
+
+    promote_panels = SeoMixin.seo_panels
+
+    seo_image_sources = [
+        "og_image"  # Explicit sharing image
+    ]
+
+    seo_description_sources = [
+        "search_description",  # Explicit sharing description
+    ]
+
+    @property
+    def seo_description(self) -> str:
+        """
+        Middleware for seo_description_sources
+        """
+        for attr in self.seo_description_sources:
+            if hasattr(self, attr):
+                text = getattr(self, attr)
+                if text:
+                    # Strip HTML if there is any
+                    return get_text_for_indexing(text)
+        return ""
+
+
 class ThumbnailMixin(BaseLogbooksPage):
     '''
     Common configuration for pages that want to generate a thumbnail image derived from a subclass-defined list of images.
@@ -250,10 +280,22 @@ class ThumbnailMixin(BaseLogbooksPage):
     class Meta:
         abstract = True
 
+    seo_image_sources = SeoMetadataMixin.seo_image_sources + [
+        "most_recent_image"
+        # TODO: use `thumbnail_image`, requires migration to CmsImage
+    ]
+
     thumbnail_image = models.ImageField(null=True, blank=True)
 
     def get_thumbnail_images(self):
         return []
+
+    @property
+    def most_recent_image(self):
+        images = self.get_thumbnail_images()
+        if len(images) > 0:
+            return images[0]
+        return None
 
     def regenerate_thumbnail(self):
         images = [img.file for img in self.get_thumbnail_images()]
@@ -307,7 +349,7 @@ class SidebarRenderableMixin(BaseLogbooksPage):
         return TemplateResponse(request, 'logbooks/content_entry/sidepanel.html', context)
 
 
-class IndexPage(ChildListMixin, BaseLogbooksPage):
+class IndexPage(ChildListMixin, SeoMetadataMixin, BaseLogbooksPage):
     '''
     Common configuration for index pages for logbooks, stories and radio episodes.
     '''
@@ -319,6 +361,7 @@ class IndexPage(ChildListMixin, BaseLogbooksPage):
     page_size = 50
     show_in_menus_default = True
     parent_page_types = ['home.HomePage']
+    seo_twitter_card = TwitterCard.SUMMARY
 
     if not settings.DEBUG:
         max_count = 1
@@ -352,7 +395,15 @@ class IndexPage(ChildListMixin, BaseLogbooksPage):
         return context
 
 
-class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, GeocodedMixin, SidebarRenderableMixin, BaseLogbooksPage):
+class ArticleSeoMixin(SeoMetadataMixin):
+    class Meta:
+        abstract = True
+
+    seo_content_type = SeoType.ARTICLE
+    seo_twitter_card = TwitterCard.LARGE
+
+
+class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, GeocodedMixin, SidebarRenderableMixin, ArticleSeoMixin, BaseLogbooksPage):
     '''
     Common configuration for logbook entries, stories and radio episodes.
     '''
@@ -391,6 +442,11 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
             and block.value.get('image')
         )
 
+    seo_image_sources = SeoMetadataMixin.seo_image_sources + [
+        "cover_image"
+    ]
+
+    @property
     def cover_image(self):
         '''
         Returns the first image in the body stream (or None if there aren't any).
@@ -403,6 +459,10 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
 
     def get_thumbnail_images(self):
         return self.body_images()
+
+    seo_description_sources = SeoMetadataMixin.seo_description_sources + [
+        'preview_text'
+    ]
 
     @property
     def preview_text(self):

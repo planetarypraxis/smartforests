@@ -19,7 +19,7 @@ from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
 from wagtail.api import APIField
 from smartforests.util import flatten_list, group_by_title
-from logbooks.models.mixins import ArticlePage, BaseLogbooksPage, ContributorMixin, DescendantPageContributorMixin, GeocodedMixin, IndexPage, Person, ThumbnailMixin, SidebarRenderableMixin
+from logbooks.models.mixins import ArticlePage, ArticleSeoMixin, BaseLogbooksPage, ContributorMixin, DescendantPageContributorMixin, GeocodedMixin, IndexPage, Person, SeoMetadataMixin, ThumbnailMixin, SidebarRenderableMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
 from logbooks.models.tag_cloud import TagCloud
@@ -49,6 +49,7 @@ class StoryPage(ArticlePage):
         ImageChooserPanel('image')
     ]
 
+    @property
     def cover_image(self):
         return self.image
 
@@ -99,6 +100,7 @@ class EpisodePage(ArticlePage):
         ImageChooserPanel('image'),
     ] + ArticlePage.additional_content_panels
 
+    @property
     def cover_image(self):
         return self.image
 
@@ -151,7 +153,7 @@ class LogbookEntryPage(ArticlePage):
         return f'{self.get_parent().url}#{self.slug}'
 
 
-class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, BaseLogbooksPage):
+class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, ContributorMixin, GeocodedMixin, ThumbnailMixin, ArticleSeoMixin, BaseLogbooksPage):
     '''
     Collection of logbook entries.
     '''
@@ -165,6 +167,10 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
 
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
     description = RichTextField()
+
+    seo_description_sources = SeoMetadataMixin.seo_description_sources + [
+        "description"
+    ]
 
     content_panels = [
         FieldPanel('title', classname="full title"),
@@ -207,6 +213,7 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
             'self': self
         })
 
+    @property
     def cover_image(self):
         '''
         Returns the first image in the body stream (or None if there aren't any).
@@ -259,7 +266,7 @@ class LogbookIndexPage(IndexPage):
         verbose_name = "Logbooks index page"
 
 
-class ContributorPage(GeocodedMixin, BaseLogbooksPage):
+class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
     allow_search = True
     page_size = 50
     show_in_menus_default = True
@@ -289,6 +296,14 @@ class ContributorPage(GeocodedMixin, BaseLogbooksPage):
         AutocompletePanel('user'),
         FieldPanel('bio')
     ] + GeocodedMixin.content_panels
+
+    seo_image_sources = SeoMetadataMixin.seo_image_sources + [
+        "avatar"
+    ]
+
+    seo_description_sources = SeoMetadataMixin.seo_description_sources + [
+        "byline"
+    ]
 
     @property
     def person(self):
@@ -341,6 +356,8 @@ class ContributorsIndexPage(IndexPage):
     '''
     Collection of people
     '''
+
+    show_in_menus_default = True
 
     class Meta:
         verbose_name = "Contributors index page"

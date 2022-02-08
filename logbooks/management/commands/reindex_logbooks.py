@@ -12,16 +12,23 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, *args, **options):
         for page in LogbookEntryPage.objects.all():
+            print("Refreshing page", page)
             page.save()
 
         for page in LogbookPage.objects.all():
+            print("Refreshing page", page)
             page.save()
 
         for page in StoryPage.objects.all():
+            print("Refreshing page", page)
             page.save()
 
+        print("Regenerating thumbnails")
         Tag.regenerate_thumbnails()
+
+        print("Reindexing tag clouds")
         TagCloud.reindex()
 
         for user in User.objects.all():
+            print("Creating contributor page for", user)
             ContributorPage.create_for_user(user)
