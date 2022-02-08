@@ -7,6 +7,7 @@ from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
+from logbooks.tasks import regenerate_tag_cloud
 from wagtail.core.models import Page
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import Tag
@@ -132,8 +133,10 @@ class TagCloud(models.Model):
 
         i = 0
 
+        # Note that this is a very hot loop, so don't make any database queries here!
         while len(stack) > 0 and i < limit:
             tag_id = stack.pop(0)
+
             if tag_id in merged_cloud:
                 merged_cloud[tag_id].count += 1
                 continue
@@ -149,7 +152,24 @@ class TagCloud(models.Model):
                 id=item.id, index=i, links=list(merged_links))
             i += 1
 
-        return TagCloud.to_json(sorted(merged_cloud.values(), reverse=True, key=TagCloud.Item.score))
+        # Filter out any tags where the pages don't exist
+        # Do it here in bulk as otherwise we make potentially 10,000s of database queries!
+        empty_tags = set(
+            tag.id for tag in Tag.objects.filter(
+                id__in=[val.id for val in merged_cloud.values()],
+            ).exclude(
+                logbooks_atlastag_items__content_object__live=True
+            )
+        )
+        ok_tags = (val for val in merged_cloud.values()
+                   if val.id not in empty_tags)
+
+        # If there were tags where the paged didn't exist, mark the source clouds for regeneration
+        if len(empty_tags) > 0:
+            for tag in tags:
+                regenerate_tag_cloud(tag.id)
+
+        return TagCloud.to_json(sorted(ok_tags, reverse=True, key=TagCloud.Item.score))
 
     @staticmethod
     def to_json(items):
@@ -182,6 +202,7 @@ class TagCloud(models.Model):
         visited = {}
 
         i = 0
+        # Note that this is a very hot loop, so don't make any database queries here!
         while len(stack) > 0 and i < 100:
             tag = stack.pop(0)
 
@@ -193,7 +214,7 @@ class TagCloud(models.Model):
             visited[tag.id] = TagCloud.Item(index=i, id=tag.id, links=[])
 
             # Get all pages for this tag
-            pages = Page.objects.filter(tagged_items__tag=tag)
+            pages = Page.objects.filter(tagged_items__tag=tag).live()
 
             # Pages that link to — or are tagged with — with this tag
             taggings = AtlasTag.objects.filter(content_object__in=pages)
