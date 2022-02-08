@@ -40,6 +40,19 @@ def tag_panel(request, slug):
     )
 
 
+
+def metadata(request, page_id, **kwargs):
+    page = get_object_or_404(Page.objects.filter(id=page_id).specific())
+
+    return render(
+        request,
+        'logbooks/frames/metadata.html',
+        {
+            'page': page
+        }
+    )
+
+
 class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
     '''
     Query the page metadata index, filtering by tag, returning a geojson FeatureCollection
