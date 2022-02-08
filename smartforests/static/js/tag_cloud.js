@@ -195,6 +195,8 @@ const init = () => {
     ctx.imageSmoothingEnabled = false;
 
     const updateBackground = (nodes, links) => {
+      if (!parentEl || !parentEl.isConnected) return
+
       /**
        * Set up the canvas
        */
