@@ -100,21 +100,30 @@ class ContributorMixin(BaseLogbooksPage):
         help_text="Contributors who are not users of the Atlas"
     )
 
+    excluded_contributors = ParentalManyToManyField(
+        User,
+        blank=True,
+        related_name='+',
+        help_text="Contributors who should be hidden from public citation"
+    )
+
     def get_contributors(self):
         p = self
-        return set(
-            [p.owner] + [
-                user
-                for user in [
-                    revision.user
-                    for revision in PageRevision.objects.filter(page=p)
-                ]
-                if user is not None
-            ] + list(
-                p.additional_contributing_users.all()
-            ) + list(
-                p.additional_contributing_people.all()
-            )
+        return list(
+            set(
+                [p.owner] + [
+                    user
+                    for user in [
+                        revision.user
+                        for revision in PageRevision.objects.filter(page=p)
+                    ]
+                    if user is not None
+                ] + list(
+                    p.additional_contributing_users.all()
+                ) + list(
+                    p.additional_contributing_people.all()
+                )
+            ) - set(self.excluded_contributors.all())
         )
 
     def contributors(self):
@@ -124,10 +133,11 @@ class ContributorMixin(BaseLogbooksPage):
         pages = Page.objects.type(
             ContributorMixin).descendant_of(self, inclusive=True).specific()
         contributors = []
-        for page in pages:
-            contributors += list(page.get_contributors())
 
-        return list(set(contributors))
+        for page in pages:
+            contributors += page.get_contributors()
+
+        return list(set(contributors) - set(self.excluded_contributors.all()))
 
     api_fields = [
         APIField('contributors', serializer=UserSerializer(many=True)),
@@ -136,6 +146,7 @@ class ContributorMixin(BaseLogbooksPage):
     content_panels = [
         AutocompletePanel('additional_contributing_users'),
         AutocompletePanel('additional_contributing_people'),
+        AutocompletePanel('excluded_contributors'),
     ]
 
 
