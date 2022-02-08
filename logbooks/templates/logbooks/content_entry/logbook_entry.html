@@ -1,4 +1,4 @@
-{% load ckdjango_tags wagtailimages_tags wagtailcore_tags %}
+{% load ckdjango_tags wagtailimages_tags wagtailcore_tags wagtailadmin_tags %}
 
 <article class='logbook-entry-card' id="{{self.slug}}">
   <div class='row row-cols-1 gy-2'>
@@ -11,6 +11,11 @@
           <time class="opacity-8" datetime="{{ self.first_published_at|date:"Y-m-d" }}">
             {{ self.first_published_at|date:"d E Y" }}
           </time>
+          {% if user.is_authenticated %}
+            <a class="ms-auto align-self-end text-faded-green" href="{% url 'wagtailadmin_pages:edit' self.id %}" target="_parent">
+              Edit
+            </a>
+          {% endif %}
         </div>
         {% if self.geographical_location %}
           <div>{{ self.geographical_location }}</div>
