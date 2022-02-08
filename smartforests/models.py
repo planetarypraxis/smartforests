@@ -13,6 +13,7 @@ from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from django.apps import apps
 from commonknowledge.django.images import generate_imagegrid_filename, render_image_grid
 import re
+from wagtail.api.conf import APIField
 
 from wagtail.snippets.models import register_snippet
 
@@ -140,6 +141,10 @@ class CmsImage(AbstractImage):
         'alt_text',
         'title',
     )
+
+    api_fields = [
+        APIField('alt_text'),
+    ]
 
 
 class ImageRendition(AbstractRendition):
