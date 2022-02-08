@@ -60,6 +60,7 @@ urlpatterns += [
 
 urlpatterns += i18n_patterns(
     path('_tags/<slug>/', logbook_views.tag_panel),
+    path('_metadata/<page_id>/', logbook_views.metadata),
     re_path(r'^', include(wagtail_urls)),
 )
 
