@@ -338,13 +338,7 @@ class ThumbnailMixin(BaseLogbooksPage):
             **imagegrid_opts
         )
 
-    def card_content_html(self):
-        '''
-        Return markup to render the summary of this page when embedded in a list
-        '''
-        return render_to_string('logbooks/thumbnails/basic_thumbnail.html', {
-            'self': self
-        })
+    card_content_html = 'logbooks/thumbnails/basic_thumbnail.html'
 
     def save(self, *args, regenerate_thumbnails=True, **kwargs):
         if regenerate_thumbnails:
