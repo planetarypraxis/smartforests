@@ -56,13 +56,9 @@
                 <a class="navbar-brand text-black fw-normal text-decoration-none d-inline-block d-none d-lg-block" href="/">
                     <img src="{% static 'img/smart-forests-logo.svg' %}" />
                 </a>
-                <li class="nav-item dropdown d-none d-lg-block">
+                <li class="nav-item dropdown dropdown-fixed-width d-none d-lg-block">
                     <a class="fw-normal nav-link dropdown-toggle text-dark-green" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      {% if page.content_type.model == 'logbookpage' %}
-                        {{ page.get_parent.localized.title }}
-                      {% else %}
-                        {{ page.localized.title }}
-                      {% endif %}
+                      {{ page.top_level_category.localized.title | default:page.localized.title }}
                     </a>
                     <ul class="dropdown-menu border-0 mt-0 bg-off-white shadow-sm" aria-labelledby="navbarDropdown">
                       <li>
@@ -101,7 +97,7 @@
                 </li>
             </ul>
         </div>
-        {% if page.content_type.model == 'logbookpage' %}
+        {% if page.show_title %}
         <a class="col-lg-8 d-none d-lg-block text-decoration-none text-dark-green" href="#" role="button">
           {{ page.localized.title }}
         </a>

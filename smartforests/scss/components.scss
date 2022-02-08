@@ -406,3 +406,15 @@
     margin-bottom: 0;
   }
 }
+
+.dropdown-fixed-width {
+  .dropdown-menu,
+  .dropdown-toggle {
+    width: 12em;
+  }
+
+  .dropdown-menu {
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+  }
+}

@@ -46,6 +46,7 @@ class BaseLogbooksPage(Page):
         abstract = True
 
     icon_class = None
+    show_title = False
 
     @classmethod
     def for_tag(cls, tag):
@@ -76,6 +77,14 @@ class BaseLogbooksPage(Page):
         '''
 
         return self.url
+
+    @property
+    def top_level_category(self):
+        parent = self.get_parent().specific
+        if parent is not None and isinstance(parent, BaseLogbooksPage):
+            return parent.top_level_category
+
+        return self
 
 
 class ContributorMixin(BaseLogbooksPage):
@@ -361,6 +370,7 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
 
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
     body = ArticleContentStream()
+    show_title = True
 
     additional_content_panels = [
         FieldPanel('tags'),

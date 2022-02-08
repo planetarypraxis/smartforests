@@ -162,6 +162,7 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
     icon_class = 'icon-logbooks'
     show_in_menus_default = True
     parent_page_types = ['logbooks.LogbookIndexPage']
+    show_title = True
 
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
     description = RichTextField()
@@ -265,6 +266,7 @@ class ContributorPage(GeocodedMixin, BaseLogbooksPage):
     show_in_menus_default = True
     parent_page_types = ['logbooks.ContributorsIndexPage']
     icon_class = 'icon-contributor'
+    show_title = True
 
     class Meta:
         verbose_name = "Contributor"
