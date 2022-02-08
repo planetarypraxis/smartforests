@@ -50,7 +50,7 @@ class BaseLogbooksPage(Page):
     @classmethod
     def for_tag(cls, tag):
         '''
-        Return all live instances matching the tag
+        Return all live pages matching the tag
         '''
         return cls.objects.filter(
             tagged_items__tag=tag

@@ -178,6 +178,21 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
         APIField('description'),
     ] + DescendantPageContributorMixin.api_fields + GeocodedMixin.api_fields
 
+    @classmethod
+    def for_tag(cls, tag):
+        '''
+        Return all live pages matching the tag.
+
+        As logbook entries aren't really pages, we consider the logbooks for a given tag
+        to be all logbooks that either have the tag themselves or who have an entry with the tag.
+        '''
+
+        logbooks = set(super().for_tag(tag))
+        logbook_entry_logbooks = set(entry.get_parent().specific
+                                     for entry in LogbookEntryPage.for_tag(tag))
+
+        return logbooks.union(logbook_entry_logbooks)
+
     def get_thumbnail_images(self):
         image_lists = [page.get_thumbnail_images()
                        for page in self.get_child_list_queryset()]
