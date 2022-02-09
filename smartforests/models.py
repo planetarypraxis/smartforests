@@ -114,7 +114,16 @@ class User(AbstractUser):
 
     @classmethod
     def for_tag(cls, tag):
-        return User.objects.filter(pagerevision__page__tagged_items__tag__in=tags).distinct()
+        from logbooks.models.mixins import ContributorMixin
+        from smartforests.util import flatten_list
+
+        contributors = set(flatten_list([
+            page.contributors for page in
+            Page.objects.type(ContributorMixin).live().filter(
+                tagged_items__tag=tag).all().specific()
+        ]))
+
+        return list(contributors)
 
     def edited_content_pages(self):
         from logbooks.models.pages import LogbookPage

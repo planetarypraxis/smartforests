@@ -126,6 +126,7 @@ class ContributorMixin(BaseLogbooksPage):
             ) - set(self.excluded_contributors.all())
         )
 
+    @property
     def contributors(self):
         '''
         Return all the people who have contributed to this page and its subpages
