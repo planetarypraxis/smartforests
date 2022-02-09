@@ -114,14 +114,20 @@ class User(AbstractUser):
 
     @classmethod
     def for_tag(cls, tag):
-        from logbooks.models.mixins import ContributorMixin
         from smartforests.util import flatten_list
+        from logbooks.views import pages_for_tag, tag_panel_types
+        from logbooks.models.pages import ContributorPage
 
-        contributors = set(flatten_list([
-            page.contributors for page in
-            Page.objects.type(ContributorMixin).live().filter(
-                tagged_items__tag=tag).all().specific()
-        ]))
+        tagged_pages_groups = pages_for_tag(
+            tag,
+            # Exclude contributor pages to prevent recursion since ContributorPage leans on User.for_tag (this method)!
+            [t for t in tag_panel_types if t is not ContributorPage]
+        )
+
+        tagged_pages = flatten_list(items for t, items in tagged_pages_groups)
+
+        contributors = set(flatten_list(
+            page.contributors for page in tagged_pages if hasattr(page, 'contributors')))
 
         return list(contributors)
 

@@ -13,23 +13,29 @@ from smartforests.views import LocaleFromLanguageCode
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
 
 
+tag_panel_types = (LogbookPage, StoryPage, EpisodePage, ContributorPage,)
+
+
+def pages_for_tag(tag: Tag, page_types=tag_panel_types):
+    return [
+        (
+            page_type,
+            set(map(lambda p: p.localized, page_type.for_tag(tag)))
+        )
+        for page_type
+        in page_types
+    ]
+
+
 def tag_panel(request, slug):
     tag = get_object_or_404(Tag.objects.filter(slug=slug))
-    page_types = (LogbookPage, StoryPage, EpisodePage, ContributorPage)
 
     return render(
         request,
         'logbooks/frames/tags.html',
         {
             'tag': tag,
-            'pages': (
-                (
-                    page_type,
-                    set(map(lambda p: p.localized, page_type.for_tag(tag)))
-                )
-                for page_type
-                in page_types
-            )
+            'pages': pages_for_tag(tag, tag_panel_types)
         }
     )
 
