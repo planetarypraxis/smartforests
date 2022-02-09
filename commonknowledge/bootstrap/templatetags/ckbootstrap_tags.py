@@ -19,7 +19,7 @@ def bs_link(context, **kwargs):
 def bs_pagination(context, paginator: Paginator, **kwargs):
     request: HttpRequest = context.get('request')
 
-    current_page = int(request.GET.get('page', 1))
+    current_page = int(request.GET.get('page', 3))
     range_start = max(current_page - 2, 1)
     range_end = min(max(current_page + 2, range_start + 4),
                     paginator.num_pages)

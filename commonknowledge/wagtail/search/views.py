@@ -91,7 +91,7 @@ class BasicSearchView(TemplateView):
 
     def get_context_data(self, **kwargs):
         scope = self.get_scope()
-        page_num = safe_to_int(self.request.GET.get('page'), 1)
+        page_num = safe_to_int(self.request.GET.get('page', 3), 1)
         search_results = self.do_search()
 
         paginator = Paginator(search_results or [], 25)
