@@ -115,7 +115,7 @@ class ContributorMixin(BaseLogbooksPage):
                     user
                     for user in [
                         revision.user
-                        for revision in PageRevision.objects.filter(page=p)
+                        for revision in PageRevision.objects.filter(page=p).select_related('user')
                     ]
                     if user is not None
                 ] + list(
