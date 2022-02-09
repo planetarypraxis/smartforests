@@ -33,8 +33,8 @@ urlpatterns = [
     path("footnotes/", include(footnotes_urls)),
     path('_frame/<page_id>/', sf_views.frame_content),
     path('_filters/', sf_views.filters_frame),
-    path('/favicon.ico',
-         RedirectView.as_view(url='/static/img/favicon.png', permanent=True))
+    path('favicon.ico',
+         RedirectView.as_view(url='/static/img/favicon.png', permanent=True)),
     # path('api/', include(rest.get_urls())),
     # path('__debug__/', include(debug_toolbar.urls)),
     path('400', TemplateView.as_view(template_name='400.html')),
