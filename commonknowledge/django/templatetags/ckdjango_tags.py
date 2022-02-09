@@ -28,7 +28,9 @@ def webpack_bundle(name, type='js'):
 
 @register.simple_tag(takes_context=True)
 def infinite_scroll_container(context, item_selector='iscroll_item', **kwargs):
-    request: HttpRequest = context.get('request')
+    request: HttpRequest = context.get('request', None)
+    if request is None:
+        return
 
     params = request.GET.dict()
     params['page'] = '{{#}}'
@@ -46,7 +48,9 @@ def infinite_scroll_container(context, item_selector='iscroll_item', **kwargs):
 
 @register.simple_tag(takes_context=True)
 def qs_link(context, key, value, **kwargs):
-    request: HttpRequest = context.get('request')
+    request: HttpRequest = context.get('request', None)
+    if request is None:
+        return
 
     params = request.GET.dict()
     if value is None:

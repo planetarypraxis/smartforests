@@ -13,20 +13,25 @@ register = template.Library()
 
 @register.inclusion_tag('ckwagtail/include/menubar.html', takes_context=True)
 def menubar(context, **kwargs):
-    site = Site.find_for_request(context.get('request'))
+    request = context.get('request', None)
+    if request is None:
+        return
+    site = Site.find_for_request(request)
     if site is None:
         return
 
     root = site.root_page
     kwargs['pages'] = root.get_children().in_menu()
-    kwargs['request'] = context.get('request')
+    kwargs['request'] = request
 
     return kwargs
 
 
 @register.simple_tag(takes_context=True)
 def next_page_path(context):
-    request = context['request']
+    request = context.get('request', None)
+    if not request:
+        return
     params = request.GET.dict()
 
     # Return the next page

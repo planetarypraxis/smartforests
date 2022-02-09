@@ -11,13 +11,17 @@ register = template.Library()
 
 @register.inclusion_tag('ckbootstrap/include/bs_link.html', takes_context=True)
 def bs_link(context, **kwargs):
-    kwargs['request'] = context.get('request')
+    kwargs['request'] = context.get('request', None)
+    if kwargs['request'] is None:
+        return
     return kwargs
 
 
 @register.simple_tag(takes_context=True)
 def bs_pagination(context, paginator: Paginator, **kwargs):
-    request: HttpRequest = context.get('request')
+    request: HttpRequest = context.get('request', None)
+    if request is None:
+        return
 
     current_page = int(request.GET.get('page', 3))
     range_start = max(current_page - 2, 1)
