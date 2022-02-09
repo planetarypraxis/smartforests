@@ -398,6 +398,7 @@ class IndexPage(ChildListMixin, SeoMetadataMixin, BaseLogbooksPage):
         children = self.get_child_list_queryset(request=None)
 
         tags = Tag.objects.filter(
+            logbooks_atlastag_items__content_object__live=True,
             logbooks_atlastag_items__content_object__in=children
         ).distinct()
 
