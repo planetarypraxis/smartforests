@@ -351,7 +351,12 @@ class ContributorsIndexPage(IndexPage):
         verbose_name = "Contributors index page"
 
     def relevant_tags(self):
-        return group_by_title(Tag.objects.all(), key='name')
+        return group_by_title(
+            Tag.objects.filter(
+                logbooks_atlastag_items__content_object__live=True
+            ).distinct(),
+            key='name'
+        )
 
     def get_filters(self, request):
         filter = {}
