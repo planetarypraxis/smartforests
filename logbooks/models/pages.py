@@ -344,7 +344,7 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
     @classmethod
     def for_tag(cls, tag):
         return cls.objects.live().filter(
-            user__in=User.with_edited_tags(tag)
+            user__in=User.for_tag(tag)
         )
 
     @property
@@ -372,7 +372,7 @@ class ContributorsIndexPage(IndexPage):
         if tag_filter is not None:
             try:
                 tag = Tag.objects.get(slug=tag_filter)
-                filter['user__in'] = User.with_edited_tags(tag)
+                filter['user__in'] = User.for_tag(tag)
 
             except Tag.DoesNotExist:
                 pass

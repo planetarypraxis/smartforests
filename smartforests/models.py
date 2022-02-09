@@ -113,7 +113,7 @@ class User(AbstractUser):
         return self.contributor_pages.first()
 
     @classmethod
-    def with_edited_tags(cls, *tags):
+    def for_tag(cls, tag):
         return User.objects.filter(pagerevision__page__tagged_items__tag__in=tags).distinct()
 
     def edited_content_pages(self):
