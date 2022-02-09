@@ -10,12 +10,12 @@ from wagtail.api.v2.utils import BadRequestError
 
 from logbooks.models.pages import ContributorPage, EpisodePage, LogbookEntryPage, LogbookPage, StoryPage
 from smartforests.views import LocaleFromLanguageCode
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
 
 
 def tag_panel(request, slug):
     tag = get_object_or_404(Tag.objects.filter(slug=slug))
-    page_types = (LogbookPage, StoryPage, EpisodePage,
-                  LogbookEntryPage, ContributorPage)
+    page_types = (LogbookPage, StoryPage, EpisodePage, ContributorPage)
 
     return render(
         request,
@@ -62,7 +62,7 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
             return getattr(obj, 'coordinates', None)
 
     queryset = Page.objects.live().specific().type(
-        LogbookPage, LogbookEntryPage, StoryPage, EpisodePage
+        LogbookPage, StoryPage, EpisodePage
     )
     serializer_class = ResultSerializer
 
@@ -83,6 +83,7 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
 
         return qs
 
+    @extend_schema(parameters=[RequestSerializer])
     def list(self, request):
         list = self.get_queryset()
         locale = self.get_locale()

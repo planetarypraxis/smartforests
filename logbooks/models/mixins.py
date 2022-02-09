@@ -46,11 +46,12 @@ class BaseLogbooksPage(Page):
         abstract = True
 
     icon_class = None
+    show_title = False
 
     @classmethod
     def for_tag(cls, tag):
         '''
-        Return all live instances matching the tag
+        Return all live pages matching the tag
         '''
         return cls.objects.filter(
             tagged_items__tag=tag
@@ -369,6 +370,7 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
 
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
     body = ArticleContentStream()
+    show_title = True
 
     additional_content_panels = [
         FieldPanel('tags'),

@@ -65,6 +65,7 @@ class StoryPage(ArticlePage):
         else:
             return []
 
+
 class StoryIndexPage(IndexPage):
     '''
     Collection of stories.
@@ -161,6 +162,7 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
     icon_class = 'icon-logbooks'
     show_in_menus_default = True
     parent_page_types = ['logbooks.LogbookIndexPage']
+    show_title = True
 
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
     description = RichTextField()
@@ -177,11 +179,29 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
         APIField('description'),
     ] + DescendantPageContributorMixin.api_fields + GeocodedMixin.api_fields
 
+    @classmethod
+    def for_tag(cls, tag):
+        '''
+        Return all live pages matching the tag.
+
+        As logbook entries aren't really pages, we consider the logbooks for a given tag
+        to be all logbooks that either have the tag themselves or who have an entry with the tag.
+        '''
+
+        logbooks = set(super().for_tag(tag))
+        logbook_entry_logbooks = set(entry.get_parent().specific
+                                     for entry in LogbookEntryPage.for_tag(tag))
+
+        return logbooks.union(logbook_entry_logbooks)
+
     def get_thumbnail_images(self):
         image_lists = [page.get_thumbnail_images()
                        for page in self.get_child_list_queryset()]
         # `set()` in case an image is reused
-        return list(set(flatten_list(image_lists))).reverse()
+        images = list(set(flatten_list(image_lists)))
+        images.reverse()
+
+        return images
 
     def card_content_html(self):
         return render_to_string('logbooks/thumbnails/basic_thumbnail.html', {
@@ -246,6 +266,7 @@ class ContributorPage(GeocodedMixin, BaseLogbooksPage):
     show_in_menus_default = True
     parent_page_types = ['logbooks.ContributorsIndexPage']
     icon_class = 'icon-contributor'
+    show_title = True
 
     class Meta:
         verbose_name = "Contributor"

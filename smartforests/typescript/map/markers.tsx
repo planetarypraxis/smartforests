@@ -47,9 +47,8 @@ export const ClusterMarker: React.FC<{
         }}
       >
         <div
-          className={`${
-            size > 30 ? "heading-medium" : ""
-          } p-1 font-monospace center-screen`}
+          className={`${size > 30 ? "heading-medium" : ""
+            } p-1 font-monospace center-screen`}
         >
           {feature.properties.point_count}
         </div>
@@ -93,9 +92,8 @@ export const AtlasPageMarker: React.FC<{
           }}
         >
           <div
-            className={`${
-              !active ? "cursor-pointer" : ""
-            } translate-middle position-absolute bg-bright-yellow icon ${iconClass}`}
+            className={`${!active ? "cursor-pointer" : ""
+              } translate-middle position-absolute bg-bright-yellow icon ${iconClass}`}
           />
         </a>
       </Marker>
@@ -128,7 +126,7 @@ function AtlasPageCard({
         <i
           className={`icon icon-20 bg-primary ms-2 align-bottom float-end ${properties.icon_class}`}
         />
-        {properties.title}
+        <span className='font-sans-serif'>{properties.title}</span>
       </h5>
 
       {properties.geographical_location && (

@@ -121,16 +121,7 @@
   display: block;
 
   &:hover {
-    background-color: $mid-green;
-    color: $white;
-
-    a:hover {
-      color: $white;
-    }
-
-    .text-dark-grey {
-      color: $white !important;
-    }
+    background-color: $soft-green;
   }
 }
 
@@ -166,7 +157,6 @@
   align-items: flex-end;
   display: flex;
   flex-direction: row;
-  height: 128px;
 
   @include media-breakpoint-down(md) {
     padding-top: #{map-get($spacers, 3)};
