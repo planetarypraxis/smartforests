@@ -255,6 +255,29 @@ class LogbookIndexPage(IndexPage):
     class Meta:
         verbose_name = "Logbooks index page"
 
+    def relevant_tags(self):
+        children = Page.get_descendants(self)
+
+        tags = Tag.objects.filter(
+            logbooks_atlastag_items__content_object__live=True,
+            logbooks_atlastag_items__content_object__in=children
+        ).distinct()
+
+        return group_by_title(tags, key='name')
+
+    def get_filters(self, request):
+        filter = {}
+
+        tag_filter = request.GET.get('filter', None)
+        if tag_filter is not None:
+            try:
+                tag = Tag.objects.get(slug=tag_filter)
+                filter['pk__in'] = [l.id for l in LogbookPage.for_tag(tag)]
+            except Tag.DoesNotExist:
+                pass
+
+        return filter
+
 
 class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
     allow_search = True
@@ -269,18 +292,18 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
 
     user = models.ForeignKey(
         User,
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='contributor_pages'
+        null = True,
+        blank = True,
+        on_delete = models.SET_NULL,
+        related_name = 'contributor_pages'
     )
 
-    byline = CharField(max_length=1000, blank=True, null=True)
-    avatar = ForeignKey(CmsImage, on_delete=models.SET_NULL,
-                        null=True, blank=True)
-    bio = RichTextField(blank=True, null=True)
+    byline=CharField(max_length = 1000, blank = True, null = True)
+    avatar=ForeignKey(CmsImage, on_delete = models.SET_NULL,
+                        null = True, blank = True)
+    bio=RichTextField(blank = True, null = True)
 
-    content_panels = [
+    content_panels=[
         FieldPanel('title', classname="full title"),
         FieldPanel('byline'),
         ImageChooserPanel('avatar'),
