@@ -338,13 +338,7 @@ class ThumbnailMixin(BaseLogbooksPage):
             **imagegrid_opts
         )
 
-    def card_content_html(self):
-        '''
-        Return markup to render the summary of this page when embedded in a list
-        '''
-        return render_to_string('logbooks/thumbnails/basic_thumbnail.html', {
-            'self': self
-        })
+    card_content_html = 'logbooks/thumbnails/basic_thumbnail.html'
 
     def save(self, *args, regenerate_thumbnails=True, **kwargs):
         if regenerate_thumbnails:
@@ -404,6 +398,7 @@ class IndexPage(ChildListMixin, SeoMetadataMixin, BaseLogbooksPage):
         children = self.get_child_list_queryset(request=None)
 
         tags = Tag.objects.filter(
+            logbooks_atlastag_items__content_object__live=True,
             logbooks_atlastag_items__content_object__in=children
         ).distinct()
 

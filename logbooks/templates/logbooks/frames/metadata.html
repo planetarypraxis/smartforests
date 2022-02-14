@@ -1,0 +1,5 @@
+{% load ckdjango_tags ckbootstrap_tags static wagtailcore_tags %}
+
+<turbo-frame id="metadata-turboframe">
+  {% include "logbooks/metadata.html" with page=page interactive=interactive %}
+</turbo-frame>

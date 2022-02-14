@@ -127,15 +127,7 @@ class LogbookEntryPage(ArticlePage):
     parent_page_types = ['logbooks.LogbookPage']
     icon_class = 'icon-logbooks'
 
-    def content_html(self):
-        '''
-        Render just the content of the page, for embedding in a logbook
-        '''
-
-        return render_to_string('logbooks/content_entry/logbook_entry.html', {
-            'self': self,
-            'LANGUAGE_CODE': translation.get_language()
-        })
+    content_html = 'logbooks/content_entry/logbook_entry.html'
 
     def serve(self, *args, **kwargs):
         '''
@@ -209,10 +201,7 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
 
         return images
 
-    def card_content_html(self):
-        return render_to_string('logbooks/thumbnails/basic_thumbnail.html', {
-            'self': self
-        })
+    card_content_html = 'logbooks/thumbnails/basic_thumbnail.html'
 
     @property
     def cover_image(self):
@@ -266,6 +255,29 @@ class LogbookIndexPage(IndexPage):
     class Meta:
         verbose_name = "Logbooks index page"
 
+    def relevant_tags(self):
+        children = Page.get_descendants(self)
+
+        tags = Tag.objects.filter(
+            logbooks_atlastag_items__content_object__live=True,
+            logbooks_atlastag_items__content_object__in=children
+        ).distinct()
+
+        return group_by_title(tags, key='name')
+
+    def get_filters(self, request):
+        filter = {}
+
+        tag_filter = request.GET.get('filter', None)
+        if tag_filter is not None:
+            try:
+                tag = Tag.objects.get(slug=tag_filter)
+                filter['pk__in'] = [l.id for l in LogbookPage.for_tag(tag)]
+            except Tag.DoesNotExist:
+                pass
+
+        return filter
+
 
 class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
     allow_search = True
@@ -280,18 +292,18 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
 
     user = models.ForeignKey(
         User,
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='contributor_pages'
+        null = True,
+        blank = True,
+        on_delete = models.SET_NULL,
+        related_name = 'contributor_pages'
     )
 
-    byline = CharField(max_length=1000, blank=True, null=True)
-    avatar = ForeignKey(CmsImage, on_delete=models.SET_NULL,
-                        null=True, blank=True)
-    bio = RichTextField(blank=True, null=True)
+    byline=CharField(max_length = 1000, blank = True, null = True)
+    avatar=ForeignKey(CmsImage, on_delete = models.SET_NULL,
+                        null = True, blank = True)
+    bio=RichTextField(blank = True, null = True)
 
-    content_panels = [
+    content_panels=[
         FieldPanel('title', classname="full title"),
         FieldPanel('byline'),
         ImageChooserPanel('avatar'),
@@ -333,10 +345,7 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
         contributor_index.add_child(instance=contributor_page)
         contributor_page.save()
 
-    def card_content_html(self):
-        return render_to_string('logbooks/thumbnails/contributor_thumbnail.html', {
-            'self': self
-        })
+    card_content_html = 'logbooks/thumbnails/contributor_thumbnail.html'
 
     @property
     def all_tags(self):
@@ -365,7 +374,12 @@ class ContributorsIndexPage(IndexPage):
         verbose_name = "Contributors index page"
 
     def relevant_tags(self):
-        return group_by_title(Tag.objects.all(), key='name')
+        return group_by_title(
+            Tag.objects.filter(
+                logbooks_atlastag_items__content_object__live=True
+            ).distinct(),
+            key='name'
+        )
 
     def get_filters(self, request):
         filter = {}

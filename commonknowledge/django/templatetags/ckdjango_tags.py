@@ -113,3 +113,8 @@ def duration_numbers(secs):
     d1 = datetime(2000, 1, 1, 0, 0, 0)
     d2 = d1 + delta
     return d2-d1
+
+
+@register.filter()
+def get_class(value):
+    return value.__class__.__name__

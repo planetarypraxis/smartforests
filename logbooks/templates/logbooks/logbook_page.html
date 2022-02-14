@@ -14,7 +14,7 @@
   <div class="mt-0">
     {% for entry in child_list_page %}
     <article class="logbook-entry {% if forloop.first %}mt-0{% endif %}" id="{{ entry.id }}">
-      {{entry.content_html}}
+      {% include entry.content_html with self=entry.localized user=user only %}
     </article>
     {% endfor %}
   </div>

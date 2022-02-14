@@ -5,7 +5,8 @@ from rest_framework_gis.serializers import GeoFeatureModelSerializer, GeometrySe
 from django.urls import path
 from wagtail.core.models import Page
 from wagtail.core.models.i18n import Locale
-from smartforests.models import Tag
+from logbooks.models.mixins import Person
+from smartforests.models import Tag, User
 from wagtail.api.v2.utils import BadRequestError
 
 from logbooks.models.pages import ContributorPage, EpisodePage, LogbookEntryPage, LogbookPage, StoryPage
@@ -36,6 +37,32 @@ def tag_panel(request, slug):
         {
             'tag': tag,
             'pages': pages_for_tag(tag, tag_panel_types)
+        }
+    )
+
+
+
+def metadata(request, page_id, **kwargs):
+    page = get_object_or_404(Page.objects.filter(id=page_id).specific())
+
+    user_id = kwargs.get('user_id', None)
+    class_name = kwargs.get('class_name', None)
+    if user_id:
+        if class_name == 'User':
+          user = User.objects.get(id=user_id)
+          page.additional_contributing_users.remove(user)
+          page.excluded_contributors.add(user)
+        else:
+          person = Person.objects.get(id=user_id)
+          page.additional_contributing_people.remove(person)
+        page.save()
+
+    return render(
+        request,
+        'logbooks/frames/metadata.html',
+        {
+            'page': page,
+            'interactive': request.user.is_authenticated
         }
     )
 

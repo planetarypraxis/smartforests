@@ -1,3 +1,4 @@
+{% load ckdjango_tags %}
 <div class="d-none d-lg-flex flex-column metadata">
   <section class="d-flex flex-column mb-3">
     <time class="text-dark-grey" datetime="{{ page.first_published_at|date:"Y-m-d" }}">
@@ -11,7 +12,12 @@
   <section class="d-flex flex-column mb-3">
     <h4 class="mb-0">Contributors</h4>
     {% for user in page.contributors %}
-      <a class='d-block' href='{{ user.contributor_page.localized.link_url }}'>{% include 'logbooks/username.html' with user=user %}</a>
+      <a class='d-block' href='{{ user.contributor_page.localized.link_url }}'>
+        {% include 'logbooks/username.html' with user=user %}
+      </a>
+      {% if interactive %}
+        <a href="/_metadata/{{page.id}}/toggle_user/{{user|get_class}}/{{user.id}}">(Hide)</a>
+      {% endif %}
     {% endfor %}
   </section>
   {% endif %}
