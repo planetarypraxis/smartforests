@@ -1,5 +1,6 @@
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
+from logbooks.models.mixins import ArticleSeoMixin, SeoMetadataMixin
 from logbooks.models.tag_cloud import TagCloud
 from smartforests.models import CmsImage
 from django.db import models
@@ -8,7 +9,7 @@ from wagtail.core.models import Page
 from commonknowledge.wagtail.models import ChildListMixin
 
 
-class HomePage(ChildListMixin, Page):
+class HomePage(ChildListMixin, SeoMetadataMixin, Page):
     show_in_menus_default = True
     parent_page_types = ['wagtailcore.Page']
 
@@ -17,7 +18,7 @@ class HomePage(ChildListMixin, Page):
         return TagCloud.get_start()
 
 
-class InformationPage(Page):
+class InformationPage(ArticleSeoMixin, Page):
     show_in_menus_default = True
     parent_page_types = [
         'home.HomePage',
@@ -36,4 +37,8 @@ class InformationPage(Page):
     content_panels = Page.content_panels + [
         ImageChooserPanel('cover_image'),
         FieldPanel('text')
+    ]
+
+    seo_image_sources = ArticleSeoMixin.seo_image_sources + [
+        "cover_image"
     ]

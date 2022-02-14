@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'import_export',
     'mapwidgets',
     'wagtailautocomplete',
+    "wagtailseo",
 
     "wagtail_localize",
     "wagtail_localize.locales",
@@ -118,6 +119,7 @@ TEMPLATES = [
                 'wagtailmenus.context_processors.wagtailmenus',
                 'django_settings_export.settings_export',
                 'django.template.context_processors.i18n',
+                "wagtail.contrib.settings.context_processors.settings",
             ],
         },
     },

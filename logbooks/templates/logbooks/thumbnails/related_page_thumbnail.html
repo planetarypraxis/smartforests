@@ -9,10 +9,12 @@
         <span>{{page.label}}</span>
       </span>
 
-      {% if page.owner and show_owner is not False %}
-        <span class="d-inline-block microcopy-small text-mid-green">
-          {{page.owner.get_full_name}}
-        </span>
+      {% if page.contributors and show_owner is not False %}
+        {% for user in page.contributors %}
+          <span class="d-inline-block microcopy-small text-mid-green">
+            {% include 'logbooks/username.html' with user=user %}
+          </span>
+        {% endfor %}
       {% endif %}
     </span>
 

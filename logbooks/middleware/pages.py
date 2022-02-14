@@ -16,7 +16,6 @@ class ImportantPagesMiddleware(object):
 
         return response
 
-    @django_cached('important_pages', ttl=60)
     def get_menu_items(self):
         return {
             'contributors': ContributorsIndexPage.objects.first(),

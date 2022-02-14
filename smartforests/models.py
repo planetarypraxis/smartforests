@@ -113,8 +113,23 @@ class User(AbstractUser):
         return self.contributor_pages.first()
 
     @classmethod
-    def with_edited_tags(cls, *tags):
-        return User.objects.filter(pagerevision__page__tagged_items__tag__in=tags).distinct()
+    def for_tag(cls, tag):
+        from smartforests.util import flatten_list
+        from logbooks.views import pages_for_tag, tag_panel_types
+        from logbooks.models.pages import ContributorPage
+
+        tagged_pages_groups = pages_for_tag(
+            tag,
+            # Exclude contributor pages to prevent recursion since ContributorPage leans on User.for_tag (this method)!
+            [t for t in tag_panel_types if t is not ContributorPage]
+        )
+
+        tagged_pages = flatten_list(items for t, items in tagged_pages_groups)
+
+        contributors = set(flatten_list(
+            page.contributors for page in tagged_pages if hasattr(page, 'contributors')))
+
+        return list(contributors)
 
     def edited_content_pages(self):
         from logbooks.models.pages import LogbookPage
