@@ -94,13 +94,13 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
         def get_coordinates(self, obj):
             return getattr(obj, 'coordinates', None)
 
-    queryset = Page.objects.live().specific().type(
-        LogbookPage, StoryPage, EpisodePage
-    )
+    model = Page
     serializer_class = ResultSerializer
 
     def get_queryset(self):
-        qs = super().get_queryset()
+        qs = Page.objects.live().specific().type(
+            LogbookPage, StoryPage, EpisodePage
+        )
         params = MapSearchViewset.RequestSerializer(data=self.request.GET)
         if not params.is_valid():
             raise BadRequestError()
