@@ -1,4 +1,4 @@
-# Using the Atlas CMS
+g# Using the Atlas CMS
 
 # Signing into the Atlas
 
@@ -54,9 +54,9 @@ Logbooks are collations of entries, bound together by their tag.
 2. Find a Logbook Entry you want to embed SoundCloud into.
 3. Add an Embed to the body.
 4. Paste in SoundCloud entry to the large text field.
-    
-    ![Screenshot 2021-10-18 at 17.50.30.png](Using%20the%20Atlas%20CMS%207f888e28dda6467aa5ff7a1d519c02d7/Screenshot_2021-10-18_at_17.50.30.png)
-    
+
+   ![Screenshot 2021-10-18 at 17.50.30.png](Using%20the%20Atlas%20CMS%207f888e28dda6467aa5ff7a1d519c02d7/Screenshot_2021-10-18_at_17.50.30.png)
+
 5. Publish page.
 6. The SoundCloud widget should now be embedded onto the page.
 
@@ -67,15 +67,15 @@ In the case of Logbooks themselves.
 1. Locate a SoundCloud page you want to embed, for example [https://soundcloud.com/crickets-tinnitussleepsolution](https://soundcloud.com/crickets-tinnitussleepsolution)
 2. Find the Logbook you want to embed into.
 3. Click on Embed icon on description.
-    
-    ![Screenshot 2021-10-11 at 16.26.29.png](Using%20the%20Atlas%20CMS%207f888e28dda6467aa5ff7a1d519c02d7/Screenshot_2021-10-11_at_16.26.29.png)
-    
+
+   ![Screenshot 2021-10-11 at 16.26.29.png](Using%20the%20Atlas%20CMS%207f888e28dda6467aa5ff7a1d519c02d7/Screenshot_2021-10-11_at_16.26.29.png)
+
 4. Paste in SoundCloud URL.
-    
-    ![Screenshot 2021-10-11 at 16.27.03.png](Using%20the%20Atlas%20CMS%207f888e28dda6467aa5ff7a1d519c02d7/Screenshot_2021-10-11_at_16.27.03.png)
-    
-    ![Screenshot 2021-10-11 at 16.27.08.png](Using%20the%20Atlas%20CMS%207f888e28dda6467aa5ff7a1d519c02d7/Screenshot_2021-10-11_at_16.27.08.png)
-    
+
+   ![Screenshot 2021-10-11 at 16.27.03.png](Using%20the%20Atlas%20CMS%207f888e28dda6467aa5ff7a1d519c02d7/Screenshot_2021-10-11_at_16.27.03.png)
+
+   ![Screenshot 2021-10-11 at 16.27.08.png](Using%20the%20Atlas%20CMS%207f888e28dda6467aa5ff7a1d519c02d7/Screenshot_2021-10-11_at_16.27.08.png)
+
 5. Click Insert button.
 6. Publish page.
 7. The SoundCloud widget should now be embedded onto the page.
