@@ -48,7 +48,7 @@ class Command(BaseCommand):
         slug = "stories"
         if StoryIndexPage.objects.filter(slug=slug).descendant_of(home).exists() is False:
             stories = StoryIndexPage(
-                title="stories",
+                title="Stories",
                 slug=slug
             )
             home.add_child(instance=stories)
@@ -56,7 +56,7 @@ class Command(BaseCommand):
         slug = "logbooks"
         if LogbookIndexPage.objects.filter(slug=slug).descendant_of(home).exists() is False:
             logbooks = LogbookIndexPage(
-                title="logbooks",
+                title="Logbooks",
                 slug=slug
             )
             home.add_child(instance=logbooks)
@@ -64,7 +64,7 @@ class Command(BaseCommand):
         slug = "contributors"
         if ContributorsIndexPage.objects.filter(slug=slug).descendant_of(home).exists() is False:
             contributors = ContributorsIndexPage(
-                title="contributors",
+                title="Contributors",
                 slug=slug
             )
             home.add_child(instance=contributors)
