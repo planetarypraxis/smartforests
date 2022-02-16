@@ -7,7 +7,7 @@
     
     {% if self.geographical_location %}
       <div class="microcopy-small pt-1">
-        {{self.geographical_location}}
+        {{self.specific.geographical_location}}
       </div>
     {% endif %}
     
@@ -19,6 +19,6 @@
   </div>
 
   <div class="ms-2">
-    <i class="icon-logbook"></i>
+    <i class="icon-thumbnail {{self.specific.icon_class}}"></i>
   </div>
 </div>
