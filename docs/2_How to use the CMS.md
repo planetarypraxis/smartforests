@@ -80,11 +80,28 @@ In the case of Logbooks themselves.
 
 Tag cluster
 Map page
-Logbooks and Logbook Entries
+
 Thumbnails
 Stories
 Contributors
 Radio and radio Episodes
-Information pages
+Promote
+Draft vs Live pages
+Locked pages
+Workflows
+Scheduled Publishing
+
+# Information pages
+
+The site has pages with the type information page e.g. About page, Terms and Conditions.
+
+To edit these pages
+
+1. Hover over the page and click edit
+
+2. Edit the required fields and select publish
+
+![Alt text](information_page.gif)
+
 Footer editing
 Tags, index pages and filters
