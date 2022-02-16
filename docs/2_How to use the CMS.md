@@ -1,6 +1,4 @@
-g# Using the Atlas CMS
-
-# Signing into the Atlas
+# Log into the site
 
 [https://www.loom.com/share/58b4fc5335fa40d7b61244489f2a3be6](https://www.loom.com/share/58b4fc5335fa40d7b61244489f2a3be6)
 
@@ -79,3 +77,14 @@ In the case of Logbooks themselves.
 5. Click Insert button.
 6. Publish page.
 7. The SoundCloud widget should now be embedded onto the page.
+
+Tag cluster
+Map page
+Logbooks and Logbook Entries
+Thumbnails
+Stories
+Contributors
+Radio and radio Episodes
+Information pages
+Footer editing
+Tags, index pages and filters
