@@ -70,7 +70,7 @@ Logbooks are collations of entries, bound together by their tag.
 
 # Adding SoundCloud to Logbooks
 
-In the case of Logbooks themselves.
+To add a soundcloud to a logbook
 
 1. Locate a SoundCloud page you want to embed, for example [https://soundcloud.com/crickets-tinnitussleepsolution](https://soundcloud.com/crickets-tinnitussleepsolution)
 2. Find the Logbook you want to embed into.
@@ -90,9 +90,61 @@ In the case of Logbooks themselves.
 
 ## Add a Story
 
+1. Head to [https://atlas.smartforests.net/admin/pages/231/](https://atlas.smartforests.net/admin/pages/231/)
+2. Click on Add Child Page.
+3. Give your story a title.
+4. Select what tags you want to be shown within the story
+5. You can add Geographic Data, both a pin on a map and a rough estimate of location.
+6. Add the body text of the story including any media content or images you would like
+7. When done you can either save the draft, or click Publish to push this to the live site.
+8. Once published you are done!
+
+<a href="https://www.loom.com/share/54dc9a33b0194461a9d62c7eb0c1ee5e">
+    <p>Add a story - Watch Video</p>
+    <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/54dc9a33b0194461a9d62c7eb0c1ee5e-with-play.gif">
+  </a>
+
+## Adding a thumbnail image
+
+<a href="https://www.loom.com/share/57b3096e1b9544d3b8c6f164af153e90">
+    <p>Adding a thumbnail image - Watch Video</p>
+    <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/57b3096e1b9544d3b8c6f164af153e90-with-play.gif">
+  </a>
+
+## Index pages
+
+Each content type - logbooks, radio episodes, contributors, stories has an index page
+
+Click on the green arrow to the right of the screen to access the listings.
+
+![Alt text](screenshots/logbooks_index.png)
+
+![Alt text](screenshots/logbooks.png)
+
+They can also be accessed from the admin panel on the left of the screen
+
+![Alt text](screenshots/index_adminpanel.png)
+
 ## Add a Contributor
 
+<a href="https://www.loom.com/share/7b86f399ef564eda8739ba0cd9b7b586">
+    <p>Add a contributor - Watch Video</p>
+    <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/7b86f399ef564eda8739ba0cd9b7b586-with-play.gif">
+  </a>
+
+## How to use the radio player
+
+<a href="https://www.loom.com/share/a9b48058d38e462b80d49c7848bafc14">
+    <p>Radio player - Watch Video</p>
+    <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/a9b48058d38e462b80d49c7848bafc14-with-play.gif">
+  </a>
+
 ## Add a Radio Episode
+
+<a href="https://www.loom.com/share/d4debb3da3744021b29d153a703adbee">
+    <p>Add a radio episode - Watch Video</p>
+    <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/d4debb3da3744021b29d153a703adbee-with-play.gif">
+  </a>
 
 ## Workflows
 
@@ -136,5 +188,3 @@ https://docs.wagtail.org/en/stable/reference/pages/theory.html#scheduled-publish
 The Wagtail admin menu can be accessed from every page by clicking on the Wagtail icon
 
 ![Alt text](screenshots/wagtail_admin.gif)
-
-Map page, Tags, Index pages, Filters
