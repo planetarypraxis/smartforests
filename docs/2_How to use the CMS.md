@@ -115,7 +115,7 @@ To add a soundcloud to a logbook
 
 Each content type - logbooks, radio episodes, contributors, stories has an index page
 
-Click on the green arrow to the right of the screen to access the listings.
+Click on the green arrow to the right of the screen to access the entries under that content type.
 
 ![Alt text](screenshots/logbooks_index.png)
 
@@ -123,7 +123,7 @@ Click on the green arrow to the right of the screen to access the listings.
 
 They can also be accessed from the admin panel on the left of the screen
 
-![Alt text](screenshots/index_adminpanel.png)
+![Alt text](screenshots/index_adminpanel.gif)
 
 ## Add a Contributor
 
