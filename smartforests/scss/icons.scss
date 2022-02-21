@@ -63,9 +63,9 @@
   --icon: url("./svg/map-icons/map.svg");
 }
 
-.icon-logbook {
+.icon-thumbnail {
   display: inline-block;
-  background-image: url("./svg/icon-logbook.png");
+  background-image: var(--icon);
   width: 20px;
   height: 20px;
   background-size: 20px 20px;
