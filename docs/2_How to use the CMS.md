@@ -105,6 +105,30 @@ Stories are like articles focusing on a particular topic.
     <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/54dc9a33b0194461a9d62c7eb0c1ee5e-with-play.gif">
   </a>
 
+## Adding images to stories and logbook entries
+
+<a href="https://www.loom.com/share/fb81b9fc875e4844be527255806b5916">
+    <p>Adding images - Watch Video</p>
+    <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/fb81b9fc875e4844be527255806b5916-1645454516564-with-play.gif">
+  </a>
+
+1. To add a thubmnail image to a logbook entry or story hit edit.
+2. Scroll to the body section and click the plus to add content.
+3. Select or upload an image.
+4. Add a caption.
+5. When done you can either save the draft, or click Publish to push this to the live site.
+6. Once published you are done!
+
+To add a cover image to a story scroll down to the image section at the bottom of the page
+
+![](screenshots/cover_image_story.png)
+
+![](screenshots/cover_image.png)
+
+Thumbnails for logbook entries are shown as a collection on the logbook listing
+
+![](screenshots/Logbook_images.png)
+
 ## How to use the radio player
 
 1. Head to the Radio page [https://atlas.smartforests.net/en/radio/](https://atlas.smartforests.net/en/radio/)
