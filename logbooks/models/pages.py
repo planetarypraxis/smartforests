@@ -81,6 +81,9 @@ class EpisodePage(ArticlePage):
     Episodes are individual items for the radio.
     '''
 
+    class Meta:
+        verbose_name_plural = "Radio"
+
     show_in_menus_default = True
     parent_page_types = ['logbooks.RadioIndexPage']
     icon_class = "icon-radio"
@@ -292,18 +295,18 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
 
     user = models.ForeignKey(
         User,
-        null = True,
-        blank = True,
-        on_delete = models.SET_NULL,
-        related_name = 'contributor_pages'
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='contributor_pages'
     )
 
-    byline=CharField(max_length = 1000, blank = True, null = True)
-    avatar=ForeignKey(CmsImage, on_delete = models.SET_NULL,
-                        null = True, blank = True)
-    bio=RichTextField(blank = True, null = True)
+    byline = CharField(max_length=1000, blank=True, null=True)
+    avatar = ForeignKey(CmsImage, on_delete=models.SET_NULL,
+                        null=True, blank=True)
+    bio = RichTextField(blank=True, null=True)
 
-    content_panels=[
+    content_panels = [
         FieldPanel('title', classname="full title"),
         FieldPanel('byline'),
         ImageChooserPanel('avatar'),
