@@ -34,6 +34,20 @@ Logbooks are composed of individual entries.
 8. When done you can either save the draft, or click Publish to push this to the live site.
 9. Once published you are done!
 
+## Adding SoundCloud embeds to entries
+
+<a href="https://www.loom.com/share/280d3196b37c4656994e48c7b0e0c410">
+    <p>Adding SoundCloud to logbooks - Watch Video</p>
+    <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/280d3196b37c4656994e48c7b0e0c410-with-play.gif">
+  </a>
+
+1. Locate a SoundCloud page you want to embed, for example [https://soundcloud.com/crickets-tinnitussleepsolution](https://soundcloud.com/crickets-tinnitussleepsolution)
+2. Find a Logbook Entry you want to embed SoundCloud into.
+3. Add an Embed to the body.
+4. Paste in SoundCloud entry to the large text field.
+5. Publish page.
+6. The SoundCloud widget should now be embedded onto the page.
+
 ## Add entries to a log book
 
 <a href="https://www.loom.com/share/5ecfb4df860c40c9b3b23ab005735368">
@@ -53,24 +67,9 @@ Logbooks are collations of entries, bound together by their tag.
 8. When done you can either save the draft, or click Publish to push this to the live site.
 9. Once published you are done!
 
-## Adding SoundCloud embeds to logbook entries
+## Adding SoundCloud to Logbooks
 
-<a href="https://www.loom.com/share/280d3196b37c4656994e48c7b0e0c410">
-    <p>Adding SoundCloud to logbooks - Watch Video</p>
-    <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/280d3196b37c4656994e48c7b0e0c410-with-play.gif">
-  </a>
-
-1. Locate a SoundCloud page you want to embed, for example [https://soundcloud.com/crickets-tinnitussleepsolution](https://soundcloud.com/crickets-tinnitussleepsolution)
-2. Find a Logbook Entry you want to embed SoundCloud into.
-3. Add an Embed to the body.
-4. Paste in SoundCloud entry to the large text field.
-
-5. Publish page.
-6. The SoundCloud widget should now be embedded onto the page.
-
-# Adding SoundCloud to Logbooks
-
-To add a soundcloud to a logbook
+To add a soundcloud to a logbook itself
 
 1. Locate a SoundCloud page you want to embed, for example [https://soundcloud.com/crickets-tinnitussleepsolution](https://soundcloud.com/crickets-tinnitussleepsolution)
 2. Find the Logbook you want to embed into.
@@ -90,6 +89,8 @@ To add a soundcloud to a logbook
 
 ## Add a Story
 
+Stories are like articles focusing on a particular topic.
+
 1. Head to [https://atlas.smartforests.net/admin/pages/231/](https://atlas.smartforests.net/admin/pages/231/)
 2. Click on Add Child Page.
 3. Give your story a title.
@@ -104,12 +105,50 @@ To add a soundcloud to a logbook
     <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/54dc9a33b0194461a9d62c7eb0c1ee5e-with-play.gif">
   </a>
 
-## Adding a thumbnail image
+## How to use the radio player
 
-<a href="https://www.loom.com/share/57b3096e1b9544d3b8c6f164af153e90">
-    <p>Adding a thumbnail image - Watch Video</p>
-    <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/57b3096e1b9544d3b8c6f164af153e90-with-play.gif">
+1. Head to the Radio page [https://atlas.smartforests.net/en/radio/](https://atlas.smartforests.net/en/radio/)
+2. Select the episode you would like to play
+3. When you navigate away from the page the episode should still play in the footer
+   <a href="https://www.loom.com/share/a9b48058d38e462b80d49c7848bafc14">
+   <p>Radio player - Watch Video</p>
+   <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/a9b48058d38e462b80d49c7848bafc14-with-play.gif">
+   </a>
+
+## Add a Radio Episode
+
+<a href="https://www.loom.com/share/d4debb3da3744021b29d153a703adbee">
+    <p>Add a radio episode - Watch Video</p>
+    <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/d4debb3da3744021b29d153a703adbee-with-play.gif">
   </a>
+
+## Creating a Tag
+
+To create a tag at the same time as adding it you can type it into the Tags box and click elsewhere on the screen.
+
+![](screenshots/AddTag.gif)
+
+You can also go to
+[https://atlas.smartforests.net/admin/snippets/smartforests/tag/](https://atlas.smartforests.net/admin/snippets/smartforests/tag/)
+
+and select Add Tag
+
+![](screenshots/Snippets_tags.png)
+
+## Using Filters
+
+Filters allow you to see content with a particular tag or tags
+
+From the homepage:
+![](screenshots/filter-home-page.gif)
+
+Logbooks, Stories, Radio and Contributors view:
+
+![](screenshots/filters.gif)
+
+Map page:
+
+![](screenshots/filter-map.gif)
 
 ## Index pages
 
@@ -130,20 +169,6 @@ They can also be accessed from the admin panel on the left of the screen
 <a href="https://www.loom.com/share/7b86f399ef564eda8739ba0cd9b7b586">
     <p>Add a contributor - Watch Video</p>
     <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/7b86f399ef564eda8739ba0cd9b7b586-with-play.gif">
-  </a>
-
-## How to use the radio player
-
-<a href="https://www.loom.com/share/a9b48058d38e462b80d49c7848bafc14">
-    <p>Radio player - Watch Video</p>
-    <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/a9b48058d38e462b80d49c7848bafc14-with-play.gif">
-  </a>
-
-## Add a Radio Episode
-
-<a href="https://www.loom.com/share/d4debb3da3744021b29d153a703adbee">
-    <p>Add a radio episode - Watch Video</p>
-    <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/d4debb3da3744021b29d153a703adbee-with-play.gif">
   </a>
 
 ## Workflows
