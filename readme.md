@@ -31,8 +31,8 @@ See it live at https://atlas.smartforests.net
 - Search for `smartforests/settings/local.py` on lastpass and paste its contents into the corresponding local file
 - Use vscode's 'run' command (usually aliased to F5) to run the app.
   - Make sure you use the 'App' configuration, which will start both the django app and the frontend build pipeline.
+  - The `setup_pages` command in `manage.py` will set up the basic page structure in the development site.
 - Go to localhost:8000/admin
-- Use the 'import' option on the left to seed the archive with content from the staging site.
 
 ### Hard mode: Using Dockerfiles
 
