@@ -1,3 +1,5 @@
+# Translations
+
 ## Switch to that language in the Page Editor and add the translation copy.
 
 1. Go to the page editor for this page

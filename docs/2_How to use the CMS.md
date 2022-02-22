@@ -1,3 +1,28 @@
+# How to use the CMS
+
+## Contents
+
+1. [Log into the site](#log-into-the-site)
+2. [Add Entries](#add-entries)
+3. [Add SoundCloud embeds to Entries](#add-soundcloud-embeds-to-entries)
+4. [Add Entries to a Logbook](#add-entries-to-a-logbook)
+5. [Add SoundCloud embeds to Logbooks](#add-soundcloud-embeds-to-logbooks)
+6. [Add a Story](#add-a-story)
+7. [Add images to Stories and Logbook Entries](#add-images-to-stories-and-logbook-entries)
+8. [How to use the Radio Player](#how-to-use-the-radio-player)
+9. [Add a Radio Episode](#add-a-radio-episode)
+10. [Creating a Tag](#creating-a-tag)
+11. [Using Filters](#using-filters)
+12. [Index pages](#index-pages)
+13. [Add a Contributor](#add-a-contributor)
+14. [Workflows](#workflows)
+15. [Scheduled Publishing](#scheduled-publishing)
+16. [Editing 'Information type' pages](#editing-information-type-pages)
+17. [Editing the footer](#editing-the-footer)
+18. [Wagtail admin](#wagtail-admin)
+
+---
+
 ## Log into the site
 
 <a href="https://www.loom.com/share/58b4fc5335fa40d7b61244489f2a3be6">
@@ -11,7 +36,9 @@
 
 If you've forgotten your password, you can reset it at [https://atlas.smartforests.net/admin/password_reset/](https://atlas.smartforests.net/admin/password_reset/)
 
-## Add entries
+---
+
+## Add Entries
 
 Entries are research observations, ideas and snippets.
 
@@ -34,7 +61,9 @@ Logbooks are composed of individual entries.
 8. When done you can either save the draft, or click Publish to push this to the live site.
 9. Once published you are done!
 
-## Adding SoundCloud embeds to entries
+---
+
+## Add SoundCloud embeds to Entries
 
 <a href="https://www.loom.com/share/280d3196b37c4656994e48c7b0e0c410">
     <p>Adding SoundCloud to logbooks - Watch Video</p>
@@ -48,7 +77,9 @@ Logbooks are composed of individual entries.
 5. Publish page.
 6. The SoundCloud widget should now be embedded onto the page.
 
-## Add entries to a log book
+---
+
+## Add Entries to a Logbook
 
 <a href="https://www.loom.com/share/5ecfb4df860c40c9b3b23ab005735368">
     <p>Adding Entries To Logbooks - Watch Video</p>
@@ -67,7 +98,9 @@ Logbooks are collations of entries, bound together by their tag.
 8. When done you can either save the draft, or click Publish to push this to the live site.
 9. Once published you are done!
 
-## Adding SoundCloud to Logbooks
+---
+
+## Add SoundCloud embeds to Logbooks
 
 To add a soundcloud to a logbook itself
 
@@ -87,6 +120,8 @@ To add a soundcloud to a logbook itself
 
    ![](screenshots/soundcloud_embed.png)
 
+---
+
 ## Add a Story
 
 Stories are like articles focusing on a particular topic.
@@ -105,7 +140,9 @@ Stories are like articles focusing on a particular topic.
     <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/54dc9a33b0194461a9d62c7eb0c1ee5e-with-play.gif">
   </a>
 
-## Adding images to stories and logbook entries
+---
+
+## Add images to Stories and Logbook Entries
 
 <a href="https://www.loom.com/share/fb81b9fc875e4844be527255806b5916">
     <p>Adding images - Watch Video</p>
@@ -129,7 +166,9 @@ Thumbnails for logbook entries are shown as a collection on the logbook listing
 
 ![](screenshots/Logbook_images.png)
 
-## How to use the radio player
+---
+
+## How to use the Radio Player
 
 1. Head to the Radio page [https://atlas.smartforests.net/en/radio/](https://atlas.smartforests.net/en/radio/)
 2. Select the episode you would like to play
@@ -139,12 +178,26 @@ Thumbnails for logbook entries are shown as a collection on the logbook listing
    <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/a9b48058d38e462b80d49c7848bafc14-with-play.gif">
    </a>
 
+---
+
 ## Add a Radio Episode
 
 <a href="https://www.loom.com/share/d4debb3da3744021b29d153a703adbee">
     <p>Add a radio episode - Watch Video</p>
     <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/d4debb3da3744021b29d153a703adbee-with-play.gif">
   </a>
+
+1. Head to https://atlas.smartforests.net/admin/pages/234/
+2. Click Add Child Page
+3. Give the episode a title.
+4. Select or upload the audio file for the episode.
+5. Select what tags you want to be shown within the episode.
+6. You can add Geographic Data, both a pin on a map and a rough estimate of location.
+7. Add the body text of the story including any media content or images you would like
+8. When done you can either save the draft, or click Publish to push this to the live site.
+9. Once published you are done!
+
+---
 
 ## Creating a Tag
 
@@ -158,6 +211,8 @@ You can also go to
 and select Add Tag
 
 ![](screenshots/Snippets_tags.png)
+
+---
 
 ## Using Filters
 
@@ -174,6 +229,8 @@ Map page:
 
 ![](screenshots/filter-map.gif)
 
+---
+
 ## Index pages
 
 Each content type - logbooks, radio episodes, contributors, stories has an index page
@@ -188,12 +245,26 @@ They can also be accessed from the admin panel on the left of the screen
 
 ![Alt text](screenshots/index_adminpanel.gif)
 
+---
+
 ## Add a Contributor
 
 <a href="https://www.loom.com/share/7b86f399ef564eda8739ba0cd9b7b586">
     <p>Add a contributor - Watch Video</p>
     <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/7b86f399ef564eda8739ba0cd9b7b586-with-play.gif">
   </a>
+
+1. Head to https://atlas.smartforests.net/admin/pages/236/
+2. Click Add Child Page
+3. Give the page a title
+4. Add the byline that you want for the contributor e.g. Researcher
+5. Select or upload an image as an avatar
+6. Add a geographic location for the contributor if you wish
+7. Add any text, media content or images you would like in the Body field
+8. When done you can either save the draft, or click Publish to push this to the live site.
+9. Once published you are done!
+
+---
 
 ## Workflows
 
@@ -203,11 +274,15 @@ A moderator approval workflow is already set up on the site.
 
 https://docs.wagtail.org/en/stable/editor_manual/administrator_tasks/managing_workflows.html
 
+---
+
 ## Scheduled Publishing
 
 Page publishing can be scheduled through the Go live date/time feature in the Settings tab of the Edit page.
 
 https://docs.wagtail.org/en/stable/reference/pages/theory.html#scheduled-publishing
+
+---
 
 ## Editing 'Information type' pages
 
@@ -216,6 +291,8 @@ https://docs.wagtail.org/en/stable/reference/pages/theory.html#scheduled-publish
 2. Edit the required fields and select publish
 
    ![Alt text](screenshots/information_page.gif)
+
+   ***
 
 ## Editing the footer
 
@@ -231,6 +308,8 @@ https://docs.wagtail.org/en/stable/reference/pages/theory.html#scheduled-publish
 
 4. Add the Link text you would like displayed.
 5. Hit save and you're done!
+
+---
 
 ## Wagtail admin
 

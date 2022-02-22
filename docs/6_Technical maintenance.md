@@ -1,3 +1,5 @@
+# Technical maintenance
+
 ## Stack
 
 - Django (fullstack Django app, no Javascript frontend)
