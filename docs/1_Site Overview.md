@@ -6,4 +6,4 @@ The atlas is a tool to capture and narrate smart forests data, including fieldwo
 
 ## Site overview
 
-![](screenshots/site_overview.png)
+![](screenshots/Site_overview.png)
