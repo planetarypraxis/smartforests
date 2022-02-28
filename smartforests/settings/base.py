@@ -97,6 +97,7 @@ MIDDLEWARE = [
 
     'django.middleware.locale.LocaleMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
+    'logbooks.middleware.pages.ImportantPagesMiddleware',
 ]
 
 ROOT_URLCONF = 'smartforests.urls'
