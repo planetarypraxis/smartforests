@@ -21,12 +21,12 @@ psycopg2 = '>=2.8.6'
 pytz = '>=2021.1'
 requests = '>=2.25.1'
 urllib3 = '>=1.26.4'
-wagtail = '>=2.14'
+wagtail = '2.15.4'
 wagtail-content-import = "*"
 django-import-export = "*"
 django-storages = "*"
 faker = "*"
-wagtailmenus = {editable = true, git = "https://github.com/rkhleics/wagtailmenus.git"}
+wagtailmenus = {editable = true, git = "https://github.com/rkhleics/wagtailmenus.git@v3.1"}
 django-debug-toolbar = "*"
 djangorestframework-gis = "*"
 django-turbo-response = "*"
