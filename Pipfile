@@ -26,7 +26,7 @@ wagtail-content-import = "*"
 django-import-export = "*"
 django-storages = "*"
 faker = "*"
-wagtailmenus = {editable = true, git = "https://github.com/rkhleics/wagtailmenus.git@v3.1"}
+wagtailmenus = {editable = true, git = "https://github.com/rkhleics/wagtailmenus.git"}
 django-debug-toolbar = "*"
 djangorestframework-gis = "*"
 django-turbo-response = "*"
