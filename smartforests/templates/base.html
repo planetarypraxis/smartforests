@@ -30,7 +30,8 @@
         {% endblock %}
     </head>
 
-    <body class="{% block body_height %}min-vh-100{% endblock %} {% block body_class %}{% endblock %} app-{{ self.content_type.app_label }} model-{{ self.content_type.model }}">
+    <body class="{% block body_height %}min-vh-100{% endblock %} {% block body_class %}{% endblock %} {% if self %} app-{{ self.content_type.app_label }} model-{{ self.content_type.model }} {% endif %}">
+        {% if self %}
         {{ self.full_url|json_script:"routing_configuration" }}
         <script type="application/json" id="model-info">
           { 
@@ -39,6 +40,7 @@
             "page_id": "{{ self.id }}"
           }
         </script>
+        {% endif %}
         <script type="application/json" id="request-info">
           { "languageCode": "{{ LANGUAGE_CODE }}" }
         </script>
@@ -103,6 +105,7 @@
             </footer>
         </div>
         {% endblock %}
+        {% if self %}
         <div id="radioPlayer" data-turbo-permanent class="offcanvas offcanvas-bottom min-h-48px h-auto bg-dark-green border-0 drop-shadow-mid-green-glow" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" aria-labelledby="radioPlayerLabel">
             <div class="position-relative text-white ps-md-3 d-flex align-items-center justify-content-between">
               <progress id="radioPlayerSeeker" min="0" max="1" value="0" data-smartforests-radio-episode-seeker></progress>
@@ -137,6 +140,7 @@
               </a>
             </div>
         </div>
+        {% endif %}
         {% include "wagtailseo/struct_data.html" %}
         <script>
             Array.from(document.querySelectorAll('[data-autofocus-show]')).forEach(modal => {
