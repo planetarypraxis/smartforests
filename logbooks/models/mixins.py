@@ -198,32 +198,6 @@ class Person(models.Model):
         return Tag.objects.filter(logbooks_atlastag_items__content_object__in=self.edited_content_pages())
 
 
-class DescendantPageContributorMixin(BaseLogbooksPage):
-    '''
-    Common configuration for pages that want to track their contributors.
-    '''
-
-    class Meta:
-        abstract = True
-
-    def contributors(self):
-        '''
-        Return all the people who have contributed to this page,
-        and any descendant pages too.
-        '''
-        pages = self.get_descendants(inclusive=True)
-        return list(set([
-            revision.user
-            for revision in PageRevision.objects.filter(page__in=pages)
-        ]))
-
-    api_fields = [
-        APIField('contributors', serializer=UserSerializer(many=True)),
-    ]
-
-    content_panels = []
-
-
 class GeocodedMixin(BaseLogbooksPage):
     '''
     Common configuration for pages that want to track a geographical location.
@@ -436,8 +410,7 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
         InlinePanel("footnotes", label="Footnotes"),
     ] + ContributorMixin.content_panels + GeocodedMixin.content_panels
 
-    content_panels = Page.content_panels + \
-        additional_content_panels + ContributorMixin.content_panels
+    content_panels = Page.content_panels + additional_content_panels
 
     api_fields = [
         APIField('tags'),

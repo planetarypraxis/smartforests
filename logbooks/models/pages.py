@@ -19,7 +19,7 @@ from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
 from wagtail.api import APIField
 from smartforests.util import flatten_list, group_by_title
-from logbooks.models.mixins import ArticlePage, ArticleSeoMixin, BaseLogbooksPage, ContributorMixin, DescendantPageContributorMixin, GeocodedMixin, IndexPage, Person, SeoMetadataMixin, ThumbnailMixin, SidebarRenderableMixin
+from logbooks.models.mixins import ArticlePage, ArticleSeoMixin, BaseLogbooksPage, ContributorMixin, GeocodedMixin, IndexPage, Person, SeoMetadataMixin, ThumbnailMixin, SidebarRenderableMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
 from logbooks.models.tag_cloud import TagCloud
@@ -172,13 +172,13 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
         FieldPanel('title', classname="full title"),
         FieldPanel('description'),
         FieldPanel('tags'),
-    ] + DescendantPageContributorMixin.content_panels + GeocodedMixin.content_panels + ContributorMixin.content_panels
+    ] + GeocodedMixin.content_panels + ContributorMixin.content_panels
 
     api_fields = [
         APIField('icon_class'),
         APIField('tags'),
         APIField('description'),
-    ] + DescendantPageContributorMixin.api_fields + GeocodedMixin.api_fields
+    ] + ContributorMixin.api_fields + GeocodedMixin.api_fields
 
     @classmethod
     def for_tag(cls, tag):
