@@ -1,6 +1,6 @@
 # Managing page privacy
 
-Both directories (Logbooks, Stories, Radio Page and Contributors) and invidual pages can be set to private or public
+Both directories (Logbooks, Stories, Radio Page and Contributors) and individual pages can be set to private or public
 
 ## Directories
 
