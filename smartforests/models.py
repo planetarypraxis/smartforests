@@ -14,7 +14,6 @@ from django.apps import apps
 from commonknowledge.django.images import generate_imagegrid_filename, render_image_grid
 import re
 from wagtail.api.conf import APIField
-
 from wagtail.snippets.models import register_snippet
 
 
@@ -103,7 +102,24 @@ class MapPage(RoutablePageMixin, Page):
         return context
 
 
-class User(AbstractUser):
+class UserInterface(models.Model):
+    class Meta:
+        abstract = True
+
+    def edited_content_pages(self):
+        from logbooks.views import content_list_types
+        return set([
+            page
+            for page in
+            Page.objects.type(content_list_types).specific()
+            if self in page.contributors
+        ])
+
+    def edited_tags(self):
+        return Tag.objects.filter(logbooks_atlastag_items__content_object__in=self.edited_content_pages())
+
+
+class User(UserInterface, AbstractUser):
     def autocomplete_label(self):
         return self.get_full_name() or self.username
 
@@ -128,19 +144,6 @@ class User(AbstractUser):
             page.contributors for page in tagged_pages if hasattr(page, 'contributors')))
 
         return list(contributors)
-
-    def edited_content_pages(self):
-        from logbooks.views import pages_for_tag, content_list_types
-        return set([
-            page
-            for page in
-            Page.objects.filter(revisions__user=self).specific()
-            if page.specific_class in content_list_types
-        ])
-
-    def edited_tags(self):
-        from smartforests.models import Tag
-        return Tag.objects.filter(logbooks_atlastag_items__content_object__in=self.edited_content_pages())
 
 
 class CmsImage(AbstractImage):

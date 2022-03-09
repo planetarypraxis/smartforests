@@ -3,7 +3,7 @@ from django.core.files.storage import default_storage
 from django.db import models
 from django.db.models.fields import CharField
 from wagtailautocomplete.edit_handlers import AutocompletePanel
-from commonknowledge.django.cache import django_cached_model
+from commonknowledge.django.cache import django_cached, django_cached_model
 from commonknowledge.django.images import generate_imagegrid_filename, render_image_grid
 from commonknowledge.wagtail.models import ChildListMixin
 from django.db.models.query_utils import subclasses
@@ -31,7 +31,7 @@ from wagtail.core.models import Page, PageManager, PageRevision
 from django.contrib.gis.db import models as geo
 from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin
 from mapwidgets.widgets import MapboxPointFieldWidget
-from smartforests.models import Tag, User
+from smartforests.models import Tag, User, UserInterface
 from smartforests.util import group_by_title
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from wagtail.snippets.models import register_snippet
@@ -161,7 +161,7 @@ class ContributorMixin(BaseLogbooksPage):
 
 
 @register_snippet
-class Person(models.Model):
+class Person(UserInterface, models.Model):
     class Meta:
         verbose_name_plural = 'People'
 
@@ -183,21 +183,6 @@ class Person(models.Model):
 
     def autocomplete_label(self):
         return str(self)
-
-    def edited_content_pages(self):
-        from logbooks.views import content_list_types
-        return set([
-            page
-            for page in
-            Page.objects.filter(
-                additional_contributing_people=self
-            ).specific()
-            if page.specific_class in content_list_types
-        ])
-
-    def edited_tags(self):
-        from smartforests.models import Tag
-        return Tag.objects.filter(logbooks_atlastag_items__content_object__in=self.edited_content_pages())
 
 
 class GeocodedMixin(BaseLogbooksPage):
