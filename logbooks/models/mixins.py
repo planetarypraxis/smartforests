@@ -136,6 +136,7 @@ class ContributorMixin(BaseLogbooksPage):
         )
 
     @property
+    @django_cached('contributors', get_key=lambda self: f'{self._meta.app_label}-{self._meta.model_name}-{self.id}')
     def contributors(self):
         '''
         Return all the people who have contributed to this page and its subpages
