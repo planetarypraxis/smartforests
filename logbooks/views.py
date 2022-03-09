@@ -42,7 +42,6 @@ def tag_panel(request, slug):
     )
 
 
-
 def metadata(request, page_id, **kwargs):
     page = get_object_or_404(Page.objects.filter(id=page_id).specific())
 
@@ -51,9 +50,15 @@ def metadata(request, page_id, **kwargs):
     if user_id:
         if class_name == 'User':
             user = User.objects.get(id=user_id)
-            page.additional_contributing_users.remove(user)
-            page.excluded_contributors.add(user)
+            if user in page.excluded_contributors.all():
+                # print("Showing user", user)
+                page.excluded_contributors.remove(user)
+            else:
+                # print("Hiding user", user)
+                page.additional_contributing_users.remove(user)
+                page.excluded_contributors.add(user)
         else:
+            # print("Hiding person", person)
             person = Person.objects.get(id=user_id)
             page.additional_contributing_people.remove(person)
         page.save()
