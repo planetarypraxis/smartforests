@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.db import models
@@ -135,8 +136,11 @@ class ContributorMixin(BaseLogbooksPage):
             ) - set(self.excluded_contributors.all())
         )
 
+    def get_contributor_cache_key(self):
+        lambda self: f'{self._meta.app_label}-{self._meta.model_name}-{self.id}'
+
     @property
-    @django_cached('contributors', get_key=lambda self: f'{self._meta.app_label}-{self._meta.model_name}-{self.id}')
+    @django_cached('contributors', get_key=get_contributor_cache_key)
     def contributors(self):
         '''
         Return all the people who have contributed to this page and its subpages
@@ -159,6 +163,13 @@ class ContributorMixin(BaseLogbooksPage):
         AutocompletePanel('additional_contributing_people'),
         AutocompletePanel('excluded_contributors'),
     ]
+
+    def save(self, *args, **kwargs):
+        '''
+        Rebuild the contributors cache when the page is edited
+        '''
+        cache.delete(f'contributors.{self.get_contributor_cache_key()}')
+        return super().save(*args, **kwargs)
 
 
 @register_snippet
