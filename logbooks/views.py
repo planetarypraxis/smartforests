@@ -14,7 +14,8 @@ from smartforests.views import LocaleFromLanguageCode
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
 
 
-tag_panel_types = (LogbookPage, StoryPage, EpisodePage, ContributorPage,)
+content_list_types = (LogbookPage, StoryPage, EpisodePage,)
+tag_panel_types = content_list_types + (ContributorPage,)
 
 
 def pages_for_tag(tag: Tag, page_types=tag_panel_types):
@@ -49,12 +50,12 @@ def metadata(request, page_id, **kwargs):
     class_name = kwargs.get('class_name', None)
     if user_id:
         if class_name == 'User':
-          user = User.objects.get(id=user_id)
-          page.additional_contributing_users.remove(user)
-          page.excluded_contributors.add(user)
+            user = User.objects.get(id=user_id)
+            page.additional_contributing_users.remove(user)
+            page.excluded_contributors.add(user)
         else:
-          person = Person.objects.get(id=user_id)
-          page.additional_contributing_people.remove(person)
+            person = Person.objects.get(id=user_id)
+            page.additional_contributing_people.remove(person)
         page.save()
 
     return render(

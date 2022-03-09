@@ -185,12 +185,14 @@ class Person(models.Model):
         return str(self)
 
     def edited_content_pages(self):
-        from logbooks.models.pages import LogbookPage
+        from logbooks.views import content_list_types
         return set([
             page
             for page in
-            LogbookPage.objects.filter(
-                additional_contributing_people=self).specific()
+            Page.objects.filter(
+                additional_contributing_people=self
+            ).specific()
+            if page.specific_class in content_list_types
         ])
 
     def edited_tags(self):

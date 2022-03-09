@@ -115,13 +115,11 @@ class User(AbstractUser):
     @classmethod
     def for_tag(cls, tag):
         from smartforests.util import flatten_list
-        from logbooks.views import pages_for_tag, tag_panel_types
-        from logbooks.models.pages import ContributorPage
+        from logbooks.views import pages_for_tag, content_list_types
 
         tagged_pages_groups = pages_for_tag(
             tag,
-            # Exclude contributor pages to prevent recursion since ContributorPage leans on User.for_tag (this method)!
-            [t for t in tag_panel_types if t is not ContributorPage]
+            content_list_types
         )
 
         tagged_pages = flatten_list(items for t, items in tagged_pages_groups)
@@ -132,11 +130,12 @@ class User(AbstractUser):
         return list(contributors)
 
     def edited_content_pages(self):
-        from logbooks.models.pages import LogbookPage
+        from logbooks.views import pages_for_tag, content_list_types
         return set([
             page
             for page in
-            LogbookPage.objects.filter(revisions__user=self).specific()
+            Page.objects.filter(revisions__user=self).specific()
+            if page.specific_class in content_list_types
         ])
 
     def edited_tags(self):
