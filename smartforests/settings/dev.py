@@ -15,6 +15,10 @@ BASE_URL = 'http://localhost:8080'
 DATABASES['default']['CONN_MAX_AGE'] = 0
 SUPERCLUSTER_URL = 'http://localhost:3001'
 
+INSTALLED_APPS += [
+    "wagtail.contrib.styleguide",
+]
+
 try:
     from .local import *
 except ImportError:

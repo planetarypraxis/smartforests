@@ -47,6 +47,11 @@
         <div id='wagtailuserbar-data-turbo-permanent-wrapper' data-turbo-permanent>
           {% wagtailuserbar %}
         </div>
+        {% with settings.smartforests.FeaturedContent.radio_episode as episode %}
+          {% if episode is not None %}
+            {% include 'logbooks/include/episode_button.html' with episode=episode.specific.localized preload=True extra_classes="d-none" %}
+          {% endif %}
+        {% endwith %}
 
         <div
         class="offcanvas offcanvas-end flex flex-column h-100 overflow-auto"
