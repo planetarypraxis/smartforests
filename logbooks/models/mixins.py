@@ -238,7 +238,6 @@ class GeocodedMixin(BaseLogbooksPage):
 
     def save(self, *args, **kwargs):
         coordinates_changed = self.__previous_coordinates != self.coordinates
-        print(coordinates_changed, self.__previous_coordinates, self.coordinates)
         if self.geographical_location is None or coordinates_changed:
             self.update_location_name()
         if self.map_image is None or coordinates_changed:
