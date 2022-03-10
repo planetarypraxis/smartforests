@@ -2,10 +2,10 @@ import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import React, { FC } from "react";
-import MapGL, { MapContext, Source, Layer, NavigationControl } from "@urbica/react-map-gl";
+import MapGL, { MapContext, NavigationControl } from "@urbica/react-map-gl";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import mapboxgl, { Evented } from "mapbox-gl";
-import { Fragment, useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import * as ReactDOM from "react-dom";
 
 import { useSize } from "./data";
