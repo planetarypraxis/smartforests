@@ -1,10 +1,8 @@
-from django.core.cache import cache
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.db import models
 from django.db.models.fields import CharField
 from wagtailautocomplete.edit_handlers import AutocompletePanel
-from commonknowledge.django.cache import django_cached, django_cached_model
 from commonknowledge.django.images import generate_imagegrid_filename, render_image_grid
 from commonknowledge.wagtail.models import ChildListMixin
 from django.db.models.query_utils import subclasses
@@ -32,7 +30,7 @@ from wagtail.core.models import Page, PageManager, PageRevision
 from django.contrib.gis.db import models as geo
 from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin
 from mapwidgets.widgets import MapboxPointFieldWidget
-from smartforests.models import Tag, User, UserInterface
+from smartforests.models import Tag, User
 from smartforests.util import group_by_title
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from wagtail.snippets.models import register_snippet
@@ -98,16 +96,10 @@ class ContributorMixin(BaseLogbooksPage):
     class Meta:
         abstract = True
 
-    additional_contributing_users = ParentalManyToManyField(
+    additional_contributors = ParentalManyToManyField(
         User,
         blank=True,
         help_text="Contributors who have not directly edited this page"
-    )
-
-    additional_contributing_people = ParentalManyToManyField(
-        'logbooks.Person',
-        blank=True,
-        help_text="Contributors who are not users of the Atlas"
     )
 
     excluded_contributors = ParentalManyToManyField(
@@ -117,84 +109,75 @@ class ContributorMixin(BaseLogbooksPage):
         help_text="Contributors who should be hidden from public citation"
     )
 
-    def get_contributors(self):
-        p = self
+    # Materialised list of contributors
+    contributors = ParentalManyToManyField(
+        User,
+        blank=True,
+        related_name='+',
+        help_text="Index list of contributors"
+    )
+
+    def get_page_revision_editors(self):
+        return set(
+            [self.owner] + [
+                user
+                for user in [
+                    revision.user
+                    for revision in PageRevision.objects.filter(page=self).select_related('user')
+                ]
+                if user is not None
+            ]
+        )
+
+    def get_page_contributors(self):
         return list(
             set(
-                [p.owner] + [
-                    user
-                    for user in [
-                        revision.user
-                        for revision in PageRevision.objects.filter(page=p).select_related('user')
-                    ]
-                    if user is not None
-                ] + list(
-                    p.additional_contributing_users.all()
-                ) + list(
-                    p.additional_contributing_people.all()
-                )
+                list(self.get_page_revision_editors()) +
+                list(self.additional_contributors.all())
             ) - set(self.excluded_contributors.all())
         )
 
-    def get_contributor_cache_key(self):
-        lambda self: f'{self._meta.app_label}-{self._meta.model_name}-{self.id}'
-
-    @property
-    @django_cached('contributors', get_key=get_contributor_cache_key)
-    def contributors(self):
+    def update_contributors(self, save=True):
         '''
         Return all the people who have contributed to this page and its subpages
         '''
-        pages = Page.objects.type(
-            ContributorMixin).descendant_of(self, inclusive=True).specific()
-        contributors = []
+        self.contributors.set(self.get_page_contributors())
 
-        for page in pages:
-            contributors += page.get_contributors()
+        # Add page tree's contributors
+        for page in Page.objects\
+                .type(ContributorMixin)\
+                .descendant_of(self, inclusive=False)\
+                .live()\
+                .specific():
+            self.contributors.add(*page.get_page_contributors())
 
-        return list(set(contributors) - set(self.excluded_contributors.all()))
+        # Re-assert top-level exclusions
+        self.contributors.remove(*self.excluded_contributors.all())
+
+        if save:
+            self.save()
 
     api_fields = [
+        APIField('additional_contributors',
+                 serializer=UserSerializer(many=True)),
+        APIField('excluded_contributors',
+                 serializer=UserSerializer(many=True)),
         APIField('contributors', serializer=UserSerializer(many=True)),
     ]
 
     content_panels = [
-        AutocompletePanel('additional_contributing_users'),
-        AutocompletePanel('additional_contributing_people'),
-        AutocompletePanel('excluded_contributors'),
+        # AutocompletePanel('additional_contributors'),
+        # AutocompletePanel('excluded_contributors'),
     ]
 
     def save(self, *args, **kwargs):
         '''
-        Rebuild the contributors cache when the page is edited
+        Rebuild the contributors list when the page is edited
         '''
-        cache.delete(f'contributors.{self.get_contributor_cache_key()}')
-        return super().save(*args, **kwargs)
+        print("Saving page", self)
 
-
-@register_snippet
-class Person(UserInterface, models.Model):
-    class Meta:
-        verbose_name_plural = 'People'
-
-    '''
-    Non-users who are manually tagged as contributors
-    '''
-    name = CharField(max_length=500)
-    contributor_page = ParentalKey(
-        'logbooks.ContributorPage', null=True, blank=True)
-
-    autocomplete_search_field = 'name'
-
-    @classmethod
-    def autocomplete_create(kls: type, value: str):
-        return kls.objects.create(name=value)
-
-    def __str__(self) -> str:
-        return self.name
-
-    def autocomplete_label(self):
-        return str(self)
+        self.update_contributors(save=False)
+        super().save(*args, **kwargs)
 
 
 class GeocodedMixin(BaseLogbooksPage):

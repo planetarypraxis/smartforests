@@ -1,37 +1,35 @@
 {% load ckdjango_tags %}
 <div class="d-none d-lg-flex flex-column metadata">
   <section class="d-flex flex-column mb-3">
-    <time class="text-dark-grey" datetime="{{ page.first_published_at|date:"Y-m-d" }}">
+    <time class="text-dark-grey" datetime="{{ page.first_published_at|date:'Y-m-d' }}">
       Added {{ page.first_published_at|date:"d E Y" }}
     </time>
-    <time class="text-dark-grey" datetime="{{ page.last_published_at|date:"Y-m-d" }}">
+    <time class="text-dark-grey" datetime="{{ page.last_published_at|date:'Y-m-d' }}">
       Last edited {{ page.last_published_at|date:"d E Y" }}
     </time>
   </section>
-  {% if page.contributors|length %}
+  {% if page.contributors.all|length %}
   <section class="d-flex flex-column mb-3">
     <h4 class="mb-0">Contributors</h4>
-    {% for user in page.contributors %}
-      <a class='d-block' href='{{ user.contributor_page.localized.link_url }}'>
+    {% for user in page.contributors.all %}
+      <a class='d-block' href='{{ user.contributor_page.localized.link_url }}' data-turbo-frame="_top">
         {% include 'logbooks/username.html' with user=user %}
       </a>
       {% if interactive %}
-        <a href="/_metadata/{{page.id}}/toggle_user/{{user|get_class}}/{{user.id}}">(Hide)</a>
+        <a href="/_metadata/{{page.id}}/toggle_user/{{user.id}}" data-turbo-frame="_self">(Hide)</a>
       {% endif %}
     {% endfor %}
   </section>
+  {% endif %}
+  {% if interactive and page.excluded_contributors.all|length %}
   <section class="d-flex flex-column mb-3">
-    {% if interactive and page.excluded_contributors.all|length %}
-      <h4 class="mb-0">Hidden Contributors</h4>
-      {% for user in page.excluded_contributors.all %}
-        <a class='d-block' href='{{ user.contributor_page.localized.link_url }}'>
-          {% include 'logbooks/username.html' with user=user %}
-        </a>
-        {% if interactive %}
-          <a href="/_metadata/{{page.id}}/toggle_user/{{user|get_class}}/{{user.id}}">(Show)</a>
-        {% endif %}
-      {% endfor %}
-    {% endif %}
+    <h4 class="mb-0">(Hidden Contributors)</h4>
+    {% for user in page.excluded_contributors.all %}
+      <s><span class='d-block'>
+        {% include 'logbooks/username.html' with user=user %}
+      </span></s>
+      <a href="/_metadata/{{page.id}}/toggle_user/{{user.id}}" data-turbo-frame="_self">(Show)</a>
+    {% endfor %}
   </section>
   {% endif %}
   {% if page.geographical_location or page.coordinates %}

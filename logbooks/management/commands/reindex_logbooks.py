@@ -1,4 +1,4 @@
-from logbooks.models.pages import ContributorPage, LogbookPage, LogbookEntryPage, StoryPage
+from logbooks.models.pages import ContributorPage, EpisodePage, LogbookPage, LogbookEntryPage, StoryPage
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
@@ -12,15 +12,15 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, *args, **options):
         for page in LogbookEntryPage.objects.all():
-            print("Refreshing page", page)
             page.save()
 
         for page in LogbookPage.objects.all():
-            print("Refreshing page", page)
             page.save()
 
         for page in StoryPage.objects.all():
-            print("Refreshing page", page)
+            page.save()
+
+        for page in EpisodePage.objects.all():
             page.save()
 
         print("Regenerating thumbnails")

@@ -10,11 +10,12 @@ from wagtail.images.models import AbstractImage, AbstractRendition
 from wagtail.documents.models import Document, AbstractDocument
 from wagtail.core.models import Page, PageRevision
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
-from django.apps import apps
 from commonknowledge.django.images import generate_imagegrid_filename, render_image_grid
 import re
 from wagtail.api.conf import APIField
 from wagtail.snippets.models import register_snippet
+
+from commonknowledge.wagtail.helpers import abstract_page_query_filter
 
 
 @register_snippet
@@ -102,28 +103,23 @@ class MapPage(RoutablePageMixin, Page):
         return context
 
 
-class UserInterface(models.Model):
-    class Meta:
-        abstract = True
-
-    def edited_content_pages(self):
-        from logbooks.views import content_list_types
-        return set([
-            page
-            for page in
-            Page.objects.type(content_list_types).specific()
-            if self in page.contributors
-        ])
-
-    def edited_tags(self):
-        return Tag.objects.filter(logbooks_atlastag_items__content_object__in=self.edited_content_pages())
-
-
-class User(UserInterface, AbstractUser):
+class User(AbstractUser):
     def autocomplete_label(self):
         return self.get_full_name() or self.username
 
+    # -- Wagtail autocomplete
     autocomplete_search_field = 'username'
+
+    @classmethod
+    def autocomplete_create(kls: type, value: str):
+        return kls.objects.create(username=value)
+
+    def __str__(self) -> str:
+        return self.get_full_name() or self.username
+
+    def autocomplete_label(self):
+        return str(self)
+    # /-- wagtail autocomplete ends
 
     def contributor_page(self):
         return self.contributor_pages.first()
@@ -141,9 +137,23 @@ class User(UserInterface, AbstractUser):
         tagged_pages = flatten_list(items for t, items in tagged_pages_groups)
 
         contributors = set(flatten_list(
-            page.contributors for page in tagged_pages if hasattr(page, 'contributors')))
+            page.contributors.all() for page in tagged_pages if hasattr(page, 'contributors')))
 
         return list(contributors)
+
+    @property
+    def edited_content_pages(self):
+        from logbooks.models.mixins import ContributorMixin
+        from logbooks.views import content_list_types
+        edited_pages = Page.objects.type(content_list_types)\
+            .filter(abstract_page_query_filter(ContributorMixin, {'contributors': self}))\
+            .live()\
+            .specific()
+        return set(edited_pages)
+
+    @property
+    def edited_tags(self):
+        return Tag.objects.filter(logbooks_atlastag_items__content_object__in=self.edited_content_pages)
 
 
 class CmsImage(AbstractImage):
