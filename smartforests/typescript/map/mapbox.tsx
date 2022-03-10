@@ -2,7 +2,7 @@ import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import React, { FC } from "react";
-import MapGL, { MapContext, ScaleControl, NavigationControl } from "@urbica/react-map-gl";
+import MapGL, { MapContext, Source, Layer, NavigationControl } from "@urbica/react-map-gl";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import mapboxgl, { Evented } from "mapbox-gl";
 import { Fragment, useContext, useEffect, useRef, useState } from "react";
@@ -28,7 +28,7 @@ export function MapVisual() {
       <MapGL
         {...viewport}
         accessToken={MAPBOX_TOKEN}
-        mapStyle="mapbox://styles/smartforests/ckuquky9r2o3v18lkxddvri76/draft?v2"
+        mapStyle="mapbox://styles/smartforests/ckziehr6u001e14ohgl2brzlu"
         style={{ width: "100%", height: "100%" }}
         viewportChangeMethod="flyTo"
         onViewportChange={(viewport) =>
