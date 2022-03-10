@@ -38,6 +38,7 @@ class StoryPage(ArticlePage):
         verbose_name_plural = "Stories"
 
     icon_class = 'icon-stories'
+    map_marker = 'https://imgur.com/6TwclOR.png'
 
     show_in_menus_default = True
     parent_page_types = ['logbooks.StoryIndexPage']
@@ -87,6 +88,7 @@ class EpisodePage(ArticlePage):
     show_in_menus_default = True
     parent_page_types = ['logbooks.RadioIndexPage']
     icon_class = "icon-radio"
+    map_marker = 'https://imgur.com/N0g8oFn.png'
 
     image = ForeignKey(CmsImage, on_delete=models.SET_NULL,
                        null=True, blank=True)
@@ -129,6 +131,7 @@ class LogbookEntryPage(ArticlePage):
     show_in_menus_default = True
     parent_page_types = ['logbooks.LogbookPage']
     icon_class = 'icon-logbooks'
+    map_marker = 'https://imgur.com/hWAL2vF.png'
 
     content_html = 'logbooks/content_entry/logbook_entry.html'
 
@@ -157,6 +160,7 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
         verbose_name_plural = "Logbooks"
 
     icon_class = 'icon-logbooks'
+    map_marker = 'https://imgur.com/hWAL2vF.png'
     show_in_menus_default = True
     parent_page_types = ['logbooks.LogbookIndexPage']
     show_title = True
@@ -288,6 +292,7 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
     show_in_menus_default = True
     parent_page_types = ['logbooks.ContributorsIndexPage']
     icon_class = 'icon-contributor'
+    map_marker = 'https://imgur.com/aebDhw0.png'
     show_title = True
 
     class Meta:
