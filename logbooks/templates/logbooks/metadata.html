@@ -29,7 +29,7 @@
       <div>{{ page.latitude | floatformat:4}}° N, {{ page.longitude | floatformat:4}}° E</div>
     {% endif %}
     {% if page.map_image %}
-      {% image page.map_image width-300 class='img-fluid rounded rounded-3 my-2' %}
+      {% image page.map_image fill-300x200 class='img-fluid rounded rounded-3 my-2' %}
     {% endif %}
     {% if page.geographical_location %}
     <div>{{ page.geographical_location }}</div>

@@ -282,7 +282,8 @@ class GeocodedMixin(BaseLogbooksPage):
             marker_url=self.map_marker or "https://docs.mapbox.com/api/img/custom-marker.png",
             username='smartforests',
             style_id='ckziehr6u001e14ohgl2brzlu',
-            zoom=9
+            width=300,
+            height=200,
         )
 
     content_panels = [
