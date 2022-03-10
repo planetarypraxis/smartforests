@@ -166,8 +166,8 @@ class ContributorMixin(BaseLogbooksPage):
     ]
 
     content_panels = [
-        # AutocompletePanel('additional_contributors'),
-        # AutocompletePanel('excluded_contributors'),
+        AutocompletePanel('additional_contributors'),
+        AutocompletePanel('excluded_contributors'),
     ]
 
     def save(self, *args, **kwargs):
