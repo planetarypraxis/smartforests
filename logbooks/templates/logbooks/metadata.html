@@ -28,7 +28,7 @@
     {% if page.coordinates %}
       <div>{{ page.latitude | floatformat:4}}° N, {{ page.longitude | floatformat:4}}° E</div>
     {% endif %}
-    {% if page.map_image %}
+    {% if page.map_image and show_map_thumbnail is not False %}
       {% image page.map_image fill-300x200 class='img-fluid rounded rounded-3 my-2' %}
     {% endif %}
     {% if page.geographical_location %}
