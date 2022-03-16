@@ -69,7 +69,7 @@ export const AtlasPageMarker: React.FC<{
 
   const active = equalUrls(frameUrl, sidebarFrame.src);
 
-  const iconClass = active ? `icon-30 icon-cursor` : properties.icon_class;
+  const iconClass = (active ? `icon-30` : '') + " " + properties.icon_class;
 
   return (
     <Fragment>
