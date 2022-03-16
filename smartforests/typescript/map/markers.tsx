@@ -78,7 +78,6 @@ export const AtlasPageMarker: React.FC<{
         latitude={geometry.coordinates[1]}
       >
         <a
-          data-turbo-action="advance"
           data-turbo-frame="sidepanel-turboframe"
           href={frameUrl}
           onMouseOver={() => setIsFocusing(true, "map")}
