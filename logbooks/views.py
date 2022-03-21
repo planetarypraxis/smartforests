@@ -49,12 +49,12 @@ def metadata(request, page_id, **kwargs):
     class_name = kwargs.get('class_name', None)
     if user_id:
         if class_name == 'User':
-          user = User.objects.get(id=user_id)
-          page.additional_contributing_users.remove(user)
-          page.excluded_contributors.add(user)
+            user = User.objects.get(id=user_id)
+            page.additional_contributing_users.remove(user)
+            page.excluded_contributors.add(user)
         else:
-          person = Person.objects.get(id=user_id)
-          page.additional_contributing_people.remove(person)
+            person = Person.objects.get(id=user_id)
+            page.additional_contributing_people.remove(person)
         page.save()
 
     return render(
@@ -71,6 +71,8 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
     '''
     Query the page metadata index, filtering by tag, returning a geojson FeatureCollection
     '''
+
+    page_types = (LogbookPage, LogbookEntryPage, StoryPage, EpisodePage,)
 
     class RequestSerializer(serializers.Serializer):
         tag = serializers.ListField(child=serializers.CharField(), default=())
@@ -98,9 +100,7 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
     serializer_class = ResultSerializer
 
     def get_queryset(self):
-        qs = Page.objects.live().specific().type(
-            LogbookPage, StoryPage, EpisodePage
-        )
+        qs = Page.objects.live().specific().type(*self.page_types)
         params = MapSearchViewset.RequestSerializer(data=self.request.GET)
         if not params.is_valid():
             raise BadRequestError()
