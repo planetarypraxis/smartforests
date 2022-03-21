@@ -9,8 +9,8 @@
         <span>{{page.label}}</span>
       </span>
 
-      {% if page.contributors and show_owner is not False %}
-        {% for user in page.contributors %}
+      {% if page.contributors.all|length and show_owner is not False %}
+        {% for user in page.contributors.all %}
           <span class="d-inline-block microcopy-small text-mid-green">
             {% include 'logbooks/username.html' with user=user %}
           </span>

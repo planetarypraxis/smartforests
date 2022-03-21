@@ -19,7 +19,7 @@ from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
 from wagtail.api import APIField
 from smartforests.util import flatten_list, group_by_title
-from logbooks.models.mixins import ArticlePage, ArticleSeoMixin, BaseLogbooksPage, ContributorMixin, GeocodedMixin, IndexPage, Person, SeoMetadataMixin, ThumbnailMixin, SidebarRenderableMixin
+from logbooks.models.mixins import ArticlePage, ArticleSeoMixin, BaseLogbooksPage, ContributorMixin, GeocodedMixin, IndexPage, SeoMetadataMixin, ThumbnailMixin, SidebarRenderableMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
 from logbooks.models.tag_cloud import TagCloud
@@ -364,16 +364,6 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
         "byline"
     ]
 
-    @property
-    def person(self):
-        if self.user:
-            return self.user
-        try:
-            person = Person.objects.get(contributor_page=self)
-            return person
-        except:
-            return None
-
     @classmethod
     def create_for_user(cls, user):
         if ContributorPage.objects.filter(user=user).exists():
@@ -394,8 +384,8 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
 
     @property
     def all_tags(self):
-        if self.person:
-            return self.person.edited_tags()
+        if self.user:
+            return self.user.edited_tags
 
     @classmethod
     def for_tag(cls, tag):
