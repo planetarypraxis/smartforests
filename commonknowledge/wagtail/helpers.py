@@ -39,10 +39,10 @@ def abstract_page_query_filter(mclass, filter_params, pk_attr='page_ptr'):
 
     # Filter for pages which are marked as features
     if len(pclasses):
-      # After the model class reference has been retrieved, create a subquery that retrieves the primary keys of pages that match the condition. Because this is constructed as a subquery and uses the values method, the entire statement will execute in a single database query.
+        # After the model class reference has been retrieved, create a subquery that retrieves the primary keys of pages that match the condition. Because this is constructed as a subquery and uses the values method, the entire statement will execute in a single database query.
         qf = Q(pk__in=Subquery(pclasses[0].objects.filter(
             **filter_params).values(pk_attr)))
-      # Execute the query filter created in abstract_page_query_filter as part of a larger query using the parent model, Page.
+        # Execute the query filter created in abstract_page_query_filter as part of a larger query using the parent model, Page.
         for c in pclasses[1:]:
             qf |= Q(pk__in=Subquery(c.objects.filter(
                 **filter_params).values(pk_attr)))

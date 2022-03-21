@@ -144,11 +144,7 @@ class ContributorMixin(BaseLogbooksPage):
         self.contributors.set(self.get_page_contributors())
 
         # Add page tree's contributors
-        for page in Page.objects\
-                .type(ContributorMixin)\
-                .descendant_of(self, inclusive=False)\
-                .live()\
-                .specific():
+        for page in Page.objects.type(ContributorMixin).descendant_of(self, inclusive=False).live().specific():
             self.contributors.add(*page.get_page_contributors())
 
         # Re-assert top-level exclusions
