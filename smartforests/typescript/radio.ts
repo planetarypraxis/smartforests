@@ -6,20 +6,19 @@ export function main() {
   /**
    * Control the audio player from any number of play buttons in the UI
    */
-  const playButtons = document.querySelectorAll(
-    "[data-smartforests-radio-play-button]"
+  const playButtons = document.querySelectorAll<HTMLDivElement>(
+    "div[data-smartforests-radio-play-button]"
   );
   console.log(`Found ${playButtons.length} play buttons on page.`);
 
   /**
    * Define the actual radio player
    */
-  const radioPlayer = document.getElementById("radioPlayer");
-  const radioPlayerPlayButton = document.getElementById("radioPlayerPlayButton");
-  const radioPlayerOffCanvasElement = document.getElementById("radioPlayer");
-  const radioPlayerSeeker = document.getElementById('radioPlayerSeeker')
-  // @ts-ignore
-  const radioPlayerOffCanvas = new bootstrap.Offcanvas(radioPlayerOffCanvasElement);
+  const radioPlayer = document.getElementById("radioPlayer") as HTMLElement;
+  const radioPlayerPlayButton = document.getElementById("radioPlayerPlayButton") as HTMLElement;
+  const radioPlayerOffCanvasElement = document.getElementById("radioPlayer") as HTMLElement;
+  const radioPlayerSeeker = document.getElementById('radioPlayerSeeker') as HTMLProgressElement
+  const radioPlayerOffCanvas = new window.bootstrap.Offcanvas(radioPlayerOffCanvasElement);
 
   /**
    * Update all play buttons in response to radioPlayerAudio status
@@ -65,8 +64,7 @@ export function main() {
       radioPlayer.querySelector(
         "[data-smartforests-radio-episode-elapsed-time]"
       ).innerHTML = formatDuration(radioPlayerAudio.currentTime);
-      // @ts-ignore
-      radioPlayerSeeker.value = (radioPlayerAudio.currentTime / radioPlayerAudio.duration).toString()
+      radioPlayerSeeker.value = parseFloat((radioPlayerAudio.currentTime / radioPlayerAudio.duration).toString())
     })
   }
 
@@ -117,10 +115,9 @@ export function main() {
     ).innerHTML = lastPublishedAt;
     Array.from(radioPlayer.querySelectorAll<HTMLAnchorElement>(
       "[data-smartforests-radio-episode-page-url]"
-    )).map(el => el.href = pageURL)
+    )).map(el => el.href = pageURL);
 
-    // @ts-ignore
-    radioPlayer.querySelector("[data-smartforests-radio-episode-image]").src =
+    (radioPlayer.querySelector("img[data-smartforests-radio-episode-image]") as HTMLImageElement).src =
       image;
 
     radioPlayerAudio.src = audioUrl;
@@ -134,7 +131,6 @@ export function main() {
     if (
       // Don't override an explicit user interaction
       !isPlayerButtonActive(playButton)
-      // @ts-ignore
       // Only listen for radio things marked preloadable
       && playButton.dataset.smartforestsShouldPreloadEpisode !== undefined
     ) {
@@ -159,8 +155,7 @@ export function main() {
       // Else treat this as a "load new track" button
       let buttonElement
 
-      // @ts-ignore
-      if (!event.target.dataset.smartforestsAudio) {
+      if (!(event.target as HTMLElement).dataset.smartforestsAudio) {
         buttonElement = findAncestor(
           event.target,
           "[data-smartforests-radio-play-button]"
