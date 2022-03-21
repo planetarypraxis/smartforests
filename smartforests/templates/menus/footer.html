@@ -1,14 +1,20 @@
 {% load menu_tags %}
-
-<div class="mb-3 container">
-  <div class="row gy-3 gy-md-4 gx-1 gx-md-2 gx-lg-3">
+<footer class="bg-panel bg-dark-green container-fluid py-3 px-4 mt-auto">
+  <div class="d-grid d-md-flex gap-2 gap-md-4 gap-lg-7 fs-7 font-monospace text-uppercase text-white links-white">
     {% for item in menu_items %}
-      <div class="col col-6 col-md-4 col-lg-3">
-        <a class="d-block d-md-inline-block me-3" href="{{ item.href }}" data-turbo="false">{{ item.text }}</a>
-      </div>
+    <a
+      class="text-decoration-none"
+      href="{{ item.href }}"
+      data-turbo="false"
+      >{{ item.text }}</a
+    >
     {% endfor %}
-    <div class='col col-6 col-md-4 col-lg-3'>
-      Site by <a class="footer-link" target="_blank" target="_blank" rel="noopener noreferrer" href="https://commonknowledge.coop">Common Knowledge</a>
-    </div>
+    <a
+      class="text-decoration-none""
+      target="_blank"
+      rel="noopener noreferrer"
+      href="https://commonknowledge.coop"
+      >Site by Common Knowledge</a
+    >
   </div>
-</div>
+</footer>

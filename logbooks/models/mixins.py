@@ -1,9 +1,14 @@
+from io import BytesIO
+from os import access
+import urllib
+from urllib.parse import urlencode, urlparse, urlunparse
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.db import models
 from django.db.models.fields import CharField
 from wagtailautocomplete.edit_handlers import AutocompletePanel
 from commonknowledge.django.images import generate_imagegrid_filename, render_image_grid
+from commonknowledge.geo import get_coordinates_data, static_map_marker_image_url
 from commonknowledge.wagtail.models import ChildListMixin
 from django.db.models.query_utils import subclasses
 from logbooks.models.tag_cloud import TagCloud
@@ -30,12 +35,14 @@ from wagtail.core.models import Page, PageManager, PageRevision
 from django.contrib.gis.db import models as geo
 from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin
 from mapwidgets.widgets import MapboxPointFieldWidget
-from smartforests.models import Tag, User
+from smartforests.models import CmsImage, Tag, User
 from smartforests.util import group_by_title
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from wagtail.snippets.models import register_snippet
 from wagtailseo.models import SeoMixin, SeoType, TwitterCard
 from wagtail.core.rich_text import get_text_for_indexing
+import requests
+from django.core.files.images import ImageFile
 
 
 class BaseLogbooksPage(Page):
@@ -189,6 +196,8 @@ class GeocodedMixin(BaseLogbooksPage):
     geographical_location = models.CharField(
         max_length=250, null=True, blank=True)
     coordinates = geo.PointField(null=True, blank=True)
+    map_image = models.ForeignKey(
+        CmsImage, on_delete=models.SET_NULL, null=True, blank=True, related_name='+')
 
     @property
     def longitude(self):
@@ -199,6 +208,60 @@ class GeocodedMixin(BaseLogbooksPage):
     def latitude(self):
         if self.coordinates:
             return self.coordinates.coords[1]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # For comparison purposes
+        self.__previous_coordinates = self.coordinates
+
+    def save(self, *args, **kwargs):
+        coordinates_changed = self.__previous_coordinates != self.coordinates
+        if self.geographical_location is None or coordinates_changed:
+            self.update_location_name()
+        if self.map_image is None or coordinates_changed:
+            self.update_map_thumbnail()
+        super().save(*args, **kwargs)
+
+    def update_location_name(self):
+        if self.coordinates is not None:
+            location_data = get_coordinates_data(
+                self.coordinates,
+                zoom=11,
+                username='jennifer@planetarypraxis.org'
+            )
+            self.geographical_location = location_data.get(
+                'display_name', None)
+
+    def update_map_thumbnail(self):
+        if self.coordinates is None:
+            return
+        url = self.static_map_marker_image_url()
+        if url is None:
+            return
+        response = requests.get(url)
+        image = ImageFile(BytesIO(response.content),
+                          name=f'{urllib.parse.quote(url)}.png')
+
+        if self.map_image is not None:
+            self.map_image.delete()
+
+        self.map_image = CmsImage(
+            alt_text=f"Map of {self.geographical_location}",
+            title=f'Generated map thumbnail for {self._meta.model_name} {self.slug}',
+            file=image
+        )
+        self.map_image.save()
+
+    def static_map_marker_image_url(self) -> str:
+        return static_map_marker_image_url(
+            self.coordinates,
+            access_token=settings.MAPBOX_API_PUBLIC_TOKEN,
+            marker_url=self.map_marker,
+            username='smartforests',
+            style_id='ckziehr6u001e14ohgl2brzlu',
+            width=300,
+            height=200,
+        )
 
     content_panels = [
         MultiFieldPanel(

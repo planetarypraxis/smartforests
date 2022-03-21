@@ -1,4 +1,5 @@
-{% load ckdjango_tags %}
+{% load ckdjango_tags wagtailimages_tags %}
+
 <div class="d-none d-lg-flex flex-column metadata">
   <section class="d-flex flex-column mb-3">
     <time class="text-dark-grey" datetime="{{ page.first_published_at|date:'Y-m-d' }}">
@@ -35,11 +36,14 @@
   {% if page.geographical_location or page.coordinates %}
   <section class="d-flex flex-column mb-3">
     <h4 class="mb-0">Location</h4>
-    {% if page.geographical_location %}
-    <div>{{ page.geographical_location }}</div>
-    {% endif %}
     {% if page.coordinates %}
       <div>{{ page.latitude | floatformat:4}}° N, {{ page.longitude | floatformat:4}}° E</div>
+    {% endif %}
+    {% if page.map_image and show_map_thumbnail is not False %}
+      {% image page.map_image fill-300x200 class='img-fluid rounded rounded-3 my-2' %}
+    {% endif %}
+    {% if page.geographical_location %}
+    <div>{{ page.geographical_location }}</div>
     {% endif %}
   </section>
   {% endif %}

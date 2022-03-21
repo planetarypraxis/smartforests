@@ -70,6 +70,8 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
     Query the page metadata index, filtering by tag, returning a geojson FeatureCollection
     '''
 
+    page_types = (LogbookPage, LogbookEntryPage, StoryPage, EpisodePage,)
+
     class RequestSerializer(serializers.Serializer):
         tag = serializers.ListField(child=serializers.CharField(), default=())
         language_code = serializers.CharField(default='en')
@@ -96,9 +98,7 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
     serializer_class = ResultSerializer
 
     def get_queryset(self):
-        qs = Page.objects.live().specific().type(
-            LogbookPage, StoryPage, EpisodePage
-        )
+        qs = Page.objects.live().specific().type(*self.page_types)
         params = MapSearchViewset.RequestSerializer(data=self.request.GET)
         if not params.is_valid():
             raise BadRequestError()

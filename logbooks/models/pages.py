@@ -26,6 +26,7 @@ from logbooks.models.tag_cloud import TagCloud
 from django.shortcuts import redirect
 from wagtailautocomplete.edit_handlers import AutocompletePanel
 from django.utils import translation
+from django.templatetags.static import static
 
 
 class StoryPage(ArticlePage):
@@ -38,6 +39,15 @@ class StoryPage(ArticlePage):
         verbose_name_plural = "Stories"
 
     icon_class = 'icon-stories'
+
+    @property
+    def map_marker(self):
+        print(static('mapicons/stories.png'))
+        if settings.DEBUG:
+            # Mapbox API requires an online resource to generate images against
+            return "https://imgur.com/6TwclOR.png"
+        else:
+            return static('mapicons/stories.png')
 
     show_in_menus_default = True
     parent_page_types = ['logbooks.StoryIndexPage']
@@ -88,6 +98,14 @@ class EpisodePage(ArticlePage):
     parent_page_types = ['logbooks.RadioIndexPage']
     icon_class = "icon-radio"
 
+    @property
+    def map_marker(self):
+        if settings.DEBUG:
+            # Mapbox API requires an online resource to generate images against
+            return "https://imgur.com/N0g8oFn.png"
+        else:
+            return static('mapicons/radio.png')
+
     image = ForeignKey(CmsImage, on_delete=models.SET_NULL,
                        null=True, blank=True)
     audio = models.ForeignKey(
@@ -130,6 +148,14 @@ class LogbookEntryPage(ArticlePage):
     parent_page_types = ['logbooks.LogbookPage']
     icon_class = 'icon-logbooks'
 
+    @property
+    def map_marker(self):
+        if settings.DEBUG:
+            # Mapbox API requires an online resource to generate images against
+            return "https://imgur.com/hWAL2vF.png"
+        else:
+            return static('mapicons/logbooks.png')
+
     content_html = 'logbooks/content_entry/logbook_entry.html'
 
     def serve(self, *args, **kwargs):
@@ -160,6 +186,14 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
     show_in_menus_default = True
     parent_page_types = ['logbooks.LogbookIndexPage']
     show_title = True
+
+    @property
+    def map_marker(self):
+        if settings.DEBUG:
+            # Mapbox API requires an online resource to generate images against
+            return "https://imgur.com/hWAL2vF.png"
+        else:
+            return static('mapicons/logbooks.png')
 
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
     description = RichTextField()
@@ -289,6 +323,14 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
     parent_page_types = ['logbooks.ContributorsIndexPage']
     icon_class = 'icon-contributor'
     show_title = True
+
+    @property
+    def map_marker(self):
+        if settings.DEBUG:
+            # Mapbox API requires an online resource to generate images against
+            return "https://imgur.com/aebDhw0.png"
+        else:
+            return static('mapicons/circle.png')
 
     class Meta:
         verbose_name = "Contributor"

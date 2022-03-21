@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('logbooks', '0032_alter_episodepage_options'),
+        ('logbooks', '0033_auto_20220310_1748'),
     ]
 
     operations = [
@@ -52,22 +52,26 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='episodepage',
             name='contributors',
-            field=modelcluster.fields.ParentalManyToManyField(blank=True, help_text='Index list of contributors', related_name='_logbooks_episodepage_contributors_+', to=settings.AUTH_USER_MODEL),
+            field=modelcluster.fields.ParentalManyToManyField(
+                blank=True, help_text='Index list of contributors', related_name='_logbooks_episodepage_contributors_+', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='logbookentrypage',
             name='contributors',
-            field=modelcluster.fields.ParentalManyToManyField(blank=True, help_text='Index list of contributors', related_name='_logbooks_logbookentrypage_contributors_+', to=settings.AUTH_USER_MODEL),
+            field=modelcluster.fields.ParentalManyToManyField(
+                blank=True, help_text='Index list of contributors', related_name='_logbooks_logbookentrypage_contributors_+', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='logbookpage',
             name='contributors',
-            field=modelcluster.fields.ParentalManyToManyField(blank=True, help_text='Index list of contributors', related_name='_logbooks_logbookpage_contributors_+', to=settings.AUTH_USER_MODEL),
+            field=modelcluster.fields.ParentalManyToManyField(
+                blank=True, help_text='Index list of contributors', related_name='_logbooks_logbookpage_contributors_+', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='storypage',
             name='contributors',
-            field=modelcluster.fields.ParentalManyToManyField(blank=True, help_text='Index list of contributors', related_name='_logbooks_storypage_contributors_+', to=settings.AUTH_USER_MODEL),
+            field=modelcluster.fields.ParentalManyToManyField(
+                blank=True, help_text='Index list of contributors', related_name='_logbooks_storypage_contributors_+', to=settings.AUTH_USER_MODEL),
         ),
         migrations.DeleteModel(
             name='Person',
