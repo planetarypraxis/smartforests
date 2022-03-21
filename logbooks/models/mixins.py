@@ -278,7 +278,7 @@ class GeocodedMixin(BaseLogbooksPage):
         return static_map_marker_image_url(
             self.coordinates,
             access_token=settings.MAPBOX_API_PUBLIC_TOKEN,
-            marker_url=self.map_marker or "https://docs.mapbox.com/api/img/custom-marker.png",
+            marker_url=self.map_marker,
             username='smartforests',
             style_id='ckziehr6u001e14ohgl2brzlu',
             width=300,
