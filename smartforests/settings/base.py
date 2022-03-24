@@ -73,7 +73,6 @@ INSTALLED_APPS = [
     "rest_framework_gis",
     'drf_spectacular',
     "background_task",
-    # 'debug_toolbar',
 
     'django.contrib.gis',
     'django.contrib.admin',
@@ -85,8 +84,6 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
-
     'django.contrib.sessions.middleware.SessionMiddleware',
     'turbo_response.middleware.TurboMiddleware',
     'django.middleware.common.CommonMiddleware',

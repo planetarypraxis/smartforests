@@ -19,13 +19,14 @@ from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
 from wagtail.api import APIField
 from smartforests.util import flatten_list, group_by_title
-from logbooks.models.mixins import ArticlePage, ArticleSeoMixin, BaseLogbooksPage, ContributorMixin, GeocodedMixin, IndexPage, Person, SeoMetadataMixin, ThumbnailMixin, SidebarRenderableMixin
+from logbooks.models.mixins import ArticlePage, ArticleSeoMixin, BaseLogbooksPage, ContributorMixin, GeocodedMixin, IndexPage, SeoMetadataMixin, ThumbnailMixin, SidebarRenderableMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
 from logbooks.models.tag_cloud import TagCloud
 from django.shortcuts import redirect
 from wagtailautocomplete.edit_handlers import AutocompletePanel
 from django.utils import translation
+from django.templatetags.static import static
 
 
 class StoryPage(ArticlePage):
@@ -38,6 +39,15 @@ class StoryPage(ArticlePage):
         verbose_name_plural = "Stories"
 
     icon_class = 'icon-stories'
+
+    @property
+    def map_marker(self):
+        print(static('mapicons/stories.png'))
+        if settings.DEBUG:
+            # Mapbox API requires an online resource to generate images against
+            return "https://imgur.com/6TwclOR.png"
+        else:
+            return static('mapicons/stories.png')
 
     show_in_menus_default = True
     parent_page_types = ['logbooks.StoryIndexPage']
@@ -88,6 +98,14 @@ class EpisodePage(ArticlePage):
     parent_page_types = ['logbooks.RadioIndexPage']
     icon_class = "icon-radio"
 
+    @property
+    def map_marker(self):
+        if settings.DEBUG:
+            # Mapbox API requires an online resource to generate images against
+            return "https://imgur.com/N0g8oFn.png"
+        else:
+            return static('mapicons/radio.png')
+
     image = ForeignKey(CmsImage, on_delete=models.SET_NULL,
                        null=True, blank=True)
     audio = models.ForeignKey(
@@ -130,6 +148,14 @@ class LogbookEntryPage(ArticlePage):
     parent_page_types = ['logbooks.LogbookPage']
     icon_class = 'icon-logbooks'
 
+    @property
+    def map_marker(self):
+        if settings.DEBUG:
+            # Mapbox API requires an online resource to generate images against
+            return "https://imgur.com/hWAL2vF.png"
+        else:
+            return static('mapicons/logbooks.png')
+
     content_html = 'logbooks/content_entry/logbook_entry.html'
 
     def serve(self, *args, **kwargs):
@@ -160,6 +186,14 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
     show_in_menus_default = True
     parent_page_types = ['logbooks.LogbookIndexPage']
     show_title = True
+
+    @property
+    def map_marker(self):
+        if settings.DEBUG:
+            # Mapbox API requires an online resource to generate images against
+            return "https://imgur.com/hWAL2vF.png"
+        else:
+            return static('mapicons/logbooks.png')
 
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
     description = RichTextField()
@@ -290,6 +324,14 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
     icon_class = 'icon-contributor'
     show_title = True
 
+    @property
+    def map_marker(self):
+        if settings.DEBUG:
+            # Mapbox API requires an online resource to generate images against
+            return "https://imgur.com/aebDhw0.png"
+        else:
+            return static('mapicons/circle.png')
+
     class Meta:
         verbose_name = "Contributor"
 
@@ -322,16 +364,6 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
         "byline"
     ]
 
-    @property
-    def person(self):
-        if self.user:
-            return self.user
-        try:
-            person = Person.objects.get(contributor_page=self)
-            return person
-        except:
-            return None
-
     @classmethod
     def create_for_user(cls, user):
         if ContributorPage.objects.filter(user=user).exists():
@@ -352,8 +384,8 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
 
     @property
     def all_tags(self):
-        if self.person:
-            return self.person.edited_tags()
+        if self.user:
+            return self.user.edited_tags
 
     @classmethod
     def for_tag(cls, tag):

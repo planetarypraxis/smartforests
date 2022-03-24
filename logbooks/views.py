@@ -5,7 +5,6 @@ from rest_framework_gis.serializers import GeoFeatureModelSerializer, GeometrySe
 from django.urls import path
 from wagtail.core.models import Page
 from wagtail.core.models.i18n import Locale
-from logbooks.models.mixins import Person
 from smartforests.models import Tag, User
 from wagtail.api.v2.utils import BadRequestError
 
@@ -14,7 +13,8 @@ from smartforests.views import LocaleFromLanguageCode
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
 
 
-tag_panel_types = (LogbookPage, StoryPage, EpisodePage, ContributorPage,)
+content_list_types = (LogbookPage, StoryPage, EpisodePage,)
+tag_panel_types = content_list_types + (ContributorPage,)
 
 
 def pages_for_tag(tag: Tag, page_types=tag_panel_types):
@@ -41,20 +41,18 @@ def tag_panel(request, slug):
     )
 
 
-
 def metadata(request, page_id, **kwargs):
     page = get_object_or_404(Page.objects.filter(id=page_id).specific())
 
     user_id = kwargs.get('user_id', None)
-    class_name = kwargs.get('class_name', None)
     if user_id:
-        if class_name == 'User':
-          user = User.objects.get(id=user_id)
-          page.additional_contributing_users.remove(user)
-          page.excluded_contributors.add(user)
+        user = User.objects.get(id=user_id)
+        if user in page.additional_contributors.all():
+            page.additional_contributors.remove(user)
+        elif user in page.excluded_contributors.all():
+            page.excluded_contributors.remove(user)
         else:
-          person = Person.objects.get(id=user_id)
-          page.additional_contributing_people.remove(person)
+            page.excluded_contributors.add(user)
         page.save()
 
     return render(
@@ -71,6 +69,8 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
     '''
     Query the page metadata index, filtering by tag, returning a geojson FeatureCollection
     '''
+
+    page_types = (LogbookPage, LogbookEntryPage, StoryPage, EpisodePage,)
 
     class RequestSerializer(serializers.Serializer):
         tag = serializers.ListField(child=serializers.CharField(), default=())
@@ -98,9 +98,7 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
     serializer_class = ResultSerializer
 
     def get_queryset(self):
-        qs = Page.objects.live().specific().type(
-            LogbookPage, StoryPage, EpisodePage
-        )
+        qs = Page.objects.live().specific().type(*self.page_types)
         params = MapSearchViewset.RequestSerializer(data=self.request.GET)
         if not params.is_valid():
             raise BadRequestError()
