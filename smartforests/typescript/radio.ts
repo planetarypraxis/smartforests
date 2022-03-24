@@ -6,8 +6,8 @@ export function main() {
   /**
    * Control the audio player from any number of play buttons in the UI
    */
-  const playButtons = document.querySelectorAll<HTMLDivElement>(
-    "div[data-smartforests-radio-play-button]"
+  const playButtons = document.querySelectorAll<HTMLElement>(
+    "[data-smartforests-radio-play-button]"
   );
   console.log(`Found ${playButtons.length} play buttons on page.`);
 
