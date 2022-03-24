@@ -39,11 +39,7 @@ class FeaturedContent(BaseSetting):
         'logbooks.EpisodePage', blank=True, null=True, on_delete=models.DO_NOTHING)
 
     panels = [
-        FieldPanel('radio_episode')
-        # Using this instead of
-        # PageChooserPanel('radio_episode', 'logbooks.EpisodePage')
-        # because you shouldn't have to navigate through the page tree to find relevant pages.
-        # Is there a PageChooserPanel that shows a flat list of relevant pages?
+        FieldPanel('radio_episode', widget=RadioEpisodeChooser)
     ]
 
 
