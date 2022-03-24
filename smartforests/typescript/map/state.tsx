@@ -14,9 +14,9 @@ type FocusSource = "list" | "map" | "url";
 export const focusSourceAtom = atom<FocusSource | "">("url");
 
 export const viewportAtom = atom<MapViewport>({
-  latitude: 0,
+  latitude: 20,
   longitude: 0,
-  zoom: 2,
+  zoom: 1.15,
 });
 
 export const isFocused = atomFamily((FocusId: FocusID) =>

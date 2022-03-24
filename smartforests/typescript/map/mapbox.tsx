@@ -39,7 +39,7 @@ export function MapVisual() {
             pitch: 0,
           })
         }
-        minZoom={2}
+        minZoom={0}
         maxZoom={16}
       >
         <NavigationControl showCompass={false} showZoom position='top-left' />
