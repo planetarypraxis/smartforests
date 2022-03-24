@@ -215,11 +215,14 @@ class GeocodedMixin(BaseLogbooksPage):
         self.__previous_coordinates = self.coordinates
 
     def save(self, *args, **kwargs):
-        coordinates_changed = self.__previous_coordinates != self.coordinates
-        if self.geographical_location is None or coordinates_changed:
-            self.update_location_name()
-        if self.map_image is None or coordinates_changed:
-            self.update_map_thumbnail()
+        try:
+            coordinates_changed = self.__previous_coordinates != self.coordinates
+            if self.geographical_location is None or coordinates_changed:
+                self.update_location_name()
+            if self.map_image is None or coordinates_changed:
+                self.update_map_thumbnail()
+        except:
+            pass
         super().save(*args, **kwargs)
 
     def update_location_name(self):
@@ -239,6 +242,10 @@ class GeocodedMixin(BaseLogbooksPage):
         if url is None:
             return
         response = requests.get(url)
+        if response.status_code != 200:
+            print("Map generator error:", url)
+            print(response.status_code, response.content)
+            return
         image = ImageFile(BytesIO(response.content),
                           name=f'{urllib.parse.quote(url)}.png')
 
