@@ -42,7 +42,6 @@ class StoryPage(ArticlePage):
 
     @property
     def map_marker(self):
-        print(static('mapicons/stories.png'))
         if settings.DEBUG:
             # Mapbox API requires an online resource to generate images against
             return "https://imgur.com/6TwclOR.png"
