@@ -1,10 +1,11 @@
 from urllib.parse import urlparse, parse_qs
-
+from generic_chooser.views import ModelChooserViewSet, ModelChooserMixin
 from django.http.request import HttpRequest
 from django.http.response import HttpResponseNotFound
 from django.shortcuts import get_object_or_404, render
 from wagtail.core.models import Page
 from wagtail.core.models.i18n import Locale
+from logbooks.models.pages import EpisodePage
 from smartforests.models import Tag
 from commonknowledge.django.cache import django_cached
 
@@ -52,3 +53,19 @@ class LocaleFromLanguageCode:
                 return locale
             except:
                 return Locale.objects.get(language_code='en')
+
+
+class RadioEpisodeChooserViewSetMixin(ModelChooserMixin):
+    def get_unfiltered_object_list(self):
+        objects = super().get_unfiltered_object_list()
+        return list(set(o.localized for o in objects))
+
+
+class RadioEpisodeChooserViewSet(ModelChooserViewSet):
+    icon = 'audio'
+    model = EpisodePage
+    page_title = "Choose a radio episode"
+    per_page = 10
+    order_by = 'title'
+    fields = ['title', 'tags']
+    chooser_mixin_class = RadioEpisodeChooserViewSetMixin

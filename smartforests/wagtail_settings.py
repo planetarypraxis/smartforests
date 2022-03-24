@@ -5,6 +5,25 @@ from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel
 from wagtail.core.models import Page
 from wagtail.contrib.settings.models import BaseSetting, register_setting
 from django.db import models
+from django.contrib.admin.utils import quote
+from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
+from generic_chooser.widgets import AdminChooser
+from logbooks.models.pages import EpisodePage
+
+
+from smartforests.views import RadioEpisodeChooserViewSet
+
+
+class RadioEpisodeChooser(AdminChooser):
+    choose_one_text = _('Choose a radio episode')
+    choose_another_text = _('Choose another episode')
+    link_to_chosen_text = _('Edit this episode')
+    model = EpisodePage
+    choose_modal_url_name = 'radio_episode_chooser:choose'
+
+    def get_edit_item_url(self, item):
+        return reverse('wagtailsnippets:edit', args=('logbooks', 'episodepage', quote(item.pk)))
 
 
 @register_setting(icon='pick')

@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'commonknowledge.django',
     'commonknowledge.wagtail',
 
+    'generic_chooser',
     'wagtailmenus',
     'wagtail_content_import',
     "wagtail_footnotes",
