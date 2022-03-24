@@ -1,4 +1,5 @@
 from commonknowledge.django.cache import django_cached
+from home.models import HomePage
 from logbooks.models.pages import ContributorsIndexPage, LogbookIndexPage, RadioIndexPage, StoryIndexPage
 from smartforests.models import MapPage
 
@@ -18,6 +19,7 @@ class ImportantPagesMiddleware(object):
 
     def get_menu_items(self):
         return {
+            'home': HomePage.objects.first(),
             'contributors': ContributorsIndexPage.objects.first(),
             'map': MapPage.objects.first(),
             'logbooks': LogbookIndexPage.objects.first(),

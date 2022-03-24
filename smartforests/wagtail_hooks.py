@@ -1,6 +1,7 @@
 from django.utils.functional import cached_property
 from wagtail.core import hooks
 from wagtail.admin.widgets.button import ButtonWithDropdownFromHook
+from smartforests.views import RadioEpisodeChooserViewSet
 
 
 @hooks.register('construct_page_action_menu')
@@ -66,3 +67,8 @@ class ButtonWithDropdownFromHookExcludingDelete(ButtonWithDropdownFromHook):
         except:
             pass
         return buttons
+
+
+@hooks.register('register_admin_viewset')
+def register_person_chooser_viewset():
+    return RadioEpisodeChooserViewSet('radio_episode_chooser', url_prefix='radio-episode-chooser')

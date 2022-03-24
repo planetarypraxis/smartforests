@@ -9,6 +9,7 @@ class SmartForestsConfig(AppConfig):
     def ready(self):
         import smartforests.signals.models
         import smartforests.signals.analytics
+        import smartforests.wagtail_settings
 
         if settings.POSTHOG_PUBLIC_TOKEN:
             posthog.api_key = settings.POSTHOG_PUBLIC_TOKEN
