@@ -26,7 +26,7 @@ from logbooks.models.tag_cloud import TagCloud
 from django.shortcuts import redirect
 from wagtailautocomplete.edit_handlers import AutocompletePanel
 from django.utils import translation
-from django.templatetags.static import static
+from django.contrib.staticfiles.storage import staticfiles_storage
 
 
 class StoryPage(ArticlePage):
@@ -46,7 +46,7 @@ class StoryPage(ArticlePage):
             # Mapbox API requires an online resource to generate images against
             return "https://imgur.com/6TwclOR.png"
         else:
-            return static('mapicons/stories.png')
+            return staticfiles_storage.url('mapicons/stories.png')
 
     show_in_menus_default = True
     parent_page_types = ['logbooks.StoryIndexPage']
@@ -103,7 +103,7 @@ class EpisodePage(ArticlePage):
             # Mapbox API requires an online resource to generate images against
             return "https://imgur.com/N0g8oFn.png"
         else:
-            return static('mapicons/radio.png')
+            return staticfiles_storage.url('mapicons/radio.png')
 
     image = ForeignKey(CmsImage, on_delete=models.SET_NULL,
                        null=True, blank=True)
@@ -153,7 +153,7 @@ class LogbookEntryPage(ArticlePage):
             # Mapbox API requires an online resource to generate images against
             return "https://imgur.com/hWAL2vF.png"
         else:
-            return static('mapicons/logbooks.png')
+            return staticfiles_storage.url('mapicons/logbooks.png')
 
     content_html = 'logbooks/content_entry/logbook_entry.html'
 
@@ -192,7 +192,7 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
             # Mapbox API requires an online resource to generate images against
             return "https://imgur.com/hWAL2vF.png"
         else:
-            return static('mapicons/logbooks.png')
+            return staticfiles_storage.url('mapicons/logbooks.png')
 
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
     description = RichTextField()
@@ -329,7 +329,7 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
             # Mapbox API requires an online resource to generate images against
             return "https://imgur.com/aebDhw0.png"
         else:
-            return static('mapicons/circle.png')
+            return staticfiles_storage.url('mapicons/circle.png')
 
     class Meta:
         verbose_name = "Contributor"
