@@ -15,7 +15,7 @@ class HomePage(ChildListMixin, SeoMetadataMixin, Page):
 
     @property
     def tag_cloud(self):
-        return TagCloud.get_start()
+        return TagCloud.get_start(limit=30)
 
 
 class InformationPage(ArticleSeoMixin, Page):

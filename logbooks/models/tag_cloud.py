@@ -1,5 +1,5 @@
 from math import ceil, floor
-from random import random
+from random import shuffle
 from typing import DefaultDict
 from dataclasses import dataclass
 
@@ -98,7 +98,9 @@ class TagCloud(models.Model):
             .order_by('-score')\
             .filter(score__gt=1)[:clouds]
 
-        return TagCloud.get_related([cloud.tag for cloud in clouds], limit=limit)
+        cloud_tags = [cloud.tag for cloud in clouds]
+        shuffle(cloud_tags)
+        return TagCloud.get_related(cloud_tags[:25], limit=limit)
 
     @staticmethod
     def get_related(tags, limit=100):
