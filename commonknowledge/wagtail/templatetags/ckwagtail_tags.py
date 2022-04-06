@@ -35,12 +35,12 @@ def next_page_path(context):
     params = request.GET.dict()
 
     # Return the next page
-    params['page'] = safe_to_int(params.get('page', 3), 1) + 1
+    params['page'] = safe_to_int(params.get('page', 1), 1) + 1
 
     # This informs our ChildListMixin not to return any data after the last page.
     params['empty'] = '1'
 
-    return mark_safe(parse.urlencode(params))
+    return mark_safe("?" + parse.urlencode(params))
 
 
 @register.simple_tag(takes_context=True)
