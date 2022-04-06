@@ -57,3 +57,25 @@ python manage.py seed
 ```
 
 Run `python manage.py seed --help` or check [source file](./smartforests/management/commands/seed.py) for options.
+
+### Regenerating tag clouds and re-indexing logbooks
+
+Producing tag clouds is a relatively computationally intensive operation, so we do it only occasionally with a Django management command.
+
+```
+python manage.py reindex_logbooks
+```
+
+This command:
+- Saves all pages in order to update their location.
+- Regenerates thumbnails for logbooks.
+- Generates tag clouds.
+- Creates a contributor page for each user.
+
+You should run this command if you modify the save behaviour of models, or change the tag cloud generation algorithm.
+
+### Background tasks to regenerate tag clouds
+
+Tag clouds are also generated with a [background task](https://github.com/planetarypraxis/smartforests/blob/main/logbooks/tasks.py) using [django-background-tasks](https://django-background-tasks.readthedocs.io/en/latest/). This task is run 15 seconds [after a tag is saved](https://github.com/planetarypraxis/smartforests/blob/f6efb6a1ed87433df9d3d4c15e60afef34a5f310/logbooks/models/snippets.py#L21-L25). 
+
+Reindexing all tags takes around 30 minutes.
