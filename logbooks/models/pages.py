@@ -18,7 +18,7 @@ from commonknowledge.wagtail.helpers import get_children_of_type
 from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
 from wagtail.api import APIField
-from smartforests.util import flatten_list, group_by_title
+from smartforests.util import flatten_list, group_by_title, static_file_absolute_url
 from logbooks.models.mixins import ArticlePage, ArticleSeoMixin, BaseLogbooksPage, ContributorMixin, GeocodedMixin, IndexPage, SeoMetadataMixin, ThumbnailMixin, SidebarRenderableMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
@@ -26,7 +26,7 @@ from logbooks.models.tag_cloud import TagCloud
 from django.shortcuts import redirect
 from wagtailautocomplete.edit_handlers import AutocompletePanel
 from django.utils import translation
-from django.contrib.staticfiles.storage import staticfiles_storage
+
 
 
 class StoryPage(ArticlePage):
@@ -46,7 +46,7 @@ class StoryPage(ArticlePage):
             # Mapbox API requires an online resource to generate images against
             return "https://imgur.com/6TwclOR.png"
         else:
-            return staticfiles_storage.url('img/mapicons/stories.png')
+            return static_file_absolute_url('img/mapicons/stories.png')
 
     show_in_menus_default = True
     parent_page_types = ['logbooks.StoryIndexPage']
@@ -103,7 +103,7 @@ class EpisodePage(ArticlePage):
             # Mapbox API requires an online resource to generate images against
             return "https://imgur.com/N0g8oFn.png"
         else:
-            return staticfiles_storage.url('img/mapicons/radio.png')
+            return static_file_absolute_url('img/mapicons/radio.png')
 
     image = ForeignKey(CmsImage, on_delete=models.SET_NULL,
                        null=True, blank=True)
@@ -153,7 +153,7 @@ class LogbookEntryPage(ArticlePage):
             # Mapbox API requires an online resource to generate images against
             return "https://imgur.com/hWAL2vF.png"
         else:
-            return staticfiles_storage.url('img/mapicons/logbooks.png')
+            return static_file_absolute_url('img/mapicons/logbooks.png')
 
     content_html = 'logbooks/content_entry/logbook_entry.html'
 
@@ -192,7 +192,7 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
             # Mapbox API requires an online resource to generate images against
             return "https://imgur.com/hWAL2vF.png"
         else:
-            return staticfiles_storage.url('img/mapicons/logbooks.png')
+            return static_file_absolute_url('img/mapicons/logbooks.png')
 
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
     description = RichTextField()
@@ -329,7 +329,7 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
             # Mapbox API requires an online resource to generate images against
             return "https://imgur.com/aebDhw0.png"
         else:
-            return staticfiles_storage.url('img/mapicons/circle.png')
+            return static_file_absolute_url('img/mapicons/circle.png')
 
     class Meta:
         verbose_name = "Contributor"
