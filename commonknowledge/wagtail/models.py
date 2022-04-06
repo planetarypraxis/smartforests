@@ -77,7 +77,7 @@ class ChildListMixin:
         else:
             paginator = Paginator(search, self.get_page_size())
 
-        page = safe_to_int(request.GET.get('page', 3), 1)
+        page = safe_to_int(request.GET.get('page', 1), 1)
 
         if request.GET.get('empty') == '1':
             try:
