@@ -214,12 +214,16 @@ class GeocodedMixin(BaseLogbooksPage):
         # For comparison purposes
         self.__previous_coordinates = self.coordinates
 
+    @property
+    def has_coordinates(self):
+        return self.latitude is not None
+
     def save(self, *args, **kwargs):
         try:
             coordinates_changed = self.__previous_coordinates != self.coordinates
-            if self.geographical_location is None or coordinates_changed:
+            if self.has_coordinates is True and self.geographical_location is None:
                 self.update_location_name()
-            if self.map_image is None or coordinates_changed:
+            if self.has_coordinates is True and (self.map_image is None or coordinates_changed):
                 self.update_map_thumbnail()
         except:
             pass
