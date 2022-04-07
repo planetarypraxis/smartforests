@@ -4,8 +4,11 @@
   "[html]": {
     "editor.formatOnSave": false
   },
+  "[django-html]": {
+    "editor.formatOnSave": false
+  },
   "python.autoComplete.extraPaths": [],
   "python.linting.enabled": true,
   "python.analysis.extraPaths": [],
-  "html-css-class-completion.includeGlobPattern": "**/*.{scss,css,html}"
+  "html-css-class-completion.includeGlobPattern": "**/*.{scss,css,html}",
 }
