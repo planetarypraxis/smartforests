@@ -147,6 +147,7 @@ class User(AbstractUser):
         from logbooks.views import content_list_types
         edited_pages = Page.objects.type(content_list_types)\
             .filter(abstract_page_query_filter(ContributorMixin, {'contributors': self}))\
+            .distinct()\
             .live()\
             .specific()
         return set(edited_pages)
@@ -157,7 +158,7 @@ class User(AbstractUser):
 
     @property
     def edited_tags(self):
-        return Tag.objects.filter(logbooks_atlastag_items__content_object__in=self.edited_content_pages)
+        return Tag.objects.filter(logbooks_atlastag_items__content_object__in=self.edited_content_pages).distinct()
 
 
 class CmsImage(AbstractImage):
