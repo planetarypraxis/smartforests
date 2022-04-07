@@ -13,10 +13,12 @@ class ImportantPagesMiddleware(object):
 
     def process_template_response(self, request, response):
         if response.context_data:
-            response.context_data['important_pages'] = self.get_menu_items()
+            response.context_data['important_pages'] = ImportantPagesMiddleware.get_menu_items(
+            )
 
         return response
 
+    @classmethod
     def get_menu_items(self):
         return {
             'home': HomePage.objects.first(),
