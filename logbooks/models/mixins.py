@@ -233,7 +233,7 @@ class GeocodedMixin(BaseLogbooksPage):
         if self.coordinates is not None:
             location_data = get_coordinates_data(
                 self.coordinates,
-                zoom=11,
+                zoom=5,
                 username='jennifer@planetarypraxis.org'
             )
             self.geographical_location = location_data.get(
