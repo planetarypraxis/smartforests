@@ -14,7 +14,7 @@
     <h4 class="mb-0">Contributors</h4>
     {% for user in page.contributors.all %}
       <a class='d-block' href='{{ user.contributor_page.localized.link_url }}' data-turbo-frame="_top">
-        {% include 'logbooks/username.html' with user=user %}
+        {{ user }}
       </a>
       {% if interactive %}
         <a href="/_metadata/{{page.id}}/toggle_user/{{user.id}}" data-turbo-frame="_self">(Hide)</a>
@@ -27,7 +27,7 @@
     <h4 class="mb-0">(Hidden Contributors)</h4>
     {% for user in page.excluded_contributors.all %}
       <s><span class='d-block'>
-        {% include 'logbooks/username.html' with user=user %}
+        {{ user }}
       </span></s>
       <a href="/_metadata/{{page.id}}/toggle_user/{{user.id}}" data-turbo-frame="_self">(Show)</a>
     {% endfor %}
