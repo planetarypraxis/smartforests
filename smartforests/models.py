@@ -152,6 +152,10 @@ class User(AbstractUser):
         return set(edited_pages)
 
     @property
+    def edited_content_pages_localized(self):
+        return list(set(p.localized for p in self.edited_content_pages))
+
+    @property
     def edited_tags(self):
         return Tag.objects.filter(logbooks_atlastag_items__content_object__in=self.edited_content_pages)
 
