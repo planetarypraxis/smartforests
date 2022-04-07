@@ -6,20 +6,29 @@
       <section class='caption text-grey fw-lighter'>
         <div class="d-flex flex-column flex-sm-row">
           <div class="me-2">
-            Added by <a href='{{ self.owner.contributor_pages.first.localized.link_url }}'>{% include 'logbooks/username.html' with user=self.owner %}</a>
+            {% if self.contributors.all|length > 0 %}
+            <div>
+            By {% for user in self.contributors.all %}
+              <a href='{{ user.contributor_page.localized.link_url }}' data-turbo-frame="_top" class="mr-2 d-inline-block">
+                {{ user }}
+              </a>
+              {% if forloop.last is not True %} / {% endif %}
+            {% endfor %}
+            </div>
+            {% endif %}
+            <time class="opacity-8" datetime="{{ self.first_published_at|date:"Y-m-d" }}">
+              {{ self.first_published_at|date:"d E Y" }}
+            </time>
+            {% if self.geographical_location %}
+              <div>{{ self.geographical_location }}</div>
+            {% endif %}
           </div>
-          <time class="opacity-8" datetime="{{ self.first_published_at|date:"Y-m-d" }}">
-            {{ self.first_published_at|date:"d E Y" }}
-          </time>
           {% if user.is_authenticated %}
-            <a class="ms-auto align-self-end text-faded-green" href="{% url 'wagtailadmin_pages:edit' self.id %}" target="_parent">
+            <a class="ms-auto align-self-start text-faded-green" href="{% url 'wagtailadmin_pages:edit' self.id %}" target="_parent">
               Edit
             </a>
           {% endif %}
         </div>
-        {% if self.geographical_location %}
-          <div>{{ self.geographical_location }}</div>
-        {% endif %}
       </section>
     </header>
     <h3 class='fs-4 fw-bolder'>{{ self.title }}</h3>
