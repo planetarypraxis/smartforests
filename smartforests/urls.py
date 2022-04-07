@@ -27,10 +27,8 @@ urlpatterns = [
     re_path(r'^admin/autocomplete/', include(autocomplete_admin_urls)),
     path('admin/', include(wagtailadmin_urls)),
     path('documents/', include(wagtaildocs_urls)),
-
-    path('search/', search_views.SearchView.as_view(), name='search'),
     path("footnotes/", include(footnotes_urls)),
-    path('_frame/<page_id>/', sf_views.frame_content),
+    path('search/', search_views.SearchView.as_view(), name='search'),
     path('_filters/', sf_views.filters_frame),
     path('favicon.ico',
          RedirectView.as_view(url='/static/img/favicon.png', permanent=True)),
@@ -62,6 +60,7 @@ urlpatterns += [
 ]
 
 urlpatterns += i18n_patterns(
+    path('_frame/<page_id>/', sf_views.frame_content),
     path('_tags/<slug>/', logbook_views.tag_panel),
     path('_metadata/<page_id>/', logbook_views.metadata),
     path('_metadata/<page_id>/toggle_user/<user_id>/', logbook_views.metadata),

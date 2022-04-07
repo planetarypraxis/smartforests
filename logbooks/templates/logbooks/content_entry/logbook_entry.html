@@ -49,7 +49,7 @@
     </section>
     <footer class='col'>
       {% for tag in self.all_tags %}
-        {% include 'logbooks/include/tag_label.html' with tag=tag tag_background_class='bg-off-white' %}
+        {% include 'logbooks/include/tag_label.html' with tag=tag tag_background_class='bg-off-white' LANGUAGE_CODE=LANGUAGE_CODE %}
       {% endfor %}
     </footer>
   </div>
