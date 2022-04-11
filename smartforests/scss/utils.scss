@@ -157,6 +157,12 @@
 
 .w-popover {
   width: 340px !important;
+  overflow-y: auto;
+  max-height: 380px;
+
+  & .mapboxgl-popup-content {
+    max-width: 100% !important;
+  }
 }
 
 .bordered-child {
