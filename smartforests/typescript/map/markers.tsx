@@ -50,7 +50,7 @@ export const ClusterMarker: React.FC<{
           className={`${size > 30 ? "heading-medium" : ""
             } p-1 font-monospace center-screen`}
         >
-          {feature.properties.point_count}
+          {feature.properties.point_count_abbreviated}
         </div>
       </div>
     </Marker>
