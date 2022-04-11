@@ -23,8 +23,10 @@ export const ClusterMarker: React.FC<{
     Math.max(20, Math.min(Math.log(feature.properties.point_count), 75))
   );
   const [_, updateViewport] = useAtom(viewportAtom);
-
   const [longitude, latitude] = feature.geometry.coordinates;
+  const [isFocusing, setIsFocusing] = useFocusContext(`cluster-${feature.properties.cluster_id}`, "cluster");
+  const [offcanvas, sidebarEl] = useOffcanvas("sidepanel-offcanvas");
+  const sidebarFrame = useAtomValue(frameAtomFamily("#sidepanel-turboframe"));
 
   return (
     <Marker
@@ -47,11 +49,40 @@ export const ClusterMarker: React.FC<{
         }}
       >
         <div
-          className={`${size > 30 ? "heading-medium" : ""
-            } p-1 font-monospace center-screen`}
+          className={`${size > 30 ? "heading-medium" : ""} p-1 font-monospace center-screen`}
+          onMouseOver={() => setIsFocusing(true, "map")}
         >
-          {feature.properties.point_count_abbreviated}
+          {feature.properties.point_count}
         </div>
+        {isFocusing && feature.properties?.pages?.length ? (
+          <Popup
+            className="mapbox-invisible-popup w-popover elevated bg-white"
+            longitude={longitude}
+            latitude={latitude}
+            offset={20}
+            onClose={() => setIsFocusing(false, "map")}
+          >
+            <div className='caption text-dark-grey p-2 cursor-pointer hover-bg-light-grey' onClick={() => setIsFocusing(false, "map")}>
+              Close
+            </div>
+            {feature.properties.pages.map(properties =>
+              <a
+                className='text-decoration-none bordered-child'
+                data-turbo-frame="sidepanel-turboframe"
+                href={pageToFrameURL(properties)}
+                onClick={() => {
+                  // Remove children from frame before showing to prevent flash of stale content
+                  if (sidebarEl.style.visibility !== "visible") {
+                    Array.from(sidebarFrame.el.children).forEach((x) => x.remove());
+                  }
+                  offcanvas.show();
+                }}
+              >
+                <AtlasPageCard key={feature.id} properties={properties} elevated={false} />
+              </a>
+            )}
+          </Popup>
+        ) : null}
       </div>
     </Marker>
   );
@@ -61,7 +92,7 @@ export const AtlasPageMarker: React.FC<{
   feature: Feature<Point, SmartForest.MapItem>;
 }> = memo(({ feature }) => {
   const { properties, geometry } = feature;
-  const [isFocusing, setIsFocusing] = useFocusContext(properties.id, "");
+  const [isFocusing, setIsFocusing] = useFocusContext(properties.id, "map");
   const [offcanvas, sidebarEl] = useOffcanvas("sidepanel-offcanvas");
 
   const frameUrl = pageToFrameURL(properties);
@@ -102,23 +133,24 @@ export const AtlasPageMarker: React.FC<{
           longitude={geometry.coordinates[0]}
           latitude={geometry.coordinates[1]}
           offset={20}
+          onClose={() => setIsFocusing(false, "map")}
         >
-          <AtlasPageCard feature={feature} />
+          <AtlasPageCard properties={feature.properties} />
         </Popup>
       )}
     </Fragment>
   );
 });
 
-function AtlasPageCard({
-  feature,
+export function AtlasPageCard({
+  properties,
+  elevated = true
 }: {
-  feature: Feature<Point, SmartForest.MapItem>;
+  properties: Feature<Point, SmartForest.MapItem>['properties'];
+  elevated?: boolean
 }) {
-  const { properties } = feature;
-
   return (
-    <div className="p-2 w-popover bg-white elevated">
+    <div className={`p-2 w-popover bg-white ${elevated ? "elevated" : ""}`}>
       <div className="caption text-dark-grey">{properties.page_type}</div>
 
       <h5 id="offcanvasMapTitle" className="text-dark-green fw-bold mt-1 mb-0">

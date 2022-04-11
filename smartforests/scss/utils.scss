@@ -152,10 +152,20 @@
 .elevated {
   box-shadow: 0px 0px 20px rgba(2, 99, 2, 0.2);
   border-radius: 3px;
+  overflow: hidden;
 }
 
 .w-popover {
-  width: 340px;
+  width: 340px !important;
+}
+
+.bordered-child {
+  border-top: 1px solid $light-grey;
+  display: block;
+  width: auto;
+  &:first-child {
+    border: none;
+  }
 }
 
 .hoverable {
