@@ -54,7 +54,7 @@ export const ClusterMarker: React.FC<{
         >
           {feature.properties.point_count}
         </div>
-        {isFocusing && feature.properties?.pages?.length ? (
+        {isFocusing && feature.properties?.features?.length ? (
           <Popup
             className="mapbox-invisible-popup w-popover elevated bg-white"
             longitude={longitude}
@@ -65,7 +65,7 @@ export const ClusterMarker: React.FC<{
             <div className='caption text-dark-grey p-2 cursor-pointer hover-bg-light-grey' onClick={() => setIsFocusing(false, "map")}>
               Close
             </div>
-            {feature.properties.pages.map(properties =>
+            {feature.properties.features.map(properties =>
               <a
                 className='text-decoration-none bordered-child'
                 data-turbo-frame="sidepanel-turboframe"
