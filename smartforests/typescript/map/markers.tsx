@@ -119,7 +119,7 @@ function AtlasPageCard({
 
   return (
     <div className="p-2 w-popover bg-white elevated">
-      <div className="caption text-dark-grey">{properties.title}</div>
+      <div className="caption text-dark-grey">{properties.page_type}</div>
 
       <h5 id="offcanvasMapTitle" className="text-dark-green fw-bold mt-1 mb-0">
         <i

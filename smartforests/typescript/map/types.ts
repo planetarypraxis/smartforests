@@ -30,6 +30,7 @@ export namespace SmartForest {
     link_url: string;
     title: string;
     icon_class: string;
+    page_type: string;
     geographical_location: string;
     tags: string[];
   }

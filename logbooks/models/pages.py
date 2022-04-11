@@ -91,7 +91,8 @@ class EpisodePage(ArticlePage):
     '''
 
     class Meta:
-        verbose_name_plural = "Radio"
+        verbose_name = "Radio Episode"
+        verbose_name_plural = "Radio Episodes"
 
     show_in_menus_default = True
     parent_page_types = ['logbooks.RadioIndexPage']
@@ -333,6 +334,7 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
 
     class Meta:
         verbose_name = "Contributor"
+        verbose_name_plural = "Contributors"
 
     user = models.ForeignKey(
         User,

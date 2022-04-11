@@ -81,13 +81,14 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
             model = LogbookPage
             geo_field = 'coordinates'
             fields = ('id', 'link_url', 'title', 'icon_class',
-                      'geographical_location', 'tags')
+                      'geographical_location', 'tags', 'page_type', )
 
         coordinates = GeometrySerializerMethodField()
         id = serializers.IntegerField()
         title = serializers.CharField()
         icon_class = serializers.CharField()
         link_url = serializers.CharField()
+        page_type = serializers.CharField()
         geographical_location = serializers.CharField()
         tags = serializers.StringRelatedField(many=True)
 

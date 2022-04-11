@@ -77,6 +77,10 @@ class BaseLogbooksPage(Page):
         return self._meta.verbose_name
 
     @property
+    def page_type(self):
+        return self._meta.verbose_name
+
+    @property
     def link_url(self):
         '''
         Wrapper for url allowing us to link to a page embedded in a parent (as with logbook entries) without
