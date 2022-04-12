@@ -67,7 +67,7 @@ export const ClusterMarker: React.FC<{
             </div>
             {feature.properties.features.map(properties =>
               <a
-                className='text-decoration-none bordered-child'
+                className='outline-none text-decoration-none bordered-child'
                 data-turbo-frame="sidepanel-turboframe"
                 href={pageToFrameURL(properties)}
                 onClick={() => {
