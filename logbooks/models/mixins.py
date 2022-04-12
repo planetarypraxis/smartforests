@@ -538,4 +538,4 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
 
     @property
     def all_tags(self):
-        return list(self.tags.all())
+        return list(sorted(list(self.tags.all()), key=lambda tag: tag.name))

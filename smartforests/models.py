@@ -136,10 +136,10 @@ class User(AbstractUser):
 
         tagged_pages = flatten_list(items for t, items in tagged_pages_groups)
 
-        contributors = set(flatten_list(
-            page.contributors.all() for page in tagged_pages if hasattr(page, 'contributors')))
+        contributors = set(flatten_list(page.contributors.all()
+                           for page in tagged_pages if hasattr(page, 'contributors')))
 
-        return list(contributors)
+        return list(sorted(contributors, key=lambda person: str(person)))
 
     @property
     def edited_content_pages(self):
@@ -149,16 +149,17 @@ class User(AbstractUser):
             .filter(abstract_page_query_filter(ContributorMixin, {'contributors': self}))\
             .distinct()\
             .live()\
-            .specific()
+            .specific()\
+            .order_by('title')
         return set(edited_pages)
 
     @property
     def edited_content_pages_localized(self):
-        return list(set(p.localized for p in self.edited_content_pages))
+        return list(sorted(list(set(p.localized for p in self.edited_content_pages)), key=lambda p: p.title))
 
     @property
     def edited_tags(self):
-        return Tag.objects.filter(logbooks_atlastag_items__content_object__in=self.edited_content_pages).distinct()
+        return Tag.objects.filter(logbooks_atlastag_items__content_object__in=self.edited_content_pages).distinct().order_by('name')
 
 
 class CmsImage(AbstractImage):

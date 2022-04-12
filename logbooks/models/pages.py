@@ -260,9 +260,9 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
 
     @property
     def all_tags(self):
-        return list(set(
+        return list(sorted(list(set(
             self.entry_tags + list(self.tags.all())
-        ))
+        )), key=lambda tag: tag.name))
 
     @property
     def preview_text(self):

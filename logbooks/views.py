@@ -22,7 +22,8 @@ def pages_for_tag(tag_or_tags: Union[Tag, List[Tag]], page_types=tag_panel_types
     return [
         (
             page_type,
-            set(map(lambda p: p.localized, page_type.for_tag(tag_or_tags)))
+            list(sorted(set(map(lambda p: p.localized, page_type.for_tag(
+                tag_or_tags))), key=lambda p: p.title))
         )
         for page_type
         in page_types
