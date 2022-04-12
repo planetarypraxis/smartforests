@@ -1,8 +1,6 @@
 import webcola from "https://cdn.skypack.dev/webcola";
 import * as d3 from "https://cdn.skypack.dev/d3@7";
-import * as geo from "https://cdn.skypack.dev/geometric";
 import * as chroma from "https://cdn.skypack.dev/chroma-js";
-import concaveman from "https://cdn.skypack.dev/concaveman";
 import debounce from "https://cdn.skypack.dev/lodash.debounce";
 import uniqBy from "https://cdn.skypack.dev/lodash.uniqby";
 import * as StackBlur from "https://cdn.skypack.dev/stackblur-canvas@2.5"
