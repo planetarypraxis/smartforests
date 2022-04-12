@@ -1,3 +1,4 @@
+from typing import List, Union
 from django.shortcuts import get_object_or_404, render
 from rest_framework import serializers, viewsets
 from rest_framework.response import Response
@@ -17,11 +18,11 @@ content_list_types = (LogbookPage, StoryPage, EpisodePage,)
 tag_panel_types = content_list_types + (ContributorPage,)
 
 
-def pages_for_tag(tag: Tag, page_types=tag_panel_types):
+def pages_for_tag(tag_or_tags: Union[Tag, List[Tag]], page_types=tag_panel_types):
     return [
         (
             page_type,
-            set(map(lambda p: p.localized, page_type.for_tag(tag)))
+            set(map(lambda p: p.localized, page_type.for_tag(tag_or_tags)))
         )
         for page_type
         in page_types
@@ -99,7 +100,6 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
     serializer_class = ResultSerializer
 
     def get_queryset(self):
-        qs = Page.objects.live().specific().type(*self.page_types)
         params = MapSearchViewset.RequestSerializer(data=self.request.GET)
         if not params.is_valid():
             raise BadRequestError()
@@ -108,12 +108,13 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
 
         if tag:
             tag_objects = tuple(x.id for x in Tag.objects.filter(slug__in=tag))
+            tagged_pages = []
             if tag_objects:
-                qs = qs.filter(tagged_items__tag_id__in=tag_objects)
-            else:
-                qs = qs.none()
+                # Get pages tagged with X
+                for PageClass in self.page_types:
+                    tagged_pages += PageClass.for_tag(tag_objects)
 
-        return qs
+        return tagged_pages
 
     @extend_schema(parameters=[RequestSerializer])
     def list(self, request):
