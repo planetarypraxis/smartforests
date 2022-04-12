@@ -125,12 +125,12 @@ class User(AbstractUser):
         return self.contributor_pages.first()
 
     @classmethod
-    def for_tag(cls, tag):
+    def for_tag(cls, tag_or_tags):
         from smartforests.util import flatten_list
         from logbooks.views import pages_for_tag, content_list_types
 
         tagged_pages_groups = pages_for_tag(
-            tag,
+            tag_or_tags,
             content_list_types
         )
 
