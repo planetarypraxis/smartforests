@@ -56,7 +56,7 @@ export const ClusterMarker: React.FC<{
         </div>
         {isFocusing && feature.properties?.features?.length ? (
           <Popup
-            className="mapbox-invisible-popup w-popover elevated bg-white"
+            className="mapbox-invisible-popup w-popover shadow-elevated br-3 bg-white"
             longitude={longitude}
             latitude={latitude}
             offset={20}
@@ -150,7 +150,7 @@ export function AtlasPageCard({
   elevated?: boolean
 }) {
   return (
-    <div className={`p-2 w-popover bg-white ${elevated ? "elevated" : ""}`}>
+    <div className={`p-2 w-popover bg-white ${elevated ? "shadow-elevated br-3" : ""}`}>
       <div className="caption text-dark-grey">{properties.page_type}</div>
 
       <h5 id="offcanvasMapTitle" className="text-dark-green fw-bold mt-1 mb-0">

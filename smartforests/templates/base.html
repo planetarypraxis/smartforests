@@ -54,7 +54,7 @@
         {% endwith %}
 
         <div
-        class="offcanvas offcanvas-end flex flex-column h-100 overflow-auto"
+        class="offcanvas offcanvas-end d-flex flex-column h-100 overflow-auto"
         tabindex="-1"
         id="tagpanel-offcanvas"
         aria-labelledby="tagpanel-title"
@@ -62,7 +62,7 @@
         data-bs-backdrop="false"
         data-turbo-permanent
         >
-            <turbo-frame id="tagpanel-turboframe" target="_top" {% block tagpanel_config %}{% endblock %}>
+            <turbo-frame id="tagpanel-turboframe" target="_top" {% block tagpanel_config %}{% endblock %} class="d-flex flex-column h-100">
               <!-- Default HTML -->
               <div class="offcanvas-header text-dark-green">
                 <div>

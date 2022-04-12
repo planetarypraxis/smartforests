@@ -149,10 +149,12 @@
   }
 }
 
-.elevated {
+.shadow-elevated {
   box-shadow: 0px 0px 20px rgba(2, 99, 2, 0.2);
+}
+
+.br-3 {
   border-radius: 3px;
-  // overflow: hidden;
 }
 
 .w-popover {

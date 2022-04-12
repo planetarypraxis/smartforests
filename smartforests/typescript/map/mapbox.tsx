@@ -48,7 +48,7 @@ export function MapVisual() {
         <AtlasPageFeatureLayer size={size} viewport={viewport} />
       </MapGL>
       {!!params['filter'] && (
-        <a href={window.location.pathname} className='d-none d-sm-block font-monospace bg-white selected-tag fs-7'>
+        <a href={window.location.pathname} className='d-none d-sm-block font-monospace bg-white selected-tag fs-7 shadow-elevated'>
           {params['filter']}
           <button className="icon-btn" aria-label="Close">
             {/* @ts-ignore */}
