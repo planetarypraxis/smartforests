@@ -18,7 +18,7 @@ from commonknowledge.wagtail.helpers import get_children_of_type
 from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
 from wagtail.api import APIField
-from smartforests.util import flatten_list, group_by_title, static_file_absolute_url
+from smartforests.util import ensure_list, flatten_list, group_by_title, static_file_absolute_url
 from logbooks.models.mixins import ArticlePage, ArticleSeoMixin, BaseLogbooksPage, ContributorMixin, GeocodedMixin, IndexPage, SeoMetadataMixin, ThumbnailMixin, SidebarRenderableMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
@@ -26,7 +26,6 @@ from logbooks.models.tag_cloud import TagCloud
 from django.shortcuts import redirect
 from wagtailautocomplete.edit_handlers import AutocompletePanel
 from django.utils import translation
-
 
 
 class StoryPage(ArticlePage):
@@ -215,7 +214,7 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
     ] + ContributorMixin.api_fields + GeocodedMixin.api_fields
 
     @classmethod
-    def for_tag(cls, tag):
+    def for_tag(cls, tag_or_tags):
         '''
         Return all live pages matching the tag.
 
@@ -223,9 +222,9 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
         to be all logbooks that either have the tag themselves or who have an entry with the tag.
         '''
 
-        logbooks = set(super().for_tag(tag))
+        logbooks = set(super().for_tag(tag_or_tags))
         logbook_entry_logbooks = set(entry.get_parent().specific
-                                     for entry in LogbookEntryPage.for_tag(tag))
+                                     for entry in LogbookEntryPage.for_tag(tag_or_tags))
 
         return logbooks.union(logbook_entry_logbooks)
 
@@ -389,9 +388,9 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
             return self.user.edited_tags
 
     @classmethod
-    def for_tag(cls, tag):
+    def for_tag(cls, tag_or_tags):
         return cls.objects.live().filter(
-            user__in=User.for_tag(tag)
+            user__in=User.for_tag(tag_or_tags)
         )
 
     @property

@@ -33,5 +33,11 @@ def flatten_list(the_list):
     return [item for sublist in the_list for item in sublist]
 
 
+def ensure_list(list_or_el):
+    if isinstance(list_or_el, list):
+        return list_or_el
+    return [list_or_el, ]
+
+
 def static_file_absolute_url(filename: str) -> str:
     return urljoin(settings.BASE_URL, staticfiles_storage.url(filename))

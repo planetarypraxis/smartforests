@@ -36,7 +36,7 @@ from django.contrib.gis.db import models as geo
 from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin
 from mapwidgets.widgets import MapboxPointFieldWidget
 from smartforests.models import CmsImage, Tag, User
-from smartforests.util import group_by_title
+from smartforests.util import ensure_list, group_by_title
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from wagtail.snippets.models import register_snippet
 from wagtailseo.models import SeoMixin, SeoType, TwitterCard
@@ -57,12 +57,12 @@ class BaseLogbooksPage(Page):
     show_title = False
 
     @classmethod
-    def for_tag(cls, tag):
+    def for_tag(cls, tag_or_tags):
         '''
         Return all live pages matching the tag
         '''
         return cls.objects.filter(
-            tagged_items__tag=tag
+            tagged_items__tag__in=ensure_list(tag_or_tags)
         ).live()
 
     @classmethod
