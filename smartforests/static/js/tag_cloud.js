@@ -293,9 +293,9 @@ const init = () => {
     // * Tags are all within the bounds of the tag area.
     // * Tags do not overlap.
     const layout = () => {
-      const PADDING = 16;
-      const width = el.clientWidth - 2 * PADDING;
-      const height = el.clientHeight - 2 * PADDING;
+      const PADDING = 75;
+      const width = Math.max(PADDING, el.clientWidth - (2 * PADDING));
+      const height = Math.max(PADDING, el.clientHeight - (2 * PADDING));
 
       const container = d3.select(el);
 
