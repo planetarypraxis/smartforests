@@ -18,6 +18,14 @@ function onClickSidepanelLink(e) {
     e.target.dataset.smartforestsSidepanelOpen
   );
   if (sidepanel) {
+    // Close all other sidepanels
+    const sidepanels = Array.from(document.querySelectorAll(".offcanvas"))
+    for (const sidepanel of sidepanels) {
+      const instance = bootstrap.Offcanvas.getInstance(sidepanel) || new bootstrap.Offcanvas(sidepanel);
+      instance.hide()
+    }
+
+    // Then open this `sidepanel`
     const instance =
       bootstrap.Offcanvas.getInstance(sidepanel) ||
       new bootstrap.Offcanvas(sidepanel);
