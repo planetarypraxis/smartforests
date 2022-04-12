@@ -152,16 +152,16 @@
 .elevated {
   box-shadow: 0px 0px 20px rgba(2, 99, 2, 0.2);
   border-radius: 3px;
-  overflow: hidden;
+  // overflow: hidden;
 }
 
 .w-popover {
   width: 340px !important;
-  overflow-y: auto;
   max-height: 380px;
 
   & .mapboxgl-popup-content {
     max-width: 100% !important;
+    overflow-y: auto;
   }
 }
 
