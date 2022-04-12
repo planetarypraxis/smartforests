@@ -14,21 +14,23 @@ const init = () => {
 };
 
 function onClickSidepanelLink(e) {
-  const sidepanel = document.querySelector(
+  const sidepanelToOpen = document.querySelector(
     e.target.dataset.smartforestsSidepanelOpen
   );
-  if (sidepanel) {
+  if (sidepanelToOpen) {
     // Close all other sidepanels
     const sidepanels = Array.from(document.querySelectorAll(".offcanvas"))
     for (const sidepanel of sidepanels) {
-      const instance = bootstrap.Offcanvas.getInstance(sidepanel) || new bootstrap.Offcanvas(sidepanel);
-      instance.hide()
+      if (sidepanelToOpen.id !== sidepanel.id) {
+        const instance = bootstrap.Offcanvas.getInstance(sidepanel) || new bootstrap.Offcanvas(sidepanel);
+        instance.hide()
+      }
     }
 
     // Then open this `sidepanel`
     const instance =
-      bootstrap.Offcanvas.getInstance(sidepanel) ||
-      new bootstrap.Offcanvas(sidepanel);
+      bootstrap.Offcanvas.getInstance(sidepanelToOpen) ||
+      new bootstrap.Offcanvas(sidepanelToOpen);
     instance.show();
   }
 }
