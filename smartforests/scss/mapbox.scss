@@ -1,6 +1,20 @@
+@keyframes popup {
+  0% {
+  opacity: 0;
+    transform: perspective(200px) translate3d(0, 0, -10px);
+  }
+  20% {
+  opacity: 0.5;
+  }
+  100% {
+  opacity: 1;
+    transform: perspective(200px) translate3d(0, 0, 0);
+  }
+}
+    
 .mapbox-invisible-popup {
   max-width: none !important;
-  background: none;
+  background: none !important;
   border: none;
   outline: none;
 
@@ -11,12 +25,14 @@
     }
 
     &-content {
-      padding: 0;
       background: none;
       border: none;
-      box-shadow: none;
       outline: none;
-      width: 300;
+      padding: 0;
+      animation: popup 0.15s ease forwards !important;
+      @extend .shadow-elevated;
+      @extend .br-3;
+      @extend .bg-white;
     }
 
     &-close-button {
@@ -26,28 +42,6 @@
     &-tip {
       display: none;
     }
-  }
-
-  .mapboxgl-popup-close-button {
-    top: 15;
-    right: 15;
-  }
-
-  .mapboxgl-popup-content {
-    padding: 0;
-    background: none;
-    border: none;
-    box-shadow: none;
-    outline: none;
-    width: 400px;
-  }
-
-  .mapboxgl-popup-close-button {
-    display: none;
-  }
-
-  .mapboxgl-popup-tip {
-    display: none;
   }
 }
 
