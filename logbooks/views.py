@@ -109,13 +109,15 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
 
         if tag:
             tag_objects = tuple(x.id for x in Tag.objects.filter(slug__in=tag))
-            tagged_pages = []
+
             if tag_objects:
-                # Get pages tagged with X
+                tagged_pages = []
                 for PageClass in self.page_types:
                     tagged_pages += PageClass.for_tag(tag_objects)
+                return tagged_pages
 
-        return tagged_pages
+        # If no filters, return all possible geo pages
+        return Page.objects.live().specific().type(*self.page_types)
 
     @extend_schema(parameters=[RequestSerializer])
     def list(self, request):
