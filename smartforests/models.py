@@ -99,7 +99,6 @@ class MapPage(RoutablePageMixin, Page):
     def get_context(self, *args, **kwargs):
         context = super().get_context(*args, **kwargs)
         context['mapbox_token'] = settings.MAPBOX_API_PUBLIC_TOKEN
-        context['supercluster_url'] = settings.SUPERCLUSTER_URL
         return context
 
 

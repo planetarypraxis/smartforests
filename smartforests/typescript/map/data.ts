@@ -1,19 +1,14 @@
 import { RefObject, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import useResizeObserver from "@react-hook/resize-observer";
-import { ClusteredFeature, Superclusterd, Viewport } from "superclusterd";
-import { useClusteredMapData } from "superclusterd/react";
+import type { ClusteredFeature, Viewport } from "superclusterd";
 import { SmartForest } from "./types";
 import { stringifyQuery } from "./state";
 import Supercluster from 'supercluster'
 import useSWR from "swr";
 import WebMercatorViewport from "@math.gl/web-mercator";
-import { BBox, FeatureCollection, Point } from "geojson";
+import { FeatureCollection, Point } from "geojson";
 
 export type MapViewport = Viewport;
-
-const supercluster = new Superclusterd(
-  document.getElementById("MAP_APP")?.dataset.superclusterUrl
-);
 
 export const useFeatures = <T>(
   dimensions: DOMRectReadOnly,

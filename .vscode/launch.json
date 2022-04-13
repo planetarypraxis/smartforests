@@ -9,7 +9,9 @@
       "type": "python",
       "request": "launch",
       "program": "${workspaceFolder}/manage.py",
-      "args": ["runserver"],
+      "args": [
+        "runserver"
+      ],
       "django": true
     },
     {
@@ -17,7 +19,9 @@
       "type": "python",
       "request": "launch",
       "program": "${workspaceFolder}/manage.py",
-      "args": ["update_index"],
+      "args": [
+        "update_index"
+      ],
       "justMyCode": false,
       "django": true
     },
@@ -26,7 +30,9 @@
       "type": "python",
       "request": "launch",
       "program": "${workspaceFolder}/manage.py",
-      "args": ["process_tasks"],
+      "args": [
+        "process_tasks"
+      ],
       "justMyCode": true,
       "django": true
     },
@@ -35,7 +41,9 @@
       "type": "python",
       "request": "launch",
       "program": "${workspaceFolder}/manage.py",
-      "args": ["reindex_logbooks"],
+      "args": [
+        "reindex_logbooks"
+      ],
       "justMyCode": true,
       "django": true
     },
@@ -44,7 +52,9 @@
       "type": "python",
       "request": "launch",
       "program": "${workspaceFolder}/manage.py",
-      "args": ["seed"],
+      "args": [
+        "seed"
+      ],
       "justMyCode": true,
       "django": true
     },
@@ -54,7 +64,11 @@
       "request": "launch",
       "program": "${workspaceFolder}/manage.py",
       "cwd": "${workspaceFolder}/publications/tests",
-      "args": ["test", "-p", "test_parser.py"],
+      "args": [
+        "test",
+        "-p",
+        "test_parser.py"
+      ],
       "django": true
     },
     {
@@ -62,18 +76,14 @@
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/node_modules/.bin/webpack",
-      "args": ["serve", "--hot", "--progress"],
+      "args": [
+        "serve",
+        "--hot",
+        "--progress"
+      ],
       "console": "internalConsole",
       "internalConsoleOptions": "openOnSessionStart"
     },
-    {
-      "name": "Supercluster",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/node_modules/.bin/superclusterd",
-      "console": "internalConsole",
-      "internalConsoleOptions": "openOnSessionStart"
-    }
   ],
   "compounds": [
     {
@@ -81,7 +91,6 @@
       "configurations": [
         "Python: Django",
         "Webpack",
-        "Supercluster",
         "Python: Run background tasks"
       ]
     }

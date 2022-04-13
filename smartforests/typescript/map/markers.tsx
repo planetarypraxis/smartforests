@@ -10,11 +10,10 @@ import { Marker, Popup } from "@urbica/react-map-gl";
 import { useFocusContext, viewportAtom } from "./state";
 import { equalUrls, useOffcanvas } from "../bootstrap";
 import { Feature, Point } from "geojson";
-import { TurboFrameElement } from "../turbo";
-import { useAtomCallback, useAtomValue } from "jotai/utils";
+import { useAtomValue } from "jotai/utils";
 import { useAtom } from "jotai";
 import { frameAtomFamily } from "../pageContext";
-import { Cluster } from "superclusterd";
+import type { Cluster } from "superclusterd";
 
 export const ClusterMarker: React.FC<{
   feature: Feature<Point, Cluster>;
