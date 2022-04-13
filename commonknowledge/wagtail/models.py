@@ -47,7 +47,7 @@ class ChildListMixin:
         return self.get_children().live().specific()
 
     def get_page_size(self):
-        return 150
+        return 10000
 
     def get_filters(self, request):
         return None
