@@ -30,7 +30,7 @@ When a page is displayed and we show a tag cloud, we search through all of the t
 
 For the question of absolute centrality, this is a bit harder, as we don't have any topic to start from. So we look through the clusters of topics we created for the purposes of determining the relatedness to a page. We then rank these according to the degree of total connectedness that exists between then. We the take the top scoring 30 or so and use as the space in which we are searching for further nodes. This helps us map the differences between them and display this visually.
 
-Initial versions of the main page map were to visually dense to be useful and attractive. So we limit this to a random selection of 30 tags.
+Initial versions of the home page map were to visually dense to be useful and attractive. So we limit this [30 tags](https://github.com/planetarypraxis/smartforests/blob/main/home/models.py#L18), which we then [randomise](https://github.com/planetarypraxis/smartforests/blob/main/logbooks/models/tag_cloud.py#L102).
 
 ## Where can we find the code that relates to the tag cloud?
 
