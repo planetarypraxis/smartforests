@@ -41,7 +41,9 @@ Describing this is quite complex in words, so it is easier to describe them in c
 This contains [the core algorithm] regarding tag relatedness (https://github.com/planetarypraxis/smartforests/blob/main/logbooks/models/tag_cloud.py#L192-L242).
 - [`tag_cloud.js`](https://github.com/planetarypraxis/smartforests/blob/main/smartforests/static/js/tag_cloud.js) Javascript code handles the display of tag clouds.
 
-The Javascript code depends on [D3.js](https://d3js.org/) and [cola.js](https://ialab.it.monash.edu/webcola/) for displaying the graph.
+The Javascript code depends on [D3.js](https://d3js.org/) and [cola.js](https://ialab.it.monash.edu/webcola/) for displaying the graph. 
+
+In the browser, this uses the [HTML Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) to render the cloud.
 
 
 
