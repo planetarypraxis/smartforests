@@ -80,59 +80,31 @@
             </turbo-frame>
         </div>
 
-
         {% block body %}
-        {% block header %}
-        {% main_menu max_levels=1 template="menus/header.html" %}
-        <div class='mb-5'>
-          <!-- Spacer for the floating header -->
-        </div>
-        {% endblock %}
+          {% block header %}
+            {% main_menu max_levels=1 template="menus/header.html" %}
+            <div class='mb-5'>
+              <!-- Spacer for the floating header -->
+            </div>
+          {% endblock %}
 
-        <div class='flex-grow {% block content_wrapper_class %}{% endblock %}'>
-        {% block content %}
-        {% endblock %}
-        </div>
+          <div class='flex-grow {% block content_wrapper_class %}{% endblock %}'>
+          {% block content %}
+          {% endblock %}
+          </div>
 
-        {% block spacer %}
-        <span class="flex-grow-1"></span>
-        {% endblock %}
+          {% block spacer %}
+            <span class="flex-grow-1"></span>
+          {% endblock %}
         {% endblock %}
 
         {% block footer %}
-        {% flat_menu 'footer' max_levels=1 show_menu_heading=False template="menus/footer.html" %}
+          {% if self %}
+            {% include "smartforests/include/radio_player.html" with episode=self %}
+          {% endif %}
+          {% flat_menu 'footer' max_levels=1 show_menu_heading=False template="menus/footer.html" %}
         {% endblock %}
-        {% if self %}
-        <div id="radioPlayer" data-turbo-permanent class="offcanvas offcanvas-bottom min-h-48px h-auto bg-dark-green border-0 drop-shadow-mid-green-glow" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" aria-labelledby="radioPlayerLabel">
-            <div class="position-relative text-white ps-md-3 d-flex align-items-center justify-content-between">
-              <progress id="radioPlayerSeeker" min="0" max="1" value="0" data-smartforests-radio-episode-seeker></progress>
-              <div class='w-100'>
-                <button id="radioPlayerPlayButton" class="btn btn-link align-baseline" title="Play episode: {{self.title}}" type="button">
-                  <img class="play-button" style="width: 20px" src="{% static 'img/button-play-light.svg' %}" alt="Play episode"/>
-                  <img class="pause-button d-none" style="width: 20px" src="{% static 'img/button-pause-light.svg' %}" alt="Pause episode"/>
-                </button>
-                <span class="d-none d-md-inline-block fs-7 font-monospace align-middle text-soft-green text-nowrap">
-                  <span class='text-off-white' id="radioPlayerElapsedTime" data-smartforests-radio-episode-elapsed-time></span>
-                  /
-                  <span id="radioPlayerDuration" data-smartforests-radio-episode-duration></span>
-                </span>
-                <a class='text-decoration-none text-reset' href='' data-smartforests-radio-episode-page-url>
-                  <span class="text-nowrap ps-1 ps-md-2 align-middle d-inline-block text-truncate" style='max-width: max(100px, 66vw);' id="radioPlayerLabel" data-smartforests-radio-episode-title></span>
-                  <span class="text-nowrap ps-1 ps-md-3 small font-monospace text-uppercase d-none d-md-inline-block" data-smartforests-radio-episode-owner></span>
-                  <span class="text-nowrap ps-1 ps-md-3 small font-monospace text-uppercase d-none d-md-inline-block" data-smartforests-radio-episode-last-published-at></span>
-                </a>
-              </div>
-              <a class='text-decoration-none text-reset d-block position-relative' href='' data-smartforests-radio-episode-page-url>
-                {% if self.image %}
-                    {% image self.image height-48 data-smartforests-radio-episode-image=true %}
-                {% else %}
-                    <img height="48" data-smartforests-radio-episode-image>
-                {% endif %}
-                <img class="position-absolute top-50 start-50 translate-middle" src='{% static "img/radio-icon.svg" %}' />
-              </a>
-            </div>
-        </div>
-        {% endif %}
+
         {% include "wagtailseo/struct_data.html" %}
         <script>
             Array.from(document.querySelectorAll('[data-autofocus-show]')).forEach(modal => {
