@@ -5,7 +5,7 @@
 1. [Log into the site](#log-into-the-site)
 2. [Add Entries](#add-entries)
 3. [Add SoundCloud embeds to Entries](#add-soundcloud-embeds-to-entries)
-4. [Add Entries to a Logbook](#add-entries-to-a-logbook)
+4. [Make a Logbook](#make-a-logbook)
 5. [Add SoundCloud embeds to Logbooks](#add-soundcloud-embeds-to-logbooks)
 6. [Add a Story](#add-a-story)
 7. [Add images to Stories and Logbook Entries](#add-images-to-stories-and-logbook-entries)
@@ -44,7 +44,7 @@ Entries are research observations, ideas and snippets.
 
 The more the better! The site will be richer and more interesting the more these are added.
 
-Logbooks are composed of individual entries.
+Each logbooks is composed of individual entries.
 
 <a href="https://www.loom.com/share/10f427da614d4aaca3d62610042b6e8e">
     <p>Adding Entries - Watch Video</p>
@@ -52,13 +52,13 @@ Logbooks are composed of individual entries.
   </a>
 
 1. Login to the Smart Forests Atlas.
-2. Head to [https://atlas.smartforests.net/admin/pages/214/](https://atlas.smartforests.net/admin/pages/214/)
+2. Head to the section of the Atlas where you want to add an entry.
 3. Click on Add Child Page.
 4. Give your entry a title.
 5. You can add tags - as many as you wish.
 6. You can add Geographic Data, both a pin on a map and a rough estimate of location.
 7. You can add the body of the entry, adding text, quotations, images and embeds as you need.
-8. When done you can either save the draft, or click Publish to push this to the live site.
+8. When done you can either save the draft, or click the arrow next to Publish to Submit for Moderation.
 9. Once published you are done!
 
 ---
@@ -74,19 +74,19 @@ Logbooks are composed of individual entries.
 2. Find a Logbook Entry you want to embed SoundCloud into.
 3. Add an Embed to the body.
 4. Paste in SoundCloud entry to the large text field.
-5. Publish page.
+5. When done you can either save the draft, or click the arrow next to Publish to Submit for Moderation.
 6. The SoundCloud widget should now be embedded onto the page.
 
 ---
 
-## Add Entries to a Logbook
+## Make a Logbook
 
 <a href="https://www.loom.com/share/5ecfb4df860c40c9b3b23ab005735368">
     <p>Adding Entries To Logbooks - Watch Video</p>
     <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/5ecfb4df860c40c9b3b23ab005735368-with-play.gif">
   </a>
 
-Logbooks are collations of entries, bound together by their tag.
+Logbooks are collections of entries, bound together by a common theme.
 
 1. Login to the Smart Forests Atlas.
 2. Head to [https://atlas.smartforests.net/admin/pages/213/](https://atlas.smartforests.net/admin/pages/213/)
@@ -95,8 +95,9 @@ Logbooks are collations of entries, bound together by their tag.
 5. Select what tags you want to be shown within the log book.
 6. You can add Geographic Data, both a pin on a map and a rough estimate of location.
 7. Add Description to talk through the data as you need to, drawing attention to the important issue.
-8. When done you can either save the draft, or click Publish to push this to the live site.
-9. Once published you are done!
+8. When done you can either save the draft, or click the arrow next to Publish to Submit for Moderation.
+9. Once submitted you are done!
+10. In order to add images to a Logbook, create a separate Logbook Entry.
 
 ---
 
@@ -115,7 +116,7 @@ To add a soundcloud to a logbook itself
    ![](screenshots/embed_link.png)
 
 5. Click Insert button.
-6. Publish page.
+6. When done you can either save the draft, or click the arrow next to Publish to Submit for Moderation.
 7. The SoundCloud widget should now be embedded onto the page.
 
    ![](screenshots/soundcloud_embed.png)
@@ -124,16 +125,17 @@ To add a soundcloud to a logbook itself
 
 ## Add a Story
 
-Stories are like articles focusing on a particular topic.
+Stories are longer articles focusing on a particular topic and linking together different Atlas entries.
 
-1. Head to [https://atlas.smartforests.net/admin/pages/231/](https://atlas.smartforests.net/admin/pages/231/)
-2. Click on Add Child Page.
-3. Give your story a title.
-4. Select what tags you want to be shown within the story
-5. You can add Geographic Data, both a pin on a map and a rough estimate of location.
-6. Add the body text of the story including any media content or images you would like
-7. When done you can either save the draft, or click Publish to push this to the live site.
-8. Once published you are done!
+1. Login to the Smart Forests Atlas.
+2. Head to [https://atlas.smartforests.net/admin/pages/231/](https://atlas.smartforests.net/admin/pages/231/)
+3. Click on Add Child Page.
+4. Give your story a title.
+5. Select what tags you want to be shown within the story
+6. You can add Geographic Data, both a pin on a map and a rough estimate of location.
+7. Add the body text of the story including any media content or images you would like
+8. When done you can either save the draft, or click the arrow next to Publish to Submit for Moderation.
+9. Once submitted you are done!
 
 <a href="https://www.loom.com/share/54dc9a33b0194461a9d62c7eb0c1ee5e">
     <p>Add a story - Watch Video</p>
@@ -153,8 +155,8 @@ Stories are like articles focusing on a particular topic.
 2. Scroll to the body section and click the plus to add content.
 3. Select or upload an image.
 4. Add a caption.
-5. When done you can either save the draft, or click Publish to push this to the live site.
-6. Once published you are done!
+5. When done you can either save the draft, or click the arrow next to Publish to Submit for Moderation.
+6. Once submitted you are done!
 
 To add a cover image to a story scroll down to the image section at the bottom of the page
 
@@ -194,8 +196,8 @@ Thumbnails for logbook entries are shown as a collection on the logbook listing
 5. Select what tags you want to be shown within the episode.
 6. You can add Geographic Data, both a pin on a map and a rough estimate of location.
 7. Add the body text of the story including any media content or images you would like
-8. When done you can either save the draft, or click Publish to push this to the live site.
-9. Once published you are done!
+8. When done you can either save the draft, or click the arrow next to Publish to Submit for Moderation.
+9. Once submitted you are done!
 
 ---
 
@@ -205,12 +207,7 @@ To create a tag at the same time as adding it you can type it into the Tags box 
 
 ![](screenshots/AddTag.gif)
 
-You can also go to
-[https://atlas.smartforests.net/admin/snippets/smartforests/tag/](https://atlas.smartforests.net/admin/snippets/smartforests/tag/)
 
-and select Add Tag
-
-![](screenshots/Snippets_tags.png)
 
 ---
 
@@ -261,8 +258,8 @@ They can also be accessed from the admin panel on the left of the screen
 5. Select or upload an image as an avatar
 6. Add a geographic location for the contributor if you wish
 7. Add any text, media content or images you would like in the Body field
-8. When done you can either save the draft, or click Publish to push this to the live site.
-9. Once published you are done!
+8. When done you can either save the draft, or click the arrow next to Publish to Submit for Moderation.
+9. Once submitted you are done!
 
 ---
 
