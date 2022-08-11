@@ -1,0 +1,1 @@
+Screenshots are stored for use by the [Github wiki](https://github.com/planetarypraxis/smartforests/wiki).
