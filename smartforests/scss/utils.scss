@@ -78,7 +78,7 @@
 }
 
 .hero-img {
-  height: 400px;
+  height: auto;
 
   @include media-breakpoint-up(md) {
     width: 100%;
