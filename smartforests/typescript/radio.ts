@@ -115,7 +115,7 @@ export function main() {
     ).innerHTML = lastPublishedAt;
     Array.from(radioPlayer.querySelectorAll<HTMLAnchorElement>(
       "[data-smartforests-radio-episode-page-url]"
-    )).map(el => el.href = pageURL);
+    )).map(el => { el.href = pageURL });
 
     (radioPlayer.querySelector("img[data-smartforests-radio-episode-image]") as HTMLImageElement).src =
       image;
