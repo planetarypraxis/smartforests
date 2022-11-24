@@ -28,7 +28,8 @@ See it live at https://atlas.smartforests.net
   - If you can't see an option to do that, make sure you have the Remote Development extension installed
 - Wait for the dev container to build.
 - Check your terminal and respond to any setup prompts it asks for
-- Search for `smartforests/settings/local.py` on lastpass and paste its contents into the corresponding local file
+- Update `smartforests/settings/local.py` with the current correct settings & environment variables.
+- Make sure VSCode has selected the correct python interpreter ('command palette > Python: Select Interpreter'). It should be set to the Python in the virtualenv (venv).
 - Use vscode's 'run' command (usually aliased to F5) to run the app.
   - Make sure you use the 'App' configuration, which will start both the django app and the frontend build pipeline.
   - The `setup_pages` command in `manage.py` will set up the basic page structure in the development site.
