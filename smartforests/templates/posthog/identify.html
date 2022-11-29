@@ -1,5 +1,6 @@
 {% if user.is_authenticated and environment.POSTHOG_PUBLIC_TOKEN %}
-<script>
+<!-- The script below is managed via cookie consent -->
+<script type="text/plain" data-cookiecategory="analytics">
   (function identify() {
     const userId = "{{ user.id }}"
     const email = "{{ user.email }}"
