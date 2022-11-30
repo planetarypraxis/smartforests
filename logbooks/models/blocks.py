@@ -22,7 +22,7 @@ class QuoteBlock(blocks.StructBlock):
 
 class ImageBlock(blocks.StructBlock):
     image = ImageChooserBlock(required=False)
-    caption = blocks.CharBlock()
+    caption = blocks.RichTextBlock()
 
     class Meta:
         template = 'logbooks/story_blocks/image.html'
