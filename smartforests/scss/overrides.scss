@@ -3,8 +3,9 @@ $small-font-size: $font-size-base * 0.7777777778;
 
 :root {
   --bs-font-sans-serif: "MarrSans", "sans-serif";
+  --cc-bg: #f9f9f9;
+  --cc-btn-primary-bg: #026302;
 }
-
 @mixin body-text {
   font-size: 16px;
   font-weight: normal;

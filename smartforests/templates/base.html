@@ -26,6 +26,7 @@
         {% webpack_bundle 'main' 'css' %}
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@300&family=Open+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.8.9/dist/cookieconsent.css" rel="stylesheet"> 
         {% block extra_css %}
         {% endblock %}
     </head>
@@ -115,5 +116,8 @@
         </script>
         {% include "posthog/identify.html" %}
         <script src="https://cdn.jsdelivr.net/gh/Blogger-Peer-Review/quotebacks@1/quoteback.js"></script>
+
+        <!-- Cookie consent script -->
+        {% include "cookie_consent.html" %}
     </body>
 </html>
