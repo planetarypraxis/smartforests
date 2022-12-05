@@ -1,5 +1,5 @@
 import webcola from "https://cdn.skypack.dev/webcola";
-import * as d3 from "https://cdn.skypack.dev/d3@7";
+import * as d3 from "https://cdn.skypack.dev/d3@7.6";
 import * as chroma from "https://cdn.skypack.dev/chroma-js";
 import debounce from "https://cdn.skypack.dev/lodash.debounce";
 import uniqBy from "https://cdn.skypack.dev/lodash.uniqby";
