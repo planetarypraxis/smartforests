@@ -7,7 +7,6 @@ from django.utils.safestring import mark_safe
 from commonknowledge.helpers import safe_to_int
 from django import template
 
-
 register = template.Library()
 
 
@@ -52,3 +51,13 @@ def render_streamfield(context, value, *args, **kwargs):
         })
     Block.get_context = get_context
     return str(value)
+
+
+@register.simple_tag(takes_context=True)
+def bulk_action_classes(context):
+    request = context.get('request', None)
+    if not request.user.is_superuser:
+        return 'hide_serious'
+    else:
+        return ''
+
