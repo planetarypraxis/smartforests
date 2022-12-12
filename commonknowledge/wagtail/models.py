@@ -58,6 +58,10 @@ class ChildListMixin:
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         qs = self.get_child_list_queryset(request)
+
+        if request.user.is_anonymous:
+            qs = qs.public()
+
         filter = self.get_filters(request)
         sort = self.get_sort(request)
 
