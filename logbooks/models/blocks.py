@@ -22,7 +22,8 @@ class QuoteBlock(blocks.StructBlock):
 
 class ImageBlock(blocks.StructBlock):
     image = ImageChooserBlock(required=False)
-    caption = blocks.CharBlock()
+    caption = blocks.RichTextBlock(
+        features=['bold', 'italic', 'link', 'ol', 'ul', 'hr', 'code', 'blockquote'])
 
     class Meta:
         template = 'logbooks/story_blocks/image.html'

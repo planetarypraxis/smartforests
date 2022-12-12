@@ -1,3 +1,4 @@
 {% load wagtailimages_tags %}
+{% load wagtailcore_tags %}
 {% image value.image min-680x400 class='img-fluid' %}
-<p class='fs-7 text-grey mt-3 mb-0'>{{ value.caption }}</p>
+<div class='fs-7 text-grey mt-3 mb-0'>{{ value.caption|richtext }}</div>
