@@ -17,6 +17,10 @@ class BasicSearchView(TemplateView):
 
     def get_queryset(self):
         qs = self.get_page_model().objects.live()
+
+        if self.request.user.is_anonymous:
+            qs = qs.public()
+            
         scope = self.get_scope()
 
         if scope is None:
