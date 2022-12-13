@@ -258,3 +258,8 @@
 .no-transition {
   transition: none !important;
 }
+
+.richtext-image.responsive {
+  max-width: 100%;
+  height: auto;
+}
