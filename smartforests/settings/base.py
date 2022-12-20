@@ -322,3 +322,17 @@ POSTHOG_DJANGO = {
 }
 
 SERVICE_API_TOKEN = os.getenv("SERVICE_API_TOKEN")
+
+INSTALLED_APPS += [
+    "django_dbq",
+]
+
+WAGTAILLOCALIZE_JOBS = {
+    "BACKEND": "smartforests.wagtail_localize_tasks.DjangoDBQueueJobBackend",
+}
+
+JOBS = {
+    "wagtail_localize.synchronize_tree": {
+        "tasks": ["smartforests.wagtail_localize_tasks.sync_tree"],
+    },
+}
