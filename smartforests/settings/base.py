@@ -320,3 +320,5 @@ WAGTAIL_CONTENT_LANGUAGES = LANGUAGES = [
 POSTHOG_DJANGO = {
     "distinct_id": lambda request: request.user and request.user.distinct_id
 }
+
+SERVICE_API_TOKEN = os.getenv("SERVICE_API_TOKEN")
