@@ -195,7 +195,8 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
             return static_file_absolute_url('img/mapicons/logbooks.png')
 
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
-    description = RichTextField()
+    description = RichTextField(
+        features=['bold', 'italic', 'link', 'ol', 'ul', 'hr', 'code', 'blockquote'])
 
     seo_description_sources = SeoMetadataMixin.seo_description_sources + [
         "description"
