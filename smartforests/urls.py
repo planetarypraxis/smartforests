@@ -13,7 +13,8 @@ from django.conf.urls.i18n import i18n_patterns
 from django.views.generic import TemplateView
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
-from commonknowledge.django import rest
+# from commonknowledge.django import rest
+from commonknowledge.django import service
 from .api import wagtail_api_router
 
 from search import views as search_views
@@ -32,7 +33,7 @@ urlpatterns = [
     path('_filters/', sf_views.filters_frame),
     path('favicon.ico',
          RedirectView.as_view(url='/static/img/favicon.png', permanent=True)),
-    # path('api/', include(rest.get_urls())),
+    # path('api/', include(rest.get_urls())),ScheduledPublishViewSet
     path('400', TemplateView.as_view(template_name='400.html')),
     path('403', TemplateView.as_view(template_name='403.html')),
     path('404', TemplateView.as_view(template_name='404.html')),
@@ -69,4 +70,8 @@ urlpatterns += i18n_patterns(
 
 urlpatterns += [
     re_path(r'', include(wagtail_content_import_urls)),
+]
+
+urlpatterns += [
+    path('api/service/publish', service.publish),
 ]
