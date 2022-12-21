@@ -196,7 +196,7 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
 
     tags = ClusterTaggableManager(through=AtlasTag, blank=True)
     description = RichTextField(
-        features=['bold', 'italic', 'link', 'ol', 'ul', 'hr', 'code', 'blockquote'])
+        features=['bold', 'italic', 'link', 'ol', 'ul', 'hr', 'code', 'blockquote', 'h2', 'h3', 'h4'])
 
     seo_description_sources = SeoMetadataMixin.seo_description_sources + [
         "description"
