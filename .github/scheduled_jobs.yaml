@@ -1,0 +1,14 @@
+name: Scheduled Jobs
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Publish scheduled content
+      run: |
+        curl https://atlas.smartforests.net/api/service/publish -H "Token: ${{ secrets.SERVICE_API_TOKEN }}"
