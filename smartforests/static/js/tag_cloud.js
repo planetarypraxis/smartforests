@@ -446,6 +446,12 @@ const init = () => {
           updateBackground(realGraphNodes, links);
         })
       });
+
+      // Stop animation after converged
+      setTimeout(() =>{
+        cola.on("tick",null)
+      }, 2000)
+      
     };
 
     layout();
