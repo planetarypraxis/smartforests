@@ -64,12 +64,15 @@ async function load() {
 }
 
 function resetJSForTurboFrame() {
-  // Ensure all Boostrap Offcanvases (sidepanels) are closed when the page opens
-  // which is necessary when navigating back in the Turbo Frame cache'd history
+  // Ensure Boostrap Offcanvases (sidepanels) are in the correct state
+  // according to the Turbo Frame cache'd history. If going back in the history
+  // and the Offcanvas was previously open, then re-open it
   const offcanvas = document.querySelectorAll(".offcanvas")
+
   for (const el of offcanvas) {
+    const visible = window.getComputedStyle(el)['visibility'] === 'visible'
     let offcanvas = new Offcanvas(el)
     offcanvas.show()
-    offcanvas.hide()
+    if (!visible) offcanvas.hide()
   }
 }
