@@ -1,12 +1,13 @@
 import "./sidepanel";
 import "./mainmenu";
-import { Offcanvas } from "bootstrap"
 
 load();
 
 document.addEventListener("turbo:load", async (event) => {
   load();
-  resetJSForTurboFrame();
+  if (window) {
+    window?.resetJSForTurboFrame();
+  } 
 });
 
 function getModelInfo() {
@@ -63,16 +64,3 @@ async function load() {
   modules.forEach(fn => fn());
 }
 
-function resetJSForTurboFrame() {
-  // Ensure Boostrap Offcanvases (sidepanels) are in the correct state
-  // according to the Turbo Frame cache'd history. If going back in the history
-  // and the Offcanvas was previously open, then re-open it
-  const offcanvas = document.querySelectorAll(".offcanvas")
-
-  for (const el of offcanvas) {
-    const visible = window.getComputedStyle(el)['visibility'] === 'visible'
-    let offcanvas = new Offcanvas(el)
-    offcanvas.show()
-    if (!visible) offcanvas.hide()
-  }
-}
