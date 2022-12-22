@@ -1,1 +1,1 @@
-python manage.py process_tasks & gunicorn --workers=2 --worker-tmp-dir /dev/shm smartforests.asgi -k uvicorn.workers.UvicornWorker
+python manage.py process_tasks & gunicorn --workers=2 --threads=2 --worker-tmp-dir /dev/shm smartforests.wsgi
