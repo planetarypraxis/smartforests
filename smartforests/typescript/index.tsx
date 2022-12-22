@@ -1,10 +1,12 @@
 import "./sidepanel";
 import "./mainmenu";
+import { Offcanvas } from "bootstrap"
 
 load();
 
 document.addEventListener("turbo:load", async (event) => {
   load();
+  resetJSForTurboFrame();
 });
 
 function getModelInfo() {
@@ -28,7 +30,7 @@ document.addEventListener("turbo:render", () => {
   const btns = document.getElementById("wagtail-userbar-items")
   // get the page ID from the HTML
   const modelInfo = getModelInfo()
-  if (!modelInfo) return
+  if (!modelInfo || !btns) return
   // find all the anchor links
   const links = btns.querySelectorAll<HTMLAnchorElement>("a[role='menuitem']");
   // loop over them, replace `page/oldID/` with `page/newID/`
@@ -59,4 +61,15 @@ async function load() {
   }
 
   modules.forEach(fn => fn());
+}
+
+function resetJSForTurboFrame() {
+  // Ensure all Boostrap Offcanvases (sidepanels) are closed when the page opens
+  // which is necessary when navigating back in the Turbo Frame cache'd history
+  const offcanvas = document.querySelectorAll(".offcanvas")
+  for (const el of offcanvas) {
+    let offcanvas = new Offcanvas(el)
+    offcanvas.show()
+    offcanvas.hide()
+  }
 }
