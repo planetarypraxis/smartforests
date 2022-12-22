@@ -122,7 +122,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'smartforests.wsgi.application'
+ASGI_APPLICATION = 'smartforests.asgi.application'
 
 
 # Database
