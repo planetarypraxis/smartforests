@@ -332,7 +332,10 @@ WAGTAILLOCALIZE_JOBS = {
 }
 
 JOBS = {
-    "wagtail_localize.synchronize_tree": {
-        "tasks": ["smartforests.wagtail_localize_tasks.sync_tree"],
+    "smartforests.queue.serialized_job": {
+        "tasks": ["smartforests.queue.serialized_job"],
     },
 }
+
+USE_BACKGROUND_WORKER = os.getenv(
+    "USE_BACKGROUND_WORKER", "False") in ("True", "true", True, 1, "t")
