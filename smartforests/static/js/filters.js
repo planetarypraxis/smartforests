@@ -45,4 +45,18 @@
   window.addEventListener("turbo:load", init);
   window.addEventListener("turbo:frame-load", init);
   init();
+
+  window.resetJSForTurboFrame = () => {
+    // Ensure Boostrap Offcanvases (sidepanels) are in the correct state
+    // according to the Turbo Frame cache'd history. If going back in the history
+    // and the Offcanvas was previously open, then re-open it
+    const offcanvas = document.querySelectorAll(".offcanvas")
+  
+    for (const el of offcanvas) {
+      const visible = window.getComputedStyle(el)['visibility'] === 'visible'
+      let offcanvas = new window.bootstrap.Offcanvas(el)
+      offcanvas.show()
+      if (!visible) offcanvas.hide()
+    }
+  }
 })();
