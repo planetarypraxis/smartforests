@@ -357,8 +357,10 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
         FieldPanel('bio')
     ] + GeocodedMixin.content_panels
 
-    seo_image_sources = SeoMetadataMixin.seo_image_sources + [
-        "avatar"
+    seo_image_sources = [
+        "og_image",
+        "avatar",
+        "default_seo_image"
     ]
 
     seo_description_sources = SeoMetadataMixin.seo_description_sources + [

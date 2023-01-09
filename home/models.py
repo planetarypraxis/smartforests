@@ -39,6 +39,8 @@ class InformationPage(ArticleSeoMixin, Page):
         FieldPanel('text')
     ]
 
-    seo_image_sources = ArticleSeoMixin.seo_image_sources + [
-        "cover_image"
+    seo_image_sources = [
+        "og_image",
+        "cover_image",
+        "default_seo_image"
     ]

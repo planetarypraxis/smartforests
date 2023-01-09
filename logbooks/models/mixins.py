@@ -302,12 +302,19 @@ class SeoMetadataMixin(SeoMixin, Page):
     promote_panels = SeoMixin.seo_panels
 
     seo_image_sources = [
-        "og_image"  # Explicit sharing image
+        "og_image",  # Explicit sharing image
+        "default_seo_image"
     ]
 
     seo_description_sources = [
         "search_description",  # Explicit sharing description
     ]
+
+    @property
+    def default_seo_image(self):
+        from smartforests.wagtail_settings import SocialMediaSettings
+        settings = SocialMediaSettings.for_site(site=self.get_site())
+        return settings.default_seo_image
 
     @property
     def seo_description(self) -> str:
@@ -331,9 +338,11 @@ class ThumbnailMixin(BaseLogbooksPage):
     class Meta:
         abstract = True
 
-    seo_image_sources = SeoMetadataMixin.seo_image_sources + [
-        "most_recent_image"
+    seo_image_sources = [
+        "og_image",
+        "most_recent_image",
         # TODO: use `thumbnail_image`, requires migration to CmsImage
+        "default_seo_image"
     ]
 
     thumbnail_image = models.ImageField(null=True, blank=True)
@@ -488,8 +497,10 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
             and block.value.get('image')
         )
 
-    seo_image_sources = SeoMetadataMixin.seo_image_sources + [
-        "cover_image"
+    seo_image_sources = [
+        "og_image",
+        "cover_image",
+        "default_seo_image"
     ]
 
     @property
