@@ -187,6 +187,8 @@ const init = () => {
       .node();
 
     const ctx = canvas.getContext("2d");
+
+    // Disable image smoothing soe we can achieve the pixelly effect
     ctx.msImageSmoothingEnabled = false;
     ctx.mozImageSmoothingEnabled = false;
     ctx.webkitImageSmoothingEnabled = false;
@@ -282,14 +284,15 @@ const init = () => {
       }
 
       // Then it is zoomed in by the PIXEL_SIZE ratio
+      // without smoothing to achieve the pixelly effect
     };
 
     let usingMobileLayout = false;
 
-    // Use webcola's constraint-based graph layout plugin for d3 to lay out the tags, ensuring that we respect the
-    // following constrants:
+    // Use webcola's constraint-based graph layout plugin for d3 to lay out the tags
+    // ensuring that we respect the following constrants:
     //
-    // * Related tags are close togehter
+    // * Related tags are close together
     // * Tags are all within the bounds of the tag area.
     // * Tags do not overlap.
     const layout = () => {
@@ -448,10 +451,10 @@ const init = () => {
       });
 
       // Stop animation after converged
-      setTimeout(() =>{
-        cola.on("tick",null)
+      setTimeout(() => {
+        cola.on("tick", null)
       }, 2000)
-      
+
     };
 
     layout();
