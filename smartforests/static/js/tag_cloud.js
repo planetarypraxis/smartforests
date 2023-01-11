@@ -177,6 +177,10 @@ const init = () => {
       });
     });
 
+    //////////////////
+    // Background
+
+
     // Canvas element for rendering the background 'elevation effect'
     /** @type HTMLCanvasElement */
     const canvas = d3
@@ -287,7 +291,8 @@ const init = () => {
       // without smoothing to achieve the pixelly effect
     };
 
-    let usingMobileLayout = false;
+    //
+    //////////////////
 
     // Use webcola's constraint-based graph layout plugin for d3 to lay out the tags
     // ensuring that we respect the following constrants:
@@ -295,6 +300,10 @@ const init = () => {
     // * Related tags are close together
     // * Tags are all within the bounds of the tag area.
     // * Tags do not overlap.
+
+    /** @type {import('webcola').d3adaptor} */
+    const d3adaptor = webcola.d3adaptor
+
     const layout = () => {
       const container = d3.select(el);
       const realGraphNodes = nodes.slice();
@@ -312,7 +321,7 @@ const init = () => {
       // Add boundary points in the top left / bottom right to constrain the other points
       // see: https://github.com/tgdwyer/WebCola/issues/139#issuecomment-136937699
       // example: https://ialab.it.monash.edu/webcola/examples/pageBoundsConstraints.html
-      const fixedNodeProperties = { fixed: true, fixedWeight: 100000 };
+      const fixedNodeProperties = { fixed: true, fixedWeight: 100 };
       const pageBounds = { x: PADDING, y: PADDING, width, height };
       const topLeft = {
         ...fixedNodeProperties,
@@ -328,6 +337,7 @@ const init = () => {
       const bottomRightBoundary = realGraphNodes.push(bottomRight) - 1;
 
       // Scroll reset
+      let usingMobileLayout = false;
       if (window.innerWidth <= MOBILE_BREAKPOINT) {
         // Center the scroll position on entering mobile view
 
@@ -370,7 +380,7 @@ const init = () => {
             })
 
           return a;
-        });
+        })
 
       const elements = tags.nodes();
 
@@ -380,22 +390,23 @@ const init = () => {
         (1 / el._prevBounds[0]) * el.clientWidth,
         (1 / el._prevBounds[1]) * el.clientHeight,
       ];
-
-      // Initialize constraints.
-      const constraints = [];
-      for (let i = 0; i < realGraphNodes.length; i++) {
-        const nodeEl = elements[i];
+      // Preserve relative positions if we're resizing.
+      for (var i = 0; i < realGraphNodes.length; i++) {
         const node = realGraphNodes[i];
-
-        // Use the tag element's pixel size to drive the layout algorithm's constraints for avoiding overlaps.
-        node.width = nodeEl.clientWidth * 1;
-        node.height = nodeEl.clientHeight * 1;
-
-        // Preserve relative positions if we're resizing.
         if (scaleFactor && node.x && node.y) {
           node.x = scaleFactor[0] * node.x;
           node.y = scaleFactor[1] * node.y;
         }
+      }
+
+      // Initialize constraints
+      const constraints = []
+      for (var i = 0; i < realGraphNodes.length; i++) {
+        // Use the tag element's pixel size to drive the layout algorithm's constraints for avoiding overlaps.
+        const nodeEl = elements[i];
+        const node = realGraphNodes[i];
+        node.width = nodeEl.clientWidth;
+        node.height = nodeEl.clientHeight;
 
         // Add constraints to prevent going offscreen
         constraints.push({
@@ -428,31 +439,21 @@ const init = () => {
         });
       }
 
-      // If there's already an instance of the layout system (ie. after window resize), remove it so it doesn't
-      // conflict with the new one
-      if (el._cola) {
-        el._cola.stop();
-      }
-
-      // Configure and start the layout
-      // DOCS: https://ialab.it.monash.edu/webcola/
-
-      /** @type {import('webcola').d3adaptor} */
-      const d3adaptor = webcola.d3adaptor
+      // Graph
 
       const cola = d3adaptor(d3)
+        .size([width, height])
         .nodes(realGraphNodes)
         .links(links)
-        .size([width, height])
         .constraints(constraints)
         .jaccardLinkLengths(responsive({
           "default": 40,
           "(min-width: 640px)": 80,
           "(min-width: 1140px)": 90
-        }), 0.7)
+        }))
+        .handleDisconnected(false)
         .avoidOverlaps(true)
-        .handleDisconnected(true)
-        .start(15, 15, 15);
+        .start(15, 15);
 
       // Store the things we need for re-layout
       el._prevBounds = [el.clientWidth, el.clientHeight];
@@ -475,11 +476,11 @@ const init = () => {
         cola.on("tick", null)
       }, 2000)
 
-    };
+    }
 
     layout();
     resizeHandlers.push(debounce(layout, 200));
-  });
+  })
 };
 
 const px = (val) => Math.round(val) + "px";
