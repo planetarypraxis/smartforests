@@ -250,8 +250,6 @@
   width: 100%;
 
   @include media-breakpoint-down(sm) {
-    overflow: auto;
-
     height: 400px;
   }
 
@@ -259,12 +257,6 @@
     height: 100%;
     width: 100%;
     position: absolute;
-
-    @include media-breakpoint-down(sm) {
-      overflow: auto;
-      width: 755px;
-      height: 755px;
-    }
   }
 }
 
@@ -285,9 +277,13 @@
   .tag-label {
     @include tag-base;
     padding: 1px 6px;
-    font-size: 11px;
     margin-left: 15px;
     margin-right: 15px;
+    font-size: 10.5px !important;
+
+    @include media-breakpoint-up(md) {
+      font-size: 12px !important;
+    }
   }
 
   .tag-handle {
