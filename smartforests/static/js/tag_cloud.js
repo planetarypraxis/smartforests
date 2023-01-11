@@ -296,6 +296,10 @@ const init = () => {
     // * Tags are all within the bounds of the tag area.
     // * Tags do not overlap.
     const layout = () => {
+      const container = d3.select(el);
+      const realGraphNodes = nodes.slice();
+
+      // Define canvas boundaries
       const PADDING = responsive({
         "default": 15,
         "(min-width: 480px)": 25,
@@ -305,20 +309,24 @@ const init = () => {
       const width = Math.max(PADDING, el.clientWidth - (2 * PADDING));
       const height = Math.max(PADDING, el.clientHeight - (2 * PADDING));
 
-      const container = d3.select(el);
-
-      const realGraphNodes = nodes.slice();
+      // Add boundary points in the top left / bottom right to constrain the other points
+      // see: https://github.com/tgdwyer/WebCola/issues/139#issuecomment-136937699
+      const fixedNodeProperties = { fixed: true, fixedWeight: 100000 };
       const pageBounds = { x: PADDING, y: PADDING, width, height };
-      const fixedNode = { fixed: true, fixedWeight: 100 };
-      const topLeft = { ...fixedNode, x: pageBounds.x, y: pageBounds.y };
-      const tlIndex = realGraphNodes.push(topLeft) - 1;
+      const topLeft = {
+        ...fixedNodeProperties,
+        x: pageBounds.x,
+        y: pageBounds.y
+      };
+      const topLeftBoundary = realGraphNodes.push(topLeft) - 1;
       const bottomRight = {
-        ...fixedNode,
+        ...fixedNodeProperties,
         x: pageBounds.x + pageBounds.width,
         y: pageBounds.y + pageBounds.height,
       };
-      const brIndex = realGraphNodes.push(bottomRight) - 1;
+      const bottomRightBoundary = realGraphNodes.push(bottomRight) - 1;
 
+      // Scroll reset
       if (window.innerWidth <= MOBILE_BREAKPOINT) {
         // Center the scroll position on entering mobile view
 
@@ -379,8 +387,8 @@ const init = () => {
         const node = realGraphNodes[i];
 
         // Use the tag element's pixel size to drive the layout algorithm's constraints for avoiding overlaps.
-        node.width = nodeEl.clientWidth;
-        node.height = nodeEl.clientHeight;
+        node.width = nodeEl.clientWidth * 1;
+        node.height = nodeEl.clientHeight * 1;
 
         // Preserve relative positions if we're resizing.
         if (scaleFactor && node.x && node.y) {
@@ -392,14 +400,14 @@ const init = () => {
         constraints.push({
           axis: "x",
           type: "separation",
-          left: tlIndex,
+          left: topLeftBoundary,
           right: i,
           gap: 0,
         });
         constraints.push({
           axis: "y",
           type: "separation",
-          left: tlIndex,
+          left: topLeftBoundary,
           right: i,
           gap: 0,
         });
@@ -407,14 +415,14 @@ const init = () => {
           axis: "x",
           type: "separation",
           left: i,
-          right: brIndex,
+          right: bottomRightBoundary,
           gap: nodeEl.clientWidth,
         });
         constraints.push({
           axis: "y",
           type: "separation",
           left: i,
-          right: brIndex,
+          right: bottomRightBoundary,
           gap: nodeEl.clientHeight,
         });
       }
@@ -428,28 +436,22 @@ const init = () => {
       // Configure and start the layout
       // DOCS: https://ialab.it.monash.edu/webcola/
 
-      const cola = webcola.d3adaptor(d3)
+      /** @type {import('webcola').d3adaptor} */
+      const d3adaptor = webcola.d3adaptor
+
+      const cola = d3adaptor(d3)
         .nodes(realGraphNodes)
         .links(links)
         .size([width, height])
         .constraints(constraints)
-        // ### jaccardLinkLengths
-        // compute an ideal length for each link based on the graph structure around that link.
-        // you can use this (for example) to create extra space around hub-nodes in dense graphs.
-        // In particular this calculation is based on the "symmetric difference"
-        // in the neighbour sets of the source and target:
-        // i.e. if neighbours of source is a and neighbours of target are b then calculation is:
-        // |a intersection b|/|a union b|
-        // Actual computation based on inspection of link structure occurs in start(),
-        // so links themselves don't have to have been assigned before invoking this function.
         .jaccardLinkLengths(responsive({
-          "default": 30,
-          "(min-width: 640px)": 60,
-          "(min-width: 1024px)": 80
-        }))
+          "default": 40,
+          "(min-width: 640px)": 80,
+          "(min-width: 1140px)": 90
+        }), 0.7)
         .avoidOverlaps(true)
         .handleDisconnected(true)
-        .start(30);
+        .start(15, 15, 15);
 
       // Store the things we need for re-layout
       el._prevBounds = [el.clientWidth, el.clientHeight];
