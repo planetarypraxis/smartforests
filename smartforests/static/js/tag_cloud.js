@@ -311,6 +311,7 @@ const init = () => {
 
       // Add boundary points in the top left / bottom right to constrain the other points
       // see: https://github.com/tgdwyer/WebCola/issues/139#issuecomment-136937699
+      // example: https://ialab.it.monash.edu/webcola/examples/pageBoundsConstraints.html
       const fixedNodeProperties = { fixed: true, fixedWeight: 100000 };
       const pageBounds = { x: PADDING, y: PADDING, width, height };
       const topLeft = {
