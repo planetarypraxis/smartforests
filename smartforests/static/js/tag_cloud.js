@@ -459,8 +459,6 @@ const init = () => {
       cola.on("tick", () => {
         requestAnimationFrame(() => {
           tags.style("transform", ({ x, y }) => {
-            x = Math.max(pageBounds.x, Math.min(pageBounds.width, x))
-            y = Math.max(pageBounds.y, Math.min(pageBounds.height, y))
             return `translate(${px(x)},${px(y)})`
           });
           updateBackground(realGraphNodes, links);
