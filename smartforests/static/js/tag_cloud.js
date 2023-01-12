@@ -183,19 +183,25 @@ const init = () => {
       .select(el)
       .append("canvas")
       .attr("class", "w-100 h-100 position-absolute")
-      .attr("style", "image-rendering: crisp-edges;")
+      .attr("style",
+        // 'crisp-edges' for most browsers, 'pixellated' for Chrome
+        "image-rendering: crisp-edges; image-rendering: pixelated;")
       .node();
 
     const ctx = canvas.getContext("2d");
 
-    // Disable image smoothing soe we can achieve the pixelly effect
-    ctx.msImageSmoothingEnabled = false;
-    ctx.mozImageSmoothingEnabled = false;
-    ctx.webkitImageSmoothingEnabled = false;
-    ctx.imageSmoothingEnabled = false;
-
     const updateBackground = (nodes, links) => {
       if (!parentEl || !parentEl.isConnected) return
+
+      // Disable image smoothing to achieve a pixelly effect
+      // must be applied after canvas resize events (see https://stackoverflow.com/a/29564875/1053937)
+      ctx.imageSmoothingQuality = "low"
+      ctx.msImageSmoothingEnabled = false;
+      ctx.mozImageSmoothingEnabled = false;
+      ctx.webkitImageSmoothingEnabled = false;
+      ctx.imageSmoothingEnabled = false;
+      ctx.oImageSmoothingEnabled = false;
+      console.log(ctx)
 
       /**
        * Set up the canvas
