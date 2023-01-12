@@ -187,6 +187,8 @@ const init = () => {
       .node();
 
     const ctx = canvas.getContext("2d");
+
+    // Disable image smoothing soe we can achieve the pixelly effect
     ctx.msImageSmoothingEnabled = false;
     ctx.mozImageSmoothingEnabled = false;
     ctx.webkitImageSmoothingEnabled = false;
@@ -282,18 +284,24 @@ const init = () => {
       }
 
       // Then it is zoomed in by the PIXEL_SIZE ratio
+      // without smoothing to achieve the pixelly effect
     };
 
     let usingMobileLayout = false;
 
-    // Use webcola's constraint-based graph layout plugin for d3 to lay out the tags, ensuring that we respect the
-    // following constrants:
+    // Use webcola's constraint-based graph layout plugin for d3 to lay out the tags
+    // ensuring that we respect the following constrants:
     //
-    // * Related tags are close togehter
+    // * Related tags are close together
     // * Tags are all within the bounds of the tag area.
     // * Tags do not overlap.
     const layout = () => {
-      const PADDING = 75;
+      const PADDING = responsive({
+        "default": 15,
+        "(min-width: 480px)": 25,
+        "(min-width: 640px)": 50,
+        "(min-width: 1024px)": 66
+      })
       const width = Math.max(PADDING, el.clientWidth - (2 * PADDING));
       const height = Math.max(PADDING, el.clientHeight - (2 * PADDING));
 
@@ -419,18 +427,26 @@ const init = () => {
 
       // Configure and start the layout
       // DOCS: https://ialab.it.monash.edu/webcola/
-      const IDEAL_GAP = 80
+
       const cola = webcola.d3adaptor(d3)
         .nodes(realGraphNodes)
         .links(links)
         .size([width, height])
         .constraints(constraints)
-        .jaccardLinkLengths(
-          IDEAL_GAP,
-          // Default gap between tags should allow for around 20 tags side by side,
-          // but adjust this to the width of the screen
-          Math.min(3, Math.max(0.5, document.body.clientWidth / (IDEAL_GAP * 2)))
-        )
+        // ### jaccardLinkLengths
+        // compute an ideal length for each link based on the graph structure around that link.
+        // you can use this (for example) to create extra space around hub-nodes in dense graphs.
+        // In particular this calculation is based on the "symmetric difference"
+        // in the neighbour sets of the source and target:
+        // i.e. if neighbours of source is a and neighbours of target are b then calculation is:
+        // |a intersection b|/|a union b|
+        // Actual computation based on inspection of link structure occurs in start(),
+        // so links themselves don't have to have been assigned before invoking this function.
+        .jaccardLinkLengths(responsive({
+          "default": 30,
+          "(min-width: 640px)": 60,
+          "(min-width: 1024px)": 80
+        }))
         .avoidOverlaps(true)
         .handleDisconnected(true)
         .start(30);
@@ -442,16 +458,20 @@ const init = () => {
       // Animate the layout.
       cola.on("tick", () => {
         requestAnimationFrame(() => {
-          tags.style("transform", (d) => `translate(${px(d.x)},${px(d.y)})`);
+          tags.style("transform", ({ x, y }) => {
+            x = Math.max(pageBounds.x, Math.min(pageBounds.width, x))
+            y = Math.max(pageBounds.y, Math.min(pageBounds.height, y))
+            return `translate(${px(x)},${px(y)})`
+          });
           updateBackground(realGraphNodes, links);
         })
       });
 
       // Stop animation after converged
-      setTimeout(() =>{
-        cola.on("tick",null)
+      setTimeout(() => {
+        cola.on("tick", null)
       }, 2000)
-      
+
     };
 
     layout();
@@ -464,3 +484,21 @@ const px = (val) => Math.round(val) + "px";
 window.addEventListener("turbo:load", init);
 
 init()
+
+
+/**
+ * @param {{ query: Number }} breakpointValues 
+ */
+function responsive(breakpointValues) {
+  if (!breakpointValues) return 0
+  const entries = Object.entries(breakpointValues)
+  if (!entries.length) return 0
+  let cascadeValue = entries[0][1]
+  for (const [breakpoint, value] of entries) {
+    if (breakpoint === 'default' || window.matchMedia(breakpoint).matches) {
+      cascadeValue = value
+    }
+  }
+  // Backup
+  return cascadeValue
+}

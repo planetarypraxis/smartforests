@@ -12,7 +12,7 @@
 
 {% block article %}
 {% if self.byline %}
-  <div class="mb-7">
+  <div class="mb-lg-7">
     <div class='logbook-entry'>
       <div class="logbook-entry-card border-2">
         {{self.byline}}
@@ -34,7 +34,7 @@
   </header>
   <div class='row'>
     {% for page in pages %}
-      <div class='col-lg-3 col-md-4 col-sm-6 col'>
+      <div class='col-lg-3 col-md-4 col-sm-6 col-xs-6 col-12'>
         {% include "logbooks/thumbnails/related_page_thumbnail.html" with page=page show_owner=False %}
       </div>
     {% endfor %}

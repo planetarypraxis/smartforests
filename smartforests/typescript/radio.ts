@@ -9,7 +9,6 @@ export function main() {
   const playButtons = document.querySelectorAll<HTMLElement>(
     "[data-smartforests-radio-play-button]"
   );
-  console.log(`Found ${playButtons.length} play buttons on page.`);
 
   /**
    * Define the actual radio player
@@ -179,7 +178,6 @@ export function main() {
     radioPlayerAudio.pause();
     radioPlayerOffCanvas.show();
 
-    console.log(`Loading ${audioUrl}`);
     startRadioPlayer(audioUrl, title, owner, lastPublishedAt, image, pageURL, play);
   }
 
