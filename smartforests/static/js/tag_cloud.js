@@ -201,7 +201,6 @@ const init = () => {
       ctx.webkitImageSmoothingEnabled = false;
       ctx.imageSmoothingEnabled = false;
       ctx.oImageSmoothingEnabled = false;
-      console.log(ctx)
 
       /**
        * Set up the canvas
@@ -315,7 +314,7 @@ const init = () => {
 
       const realGraphNodes = nodes.slice();
       const pageBounds = { x: PADDING, y: PADDING, width, height };
-      const fixedNode = { fixed: true, fixedWeight: 100 };
+      const fixedNode = { fixed: true, fixedWeight: 100000 };
       const topLeft = { ...fixedNode, x: pageBounds.x, y: pageBounds.y };
       const tlIndex = realGraphNodes.push(topLeft) - 1;
       const bottomRight = {
