@@ -6,7 +6,7 @@
     <div>
       <main class="container-fluid">
         {% for episode in child_list_page %}
-          <div class="row g-0 border-sm-0 border-bottom pt-3 pb-2 {% if forloop.last %}mb-6{% endif %}">
+          <div class="row g-0 border-sm-0 border-bottom pt-1 pb-1 align-items-center {% if forloop.last %}mb-6{% endif %}">
             <div class="col d-flex align-items-start">
               {% include 'logbooks/include/episode_button.html' with episode=episode extra_classes="me-2 p-0 d-none d-md-block" %}
               <div class='w-100'>
@@ -37,9 +37,9 @@
             </div>
             <div class="col-2 d-none d-md-flex align-items-start justify-content-end">
               {% if episode.image %}
-                  {% image episode.image height-60%}
+                  {% image episode.image fill-100x100%}
               {% else %}
-                <img src="{% static "img/radio-icon.svg" %}"/>
+                <img src="{% static "img/radio-icon.svg" %}" />
               {% endif %}
             </div>
           </div>
