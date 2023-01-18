@@ -21,9 +21,9 @@
     </div>
     <a class='text-decoration-none text-reset d-block position-relative' href='' data-smartforests-radio-episode-page-url>
       {% if episode.image %}
-          {% image episode.image height-48 data-smartforests-radio-episode-image=true %}
+          {% image episode.image fill-60x60 data-smartforests-radio-episode-image=true %}
       {% else %}
-          <img height="48" data-smartforests-radio-episode-image>
+          <img height="60" style="object-fit: cover; height: 75px; width: 75px;"  data-smartforests-radio-episode-image>
       {% endif %}
       <img class="position-absolute top-50 start-50 translate-middle" src='{% static "img/radio-icon.svg" %}' />
     </a>
