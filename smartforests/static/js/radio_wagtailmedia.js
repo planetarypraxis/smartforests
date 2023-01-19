@@ -21,6 +21,8 @@ jQuery(function () {
     })
 
     jQuery('input[name="media-chooser-upload-file"]').on('change', async function (evt) {
+      const fileInput = jQuery(document).find('input[name="media-chooser-upload-file"]')
+
       // Disable the submit button, just in case...
       const submit = jQuery('button[type="submit"]')
       submit.attr('disabled', true)
@@ -29,23 +31,28 @@ jQuery(function () {
       const [file] = evt.target.files
       const ctx = new AudioContext()
       const buffer = await file.arrayBuffer()
-      const data = await ctx.decodeAudioData(buffer)
+      let data
 
+      // Catch wrong-filetype issues - wagtailmedia doesn't have very good error handling
+      try {
+        data = await ctx.decodeAudioData(buffer)
+      } catch {
+        onFail(fileInput)
+      }
+
+      // Deal with uncaught errors due to corrupted files etc.
       if (!!(data?.duration && !isNaN(data?.duration))) {
         const duration = Math.floor(data.duration)
 
         // Insert the duration into the input
         durationInput.show()
-        jQuery('input[name="media-chooser-upload-duration"]').val(duration)
+        jQuery('input[name="media-chooser-upload-duration"]').val(duration).attr('disabled', true)
 
         // Show and autofill the title
         title.show()
         jQuery('input[name="media-chooser-upload-title"]').val(file.name)
 
-      } else {
-        jQuery(document).find('input[name="media-chooser-upload-file"]').val(null)
-        alert("Something is wrong with that file, or it's the wrong file type. Supported formats are MP3, OGG or WAV")
-      }
+      } else onFail(fileInput)
 
       // release the button
       submit.attr('disabled', false)
@@ -56,3 +63,9 @@ jQuery(function () {
 
   observer.observe(document.querySelector('body'), { subtree: false, childList: true });
 })
+
+function onFail(fileInput) {
+  const alertText = "Something is wrong with that file, or it's the wrong file type. Supported formats are MP3, OGG or WAV"
+  fileInput.val(null)
+  alert(alertText)
+}
