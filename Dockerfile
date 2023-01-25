@@ -6,8 +6,13 @@ RUN SKIP_MIGRATE=1 bash install.sh
 RUN yarn
 
 # Copy the rest of the sources over
-COPY --chown=app:app . .
-ENV DJANGO_SETTINGS_MODULE=smartforests.settings.production \
-  NODE_ENV=production
+COPY --chown=app:app . ./
+ENV DJANGO_SETTINGS_MODULE=smartforests.settings.production
+ENV NODE_ENV=production
 
+# Build
 RUN pipenv run bash .bin/build.sh
+
+# Run
+EXPOSE ${PORT:-8080}
+#RUN pipenv run bash .bin/release.sh
