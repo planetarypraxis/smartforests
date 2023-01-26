@@ -6,7 +6,7 @@ kill_timeout = 5
 
 [env]
   PORT = "8080"
-  BASE_URL = "https://atlas-staging.smartforests.net"
+  BASE_URL = "https://smartforests-test.fly.dev/"
 
 [experimental]
   auto_rollback = true
