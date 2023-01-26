@@ -12,6 +12,11 @@ See it live at https://atlas.smartforests.net
 - Webpack (asset pipeline)
 - PostgreSQL (Database & search index)
 
+## Hosting
+
+- Digital Ocean (production)
+- Fly.io (staging)
+
 ## Third party services
 
 - Digital Ocean App Platform (Compute, database hosting, object storage & CDN)
