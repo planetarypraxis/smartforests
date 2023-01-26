@@ -15,4 +15,4 @@ RUN pipenv run bash .bin/build.sh
 
 # Run
 EXPOSE ${PORT:-8080}
-RUN pipenv run bash .bin/release.sh
+#RUN pipenv run bash .bin/release.sh

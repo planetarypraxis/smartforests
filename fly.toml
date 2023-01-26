@@ -18,6 +18,7 @@ kill_timeout = 5
 [[services]]
   # http_checks = []
   internal_port = 8080
+  # processes = ["app"]
   protocol = "tcp"
   # script_checks = []
   [services.concurrency]
@@ -39,6 +40,9 @@ kill_timeout = 5
     interval = "15s"
     restart_limit = 0
     timeout = "2s"
+
+  [processes]
+    web = "pipenv run bash .bin/run.sh"
 
 [[statics]]
   guest_path = "/app/static"
