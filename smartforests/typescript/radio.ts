@@ -1,55 +1,55 @@
 import { findAncestor, formatDuration } from "./util";
 
-const radioPlayerAudio = new Audio();
+const episode = new Audio();
 
 export function main() {
   /**
    * Control the audio player from any number of play buttons in the UI
    */
-  const playButtons = document.querySelectorAll<HTMLElement>(
+  const loadEpisodeButtons = document.querySelectorAll<HTMLElement>(
     "[data-smartforests-radio-play-button]"
   );
 
   /**
    * Define the actual radio player
    */
-  const radioPlayer = document.getElementById("radioPlayer") as HTMLElement;
-  const radioPlayerPlayButton = document.getElementById("radioPlayerPlayButton") as HTMLElement;
-  const radioPlayerOffCanvasElement = document.getElementById("radioPlayer") as HTMLElement;
-  const radioPlayerSeeker = document.getElementById('radioPlayerSeeker') as HTMLProgressElement
-  const radioPlayerOffCanvas = new window.bootstrap.Offcanvas(radioPlayerOffCanvasElement);
+  const radio = document.getElementById("radioPlayer") as HTMLElement;
+  const radioPlayButton = document.getElementById("radioPlayerPlayButton") as HTMLElement;
+  const radioOffCanvasElement = document.getElementById("radioPlayer") as HTMLElement;
+  const radioSeeker = document.getElementById('radioPlayerSeeker') as HTMLProgressElement
+  const radioOffCanvas = new window.bootstrap.Offcanvas(radioOffCanvasElement);
 
   /**
    * Update all play buttons in response to radioPlayerAudio status
    */
-  radioPlayerAudio.addEventListener('ended', updateButtonState)
-  radioPlayerAudio.addEventListener('pause', updateButtonState)
-  radioPlayerAudio.addEventListener('play', updateButtonState)
-  radioPlayerAudio.addEventListener('playing', updateButtonState)
+  episode.addEventListener('ended', updateButtonState)
+  episode.addEventListener('pause', updateButtonState)
+  episode.addEventListener('play', updateButtonState)
+  episode.addEventListener('playing', updateButtonState)
 
-  function isPlayerButtonActive(somePlayButton) {
-    if (!somePlayButton.dataset.smartforestsAudio || !radioPlayerAudio.src) return false
+  function isEpisodeActive(somePlayButton) {
+    if (!somePlayButton.dataset.smartforestsAudio || !episode.src) return false
     // (We rebuild the URL because one might be a relative URL, the other might be absolute)
-    const buttonURL = new URL(somePlayButton.dataset.smartforestsAudio, radioPlayerAudio.src).toString()
-    const playerURL = new URL(radioPlayerAudio.src).toString()
+    const buttonURL = new URL(somePlayButton.dataset.smartforestsAudio, episode.src).toString()
+    const playerURL = new URL(episode.src).toString()
     return buttonURL === playerURL
   }
 
   function updateButtonState() {
     // Main radio player
-    radioPlayerPlayButton.querySelector(radioPlayerAudio.paused ? ".pause-button" : ".play-button").classList.add("d-none");
-    radioPlayerPlayButton.querySelector(radioPlayerAudio.paused ? ".play-button" : ".pause-button").classList.remove("d-none");
+    radioPlayButton.querySelector(episode.paused ? ".pause-button" : ".play-button").classList.add("d-none");
+    radioPlayButton.querySelector(episode.paused ? ".play-button" : ".pause-button").classList.remove("d-none");
 
     // Other play/pause buttons in the UI
-    Array.from(playButtons).forEach((somePlayButton) => {
+    Array.from(loadEpisodeButtons).forEach((loadEpisodeButton) => {
       // Default all buttons to pause, just in case
-      somePlayButton.querySelector(".pause-button").classList.add("d-none");
-      somePlayButton.querySelector(".play-button").classList.remove("d-none");
+      loadEpisodeButton.querySelector(".pause-button").classList.add("d-none");
+      loadEpisodeButton.querySelector(".play-button").classList.remove("d-none");
 
       // If the button refers to the same audio, then sync its visual state to the radio player
-      if (isPlayerButtonActive(somePlayButton)) {
-        somePlayButton.querySelector(radioPlayerAudio.paused ? ".pause-button" : ".play-button").classList.add("d-none");
-        somePlayButton.querySelector(radioPlayerAudio.paused ? ".play-button" : ".pause-button").classList.remove("d-none");
+      if (isEpisodeActive(loadEpisodeButton)) {
+        loadEpisodeButton.querySelector(episode.paused ? ".pause-button" : ".play-button").classList.add("d-none");
+        loadEpisodeButton.querySelector(episode.paused ? ".play-button" : ".pause-button").classList.remove("d-none");
       }
     });
   }
@@ -57,22 +57,22 @@ export function main() {
   /**
    * Update the current time / bar / etc. according to current status
    */
-  radioPlayerAudio.addEventListener('timeupdate', updatePlayerTime)
+  episode.addEventListener('timeupdate', updatePlayerTime)
   function updatePlayerTime(e) {
     requestAnimationFrame(() => {
-      radioPlayer.querySelector(
+      radio.querySelector(
         "[data-smartforests-radio-episode-elapsed-time]"
-      ).innerHTML = formatDuration(radioPlayerAudio.currentTime);
-      radioPlayerSeeker.value = parseFloat((radioPlayerAudio.currentTime / radioPlayerAudio.duration).toString())
+      ).innerHTML = formatDuration(episode.currentTime);
+      radioSeeker.value = parseFloat((episode.currentTime / episode.duration).toString())
     })
   }
 
-  radioPlayerAudio.addEventListener('durationchange', updatePlayerDuration)
-  function updatePlayerDuration() {
+  episode.addEventListener('durationchange', updateEpisodeDuration)
+  function updateEpisodeDuration() {
     requestAnimationFrame(() => {
-      radioPlayer.querySelector(
+      radio.querySelector(
         "[data-smartforests-radio-episode-duration]"
-      ).innerHTML = formatDuration(radioPlayerAudio.duration);
+      ).innerHTML = formatDuration(episode.duration);
     })
   }
 
@@ -80,60 +80,60 @@ export function main() {
    * Control the radio player with the buttons
    */
 
-  radioPlayerPlayButton.addEventListener("click", (event) => {
+  radioPlayButton.addEventListener("click", (event) => {
     event.stopImmediatePropagation();
-    if (radioPlayerAudio.paused) {
-      radioPlayerAudio.play()
+    if (episode.paused) {
+      episode.play()
     } else {
-      radioPlayerAudio.pause()
+      episode.pause()
     }
   });
 
   /**
    * Control the current time via the seeker
    */
-  radioPlayerSeeker.addEventListener('click', (event) => {
+  radioSeeker.addEventListener('click', (event) => {
     event.stopImmediatePropagation()
-    const percent = event.offsetX / radioPlayerSeeker.offsetWidth;
-    radioPlayerAudio.currentTime = percent * radioPlayerAudio.duration;
+    const percent = event.offsetX / radioSeeker.offsetWidth;
+    episode.currentTime = percent * episode.duration;
   })
 
   /**
    * Load audio into player from any 'play' button in the UI
    */
 
-  function startRadioPlayer(audioUrl, title, owner, lastPublishedAt, image, pageURL, play = true) {
-    radioPlayer.querySelector(
+  function loadRadioPlayer(audioUrl, title, owner, lastPublishedAt, image, pageURL, play = true) {
+    radio.querySelector(
       "[data-smartforests-radio-episode-title]"
     ).innerHTML = title;
-    radioPlayer.querySelector(
+    radio.querySelector(
       "[data-smartforests-radio-episode-owner]"
     ).innerHTML = owner;
-    radioPlayer.querySelector(
+    radio.querySelector(
       "[data-smartforests-radio-episode-last-published-at]"
     ).innerHTML = lastPublishedAt;
-    Array.from(radioPlayer.querySelectorAll<HTMLAnchorElement>(
+    Array.from(radio.querySelectorAll<HTMLAnchorElement>(
       "[data-smartforests-radio-episode-page-url]"
     )).map(el => { el.href = pageURL });
 
-    (radioPlayer.querySelector("img[data-smartforests-radio-episode-image]") as HTMLImageElement).src =
+    (radio.querySelector("img[data-smartforests-radio-episode-image]") as HTMLImageElement).src =
       image;
 
-    radioPlayerAudio.src = audioUrl;
+    episode.src = audioUrl;
     if (play) {
-      radioPlayerAudio.play();
+      episode.play();
     }
   }
 
-  Array.from(playButtons).forEach((playButton) => {
+  Array.from(loadEpisodeButtons).forEach((playButton) => {
     // Load featured episode at pageload
     if (
       // Don't override an explicit user interaction
-      !isPlayerButtonActive(playButton)
+      !isEpisodeActive(playButton)
       // Only listen for radio things marked preloadable
       && playButton.dataset.smartforestsShouldPreloadEpisode !== undefined
     ) {
-      startRadioPlayerViaButton(playButton, false);
+      loadEpisodeViaButton(playButton, false);
     }
 
     // Listen for subsequent 'play' requests
@@ -142,11 +142,11 @@ export function main() {
 
       // If this audio track was already playing,
       // then treat this as a normal play/pause button
-      if (isPlayerButtonActive(playButton)) {
-        if (radioPlayerAudio.paused) {
-          radioPlayerAudio.play();
+      if (isEpisodeActive(playButton)) {
+        if (episode.paused) {
+          episode.play();
         } else {
-          radioPlayerAudio.pause();
+          episode.pause();
         }
         return
       }
@@ -154,6 +154,7 @@ export function main() {
       // Else treat this as a "load new track" button
       let buttonElement
 
+      // Capture click events on child elements
       if (!(event.target as HTMLElement).dataset.smartforestsAudio) {
         buttonElement = findAncestor(
           event.target,
@@ -163,11 +164,11 @@ export function main() {
         buttonElement = event.target;
       }
 
-      startRadioPlayerViaButton(buttonElement);
+      loadEpisodeViaButton(buttonElement);
     });
   });
 
-  function startRadioPlayerViaButton(buttonElement, play = true) {
+  function loadEpisodeViaButton(buttonElement, play = true) {
     const audioUrl = buttonElement.dataset.smartforestsAudio;
     const title = buttonElement.dataset.smartforestsTitle;
     const lastPublishedAt = buttonElement.dataset.smartforestsLastPublishedAt;
@@ -175,10 +176,10 @@ export function main() {
     const image = buttonElement.dataset.smartforestsImage;
     const pageURL = buttonElement.dataset.smartforestsPageUrl;
 
-    radioPlayerAudio.pause();
-    radioPlayerOffCanvas.show();
+    episode.pause();
+    radioOffCanvas.show();
 
-    startRadioPlayer(audioUrl, title, owner, lastPublishedAt, image, pageURL, play);
+    loadRadioPlayer(audioUrl, title, owner, lastPublishedAt, image, pageURL, play);
   }
 
   // Update the button state on each new visit
