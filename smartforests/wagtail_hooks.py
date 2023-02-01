@@ -82,3 +82,11 @@ def insert_global_admin_css():
         '<link rel="stylesheet" type="text/css" href="{}">',
         static("admin.css"),
     )
+
+
+@hooks.register("insert_global_admin_js", order=100)
+def global_admin_js():
+    return format_html(
+        '<script type="module" src="{}"></script>',
+        static("/js/radio_wagtailmedia.js")
+    )
