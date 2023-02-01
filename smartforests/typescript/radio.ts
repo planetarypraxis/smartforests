@@ -1,55 +1,96 @@
 import { findAncestor, formatDuration } from "./util";
+import { snakeCase } from "lodash";
+
+type RadioState = {
+  loaded: boolean;
+  playing: boolean;
+  episode?: string;
+};
+
+type EpisodeMeta = {
+  audioUrl: string;
+  title: string;
+  owner: string;
+  lastPublishedAt: string;
+  image: string;
+  pageURL: string;
+};
+
+type PlayButton = HTMLButtonElement & { dataset: PlayButtonDataset };
+
+interface PlayButtonDataset {
+  smartforestsAudio: string;
+  smartforestsTitle: string;
+  smartforestsLastPublishedAt: string;
+  smartforestsOwner: string;
+  smartforestsImage: string;
+  smartforestsPageUrl: string;
+}
 
 const episode = new Audio();
+let radio: RadioState = {
+  loaded: false,
+  playing: false,
+};
 
 export function main() {
   /**
-   * Control the audio player from any number of play buttons in the UI
-   */
-  const loadEpisodeButtons = document.querySelectorAll<HTMLElement>(
-    "[data-smartforests-radio-play-button]"
-  );
-
-  /**
    * Define the actual radio player
    */
-  const radio = document.getElementById("radioPlayer") as HTMLElement;
+  const radioUI = document.getElementById("radioPlayer") as HTMLElement;
   const radioPlayButton = document.getElementById("radioPlayerPlayButton") as HTMLElement;
+  const radioSeeker = document.getElementById("radioPlayerSeeker") as HTMLProgressElement;
   const radioOffCanvasElement = document.getElementById("radioPlayer") as HTMLElement;
-  const radioSeeker = document.getElementById('radioPlayerSeeker') as HTMLProgressElement
   const radioOffCanvas = new window.bootstrap.Offcanvas(radioOffCanvasElement);
 
   /**
    * Update all play buttons in response to radioPlayerAudio status
    */
-  episode.addEventListener('ended', updateButtonState)
-  episode.addEventListener('pause', updateButtonState)
-  episode.addEventListener('play', updateButtonState)
-  episode.addEventListener('playing', updateButtonState)
+  episode.addEventListener("ended", updateButtonState);
+  episode.addEventListener("pause", updateButtonState);
+  episode.addEventListener("play", updateButtonState);
+  episode.addEventListener("playing", updateButtonState);
+
+  /**
+   * Control the audio player from any number of play buttons in the UI
+   */
+  function getEpisodeButtons() {
+    return document.querySelectorAll<HTMLElement>("[data-smartforests-radio-play-button]");
+  }
 
   function isEpisodeActive(somePlayButton) {
-    if (!somePlayButton.dataset.smartforestsAudio || !episode.src) return false
+    if (!somePlayButton.dataset.smartforestsAudio || !episode.src) return false;
     // (We rebuild the URL because one might be a relative URL, the other might be absolute)
-    const buttonURL = new URL(somePlayButton.dataset.smartforestsAudio, episode.src).toString()
-    const playerURL = new URL(episode.src).toString()
-    return buttonURL === playerURL
+    const buttonURL = new URL(somePlayButton.dataset.smartforestsAudio, episode.src).toString();
+    const playerURL = new URL(episode.src).toString();
+    return buttonURL === playerURL;
   }
 
   function updateButtonState() {
+    const episodeLoadButtons = getEpisodeButtons();
+
     // Main radio player
-    radioPlayButton.querySelector(episode.paused ? ".pause-button" : ".play-button").classList.add("d-none");
-    radioPlayButton.querySelector(episode.paused ? ".play-button" : ".pause-button").classList.remove("d-none");
+    radioPlayButton
+      .querySelector(episode.paused ? ".pause-button" : ".play-button")
+      ?.classList.add("d-none");
+    radioPlayButton
+      .querySelector(episode.paused ? ".play-button" : ".pause-button")
+      ?.classList.remove("d-none");
 
     // Other play/pause buttons in the UI
-    Array.from(loadEpisodeButtons).forEach((loadEpisodeButton) => {
+    Array.from(episodeLoadButtons).forEach((loadEpisodeButton) => {
       // Default all buttons to pause, just in case
-      loadEpisodeButton.querySelector(".pause-button").classList.add("d-none");
-      loadEpisodeButton.querySelector(".play-button").classList.remove("d-none");
+      loadEpisodeButton.querySelector(".pause-button")?.classList.add("d-none");
+      loadEpisodeButton.querySelector(".play-button")?.classList.remove("d-none");
 
       // If the button refers to the same audio, then sync its visual state to the radio player
       if (isEpisodeActive(loadEpisodeButton)) {
-        loadEpisodeButton.querySelector(episode.paused ? ".pause-button" : ".play-button").classList.add("d-none");
-        loadEpisodeButton.querySelector(episode.paused ? ".play-button" : ".pause-button").classList.remove("d-none");
+        loadEpisodeButton
+          .querySelector(episode.paused ? ".pause-button" : ".play-button")
+          ?.classList.add("d-none");
+        loadEpisodeButton
+          .querySelector(episode.paused ? ".play-button" : ".pause-button")
+          ?.classList.remove("d-none");
       }
     });
   }
@@ -57,118 +98,106 @@ export function main() {
   /**
    * Update the current time / bar / etc. according to current status
    */
-  episode.addEventListener('timeupdate', updatePlayerTime)
+  episode.addEventListener("timeupdate", updatePlayerTime);
   function updatePlayerTime(e) {
     requestAnimationFrame(() => {
-      radio.querySelector(
-        "[data-smartforests-radio-episode-elapsed-time]"
-      ).innerHTML = formatDuration(episode.currentTime);
-      radioSeeker.value = parseFloat((episode.currentTime / episode.duration).toString())
-    })
+      const elapsed = radioUI.querySelector("[data-smartforests-radio-episode-elapsed-time]");
+      if (elapsed) elapsed.innerHTML = formatDuration(episode.currentTime);
+      if (episode.currentTime && episode.duration && episode?.duration > 0) {
+        radioSeeker.value = parseFloat((episode.currentTime / episode.duration).toString());
+      }
+    });
   }
 
-  episode.addEventListener('durationchange', updateEpisodeDuration)
+  episode.addEventListener("durationchange", updateEpisodeDuration);
   function updateEpisodeDuration() {
     requestAnimationFrame(() => {
-      radio.querySelector(
-        "[data-smartforests-radio-episode-duration]"
-      ).innerHTML = formatDuration(episode.duration);
-    })
+      const duration = radioUI.querySelector("[data-smartforests-radio-episode-duration]");
+      if (duration) duration.innerHTML = formatDuration(episode.duration);
+    });
   }
 
   /**
    * Control the radio player with the buttons
    */
-
   radioPlayButton.addEventListener("click", (event) => {
     event.stopImmediatePropagation();
     if (episode.paused) {
-      episode.play()
+      episode.play();
     } else {
-      episode.pause()
+      episode.pause();
     }
   });
 
   /**
    * Control the current time via the seeker
    */
-  radioSeeker.addEventListener('click', (event) => {
-    event.stopImmediatePropagation()
+  radioSeeker.addEventListener("click", (event) => {
+    event.stopImmediatePropagation();
     const percent = event.offsetX / radioSeeker.offsetWidth;
     episode.currentTime = percent * episode.duration;
-  })
+  });
 
   /**
    * Load audio into player from any 'play' button in the UI
    */
 
-  function loadRadioPlayer(audioUrl, title, owner, lastPublishedAt, image, pageURL, play = true) {
-    radio.querySelector(
-      "[data-smartforests-radio-episode-title]"
-    ).innerHTML = title;
-    radio.querySelector(
-      "[data-smartforests-radio-episode-owner]"
-    ).innerHTML = owner;
-    radio.querySelector(
-      "[data-smartforests-radio-episode-last-published-at]"
-    ).innerHTML = lastPublishedAt;
-    Array.from(radio.querySelectorAll<HTMLAnchorElement>(
-      "[data-smartforests-radio-episode-page-url]"
-    )).map(el => { el.href = pageURL });
+  function loadEpisode(episodeMeta: EpisodeMeta, play = true) {
+    ["title", "owner", "lastPublishedAt"].forEach((prop) => {
+      const element = radioUI.querySelector(`[data-smartforests-radio-episode-${snakeCase(prop)}]`);
+      if (element) element.innerHTML = episodeMeta[prop];
+    });
 
-    (radio.querySelector("img[data-smartforests-radio-episode-image]") as HTMLImageElement).src =
-      image;
+    Array.from(
+      radioUI.querySelectorAll<HTMLAnchorElement>("[data-smartforests-radio-episode-page-url]")
+    ).map((el) => {
+      el.href = episodeMeta.pageURL;
+    });
 
-    episode.src = audioUrl;
+    (radioUI.querySelector("img[data-smartforests-radio-episode-image]") as HTMLImageElement).src =
+      episodeMeta.image;
+
+    episode.src = episodeMeta.audioUrl;
+
     if (play) {
       episode.play();
     }
   }
 
-  Array.from(loadEpisodeButtons).forEach((playButton) => {
-    // Load featured episode at pageload
-    if (
-      // Don't override an explicit user interaction
-      !isEpisodeActive(playButton)
-      // Only listen for radio things marked preloadable
-      && playButton.dataset.smartforestsShouldPreloadEpisode !== undefined
-    ) {
-      loadEpisodeViaButton(playButton, false);
-    }
+  function addButtonListeners() {
+    const episodeLoadButtons = getEpisodeButtons();
+    Array.from(episodeLoadButtons).forEach((loadEpisodeButton) => {
+      // Listen for clicks
+      loadEpisodeButton.addEventListener("click", (event) => {
+        event.stopImmediatePropagation();
 
-    // Listen for subsequent 'play' requests
-    playButton.addEventListener("click", (event) => {
-      event.stopImmediatePropagation();
-
-      // If this audio track was already playing,
-      // then treat this as a normal play/pause button
-      if (isEpisodeActive(playButton)) {
-        if (episode.paused) {
-          episode.play();
-        } else {
-          episode.pause();
+        // If this audio track was already playing,
+        // then treat this as a normal play/pause button
+        if (isEpisodeActive(loadEpisodeButton)) {
+          if (episode.paused) {
+            episode.play();
+          } else {
+            episode.pause();
+          }
+          return;
         }
-        return
-      }
 
-      // Else treat this as a "load new track" button
-      let buttonElement
+        // Else treat this as a "load new track" button
+        let buttonElement;
 
-      // Capture click events on child elements
-      if (!(event.target as HTMLElement).dataset.smartforestsAudio) {
-        buttonElement = findAncestor(
-          event.target,
-          "[data-smartforests-radio-play-button]"
-        );
-      } else {
-        buttonElement = event.target;
-      }
+        // Capture click events on child elements
+        if (!(event.target as HTMLElement).dataset.smartforestsAudio) {
+          buttonElement = findAncestor(event.target, "[data-smartforests-radio-play-button]");
+        } else {
+          buttonElement = event.target;
+        }
 
-      loadEpisodeViaButton(buttonElement);
+        loadEpisodeViaButton(buttonElement);
+      });
     });
-  });
+  }
 
-  function loadEpisodeViaButton(buttonElement, play = true) {
+  function loadEpisodeViaButton(buttonElement: PlayButton, play = true): EpisodeMeta {
     const audioUrl = buttonElement.dataset.smartforestsAudio;
     const title = buttonElement.dataset.smartforestsTitle;
     const lastPublishedAt = buttonElement.dataset.smartforestsLastPublishedAt;
@@ -178,11 +207,36 @@ export function main() {
 
     episode.pause();
     radioOffCanvas.show();
+    const episodeMeta = {
+      audioUrl,
+      title,
+      owner,
+      lastPublishedAt,
+      image,
+      pageURL,
+    };
 
-    loadRadioPlayer(audioUrl, title, owner, lastPublishedAt, image, pageURL, play);
+    loadEpisode(episodeMeta, play);
+
+    return episodeMeta;
   }
 
-  // Update the button state on each new visit
-  // in case something is already playing
-  updateButtonState()
+  async function loadRadio() {
+    if (!radio.loaded) {
+      const featuredEpisode = document.querySelectorAll<PlayButton>(
+        ".featured-episode[data-smartforests-radio-play-button]"
+      )[0];
+
+      const { pageURL } = loadEpisodeViaButton(featuredEpisode);
+
+      radio.loaded = true;
+      radio.episode = pageURL;
+
+      console.log("SmartForests Radio loaded...");
+    }
+    addButtonListeners();
+    updateButtonState();
+  }
+
+  loadRadio();
 }
