@@ -54,14 +54,14 @@ export function main() {
   /**
    * Control the audio player from any number of play buttons in the UI
    */
-  function getEpisodeButtons() {
-    return document.querySelectorAll<HTMLElement>("[data-smartforests-radio-play-button]");
+  function getEpisodeButtons(): NodeListOf<PlayButton> {
+    return document.querySelectorAll<PlayButton>("[data-smartforests-radio-play-button]");
   }
 
-  function isEpisodeActive(somePlayButton) {
-    if (!somePlayButton.dataset.smartforestsAudio || !episode.src) return false;
+  function isEpisodeActive(playButton: PlayButton) {
+    if (!playButton.dataset.smartforestsAudio || !episode.src) return false;
     // (We rebuild the URL because one might be a relative URL, the other might be absolute)
-    const buttonURL = new URL(somePlayButton.dataset.smartforestsAudio, episode.src).toString();
+    const buttonURL = new URL(playButton.dataset.smartforestsAudio, episode.src).toString();
     const playerURL = new URL(episode.src).toString();
     return buttonURL === playerURL;
   }
@@ -78,7 +78,7 @@ export function main() {
       ?.classList.remove("d-none");
 
     // Other play/pause buttons in the UI
-    Array.from(episodeLoadButtons).forEach((loadEpisodeButton) => {
+    (Array.from(episodeLoadButtons) as PlayButton[]).forEach((loadEpisodeButton) => {
       // Default all buttons to pause, just in case
       loadEpisodeButton.querySelector(".pause-button")?.classList.add("d-none");
       loadEpisodeButton.querySelector(".play-button")?.classList.remove("d-none");
@@ -99,7 +99,7 @@ export function main() {
    * Update the current time / bar / etc. according to current status
    */
   episode.addEventListener("timeupdate", updatePlayerTime);
-  function updatePlayerTime(e) {
+  function updatePlayerTime() {
     requestAnimationFrame(() => {
       const elapsed = radioUI.querySelector("[data-smartforests-radio-episode-elapsed-time]");
       if (elapsed) elapsed.innerHTML = formatDuration(episode.currentTime);
@@ -143,7 +143,7 @@ export function main() {
    */
 
   function loadEpisode(episodeMeta: EpisodeMeta, play = true) {
-    ["title", "owner", "lastPublishedAt"].forEach((prop) => {
+    (["title", "owner", "lastPublishedAt"] as Array<keyof EpisodeMeta>).forEach((prop) => {
       const element = radioUI.querySelector(`[data-smartforests-radio-episode-${snakeCase(prop)}]`);
       if (element) element.innerHTML = episodeMeta[prop];
     });
@@ -207,7 +207,7 @@ export function main() {
 
     episode.pause();
     radioOffCanvas.show();
-    const episodeMeta = {
+    const episodeMeta: EpisodeMeta = {
       audioUrl,
       title,
       owner,
