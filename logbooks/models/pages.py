@@ -107,6 +107,10 @@ class EpisodePage(ArticlePage):
 
     image = ForeignKey(CmsImage, on_delete=models.SET_NULL,
                        null=True, blank=True)
+
+    thumbnail = ForeignKey(CmsImage, related_name='episode_thumbnail', on_delete=models.SET_NULL,
+                           null=True, blank=True)
+
     audio = models.ForeignKey(
         'wagtailmedia.Media',
         null=True,
@@ -118,6 +122,7 @@ class EpisodePage(ArticlePage):
     content_panels = Page.content_panels + [
         MediaChooserPanel('audio', media_type='audio'),
         ImageChooserPanel('image'),
+        ImageChooserPanel('thumbnail'),
     ] + ArticlePage.additional_content_panels
 
     @property
