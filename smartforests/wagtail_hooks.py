@@ -88,5 +88,5 @@ def insert_global_admin_css():
 def global_admin_js():
     return format_html(
         '<script type="module" src="{}"></script>',
-        static("/js/radio_wagtailmedia.js")
+        static("js/radio_wagtailmedia.js")
     )
