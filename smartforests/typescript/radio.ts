@@ -227,12 +227,12 @@ export function main() {
         ".featured-episode[data-smartforests-radio-play-button]"
       )[0];
 
+      if (!featuredEpisode) throw "Unable to load the Radio - no featured episode was found";
+
       const { pageURL } = loadEpisodeViaButton(featuredEpisode);
 
       radio.loaded = true;
       radio.episode = pageURL;
-
-      console.log("SmartForests Radio loaded...");
     }
     addButtonListeners();
     updateButtonState();
