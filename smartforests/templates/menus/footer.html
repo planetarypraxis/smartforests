@@ -10,11 +10,25 @@
     >
     {% endfor %}
     <a
-      class="text-decoration-none""
+      class="text-decoration-none"
       target="_blank"
       rel="noopener noreferrer"
       href="https://commonknowledge.coop"
       >Site by Common Knowledge</a
+    >
+    <a
+      class="text-decoration-none"
+      target="_blank"
+      rel="noopener noreferrer"
+      href="{% url 'wagtailadmin_home' %}"
+      >Admin area</a
+    >
+    <a
+      class="text-decoration-none"
+      target="_blank"
+      rel="noopener noreferrer"
+      href="{% url 'swagger-ui' %}"
+      >API docs</a
     >
   </div>
 </footer>

@@ -50,7 +50,7 @@
         </div>
         {% with settings.smartforests.FeaturedContent.radio_episode as episode %}
           {% if episode is not None %}
-            {% include 'logbooks/include/episode_button.html' with episode=episode.specific.localized preload=True extra_classes="d-none" %}
+            {% include 'logbooks/include/episode_button.html' with episode=episode.specific.localized preload=True extra_classes="d-none featured-episode" %}
           {% endif %}
         {% endwith %}
 

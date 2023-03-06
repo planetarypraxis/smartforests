@@ -88,7 +88,6 @@ const init = () => {
   document.addEventListener("turbo:before-cache", hideBackdrop)
 
   function showBackdrop() {
-    console.log('Show Backdrop')
     document.body.classList.toggle('modal-open', true)
     //
     let backdrop = getBackdropElement()

@@ -5,6 +5,9 @@ load();
 
 document.addEventListener("turbo:load", async (event) => {
   load();
+  if (window) {
+    window?.resetJSForTurboFrame();
+  } 
 });
 
 function getModelInfo() {
@@ -28,7 +31,7 @@ document.addEventListener("turbo:render", () => {
   const btns = document.getElementById("wagtail-userbar-items")
   // get the page ID from the HTML
   const modelInfo = getModelInfo()
-  if (!modelInfo) return
+  if (!modelInfo || !btns) return
   // find all the anchor links
   const links = btns.querySelectorAll<HTMLAnchorElement>("a[role='menuitem']");
   // loop over them, replace `page/oldID/` with `page/newID/`
@@ -60,3 +63,4 @@ async function load() {
 
   modules.forEach(fn => fn());
 }
+

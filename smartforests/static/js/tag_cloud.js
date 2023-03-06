@@ -183,17 +183,24 @@ const init = () => {
       .select(el)
       .append("canvas")
       .attr("class", "w-100 h-100 position-absolute")
-      .attr("style", "image-rendering: crisp-edges;")
+      .attr("style",
+        // 'crisp-edges' for most browsers, 'pixellated' for Chrome
+        "image-rendering: crisp-edges; image-rendering: pixelated;")
       .node();
 
     const ctx = canvas.getContext("2d");
-    ctx.msImageSmoothingEnabled = false;
-    ctx.mozImageSmoothingEnabled = false;
-    ctx.webkitImageSmoothingEnabled = false;
-    ctx.imageSmoothingEnabled = false;
 
     const updateBackground = (nodes, links) => {
       if (!parentEl || !parentEl.isConnected) return
+
+      // Disable image smoothing to achieve a pixelly effect
+      // must be applied after canvas resize events (see https://stackoverflow.com/a/29564875/1053937)
+      ctx.imageSmoothingQuality = "low"
+      ctx.msImageSmoothingEnabled = false;
+      ctx.mozImageSmoothingEnabled = false;
+      ctx.webkitImageSmoothingEnabled = false;
+      ctx.imageSmoothingEnabled = false;
+      ctx.oImageSmoothingEnabled = false;
 
       /**
        * Set up the canvas
@@ -282,18 +289,24 @@ const init = () => {
       }
 
       // Then it is zoomed in by the PIXEL_SIZE ratio
+      // without smoothing to achieve the pixelly effect
     };
 
     let usingMobileLayout = false;
 
-    // Use webcola's constraint-based graph layout plugin for d3 to lay out the tags, ensuring that we respect the
-    // following constrants:
+    // Use webcola's constraint-based graph layout plugin for d3 to lay out the tags
+    // ensuring that we respect the following constrants:
     //
-    // * Related tags are close togehter
+    // * Related tags are close together
     // * Tags are all within the bounds of the tag area.
     // * Tags do not overlap.
     const layout = () => {
-      const PADDING = 75;
+      const PADDING = responsive({
+        "default": 15,
+        "(min-width: 480px)": 25,
+        "(min-width: 640px)": 50,
+        "(min-width: 1024px)": 66
+      })
       const width = Math.max(PADDING, el.clientWidth - (2 * PADDING));
       const height = Math.max(PADDING, el.clientHeight - (2 * PADDING));
 
@@ -301,7 +314,7 @@ const init = () => {
 
       const realGraphNodes = nodes.slice();
       const pageBounds = { x: PADDING, y: PADDING, width, height };
-      const fixedNode = { fixed: true, fixedWeight: 100 };
+      const fixedNode = { fixed: true, fixedWeight: 100000 };
       const topLeft = { ...fixedNode, x: pageBounds.x, y: pageBounds.y };
       const tlIndex = realGraphNodes.push(topLeft) - 1;
       const bottomRight = {
@@ -419,18 +432,26 @@ const init = () => {
 
       // Configure and start the layout
       // DOCS: https://ialab.it.monash.edu/webcola/
-      const IDEAL_GAP = 80
+
       const cola = webcola.d3adaptor(d3)
         .nodes(realGraphNodes)
         .links(links)
         .size([width, height])
         .constraints(constraints)
-        .jaccardLinkLengths(
-          IDEAL_GAP,
-          // Default gap between tags should allow for around 20 tags side by side,
-          // but adjust this to the width of the screen
-          Math.min(3, Math.max(0.5, document.body.clientWidth / (IDEAL_GAP * 2)))
-        )
+        // ### jaccardLinkLengths
+        // compute an ideal length for each link based on the graph structure around that link.
+        // you can use this (for example) to create extra space around hub-nodes in dense graphs.
+        // In particular this calculation is based on the "symmetric difference"
+        // in the neighbour sets of the source and target:
+        // i.e. if neighbours of source is a and neighbours of target are b then calculation is:
+        // |a intersection b|/|a union b|
+        // Actual computation based on inspection of link structure occurs in start(),
+        // so links themselves don't have to have been assigned before invoking this function.
+        .jaccardLinkLengths(responsive({
+          "default": 30,
+          "(min-width: 640px)": 60,
+          "(min-width: 1024px)": 80
+        }))
         .avoidOverlaps(true)
         .handleDisconnected(true)
         .start(30);
@@ -442,10 +463,18 @@ const init = () => {
       // Animate the layout.
       cola.on("tick", () => {
         requestAnimationFrame(() => {
-          tags.style("transform", (d) => `translate(${px(d.x)},${px(d.y)})`);
+          tags.style("transform", ({ x, y }) => {
+            return `translate(${px(x)},${px(y)})`
+          });
           updateBackground(realGraphNodes, links);
         })
       });
+
+      // Stop animation after converged
+      setTimeout(() => {
+        cola.on("tick", null)
+      }, 2000)
+
     };
 
     layout();
@@ -458,3 +487,21 @@ const px = (val) => Math.round(val) + "px";
 window.addEventListener("turbo:load", init);
 
 init()
+
+
+/**
+ * @param {{ query: Number }} breakpointValues 
+ */
+function responsive(breakpointValues) {
+  if (!breakpointValues) return 0
+  const entries = Object.entries(breakpointValues)
+  if (!entries.length) return 0
+  let cascadeValue = entries[0][1]
+  for (const [breakpoint, value] of entries) {
+    if (breakpoint === 'default' || window.matchMedia(breakpoint).matches) {
+      cascadeValue = value
+    }
+  }
+  // Backup
+  return cascadeValue
+}

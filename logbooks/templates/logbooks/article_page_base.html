@@ -21,7 +21,7 @@
       <h1 class="mb-3 mb-lg-5">{{self.title}}</h1>
       {% endblock %}
     </header>
-    <section class="d-flex d-lg-none flex-row mb-3 flex-wrap">
+    <section class="d-flex d-lg-none flex-row mb-3 flex-md-wrap overflow-auto">
       {% for tag in self.all_tags %}
         {% include "logbooks/include/tag_label.html" with tag=tag %}
       {% endfor %}
@@ -48,13 +48,13 @@
 
 {% block article_footer %}
 {% endblock %}
-
+{% if self.all_tags|length %}
 <h3 class="bg-dark-green p-3 py-2 microcopy-small text-white m-0">
   Related Tags
 </h3>
 <div id="tag-cloud" data-tag-offcanvas="tagpanel-offcanvas" data-tag-frame="tagpanel-turboframe" data-tag-cloud-data="tag_cloud"></div>
 {{self.tag_cloud|json_script:"tag_cloud"}}
-
+{% endif %}
 {% endblock %}
 
 
