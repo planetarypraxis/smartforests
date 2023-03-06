@@ -322,3 +322,10 @@ POSTHOG_DJANGO = {
 }
 
 SERVICE_API_TOKEN = os.getenv("SERVICE_API_TOKEN")
+
+WAGTAILLOCALIZE_JOBS = {
+    "BACKEND": "smartforests.wagtail_localize_tasks.DjangoDBQueueJobBackend",
+}
+
+USE_BACKGROUND_WORKER = os.getenv(
+    "USE_BACKGROUND_WORKER", "False") in ("True", "true", True, 1, "t")
