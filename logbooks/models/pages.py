@@ -213,6 +213,8 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
         FieldPanel('tags'),
     ] + GeocodedMixin.content_panels + ContributorMixin.content_panels
 
+    settings_panels = Page.settings_panels = [FieldPanel("first_published_at")]
+
     api_fields = [
         APIField('icon_class'),
         APIField('tags'),
@@ -287,6 +289,14 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
         return self.render(request, context_overrides={
             'hash': path
         })
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        logbook_entries = self.get_child_list_queryset(
+            request).order_by('first_published_at')
+        context['logbook_entries'] = logbook_entries
+
+        return context
 
 
 class LogbookIndexPage(IndexPage):

@@ -12,7 +12,7 @@
     {% endif %}
   </div>
   <div class="mt-0">
-    {% for entry in child_list_page %}
+    {% for entry in logbook_entries %}
     <article class="logbook-entry {% if forloop.first %}mt-0{% endif %}" id="{{ entry.id }}">
       {% include entry.content_html with self=entry.localized user=user only %}
     </article>
