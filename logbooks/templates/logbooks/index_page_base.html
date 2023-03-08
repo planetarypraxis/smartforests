@@ -54,10 +54,24 @@
       </div>
     </div>
   </div>
-  
+
+  <div class="dropdown">
+    <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+      Relevance
+    </a>
+    <ul class="dropdown-menu">
+      <li>
+        <a href="{{ request.path }}?sort=most_recent" >Newest</a>
+      </li>
+      <li>
+        <a href="{{ request.path }}?sort=oldest">Oldest</a>
+      </li>
+  </ul>
+  </div>
   {% block index_content %}
     {% include "logbooks/include/masonry.html" with contents=child_list_page %}
   {% endblock %}
+
 </div>
 
 {% endblock %}

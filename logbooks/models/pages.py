@@ -290,14 +290,6 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
             'hash': path
         })
 
-    def get_context(self, request, *args, **kwargs):
-        context = super().get_context(request, *args, **kwargs)
-        logbook_entries = self.get_child_list_queryset(
-            request).order_by('first_published_at')
-        context['logbook_entries'] = logbook_entries
-
-        return context
-
 
 class LogbookIndexPage(IndexPage):
     '''

@@ -28,14 +28,22 @@ class ChildListMixin:
     def get_sort(self, request):
         if len(self.sort_options) == 0:
             return None
-
-        return next(
-            (
-                opt for opt in self.sort_options
-                if opt.slug == request.GET.get('sort')
-            ),
-            self.sort_options[0]
-        )
+        if self.page_type == 'Logbook':
+            return next(
+                (
+                    opt for opt in self.sort_options
+                    if opt.slug == request.GET.get('sort')
+                ),
+                self.sort_options[1]
+            )
+        else:
+            return next(
+                (
+                    opt for opt in self.sort_options
+                    if opt.slug == request.GET.get('sort')
+                ),
+                self.sort_options[0]
+            )
 
     def get_search_queryset(self, request, qs):
         q = request.GET.get('query')
