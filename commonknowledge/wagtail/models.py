@@ -23,6 +23,8 @@ class ChildListMixin:
     sort_options = (
         SortOption('Newest', 'most_recent', '-first_published_at'),
         SortOption('Oldest', 'oldest', 'first_published_at'),
+        SortOption('A-Z', 'a-z', 'title'),
+        SortOption('Z-A', 'z-a', '-title'),
     )
 
     def get_sort(self, request):
