@@ -28,7 +28,7 @@ class ChildListMixin:
     def get_sort(self, request):
         if len(self.sort_options) == 0:
             return None
-        if self.page_type == 'Logbook':
+        if hasattr(self, 'page_type') and self.page_type == 'Logbook':
             return next(
                 (
                     opt for opt in self.sort_options
