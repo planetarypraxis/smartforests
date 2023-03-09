@@ -45,3 +45,4 @@ human-readable = '>= 1.1.0'
 drf-spectacular = "*"
 wagtail-seo = "*"
 wagtail-generic-chooser = "*"
+djlint = "*"
