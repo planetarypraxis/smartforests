@@ -52,11 +52,66 @@
                         </a>
                     {% endif %}
                 </div>
-                {% comment %} Display on small screen {% endcomment %}
-                <div class='dropdown dropdown-fixed-width bg-off-white'>
-                    <a class=" dropdown-toggle fw-normal filter-link text-dark-green text-decoration-none "
+                <!--  Check if page is a logbook -->
+                {% if self.title == "Logbooks" %}
+                    <!-- Display on small screens -->
+                    <div class='dropdown dropdown-fixed-width bg-off-white d-lg-none logbooks-dropdown'>
+                        <a class="dropdown-toggle fw-normal filter-link text-dark-green text-decoration-none"
+                           href="#"
+                           role="button"
+                           id="logbooks"
+                           data-bs-toggle="dropdown"
+                           data-bs-offset="0,-2"
+                           aria-expanded="false">
+                            Relevance
+                        </a>
+                        <ul class="dropdown-menu w-100 border-0 mt-0 bg-off-white shadow-sm fs-body-text"
+                            aria-labelledby="">
+                            <li>
+                                <a class="dropdown-item text-dark-green p-2"
+                                   href="{{ request.path }}?sort=a-z">
+                                    <span>Title A—Z</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-dark-green p-2"
+                                   href="{{ request.path }}?sort=z-a">
+                                    <span>Title Z—A</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-dark-green p-2"
+                                   href="{{ request.path }}?sort=oldest">
+                                    <span>Oldest First</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-dark-green p-2"
+                                   href="{{ request.path }}?sort=most_recent">
+                                    <span>Newest First</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md mb-5 mb-md-0">
+                <h1>{{ self.title }}</h1>
+                {% if tag_filter %}
+                    <div>
+                        <a href="{% qs_link 'filter' None %}" class="filter-tag active">
+                            {{ tag_filter }}
+                            <i aria-label="Close" className="icon icon-8 icon-close bg-white ms-1"></i>
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+            <!-- Check if page is a logbook -->
+            {% if self.title == "Logbooks" %}
+                <!-- Display on large screens -->
+                <div class='dropdown dropdown-fixed-width bg-off-white d-none d-lg-block logbooks-dropdown'>
+                    <a class="dropdown-toggle fw-normal filter-link text-dark-green text-decoration-none "
                        href="#"
-                       id="filterDropdown-smscrn"
                        role="button"
                        data-bs-toggle="dropdown"
                        data-bs-offset="0,-2"
@@ -91,57 +146,7 @@
                         </li>
                     </ul>
                 </div>
-            </div>
-            <div class="col-md mb-5 mb-md-0">
-                <h1>{{ self.title }}</h1>
-                {% if tag_filter %}
-                    <div>
-                        <a href="{% qs_link 'filter' None %}" class="filter-tag active">
-                            {{ tag_filter }}
-                            <i aria-label="Close" className="icon icon-8 icon-close bg-white ms-1"></i>
-                        </a>
-                    </div>
-                {% endif %}
-            </div>
-                {% comment %} Display on large screen {% endcomment %}
-            <div class='dropdown dropdown-fixed-width bg-off-white'>
-                <a class=" dropdown-toggle fw-normal filter-link text-dark-green text-decoration-none "
-                   href="#"
-                   id="filterDropdown-lgscrn"
-                   role="button"
-                   data-bs-toggle="dropdown"
-                   data-bs-offset="0,-2"
-                   aria-expanded="false">
-                    Relevance
-                </a>
-                <ul class="dropdown-menu w-100 border-0 mt-0 bg-off-white shadow-sm fs-body-text"
-                    aria-labelledby="">
-                    <li>
-                        <a class="dropdown-item text-dark-green p-2"
-                           href="{{ request.path }}?sort=a-z">
-                            <span>Title A—Z</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item text-dark-green p-2"
-                           href="{{ request.path }}?sort=z-a">
-                            <span>Title Z—A</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item text-dark-green p-2"
-                           href="{{ request.path }}?sort=oldest">
-                            <span>Oldest First</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item text-dark-green p-2"
-                           href="{{ request.path }}?sort=most_recent">
-                            <span>Newest First</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            {% endif %}
         </div>
         {% block index_content %}
             {% include "logbooks/include/masonry.html" with contents=child_list_page %}

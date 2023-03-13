@@ -11,25 +11,6 @@
     </div>
     {% endif %}
   </div>
-  <div class="dropdown">
-    <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-      Relevance
-    </a>
-    <ul class="dropdown-menu">
-        <li>
-          <a href="{{ request.path }}?sort=most_recent" >Newest</a>
-        </li>
-        <li>
-          <a href="{{ request.path }}?sort=oldest">Oldest</a>
-        </li>
-        <li>
-          <a href="{{ request.path }}?sort=a-z" >Title A—Z</a>
-        </li>
-        <li>
-          <a href="{{ request.path }}?sort=z-a">Title Z—A</a>
-        </li>
-    </ul>
-  </div>
   <div class="mt-0">
     {% for entry in child_list_page %}
     <article class="logbook-entry {% if forloop.first %}mt-0{% endif %}" id="{{ entry.id }}">
