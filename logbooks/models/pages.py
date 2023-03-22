@@ -213,6 +213,8 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
         FieldPanel('tags'),
     ] + GeocodedMixin.content_panels + ContributorMixin.content_panels
 
+    settings_panels = Page.settings_panels = [FieldPanel("first_published_at")]
+
     api_fields = [
         APIField('icon_class'),
         APIField('tags'),

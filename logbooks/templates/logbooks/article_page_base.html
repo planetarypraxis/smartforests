@@ -1,63 +1,70 @@
 {% extends "base.html" %}
 {% load ckdjango_tags static ckbootstrap_tags wagtailcore_tags %}
-
 {% block content %}
-
-{% block article_header %}
+    {% block article_header %}{% endblock %}
+    <main class="container-fluid mb-7">
+        <div class="row gx-0 mt-3 mt-lg-7">
+            <header class="col-lg-6 offset-lg-3 logbook-filter">
+                <div class='d-flex mb-5 justify-content-between align-items-center'>
+                    <div class="d-block d-lg-none text-reset text-decoration-none text-mid-green">
+                        <svg width="14"
+                             height="14"
+                             viewBox="0 0 14 14"
+                             fill="currentColor"
+                             class='text-mid-green'
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.00033 2.33334L7.82283 3.15584L4.56783 6.41668H11.667V7.58334H4.56783L7.82283 10.8442L7.00033 11.6667L2.33366 7.00001L7.00033 2.33334Z" />
+                        </svg>
+                        <a class="border-bottom border-1 pb-1 text-mid-green border-mid-green ms-2 text-decoration-none"
+                           href="{{ self.get_parent.url }}">
+                            {{ self.get_parent.title }}
+                        </a>
+                    </div>
+                    {% block filter_mobile %}{% endblock %}
+                    {% block filter_desktop %}{% endblock %}
+                </div>
+                {% block article_title %}<h1 class="mb-3 mb-lg-5">{{ self.title }}</h1>{% endblock %}
+            </header>
+            <section class="d-flex d-lg-none flex-row mb-3 flex-md-wrap overflow-auto">
+                {% for tag in self.all_tags %}
+                    {% include "logbooks/include/tag_label.html" with tag=tag %}
+                {% endfor %}
+            </section>
+        </div>
+        <div class="row gx-0">
+            <aside class="col-lg-2 h-100 sticky-lg-top z-index-10" style='top: 75px;'>
+                <div class="d-none d-lg-block mb-5 text-reset text-decoration-none text-mid-green">
+                    <svg width="14"
+                         height="14"
+                         viewBox="0 0 14 14"
+                         fill="currentColor"
+                         class='text-mid-green'
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7.00033 2.33334L7.82283 3.15584L4.56783 6.41668H11.667V7.58334H4.56783L7.82283 10.8442L7.00033 11.6667L2.33366 7.00001L7.00033 2.33334Z" />
+                    </svg>
+                    <a class="border-bottom border-1 pb-1 text-mid-green border-mid-green ms-2 text-decoration-none"
+                       href="{{ self.get_parent.url }}">
+                        {{ self.get_parent.title }}
+                    </a>
+                </div>
+                <turbo-frame id="metadata-turboframe" src="/_metadata/{{ self.id }}" />
+            </aside>
+            <section class="col-lg-6 offset-lg-1 gx-0 content-copy">
+                {% block article %}{% endblock %}
+            </section>
+        </div>
+    </main>
+    {% block article_footer %}{% endblock %}
+    {% if self.all_tags|length %}
+        <h3 class="bg-dark-green p-3 py-2 microcopy-small text-white m-0">Related Tags</h3>
+        <div id="tag-cloud"
+             data-tag-offcanvas="tagpanel-offcanvas"
+             data-tag-frame="tagpanel-turboframe"
+             data-tag-cloud-data="tag_cloud">
+        </div>
+        {{ self.tag_cloud|json_script:"tag_cloud" }}
+    {% endif %}
 {% endblock %}
-
-<main class="container-fluid mb-7">
-  <div class="row gx-0 mt-3 mt-lg-7">
-    <header class="col-lg-6 offset-lg-3">
-      <div class="d-block d-lg-none mb-5 text-reset text-decoration-none text-mid-green">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" class='text-mid-green' xmlns="http://www.w3.org/2000/svg">
-          <path d="M7.00033 2.33334L7.82283 3.15584L4.56783 6.41668H11.667V7.58334H4.56783L7.82283 10.8442L7.00033 11.6667L2.33366 7.00001L7.00033 2.33334Z" />
-        </svg>
-        <a class="border-bottom border-1 pb-1 text-mid-green border-mid-green ms-2 text-decoration-none" href="{{ self.get_parent.url }}">
-          {{ self.get_parent.title}}
-        </a>
-      </div>
-      {% block article_title %}
-      <h1 class="mb-3 mb-lg-5">{{self.title}}</h1>
-      {% endblock %}
-    </header>
-    <section class="d-flex d-lg-none flex-row mb-3 flex-md-wrap overflow-auto">
-      {% for tag in self.all_tags %}
-        {% include "logbooks/include/tag_label.html" with tag=tag %}
-      {% endfor %}
-    </section>
-  </div>
-  <div class="row gx-0">
-    <aside class="col-lg-2 h-100 sticky-lg-top z-index-10" style='top: 75px;'>
-      <div class="d-none d-lg-block mb-5 text-reset text-decoration-none text-mid-green">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" class='text-mid-green' xmlns="http://www.w3.org/2000/svg">
-          <path d="M7.00033 2.33334L7.82283 3.15584L4.56783 6.41668H11.667V7.58334H4.56783L7.82283 10.8442L7.00033 11.6667L2.33366 7.00001L7.00033 2.33334Z" />
-        </svg>
-        <a class="border-bottom border-1 pb-1 text-mid-green border-mid-green ms-2 text-decoration-none" href="{{ self.get_parent.url }}">
-          {{ self.get_parent.title}}
-        </a>
-      </div>
-      <turbo-frame id="metadata-turboframe" src="/_metadata/{{self.id}}" />
-    </aside>
-    <section class="col-lg-6 offset-lg-1 gx-0 content-copy">
-      {% block article %}
-      {% endblock %}
-    </section>
-  </div>
-</main>
-
-{% block article_footer %}
-{% endblock %}
-{% if self.all_tags|length %}
-<h3 class="bg-dark-green p-3 py-2 microcopy-small text-white m-0">
-  Related Tags
-</h3>
-<div id="tag-cloud" data-tag-offcanvas="tagpanel-offcanvas" data-tag-frame="tagpanel-turboframe" data-tag-cloud-data="tag_cloud"></div>
-{{self.tag_cloud|json_script:"tag_cloud"}}
-{% endif %}
-{% endblock %}
-
-
 {% block extra_js %}
-  <script defer type="module" src="{% static 'js/tag_cloud.js' %}"></script>
+    <script defer type="module" src="{% static 'js/tag_cloud.js' %}"></script>
 {% endblock %}

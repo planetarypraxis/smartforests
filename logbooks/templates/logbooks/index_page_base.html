@@ -1,73 +1,84 @@
 {% extends "base.html" %}
 {% load static ckdjango_tags ckbootstrap_tags %}
-
 {% block content_wrapper_class %}filter-page{% endblock %}
-
 {% block content %}
-
-<!-- Filter sidepanel -->
-{% if self.relevant_tags %}
-<div id='filters' class="offcanvas offcanvas-start" tabindex="-1" aria-labelledby="offcanvasLabel">
-  <div class="offcanvas-header d-flex align-items-center justify-content-end cursor-pointer" data-bs-dismiss="offcanvas">
-    <svg class='d-inline-block' width="15" height="15" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M7.00033 2.33334L7.82283 3.15584L4.56783 6.41668H11.667V7.58334H4.56783L7.82283 10.8442L7.00033 11.6667L2.33366 7.00001L7.00033 2.33334Z" fill="#043003"/>
-    </svg>
-    <a class="offcanvas-title d-inline-block ms-2" id="offcanvasLabel">Filters</a>
-  </div>
-  <div class="offcanvas-body">
-    <div class="p-3">
-      <h3 class="fw-bold">Tags</h3>
-
-      {% include "smartforests/include/tag_list.html" with tags=self.relevant_tags target="logbook-search-results" %}
-    </div>
-  </div>
-</div>
-{% endif %}
-
-<div class="container-fluid mt-0 filter-page__content">
-  <div class="mb-5">
-    <div class="index-header mt-3 mt-md-7">
-      <div id="sidebar-show" class="col-md-3 filters-reveal collapse-horizontal">
-        <div class="sidebar-sized">
-          {% if self.relevant_tags %}
-          <a class="btn btn-link p-0" href="#filters" data-bs-toggle="offcanvas" href="#filters" role="button" aria-controls="filters">
-
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" id="open-svg">
-              <path d="M7.00016 2.33334L6.17766 3.15584L9.43266 6.41668H2.3335V7.58334H9.43266L6.17766 10.8442L7.00016 11.6667L11.6668 7.00001L7.00016 2.33334Z" fill="#043003"/>
-            </svg>
-            
-            Filters
-          </a>
-          {% endif %}
+    <!-- Filter sidepanel -->
+    {% if self.relevant_tags %}
+        <div id='filters'
+             class="offcanvas offcanvas-start"
+             tabindex="-1"
+             aria-labelledby="offcanvasLabel">
+            <div class="offcanvas-header d-flex align-items-center justify-content-end cursor-pointer"
+                 data-bs-dismiss="offcanvas">
+                <svg class='d-inline-block'
+                     width="15"
+                     height="15"
+                     viewBox="0 0 14 14"
+                     fill="none"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.00033 2.33334L7.82283 3.15584L4.56783 6.41668H11.667V7.58334H4.56783L7.82283 10.8442L7.00033 11.6667L2.33366 7.00001L7.00033 2.33334Z" fill="#043003"/>
+                </svg>
+                <a class="offcanvas-title d-inline-block ms-2" id="offcanvasLabel">Filters</a>
+            </div>
+            <div class="offcanvas-body">
+                <div class="p-3">
+                    <h3 class="fw-bold">Tags</h3>
+                    {% include "smartforests/include/tag_list.html" with tags=self.relevant_tags target="logbook-search-results" %}
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="col-md mb-4 mb-md-0">
-        <h1>{{self.title}}</h1>
-        {% if tag_filter %}
-        <div>
-          <a href="{% qs_link 'filter' None %}" class="filter-tag active">
-            {{ tag_filter }}
-            <i aria-label="Close" className="icon icon-8 icon-close bg-white ms-1"></i>
-          </a>
+    {% endif %}
+    <div class="container-fluid mt-0 filter-page__content">
+        <div class="index-header mt-5 mt-md-7 mb-5">
+            <div id="sidebar-show"
+                 class="col-md-3 filters-reveal collapse-horizontal d-flex justify-content-between align-items-center">
+                <div class="sidebar-sized">
+                    {% if self.relevant_tags %}
+                        <a class="btn btn-link p-0 text-decoration-none"
+                           href="#filters"
+                           data-bs-toggle="offcanvas"
+                           href="#filters"
+                           role="button"
+                           aria-controls="filters">
+                            <svg width="14"
+                                 height="14"
+                                 viewBox="0 0 14 14"
+                                 fill="none"
+                                 xmlns="http://www.w3.org/2000/svg"
+                                 id="open-svg">
+                                <path d="M7.00016 2.33334L6.17766 3.15584L9.43266 6.41668H2.3335V7.58334H9.43266L6.17766 10.8442L7.00016 11.6667L11.6668 7.00001L7.00016 2.33334Z" fill="#043003"/>
+                            </svg>
+                            Filters
+                        </a>
+                    {% endif %}
+                </div>
+                {% block filter_mobile %}{% endblock %}
+            </div>
+            <div class="col-md mb-5 mb-md-0">
+                <h1>{{ self.title }}</h1>
+                {% if tag_filter %}
+                    <div>
+                        <a href="{% qs_link 'filter' None %}" class="filter-tag active">
+                            {{ tag_filter }}
+                            <i aria-label="Close" className="icon icon-8 icon-close bg-white ms-1"></i>
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+            {% block filter_desktop %}{% endblock %}
         </div>
-        {% endif %}
-      </div>
+        {% block index_content %}
+            {% include "logbooks/include/masonry.html" with contents=child_list_page %}
+        {% endblock %}
     </div>
-  </div>
-  
-  {% block index_content %}
-    {% include "logbooks/include/masonry.html" with contents=child_list_page %}
-  {% endblock %}
-</div>
-
 {% endblock %}
-
 <!-- The masonry component doesn't get on with the flex: 1 we usually stick at the bottom of the page -->
-{% block spacer %}
-{% endblock %}
-
+{% block spacer %}{% endblock %}
 {% block extra_js %}
-<script defer src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4/dist/masonry.pkgd.min.js" crossorigin="anonymous"></script>
-<script defer src="{% static 'js/masonry.js' %}"></script>
+    <script defer
+            src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
+    <script defer
+            src="https://cdn.jsdelivr.net/npm/masonry-layout@4/dist/masonry.pkgd.min.js"
+            crossorigin="anonymous"></script>
+    <script defer src="{% static 'js/masonry.js' %}"></script>
 {% endblock %}
