@@ -294,9 +294,7 @@
     margin-left: 15px;
     margin-right: 15px;
     font-size: 10.5px !important;
-    max-width: 120px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    max-width: max-content;
     transition: all 0.25s ease-in-out;
 
     &:hover {

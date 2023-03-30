@@ -503,6 +503,7 @@
                 "sha256:77993254db1ff6f84eb6e1d75e3b6b72cba2ef20813a585b2d81e8e5e3c713c6"
             ],
             "version": "==1.14.7"
+
         },
         "jsonschema": {
             "hashes": [

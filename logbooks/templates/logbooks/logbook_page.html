@@ -21,6 +21,7 @@
             {% else %}
                 Oldest First
             {% endif %}
+
         </a>
         <ul class="dropdown-menu w-100 border-0 mt-0 bg-off-white shadow-sm fs-body-text"
             aria-labelledby="">
@@ -61,6 +62,7 @@
            data-bs-toggle="dropdown"
            data-bs-offset="0,-2"
            aria-expanded="false">
+
             {% if 'sort=a-z' in request.get_full_path %}
                 Title A—Z
             {% elif 'sort=z-a' in request.get_full_path %}
@@ -72,6 +74,7 @@
             {% else %}
                 Oldest First
             {% endif %}
+
         </a>
         <ul class="dropdown-menu w-100 border-0 mt-0 bg-off-white shadow-sm fs-body-text"
             aria-labelledby="">
