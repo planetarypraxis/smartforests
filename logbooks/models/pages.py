@@ -18,6 +18,7 @@ from commonknowledge.wagtail.helpers import get_children_of_type
 from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
 from wagtail.api import APIField
+from wagtail.images.api.fields import ImageRenditionField
 from smartforests.util import ensure_list, flatten_list, group_by_title, static_file_absolute_url
 from logbooks.models.mixins import ArticlePage, ArticleSeoMixin, BaseLogbooksPage, ContributorMixin, GeocodedMixin, IndexPage, SeoMetadataMixin, ThumbnailMixin, SidebarRenderableMixin
 from logbooks.models.snippets import AtlasTag
@@ -26,6 +27,7 @@ from logbooks.models.tag_cloud import TagCloud
 from django.shortcuts import redirect
 from wagtailautocomplete.edit_handlers import AutocompletePanel
 from django.utils import translation
+from smartforests.utils.api import APIRichTextField
 
 
 class StoryPage(ArticlePage):
@@ -55,6 +57,10 @@ class StoryPage(ArticlePage):
 
     content_panels = ArticlePage.content_panels + [
         ImageChooserPanel('image')
+    ]
+
+    api_fields = ArticlePage.api_fields + [
+        APIField('image'),
     ]
 
     @property
@@ -110,6 +116,11 @@ class EpisodePage(ArticlePage):
 
     thumbnail = ForeignKey(CmsImage, related_name='episode_thumbnail', on_delete=models.SET_NULL,
                            null=True, blank=True)
+
+    api_fields = ArticlePage.api_fields + [
+        APIField('image'),
+        APIField('thumbnail', serializer=ImageRenditionField('fill-100x100')),
+    ]
 
     audio = models.ForeignKey(
         'wagtailmedia.Media',
@@ -218,7 +229,7 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
     api_fields = [
         APIField('icon_class'),
         APIField('tags'),
-        APIField('description'),
+        APIRichTextField('description'),
     ] + ContributorMixin.api_fields + GeocodedMixin.api_fields
 
     @classmethod
@@ -406,6 +417,13 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
     @property
     def tag_cloud(self):
         return TagCloud.get_related(self.all_tags)
+
+    api_fields = [
+        APIField('byline'),
+        APIField('avatar'),
+        APIField('user'),
+        APIRichTextField('bio'),
+    ]
 
 
 class ContributorsIndexPage(IndexPage):

@@ -19,6 +19,10 @@ class QuoteBlock(blocks.StructBlock):
         template = 'logbooks/story_blocks/quote.html'
         icon = 'quote'
 
+    def get_api_representation(self, value, context=None):
+        print("QuoteBlock", value)
+        return super().get_api_representation(value, context)
+
 
 class ImageBlock(blocks.StructBlock):
     image = ImageChooserBlock(required=False)
@@ -28,6 +32,10 @@ class ImageBlock(blocks.StructBlock):
     class Meta:
         template = 'logbooks/story_blocks/image.html'
         icon = 'image'
+
+    def get_api_representation(self, value, context=None):
+        print("ImageBlock", value)
+        return super().get_api_representation(value, context)
 
 
 def ArticleContentStream(block_types=None, **kwargs):
