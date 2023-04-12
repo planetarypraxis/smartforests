@@ -166,13 +166,7 @@ class ContributorMixin(BaseLogbooksPage):
             self.save()
 
     api_fields = [
-        # APIField('additional_contributors',
-        #          serializer=UserSerializer(many=True)),
-        # APIField('excluded_contributors',
-        #          serializer=UserSerializer(many=True)),
-        APIField('contributors_parsed',
-                 serializer=UserField(source="contributors")),
-        APIField('contributors'),
+        APIField('contributors', serializer=UserSerializer(many=True)),
     ]
 
     content_panels = [
