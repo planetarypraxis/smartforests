@@ -14,6 +14,7 @@ from commonknowledge.django.images import generate_imagegrid_filename, render_im
 import re
 from wagtail.api.conf import APIField
 from wagtail.snippets.models import register_snippet
+from wagtail.api.v2.utils import get_full_url
 
 from commonknowledge.wagtail.helpers import abstract_page_query_filter
 
@@ -123,6 +124,14 @@ class User(AbstractUser):
     def contributor_page(self):
         return self.contributor_pages.first()
 
+    def get_api_representation(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+        }
+
     @classmethod
     def for_tag(cls, tag_or_tags):
         from smartforests.util import flatten_list
@@ -177,6 +186,19 @@ class CmsImage(AbstractImage):
     api_fields = [
         APIField('alt_text'),
     ]
+
+    def get_api_representation(self):
+        return {
+            "id": self.id,
+            "meta": {
+                "type": settings.WAGTAILIMAGES_IMAGE_MODEL,
+                "download_url": get_full_url(None, self.file.url),
+                "width": self.width,
+                "height": self.height,
+            },
+            "title": self.title,
+            "alt_text": self.alt_text
+        }
 
 
 class ImageRendition(AbstractRendition):

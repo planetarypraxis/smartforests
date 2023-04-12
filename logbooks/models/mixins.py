@@ -15,7 +15,7 @@ from logbooks.models.tag_cloud import TagCloud
 from logbooks.tasks import regenerate_page_thumbnails
 from logbooks.thumbnail import get_thumbnail_opts
 from logbooks.models.snippets import AtlasTag
-from logbooks.models.serializers import PageCoordinatesSerializer, UserSerializer
+from logbooks.models.serializers import PageCoordinatesSerializer, UserSerializer, UserField
 from logbooks.models.blocks import ArticleContentStream
 from turbo_response import TurboFrame
 from sumy.nlp.tokenizers import Tokenizer
@@ -43,6 +43,7 @@ from wagtailseo.models import SeoMixin, SeoType, TwitterCard
 from wagtail.core.rich_text import get_text_for_indexing
 import requests
 from django.core.files.images import ImageFile
+from smartforests.utils.api import APIRichTextField
 
 
 class BaseLogbooksPage(Page):
@@ -165,10 +166,6 @@ class ContributorMixin(BaseLogbooksPage):
             self.save()
 
     api_fields = [
-        APIField('additional_contributors',
-                 serializer=UserSerializer(many=True)),
-        APIField('excluded_contributors',
-                 serializer=UserSerializer(many=True)),
         APIField('contributors', serializer=UserSerializer(many=True)),
     ]
 
@@ -480,6 +477,7 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
     api_fields = [
         APIField('tags'),
         APIField('icon_class'),
+        APIField('body'),
     ] + ContributorMixin.api_fields + GeocodedMixin.api_fields
 
     search_fields = IndexedStreamfieldMixin.search_fields + Page.search_fields

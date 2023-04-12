@@ -4,6 +4,7 @@ from wagtail.core.fields import StreamField
 from wagtail.embeds.blocks import EmbedBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail_footnotes.blocks import RichTextBlockWithFootnotes
+from wagtail.core.rich_text import expand_db_html
 
 from commonknowledge.wagtail.search.models import StreamfieldIndexer, StructIndexer, TextIndexer
 
@@ -19,6 +20,15 @@ class QuoteBlock(blocks.StructBlock):
         template = 'logbooks/story_blocks/quote.html'
         icon = 'quote'
 
+    def get_api_representation(self, value, context=None):
+        return {
+            "text": expand_db_html(str(value['text'])) if value['text'] is not None else None,
+            "author": value['author'],
+            "title": value['title'],
+            "date": value['date'],
+            "link": value['link'],
+        }
+
 
 class ImageBlock(blocks.StructBlock):
     image = ImageChooserBlock(required=False)
@@ -28,6 +38,14 @@ class ImageBlock(blocks.StructBlock):
     class Meta:
         template = 'logbooks/story_blocks/image.html'
         icon = 'image'
+
+    def get_api_representation(self, value, context=None):
+        return {
+            "image": {
+                "id": value['image'].get_api_representation()
+            },
+            "caption": expand_db_html(str(value['caption'])) if value['caption'] is not None else None,
+        }
 
 
 def ArticleContentStream(block_types=None, **kwargs):
