@@ -46,9 +46,9 @@
                   </a>
               </li>
               <li class="nav-item d-lg-none p-2 text-truncate border-bottom border-soft-green overflow-hidden w-100">
-                  {% for page in menu_items %}
-                  <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ page.href }}">
-                      {{ page.text }}
+                  {% for menu_item in menu_items %}
+                  <a class="text-dark-green text-decoration-none d-flex justify-content-between align-items-center px-2" href="{{ menu_item.link_page.localized.url }}">
+                      {{ menu_item.link_page.localized.title }}
                   </a>
                   {% endfor %}
               </li>
@@ -143,8 +143,8 @@
                                 <span>{{ important_pages.contributors.localized.title }}</span>
                               </a>
                           </li>
-                          {% for page in menu_items %}
-                            <li><a class="dropdown-item text-dark-green" href="{{ page.href }}">{{ page.text }}</a></li>
+                          {% for menu_item in menu_items %}
+                            <li><a class="dropdown-item text-dark-green" href="{{ menu_item.link_page.localized.url }}">{{ menu_item.link_page.localized.title }}</a></li>
                           {% endfor %}
                         </ul>
                       </div>
