@@ -320,6 +320,11 @@ class LogbookIndexPage(IndexPage):
 
         return group_by_title(tags, key='name')
 
+    def get_child_list_queryset(self, *args, **kwargs):
+        return super().get_child_list_queryset().filter(
+            alias_of=None
+        )
+
     def get_filters(self, request):
         filter = {}
 
