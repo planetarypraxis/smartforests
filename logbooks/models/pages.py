@@ -320,11 +320,6 @@ class LogbookIndexPage(IndexPage):
 
         return group_by_title(tags, key='name')
 
-    def get_child_list_queryset(self, *args, **kwargs):
-        return super().get_child_list_queryset().filter(
-            alias_of=None
-        )
-
     def get_filters(self, request):
         filter = {}
 
@@ -440,6 +435,11 @@ class ContributorsIndexPage(IndexPage):
 
     class Meta:
         verbose_name = "Contributors index page"
+
+    # Default child list filters out untranslated pages, but
+    # we should always show all contributors
+    def get_child_list_queryset(self, *args, **kwargs):
+        return self.get_children().live().specific()
 
     def relevant_tags(self):
         return group_by_title(
