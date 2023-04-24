@@ -29,13 +29,13 @@
     {% endif %}
 
     <div class="accordion" id="tag-accordion">
-      {% for page_type, page_list in pages %}
+      {% for page_type, localized_title, page_list in pages %}
         {% if page_list %}
           <div class="accordion-item">
             <h2 class="accordion-header" id="{{ page_type.model_info.verbose_name | slugify }}-heading">
               <button class="accordion-button collapsed text-dark-green fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#{{page_type.model_info.verbose_name  | slugify }}-collapse" aria-controls="{{page_type.model_info.verbose_name  | slugify }}-collapse">
                 <i class="icon {{page_type.icon_class}} icon-20 bg-faded-green me-2"></i>
-                {{page_type.model_info.verbose_name_plural}}
+                {{ localized_title }}
                 <span class="ms-2 badge bg-off-white microcopy-small text-dark-green">{{page_list|length}}</span>
               </button>
             </h2>

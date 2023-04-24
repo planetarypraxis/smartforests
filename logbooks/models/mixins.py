@@ -17,6 +17,7 @@ from logbooks.thumbnail import get_thumbnail_opts
 from logbooks.models.snippets import AtlasTag
 from logbooks.models.serializers import PageCoordinatesSerializer, UserSerializer, UserField
 from logbooks.models.blocks import ArticleContentStream
+from logbooks.models.fields import TagFieldPanel
 from turbo_response import TurboFrame
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.utils import get_stop_words
@@ -472,7 +473,7 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
     show_title = True
 
     additional_content_panels = [
-        FieldPanel('tags'),
+        TagFieldPanel('tags'),
         StreamFieldPanel('body'),
         InlinePanel("footnotes", label="Footnotes"),
     ] + ContributorMixin.content_panels + GeocodedMixin.content_panels

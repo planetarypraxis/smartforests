@@ -47,7 +47,7 @@
                         {{ self.get_parent.title }}
                     </a>
                 </div>
-                <turbo-frame id="metadata-turboframe" src="/_metadata/{{ self.id }}" />
+                <turbo-frame id="metadata-turboframe" src="{% if LANGUAGE_CODE %}/{{LANGUAGE_CODE}}{% endif %}/_metadata/{{ self.id }}" />
             </aside>
             <section class="col-lg-6 offset-lg-1 gx-0 content-copy">
                 {% block article %}{% endblock %}

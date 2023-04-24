@@ -1,7 +1,8 @@
+import json
 from urllib.parse import urlparse, parse_qs
 from generic_chooser.views import ModelChooserViewSet, ModelChooserMixin
 from django.http.request import HttpRequest
-from django.http.response import HttpResponseNotFound
+from django.http.response import HttpResponse, HttpResponseNotFound
 from django.shortcuts import get_object_or_404, render
 from wagtail.core.models import Page
 from wagtail.core.models.i18n import Locale
@@ -33,6 +34,18 @@ def filters_frame(request: HttpRequest):
             'tag_filter': request.GET.get('current')
         }
     )
+
+
+def tag_autocomplete_view(request: HttpRequest):
+    search = request.GET.get("term", "")
+    locale = request.GET.get("locale")
+    tags = Tag.objects.filter(name__startswith=search)
+    if locale:
+        tags = tags.filter(locale__language_code=locale)
+    tags = tags.order_by("name")
+    suggestions = set(tag.name for tag in tags[:10])
+    suggestions = sorted(list(suggestions))
+    return HttpResponse(json.dumps(suggestions), content_type='application/json; charset=utf8')
 
 
 class LocaleFromLanguageCode:

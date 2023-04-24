@@ -24,6 +24,8 @@ from django.views.generic.base import RedirectView
 
 
 urlpatterns = [
+    path('admin/tag-autocomplete/smartforests/tag/',
+         sf_views.tag_autocomplete_view),
     path('django-admin/', admin.site.urls),
     re_path(r'^admin/autocomplete/', include(autocomplete_admin_urls)),
     path('admin/', include(wagtailadmin_urls)),
