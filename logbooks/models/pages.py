@@ -436,6 +436,11 @@ class ContributorsIndexPage(IndexPage):
     class Meta:
         verbose_name = "Contributors index page"
 
+    # Default child list filters out untranslated pages, but
+    # we should always show all contributors
+    def get_child_list_queryset(self, *args, **kwargs):
+        return self.get_children().live().specific()
+
     def relevant_tags(self):
         return group_by_title(
             Tag.objects.filter(
