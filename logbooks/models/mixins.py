@@ -417,6 +417,11 @@ class IndexPage(ChildListMixin, SeoMetadataMixin, BaseLogbooksPage):
     if not settings.DEBUG:
         max_count = 1
 
+    def get_child_list_queryset(self, *args, **kwargs):
+        return super().get_child_list_queryset().filter(
+            alias_of=None
+        )
+
     def get_filters(self, request):
         filter = {}
 
