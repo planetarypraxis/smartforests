@@ -5,7 +5,6 @@ from django.db.models.fields.related import ForeignKey
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
 from django.utils.text import slugify
-from modelcluster.contrib.taggit import ClusterTaggableManager
 from wagtail.core.models import Page
 from smartforests.models import Tag, User
 from wagtail.admin.edit_handlers import FieldPanel
@@ -19,6 +18,7 @@ from commonknowledge.django.cache import django_cached_model
 from wagtail.api import APIField
 from wagtail.images.api.fields import ImageRenditionField
 from smartforests.util import ensure_list, flatten_list, group_by_title, static_file_absolute_url
+from logbooks.models.fields import TagFieldPanel, LocalizedTaggableManager
 from logbooks.models.mixins import ArticlePage, ArticleSeoMixin, BaseLogbooksPage, ContributorMixin, GeocodedMixin, IndexPage, SeoMetadataMixin, ThumbnailMixin, SidebarRenderableMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
@@ -209,7 +209,7 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
         else:
             return static_file_absolute_url('img/mapicons/logbooks.png')
 
-    tags = ClusterTaggableManager(through=AtlasTag, blank=True)
+    tags = LocalizedTaggableManager(through=AtlasTag, blank=True)
     description = RichTextField(
         features=['bold', 'italic', 'link', 'ol', 'ul', 'hr', 'code', 'blockquote', 'h2', 'h3', 'h4'])
 
@@ -220,7 +220,7 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
     content_panels = [
         FieldPanel('title', classname="full title"),
         FieldPanel('description'),
-        FieldPanel('tags'),
+        TagFieldPanel('tags'),
     ] + GeocodedMixin.content_panels + ContributorMixin.content_panels
 
     settings_panels = [FieldPanel("first_published_at")] + Page.settings_panels

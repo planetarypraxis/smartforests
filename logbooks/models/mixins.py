@@ -17,7 +17,7 @@ from logbooks.thumbnail import get_thumbnail_opts
 from logbooks.models.snippets import AtlasTag
 from logbooks.models.serializers import PageCoordinatesSerializer, UserSerializer, UserField
 from logbooks.models.blocks import ArticleContentStream
-from logbooks.models.fields import TagFieldPanel
+from logbooks.models.fields import TagFieldPanel, LocalizedTaggableManager
 from turbo_response import TurboFrame
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.utils import get_stop_words
@@ -29,7 +29,6 @@ from django.db import models
 from django.http.response import HttpResponseNotFound
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
-from modelcluster.contrib.taggit import ClusterTaggableManager
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, StreamFieldPanel
 from wagtail.api.conf import APIField
 from wagtail.core.models import Page, PageManager, PageRevision
@@ -468,7 +467,7 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
     class Meta:
         abstract = True
 
-    tags = ClusterTaggableManager(through=AtlasTag, blank=True)
+    tags = LocalizedTaggableManager(through=AtlasTag, blank=True)
     body = ArticleContentStream()
     show_title = True
 
