@@ -185,11 +185,19 @@ class TagCloud(models.Model):
             empty_tags = set(
                 tag.id for tag in Tag.objects.filter(
                     id__in=[val.id for val in ok_tags],
-                ).exclude(logbooks_atlastag_items__content_object__locale=True)
+                ).exclude(logbooks_atlastag_items__content_object__locale=locale)
             )
             ok_tags = [val for val in ok_tags if val.id not in empty_tags]
 
-        return TagCloud.to_json(sorted(ok_tags, reverse=True, key=TagCloud.Item.score))
+        sorted_tags = sorted(ok_tags, reverse=True, key=TagCloud.Item.score)
+
+        # Update tag index after sort (for use by D3 on front-end)
+        index = 0
+        for item in sorted_tags:
+            item.index = index
+            index += 1
+
+        return TagCloud.to_json(sorted_tags)
 
     @staticmethod
     def to_json(items):
@@ -234,7 +242,8 @@ class TagCloud(models.Model):
             visited[tag.id] = TagCloud.Item(index=i, id=tag.id, links=[])
 
             # Get all pages for this tag
-            pages = Page.objects.filter(tagged_items__tag=tag).live()
+            pages = Page.objects.filter(
+                tagged_items__tag__translation_key=tag.translation_key).live()
 
             # Pages that link to — or are tagged with — with this tag
             taggings = AtlasTag.objects.filter(content_object__in=pages)
