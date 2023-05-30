@@ -108,7 +108,7 @@ class TagCloud(models.Model):
         clouds = cloud_q[:clouds]
 
         cloud_tags = [cloud.tag for cloud in clouds]
-        # shuffle(cloud_tags)
+        shuffle(cloud_tags)
         return TagCloud.get_related(cloud_tags[:25], limit=limit, locale=locale)
 
     @staticmethod
@@ -192,10 +192,7 @@ class TagCloud(models.Model):
         sorted_tags = sorted(ok_tags, reverse=True, key=TagCloud.Item.score)
 
         # Update tag index after sort (for use by D3 on front-end)
-        index = 0
-        for item in sorted_tags:
-            item.index = index
-            index += 1
+        TagCloud.reindex_tag_cloud_items(sorted_tags)
 
         return TagCloud.to_json(sorted_tags)
 
@@ -210,10 +207,19 @@ class TagCloud(models.Model):
             for tag in Tag.objects.filter(id__in=[item.id for item in items])
         }
 
-        return [
-            item.to_json(lookup[item.id]) for item in items
-            if item.id in lookup
-        ]
+        items = [item for item in items if item.id in lookup]
+
+        # Correct item indices if some tags do not exist
+        TagCloud.reindex_tag_cloud_items(items)
+
+        return [item.to_json(lookup[item.id]) for item in items]
+
+    @staticmethod
+    def reindex_tag_cloud_items(items):
+        index = 0
+        for item in items:
+            item.index = index
+            index += 1
 
     @staticmethod
     def build_for_tag(instance: Tag):
@@ -241,7 +247,8 @@ class TagCloud(models.Model):
 
             visited[tag.id] = TagCloud.Item(index=i, id=tag.id, links=[])
 
-            # Get all pages for this tag
+            # Get all pages for this tag. Filter using the tag translation key
+            # to group together content for tags and their localized versions.
             pages = Page.objects.filter(
                 tagged_items__tag__translation_key=tag.translation_key).live()
 

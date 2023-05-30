@@ -30,10 +30,14 @@ class TagFieldPanel(FieldPanel):
 
 
 class LocalizedTaggableManager(ClusterTaggableManager):
+    """
+    Create new tags in the locale of the page being edited.
+    """
+
     def save_form_data(self, instance, value):
         locale = instance.locale if instance else None
         if locale:
             for name in value:
-                Tag.objects.get_or_create(name=name, locale=locale, defaults={
+                Tag.objects.get_or_create(name=name, defaults={
                                           "name": name, "locale": locale})
         return super().save_form_data(instance, value)
