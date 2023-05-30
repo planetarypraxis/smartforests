@@ -17,6 +17,7 @@ from wagtail.api.conf import APIField
 from wagtail.snippets.models import register_snippet
 from wagtail.api.v2.utils import get_full_url
 from wagtail.core.models import TranslatableMixin
+from smartforests.mixins import SeoMetadataMixin
 
 from commonknowledge.wagtail.helpers import abstract_page_query_filter
 
@@ -83,7 +84,7 @@ class Tag(TranslatableMixin, TagBase):
         )
 
 
-class MapPage(RoutablePageMixin, Page):
+class MapPage(RoutablePageMixin, SeoMetadataMixin, Page):
     parent_page_types = ['home.HomePage']
     max_count = 1
 

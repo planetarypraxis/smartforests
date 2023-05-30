@@ -19,7 +19,7 @@ from wagtail.api import APIField
 from wagtail.images.api.fields import ImageRenditionField
 from smartforests.util import ensure_list, flatten_list, group_by_title, static_file_absolute_url
 from logbooks.models.fields import TagFieldPanel, LocalizedTaggableManager
-from logbooks.models.mixins import ArticlePage, ArticleSeoMixin, BaseLogbooksPage, ContributorMixin, GeocodedMixin, IndexPage, SeoMetadataMixin, ThumbnailMixin, SidebarRenderableMixin
+from logbooks.models.mixins import ArticlePage, ArticleSeoMixin, BaseLogbooksPage, ContributorMixin, GeocodedMixin, IndexPage, ThumbnailMixin, SidebarRenderableMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
 from logbooks.models.tag_cloud import TagCloud
@@ -27,6 +27,7 @@ from django.shortcuts import redirect
 from wagtailautocomplete.edit_handlers import AutocompletePanel
 from django.utils import translation
 from smartforests.utils.api import APIRichTextField
+from smartforests.mixins import SeoMetadataMixin
 
 
 class StoryPage(ArticlePage):

@@ -39,11 +39,10 @@ from smartforests.models import CmsImage, Tag, User
 from smartforests.util import ensure_list, group_by_title
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from wagtail.snippets.models import register_snippet
-from wagtailseo.models import SeoMixin, SeoType, TwitterCard
-from wagtail.core.rich_text import get_text_for_indexing
+from wagtailseo.models import SeoType, TwitterCard
 import requests
 from django.core.files.images import ImageFile
-from smartforests.utils.api import APIRichTextField
+from smartforests.mixins import SeoMetadataMixin
 
 
 class BaseLogbooksPage(Page):
@@ -290,41 +289,6 @@ class GeocodedMixin(BaseLogbooksPage):
         APIField('geographical_location'),
         APIField('coordinates', serializer=PageCoordinatesSerializer)
     ]
-
-
-class SeoMetadataMixin(SeoMixin, Page):
-    class Meta:
-        abstract = True
-
-    promote_panels = SeoMixin.seo_panels
-
-    seo_image_sources = [
-        "og_image",  # Explicit sharing image
-        "default_seo_image"
-    ]
-
-    seo_description_sources = [
-        "search_description",  # Explicit sharing description
-    ]
-
-    @property
-    def default_seo_image(self):
-        from smartforests.wagtail_settings import SocialMediaSettings
-        settings = SocialMediaSettings.for_site(site=self.get_site())
-        return settings.default_seo_image
-
-    @property
-    def seo_description(self) -> str:
-        """
-        Middleware for seo_description_sources
-        """
-        for attr in self.seo_description_sources:
-            if hasattr(self, attr):
-                text = getattr(self, attr)
-                if text:
-                    # Strip HTML if there is any
-                    return get_text_for_indexing(text)
-        return ""
 
 
 class ThumbnailMixin(BaseLogbooksPage):
