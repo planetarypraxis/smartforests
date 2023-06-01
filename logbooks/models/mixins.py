@@ -392,8 +392,8 @@ class IndexPage(ChildListMixin, SeoMetadataMixin, BaseLogbooksPage):
         tag_filter = request.GET.get('filter', None)
         if tag_filter is not None:
             try:
-                tag = Tag.objects.get(slug=tag_filter)
-                filter['tagged_items__tag_id'] = tag.id
+                tags = Tag.objects.filter(slug=tag_filter)
+                filter['tagged_items__tag_id__in'] = [tag.id for tag in tags]
             except Tag.DoesNotExist:
                 pass
 

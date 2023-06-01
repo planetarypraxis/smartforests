@@ -326,8 +326,8 @@ class LogbookIndexPage(IndexPage):
         tag_filter = request.GET.get('filter', None)
         if tag_filter is not None:
             try:
-                tag = Tag.objects.get(slug=tag_filter)
-                filter['pk__in'] = [l.id for l in LogbookPage.for_tag(tag)]
+                tags = Tag.objects.filter(slug=tag_filter)
+                filter['pk__in'] = [l.id for l in LogbookPage.for_tag(tags)]
             except Tag.DoesNotExist:
                 pass
 
@@ -455,8 +455,8 @@ class ContributorsIndexPage(IndexPage):
         tag_filter = request.GET.get('filter', None)
         if tag_filter is not None:
             try:
-                tag = Tag.objects.get(slug=tag_filter)
-                filter['pk__in'] = ContributorPage.for_tag(tag)
+                tags = Tag.objects.filter(slug=tag_filter)
+                filter['pk__in'] = ContributorPage.for_tag(tags)
 
             except Tag.DoesNotExist:
                 pass

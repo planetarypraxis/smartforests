@@ -93,7 +93,9 @@ class ChildListMixin:
 
         page = safe_to_int(request.GET.get('page', 1), 1)
 
-        if request.GET.get('empty') == '1':
+        empty = request.GET.get('empty', False)
+        show_empty_page_for_no_results = empty == '1' or int(empty) >= 1
+        if show_empty_page_for_no_results:
             try:
                 context['child_list_page'] = paginator.page(page)
             except PageNotAnInteger:

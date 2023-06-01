@@ -1,6 +1,6 @@
 {% load wagtailimages_tags %}
 
-{% if self.thumbnail_image %}
+{% if self.thumbnail_image and self.thumbnail_image.width %}
   <div class="card">
     {% include "logbooks/include/thumbnail_meta.html" with class="card-body link-reset text-dark-grey" %}
 
