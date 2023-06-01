@@ -446,3 +446,15 @@
     margin-left: 30%;
   }
 }
+
+.endnotes {
+  font-size: $small-font-size;
+}
+
+.endnotes hr {
+  background-color: $dark-green;
+  border: none;
+  height: 1px;
+  opacity: 1;
+  width: 2rem;
+}
