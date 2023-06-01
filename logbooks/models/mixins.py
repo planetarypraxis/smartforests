@@ -482,6 +482,7 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
     ] + ContributorMixin.content_panels + GeocodedMixin.content_panels
 
     content_panels = Page.content_panels + additional_content_panels
+    settings_panels = [FieldPanel("first_published_at")] + Page.settings_panels
 
     api_fields = [
         APIField('tags'),
