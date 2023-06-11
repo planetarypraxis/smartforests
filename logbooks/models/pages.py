@@ -17,7 +17,7 @@ from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
 from wagtail.api import APIField
 from wagtail.images.api.fields import ImageRenditionField
-from smartforests.util import ensure_list, flatten_list, group_by_title, static_file_absolute_url
+from smartforests.util import ensure_list, flatten_list, group_by_tag_name, static_file_absolute_url
 from logbooks.models.fields import TagFieldPanel, LocalizedTaggableManager
 from logbooks.models.mixins import ArticlePage, ArticleSeoMixin, BaseLogbooksPage, ContributorMixin, GeocodedMixin, IndexPage, ThumbnailMixin, SidebarRenderableMixin
 from logbooks.models.snippets import AtlasTag
@@ -25,7 +25,6 @@ from smartforests.models import CmsImage
 from logbooks.models.tag_cloud import TagCloud
 from django.shortcuts import redirect
 from wagtailautocomplete.edit_handlers import AutocompletePanel
-from django.utils import translation
 from smartforests.utils.api import APIRichTextField
 from smartforests.mixins import SeoMetadataMixin
 
@@ -318,7 +317,7 @@ class LogbookIndexPage(IndexPage):
             logbooks_atlastag_items__content_object__in=children
         ).distinct()
 
-        return group_by_title(tags, key='name')
+        return group_by_tag_name(tags)
 
     def get_filters(self, request):
         filter = {}
@@ -326,8 +325,8 @@ class LogbookIndexPage(IndexPage):
         tag_filter = request.GET.get('filter', None)
         if tag_filter is not None:
             try:
-                tags = Tag.objects.filter(slug=tag_filter)
-                filter['pk__in'] = [l.id for l in LogbookPage.for_tag(tags)]
+                tag_ids = Tag.get_translated_tag_ids(tag_filter)
+                filter['pk__in'] = [l.id for l in LogbookPage.for_tag(tag_ids)]
             except Tag.DoesNotExist:
                 pass
 
@@ -442,11 +441,10 @@ class ContributorsIndexPage(IndexPage):
         return self.get_children().live().specific()
 
     def relevant_tags(self):
-        return group_by_title(
+        return group_by_tag_name(
             Tag.objects.filter(
                 logbooks_atlastag_items__content_object__live=True
-            ).distinct(),
-            key='name'
+            ).distinct()
         )
 
     def get_filters(self, request):

@@ -1,3 +1,4 @@
+from collections import defaultdict
 from django.contrib.contenttypes import models
 from django.db.models.functions import Lower
 from smartforests.models import Tag
@@ -7,23 +8,17 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 from django.conf import settings
 
 
-def group_by_title(qs, key='title'):
-    def get(x): return getattr(x, key)[0].lower()
+def group_by_tag_name(qs):
+    result = defaultdict(set)
 
-    letter = None
-    result = []
-    head = []
+    for item in qs:
+        letter = item.localized.name[0]
+        result[letter].add(item.localized)
 
-    for item in qs.annotate(lower_title=Lower(key)).order_by('lower_title'):
-        l = get(item)
-        if letter is None or l != letter:
-            letter = l
-            head = []
-            result.append((letter, head))
-
-        head.append(item)
-
-    return result
+    groups = [(letter, sorted(tags, key=lambda t: t.name.lower()))
+              for letter, tags in result.items()]
+    ordered = sorted(groups, key=lambda x: x[0].lower())
+    return ordered
 
 
 def flatten_list(the_list):

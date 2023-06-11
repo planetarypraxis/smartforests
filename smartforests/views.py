@@ -10,7 +10,7 @@ from logbooks.models.pages import EpisodePage
 from smartforests.models import Tag
 from commonknowledge.django.cache import django_cached
 
-from smartforests.util import group_by_title
+from smartforests.util import group_by_tag_name
 
 
 def frame_content(request, page_id):
@@ -22,9 +22,12 @@ def frame_content(request, page_id):
 
 
 def filters_frame(request: HttpRequest):
-    @django_cached('smartforests.views.filters_frame.get_tags')
+    cache_key = 'smartforests.views.filters_frame.get_tags.' + \
+        Locale.get_active().language_code
+
+    @django_cached(cache_key)
     def get_tags():
-        return group_by_title(Tag.objects.distinct(), key='name')
+        return group_by_tag_name(Tag.objects.distinct())
 
     return render(
         request,
@@ -39,7 +42,7 @@ def filters_frame(request: HttpRequest):
 def tag_autocomplete_view(request: HttpRequest):
     search = request.GET.get("term", "")
     locale = request.GET.get("locale")
-    tags = Tag.objects.filter(name__startswith=search)
+    tags = Tag.objects.filter(name__istartswith=search)
     if locale:
         tags = tags.filter(locale__language_code=locale)
     tags = tags.order_by("name")

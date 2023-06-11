@@ -36,7 +36,7 @@ from django.contrib.gis.db import models as geo
 from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin
 from mapwidgets.widgets import MapboxPointFieldWidget
 from smartforests.models import CmsImage, Tag, User
-from smartforests.util import ensure_list, group_by_title
+from smartforests.util import ensure_list, group_by_tag_name
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from wagtail.snippets.models import register_snippet
 from wagtailseo.models import SeoType, TwitterCard
@@ -392,8 +392,8 @@ class IndexPage(ChildListMixin, SeoMetadataMixin, BaseLogbooksPage):
         tag_filter = request.GET.get('filter', None)
         if tag_filter is not None:
             try:
-                tags = Tag.objects.filter(slug=tag_filter)
-                filter['tagged_items__tag_id__in'] = [tag.id for tag in tags]
+                tag_ids = Tag.get_translated_tag_ids(slug=tag_filter)
+                filter['tagged_items__tag_id__in'] = tag_ids
             except Tag.DoesNotExist:
                 pass
 
@@ -407,7 +407,7 @@ class IndexPage(ChildListMixin, SeoMetadataMixin, BaseLogbooksPage):
             logbooks_atlastag_items__content_object__in=children
         ).distinct()
 
-        return group_by_title(tags, key='name')
+        return group_by_tag_name(tags)
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)

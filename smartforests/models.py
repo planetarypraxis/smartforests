@@ -39,6 +39,13 @@ class Tag(TranslatableMixin, TagBase):
         unique_together = [('locale', 'name'), ('translation_key', 'locale')]
 
     @staticmethod
+    def get_translated_tag_ids(slug):
+        translation_keys = tuple(
+            x.translation_key for x in Tag.objects.filter(slug=slug))
+        return tuple(tag.id for tag in Tag.objects.filter(
+            translation_key__in=translation_keys))
+
+    @staticmethod
     def regenerate_thumbnails():
         for tag in Tag.objects.iterator():
             tag.regenerate_thumbnail()

@@ -155,12 +155,12 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
         tag = params.data.get('tag', ())
 
         if tag:
-            tag_objects = tuple(x.id for x in Tag.objects.filter(slug__in=tag))
+            tag_ids = Tag.get_translated_tag_ids(tag)
 
-            if tag_objects:
+            if tag_ids:
                 tagged_pages = []
                 for PageClass in self.page_types:
-                    tagged_pages += PageClass.for_tag(tag_objects)
+                    tagged_pages += PageClass.for_tag(tag_ids)
                 return tagged_pages
 
         # If no filters, return all possible geo pages
@@ -168,10 +168,10 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
 
     @extend_schema(parameters=[RequestSerializer])
     def list(self, request):
-        list = self.get_queryset()
+        pages = self.get_queryset()
         locale = self.get_locale()
         localized_pages = set()
-        for page in list:
+        for page in pages:
             localized_page = page.get_translation_or_none(locale)
             # Show the localized page if it exists
             if localized_page:
