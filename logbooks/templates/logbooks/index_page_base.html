@@ -18,7 +18,11 @@
                      xmlns="http://www.w3.org/2000/svg">
                     <path d="M7.00033 2.33334L7.82283 3.15584L4.56783 6.41668H11.667V7.58334H4.56783L7.82283 10.8442L7.00033 11.6667L2.33366 7.00001L7.00033 2.33334Z" fill="#043003"/>
                 </svg>
-                <a class="offcanvas-title d-inline-block ms-2" id="offcanvasLabel">Filters</a>
+                <!-- TODO: fix this bug properly (remove the onclick hack) -->
+                <!-- Problem: selecting a filter then going back breaks the offcanvas show/hide buttons -->
+                <a class="offcanvas-title d-inline-block ms-2" id="offcanvasLabel"
+                    onclick="$('.offcanvas').removeClass('show');$('.modal-backdrop').remove()"
+                >Filters</a>
             </div>
             <div class="offcanvas-body">
                 <div class="p-3">
