@@ -1,20 +1,21 @@
 from django.core.management.base import BaseCommand
+from django.utils.text import slugify
 from smartforests.models import Tag, User
 from wagtail.core.models.i18n import Locale
-from wagtail_localize.models import Translation, TranslationSource
+from wagtail_localize.models import StringTranslation, Translation, TranslationSource
 from wagtail_localize.views.edit_translation import machine_translate
 
 
 class MockRequest:
 
-    class MockMessage:
+    class MockMessages:
         def add(self, *args, **kwargs):
             pass
 
     def __init__(self, user):
         self.user = user
         self.method = "POST"
-        self._messages = MockRequest.MockMessage()
+        self._messages = MockRequest.MockMessages()
         self.POST = {
             "next": "https://example.com"
         }
@@ -67,6 +68,13 @@ class Command(BaseCommand):
 
                 # Update translation
                 machine_translate(self.mock_request, translation.id)
+
+                # Fix translated slugs (slugify them)
+                string_translations = StringTranslation.objects.filter(
+                    context__path="slug", translation_of__segments__source=translation_source)
+                for string_translation in string_translations:
+                    string_translation.data = slugify(string_translation.data)
+                    string_translation.save()
 
                 # Update tag
                 translation.save_target(user=self.admin, publish=True)
