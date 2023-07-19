@@ -14,6 +14,7 @@ import { unmountComponentAtNode } from "react-dom";
 import { useAtom } from "jotai";
 import { viewportAtom } from "./state";
 import { TurboURLParamsContextProvider, useTurboURLParams } from "../turbo";
+import { getLanguageCode } from "../pageContext";
 
 const MAPBOX_TOKEN = document.getElementById("MAP_APP")?.dataset.mapboxToken;
 
@@ -143,6 +144,7 @@ const FilterView: FC<{ onClose: () => void; open: boolean }> = ({
   onClose,
   open,
 }) => {
+  const languageCode = getLanguageCode()
   return (
     <div
       className={`mapboxgl-ctrl-filters-content top-0 fade-inout p-3 ${open ? "" : "hidden"
@@ -166,7 +168,7 @@ const FilterView: FC<{ onClose: () => void; open: boolean }> = ({
           id="filters"
           target="_top"
           loading="lazy"
-          src={`/_filters/`}
+          src={`/${languageCode ? languageCode + '/' : ''}_filters/`}
         />
       </div>
     </div>

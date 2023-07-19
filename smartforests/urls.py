@@ -24,13 +24,14 @@ from django.views.generic.base import RedirectView
 
 
 urlpatterns = [
+    path('admin/tag-autocomplete/smartforests/tag/',
+         sf_views.tag_autocomplete_view),
     path('django-admin/', admin.site.urls),
     re_path(r'^admin/autocomplete/', include(autocomplete_admin_urls)),
     path('admin/', include(wagtailadmin_urls)),
     path('documents/', include(wagtaildocs_urls)),
     path("footnotes/", include(footnotes_urls)),
     path('search/', search_views.SearchView.as_view(), name='search'),
-    path('_filters/', sf_views.filters_frame),
     path('favicon.ico',
          RedirectView.as_view(url='/static/img/favicon.png', permanent=True)),
     # path('api/', include(rest.get_urls())),ScheduledPublishViewSet
@@ -39,6 +40,10 @@ urlpatterns = [
     path('404', TemplateView.as_view(template_name='404.html')),
     path('500', TemplateView.as_view(template_name='500.html')),
 ]
+
+urlpatterns += i18n_patterns(
+    path('_filters/', sf_views.filters_frame),
+)
 
 if settings.DEBUG:
     if settings.USE_DEBUG_TOOLBAR:

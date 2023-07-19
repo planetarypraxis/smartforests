@@ -4,6 +4,7 @@ from django.db import models
 from django.conf import settings
 from django.db.models.query import QuerySet
 from django.dispatch.dispatcher import receiver
+from django.utils.translation import pgettext_lazy
 from taggit.models import TagBase
 from wagtail.core.fields import RichTextField
 from wagtail.images.models import AbstractImage, AbstractRendition
@@ -15,14 +16,34 @@ import re
 from wagtail.api.conf import APIField
 from wagtail.snippets.models import register_snippet
 from wagtail.api.v2.utils import get_full_url
+from wagtail.core.models import TranslatableMixin
+from smartforests.mixins import SeoMetadataMixin
 
 from commonknowledge.wagtail.helpers import abstract_page_query_filter
 
 
 @register_snippet
-class Tag(TagBase):
+class Tag(TranslatableMixin, TagBase):
+    name = models.CharField(
+        verbose_name=pgettext_lazy("A tag name", "name"), max_length=100
+    )
+    slug = models.SlugField(
+        verbose_name=pgettext_lazy("A tag slug", "slug"), max_length=100
+    )
+
     description = RichTextField(blank=True, default="")
     thumbnail = models.ImageField(null=True, blank=True)
+
+    class Meta:
+        ordering = ['name']
+        unique_together = [('locale', 'name'), ('translation_key', 'locale')]
+
+    @staticmethod
+    def get_translated_tag_ids(slug):
+        translation_keys = tuple(
+            x.translation_key for x in Tag.objects.filter(slug=slug))
+        return tuple(tag.id for tag in Tag.objects.filter(
+            translation_key__in=translation_keys))
 
     @staticmethod
     def regenerate_thumbnails():
@@ -70,7 +91,7 @@ class Tag(TagBase):
         )
 
 
-class MapPage(RoutablePageMixin, Page):
+class MapPage(RoutablePageMixin, SeoMetadataMixin, Page):
     parent_page_types = ['home.HomePage']
     max_count = 1
 

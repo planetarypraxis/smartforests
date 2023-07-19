@@ -5,9 +5,7 @@ from django.db.models.fields.related import ForeignKey
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
 from django.utils.text import slugify
-from modelcluster.contrib.taggit import ClusterTaggableManager
 from wagtail.core.models import Page
-from wagtail.search.index import AutocompleteField
 from smartforests.models import Tag, User
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
@@ -19,15 +17,16 @@ from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
 from wagtail.api import APIField
 from wagtail.images.api.fields import ImageRenditionField
-from smartforests.util import ensure_list, flatten_list, group_by_title, static_file_absolute_url
-from logbooks.models.mixins import ArticlePage, ArticleSeoMixin, BaseLogbooksPage, ContributorMixin, GeocodedMixin, IndexPage, SeoMetadataMixin, ThumbnailMixin, SidebarRenderableMixin
+from smartforests.util import ensure_list, flatten_list, group_by_tag_name, static_file_absolute_url
+from logbooks.models.fields import TagFieldPanel, LocalizedTaggableManager
+from logbooks.models.mixins import ArticlePage, ArticleSeoMixin, BaseLogbooksPage, ContributorMixin, GeocodedMixin, IndexPage, ThumbnailMixin, SidebarRenderableMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
 from logbooks.models.tag_cloud import TagCloud
 from django.shortcuts import redirect
 from wagtailautocomplete.edit_handlers import AutocompletePanel
-from django.utils import translation
 from smartforests.utils.api import APIRichTextField
+from smartforests.mixins import SeoMetadataMixin
 
 
 class StoryPage(ArticlePage):
@@ -210,7 +209,7 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
         else:
             return static_file_absolute_url('img/mapicons/logbooks.png')
 
-    tags = ClusterTaggableManager(through=AtlasTag, blank=True)
+    tags = LocalizedTaggableManager(through=AtlasTag, blank=True)
     description = RichTextField(
         features=['bold', 'italic', 'link', 'ol', 'ul', 'hr', 'code', 'blockquote', 'h2', 'h3', 'h4'])
 
@@ -221,7 +220,7 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
     content_panels = [
         FieldPanel('title', classname="full title"),
         FieldPanel('description'),
-        FieldPanel('tags'),
+        TagFieldPanel('tags'),
     ] + GeocodedMixin.content_panels + ContributorMixin.content_panels
 
     settings_panels = [FieldPanel("first_published_at")] + Page.settings_panels
@@ -318,7 +317,7 @@ class LogbookIndexPage(IndexPage):
             logbooks_atlastag_items__content_object__in=children
         ).distinct()
 
-        return group_by_title(tags, key='name')
+        return group_by_tag_name(tags)
 
     def get_filters(self, request):
         filter = {}
@@ -326,8 +325,8 @@ class LogbookIndexPage(IndexPage):
         tag_filter = request.GET.get('filter', None)
         if tag_filter is not None:
             try:
-                tag = Tag.objects.get(slug=tag_filter)
-                filter['pk__in'] = [l.id for l in LogbookPage.for_tag(tag)]
+                tag_ids = Tag.get_translated_tag_ids(tag_filter)
+                filter['pk__in'] = [l.id for l in LogbookPage.for_tag(tag_ids)]
             except Tag.DoesNotExist:
                 pass
 
@@ -442,11 +441,10 @@ class ContributorsIndexPage(IndexPage):
         return self.get_children().live().specific()
 
     def relevant_tags(self):
-        return group_by_title(
+        return group_by_tag_name(
             Tag.objects.filter(
                 logbooks_atlastag_items__content_object__live=True
-            ).distinct(),
-            key='name'
+            ).distinct()
         )
 
     def get_filters(self, request):
@@ -455,8 +453,8 @@ class ContributorsIndexPage(IndexPage):
         tag_filter = request.GET.get('filter', None)
         if tag_filter is not None:
             try:
-                tag = Tag.objects.get(slug=tag_filter)
-                filter['pk__in'] = ContributorPage.for_tag(tag)
+                tags = Tag.objects.filter(slug=tag_filter)
+                filter['pk__in'] = ContributorPage.for_tag(tags)
 
             except Tag.DoesNotExist:
                 pass

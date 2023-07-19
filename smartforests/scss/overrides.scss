@@ -1,5 +1,7 @@
 // 14px, expressed as rem
 $small-font-size: $font-size-base * 0.7777777778;
+// 32px as rem
+$large-font-size: $font-size-base * 2;
 
 :root {
   --bs-font-sans-serif: "MarrSans", "sans-serif";

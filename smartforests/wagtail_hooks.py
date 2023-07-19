@@ -1,6 +1,8 @@
 from django.utils.functional import cached_property
 from wagtail.core import hooks
+from wagtail.core.models import Page
 from wagtail.admin.widgets.button import ButtonWithDropdownFromHook
+from wagtail_localize.models import Translation, TranslationSource
 from smartforests.views import RadioEpisodeChooserViewSet
 from django.utils.html import format_html
 from django.templatetags.static import static
@@ -90,3 +92,23 @@ def global_admin_js():
         '<script type="module" src="{}"></script>',
         static("js/radio_wagtailmedia.js")
     )
+
+
+@hooks.register('after_publish_page')
+def after_publish_page_update_translations(request, page):
+    """Update translations when original page is saved."""
+    if hasattr(page, "translation_key"):
+        # Update translation source (this stores synched fields, e.g. tags and coordinates)
+        TranslationSource.update_or_create_from_instance(page)
+
+        translated_pages = Page.objects.filter(
+            translation_key=page.translation_key).exclude(id=page.id)
+        for translated_page in translated_pages:
+            # Update each translation with the new synched field values
+            translation = Translation.objects.filter(
+                source__object_id=page.translation_key,
+                target_locale_id=translated_page.locale_id,
+                enabled=True,
+            ).first()
+            if translation:
+                translation.save_target(request.user)

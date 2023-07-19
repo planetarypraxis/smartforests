@@ -39,13 +39,7 @@ class ChildListMixin:
                 self.sort_options[1]
             )
         else:
-            return next(
-                (
-                    opt for opt in self.sort_options
-                    if opt.slug == request.GET.get('sort')
-                ),
-                self.sort_options[0]
-            )
+            return None
 
     def get_search_queryset(self, request, qs):
         q = request.GET.get('query')
@@ -93,7 +87,9 @@ class ChildListMixin:
 
         page = safe_to_int(request.GET.get('page', 1), 1)
 
-        if request.GET.get('empty') == '1':
+        empty = request.GET.get('empty', False)
+        show_empty_page_for_no_results = empty == '1' or int(empty) >= 1
+        if show_empty_page_for_no_results:
             try:
                 context['child_list_page'] = paginator.page(page)
             except PageNotAnInteger:

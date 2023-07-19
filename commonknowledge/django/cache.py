@@ -6,6 +6,7 @@ def django_cached_key(ns, get_key, *args, **kwargs):
     key = ns
     if get_key != None:
         key += '.' + str(get_key(*args, **kwargs))
+    return key
 
 
 def django_cached(ns, get_key=None, ttl=500):

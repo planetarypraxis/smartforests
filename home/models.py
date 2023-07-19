@@ -1,8 +1,9 @@
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
-from logbooks.models.mixins import ArticleSeoMixin, SeoMetadataMixin
+from logbooks.models.mixins import ArticleSeoMixin
 from logbooks.models.tag_cloud import TagCloud
 from smartforests.models import CmsImage
+from smartforests.mixins import SeoMetadataMixin
 from django.db import models
 from wagtail.core.fields import RichTextField
 from wagtail.core.models import Page
@@ -15,7 +16,8 @@ class HomePage(ChildListMixin, SeoMetadataMixin, Page):
 
     @property
     def tag_cloud(self):
-        return TagCloud.get_start(limit=30)
+        return TagCloud.get_start(
+            limit=30, prioritise_current_locale=True)
 
 
 class InformationPage(ArticleSeoMixin, Page):

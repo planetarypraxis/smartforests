@@ -1,5 +1,6 @@
 from typing import List, Union
-from django.shortcuts import get_object_or_404, render
+from django.apps import apps
+from django.shortcuts import get_list_or_404, get_object_or_404, render
 from rest_framework import serializers, viewsets
 from rest_framework.response import Response
 from rest_framework_gis.serializers import GeoFeatureModelSerializer, GeometrySerializerMethodField
@@ -8,6 +9,7 @@ from wagtail.core.models import Page
 from wagtail.core.models.i18n import Locale
 from smartforests.models import Tag, User
 from wagtail.api.v2.utils import BadRequestError
+from commonknowledge.helpers import ensure_list
 
 from logbooks.models.pages import ContributorPage, EpisodePage, LogbookEntryPage, LogbookPage, StoryPage
 from smartforests.views import LocaleFromLanguageCode
@@ -19,26 +21,71 @@ tag_panel_types = content_list_types + (ContributorPage,)
 
 
 def pages_for_tag(tag_or_tags: Union[Tag, List[Tag]], page_types=tag_panel_types):
-    return [
+    current_locale = Locale.get_active()
+    # Expand the list of tags to include all localized versions
+    #
+    # This is necessary because pages can either be:
+    # 1. Translated versions of original pages
+    # 2. Original pages themselves
+    #
+    # In the first case, the translated pages will be tagged with
+    # the original tag (not the translated tag).
+    # In the second case, the translated pages will be tagged with
+    # the translated tag.
+    all_tags = Tag.objects.filter(
+        translation_key__in=[tag.translation_key for tag in ensure_list(tag_or_tags)])
+    page_lists_by_type = [(page_type, page_type.for_tag(list(all_tags)))
+                          for page_type in page_types]
+    localized_pages_by_type = [
         (
             page_type,
-            list(sorted(set(map(lambda p: p.localized, page_type.for_tag(
-                tag_or_tags))), key=lambda p: p.title))
+            list(sorted(
+                filter(lambda p: p.locale == current_locale, page_list),
+                key=lambda p: p.title)
+            )
         )
-        for page_type
-        in page_types
+        for (page_type, page_list) in page_lists_by_type
     ]
+
+    return [(page_type, page_list) for (page_type, page_list) in localized_pages_by_type if page_list]
+
+
+def get_localized_title_for_page_type(page_type):
+    """
+    Return the title of the parent page for the page type, if it exists.
+    Default to the verbose_name_plural of the model.
+    """
+
+    default = page_type.model_info().verbose_name_plural
+
+    if not page_type.parent_page_types:
+        return default
+
+    parent_page_type = page_type.parent_page_types[0]
+    [parent_page_app, parent_page_model_name] = parent_page_type.split(".")
+    parent_page_model = apps.get_model(
+        app_label=parent_page_app, model_name=parent_page_model_name)
+    parent_page = parent_page_model.objects.first()
+    if not parent_page:
+        return default
+
+    return parent_page.localized.title
 
 
 def tag_panel(request, slug):
-    tag = get_object_or_404(Tag.objects.filter(slug=slug))
+    tags = get_list_or_404(Tag.objects.filter(slug=slug))
+
+    pages = [
+        (page_type, get_localized_title_for_page_type(page_type), page_list)
+        for (page_type, page_list) in pages_for_tag(tags, tag_panel_types)
+    ]
 
     return render(
         request,
         'logbooks/frames/tags.html',
         {
-            'tag': tag,
-            'pages': pages_for_tag(tag, tag_panel_types)
+            'tag': tags[0],
+            'pages': pages
         }
     )
 
@@ -108,12 +155,12 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
         tag = params.data.get('tag', ())
 
         if tag:
-            tag_objects = tuple(x.id for x in Tag.objects.filter(slug__in=tag))
+            tag_ids = Tag.get_translated_tag_ids(tag)
 
-            if tag_objects:
+            if tag_ids:
                 tagged_pages = []
                 for PageClass in self.page_types:
-                    tagged_pages += PageClass.for_tag(tag_objects)
+                    tagged_pages += PageClass.for_tag(tag_ids)
                 return tagged_pages
 
         # If no filters, return all possible geo pages
@@ -121,10 +168,17 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
 
     @extend_schema(parameters=[RequestSerializer])
     def list(self, request):
-        list = self.get_queryset()
+        pages = self.get_queryset()
         locale = self.get_locale()
-        localized_pages = set([page.get_translation_or_none(
-            locale) or page for page in list])
+        localized_pages = set()
+        for page in pages:
+            localized_page = page.get_translation_or_none(locale)
+            # Show the localized page if it exists
+            if localized_page:
+                localized_pages.add(localized_page)
+            # Otherwise show this page if it is an original, not an auto-created dummy translation
+            elif not page.alias_of:
+                localized_pages.add(page)
         return Response(self.ResultSerializer(localized_pages, many=True).data)
 
     def get_object(self, request):

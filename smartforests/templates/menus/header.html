@@ -3,7 +3,7 @@
 <nav class="navbar py-0 {% block header_position %}fixed-top{% endblock %} navbar-expand-lg navbar-light bg-faded-yellow">
     <div class="container-fluid">
         <!-- Mobile logo -->
-        <a class="d-flex d-lg-none navbar-brand text-black fw-normal text-decoration-none align-items-center" href="/">
+        <a class="d-flex d-lg-none navbar-brand text-black fw-normal text-decoration-none align-items-center" href="{{ homepage.localized.url }}">
             <div class="d-flex align-items-center">
                 <img src="{% static 'img/smart-forests-logo.svg' %}" />
             </div>
@@ -92,7 +92,7 @@
                       col col-3 d-flex align-items-center
                     '>
                       <!-- Desktop logo -->
-                      <a class="navbar-brand text-black fw-normal text-decoration-none" href="/">
+                      <a class="navbar-brand text-black fw-normal text-decoration-none" href="{{ homepage.localized.url }}">
                           <img src="{% static 'img/smart-forests-logo.svg' %}" />
                       </a>
                       <!-- Dropdown button -->

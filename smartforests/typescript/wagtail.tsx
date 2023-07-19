@@ -2,6 +2,7 @@ import React from "react";
 import useSWR from "swr";
 import qs from "query-string";
 import { SmartForest } from "./map/types";
+import { getLanguageCode } from './pageContext';
 
 export const wagtailAPIDefaultOptions = {
   limit: 20,
@@ -27,7 +28,8 @@ export function constructModelTypeName(
 }
 
 export function pageToFrameURL(page: SmartForest.MapItem["page"]) {
-  return `/_frame/${page.id}`;
+  const languageCode = getLanguageCode()
+  return `${languageCode ? `/${languageCode}` : ""}/_frame/${page.id}`;
 }
 
 export function useWagtailSearch<Item = any, Wrapper = Wagtail.Results<Item>>(

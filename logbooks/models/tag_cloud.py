@@ -9,6 +9,7 @@ from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 from logbooks.tasks import regenerate_tag_cloud
 from wagtail.core.models import Page
+from wagtail.core.models.i18n import Locale
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import Tag
 
@@ -33,8 +34,8 @@ class TagCloud(models.Model):
         def to_json(self, tag=None):
             if tag:
                 json = self.to_json()
-                json['name'] = tag.name
-                json['slug'] = tag.slug
+                json['name'] = tag.localized.name
+                json['slug'] = tag.localized.slug
                 json['score'] = self.score()
                 return json
 
@@ -89,21 +90,29 @@ class TagCloud(models.Model):
             TagCloud.build_for_tag(tag)
 
     @staticmethod
-    def get_start(limit=100, clouds=100):
+    def get_start(limit=100, clouds=100, prioritise_current_locale=False):
         '''
         Return a merged tag cloud based on the best-scoring clouds (most densely connected nodes) we know about.
         '''
 
-        clouds = TagCloud.objects\
+        cloud_q = TagCloud.objects\
             .order_by('-score')\
-            .filter(score__gt=1)[:clouds]
+            .filter(score__gt=1)
+
+        locale = Locale.get_active() if prioritise_current_locale else None
+        if locale:
+            cloud_q = cloud_q.filter(
+                tag__logbooks_atlastag_items__content_object__locale=locale
+            )
+
+        clouds = cloud_q[:clouds]
 
         cloud_tags = [cloud.tag for cloud in clouds]
         shuffle(cloud_tags)
-        return TagCloud.get_related(cloud_tags[:25], limit=limit)
+        return TagCloud.get_related(cloud_tags[:25], limit=limit, locale=locale)
 
     @staticmethod
-    def get_related(tags, limit=100):
+    def get_related(tags, limit=100, locale=None):
         '''
         Given a list of start tags, merge their associated tag clouds and return a json object describing each tag.
         '''
@@ -151,27 +160,41 @@ class TagCloud(models.Model):
                     stack.append(link)
 
             merged_cloud[tag_id] = TagCloud.Item(
-                id=item.id, index=i, links=list(merged_links))
+                id=tag_id, index=i, links=list(merged_links))
             i += 1
 
         # Filter out any tags where the pages don't exist
-        # Do it here in bulk as otherwise we make potentially 10,000s of database queries!
+        # Works by finding all tags, then excluding tags where the content_object (tagged item)
+        # is live. This returns all tags where the content_object is not live or is missing.
+        # Do it here in bulk as otherwise we make potentially 10,000s of database queries!
         empty_tags = set(
             tag.id for tag in Tag.objects.filter(
                 id__in=[val.id for val in merged_cloud.values()],
-            ).exclude(
-                logbooks_atlastag_items__content_object__live=True
-            )
+            ).exclude(logbooks_atlastag_items__content_object__live=True)
         )
-        ok_tags = (val for val in merged_cloud.values()
-                   if val.id not in empty_tags)
+        ok_tags = [val for val in merged_cloud.values()
+                   if val.id not in empty_tags]
 
-        # If there were tags where the paged didn't exist, mark the source clouds for regeneration
+        # If there were tags where the page didn't exist, mark the source clouds for regeneration
         if len(empty_tags) > 0:
             for tag in tags:
                 regenerate_tag_cloud(tag.id)
 
-        return TagCloud.to_json(sorted(ok_tags, reverse=True, key=TagCloud.Item.score))
+        # If a locale is provided, exclude tags with no content in that locale
+        if locale:
+            empty_tags = set(
+                tag.id for tag in Tag.objects.filter(
+                    id__in=[val.id for val in ok_tags],
+                ).exclude(logbooks_atlastag_items__content_object__locale=locale)
+            )
+            ok_tags = [val for val in ok_tags if val.id not in empty_tags]
+
+        sorted_tags = sorted(ok_tags, reverse=True, key=TagCloud.Item.score)
+
+        # Update tag index after sort (for use by D3 on front-end)
+        TagCloud.reindex_tag_cloud_items(sorted_tags)
+
+        return TagCloud.to_json(sorted_tags)
 
     @staticmethod
     def to_json(items):
@@ -184,10 +207,19 @@ class TagCloud(models.Model):
             for tag in Tag.objects.filter(id__in=[item.id for item in items])
         }
 
-        return [
-            item.to_json(lookup[item.id]) for item in items
-            if item.id in lookup
-        ]
+        items = [item for item in items if item.id in lookup]
+
+        # Correct item indices if some tags do not exist
+        TagCloud.reindex_tag_cloud_items(items)
+
+        return [item.to_json(lookup[item.id]) for item in items]
+
+    @staticmethod
+    def reindex_tag_cloud_items(items):
+        index = 0
+        for item in items:
+            item.index = index
+            index += 1
 
     @staticmethod
     def build_for_tag(instance: Tag):
@@ -215,8 +247,10 @@ class TagCloud(models.Model):
 
             visited[tag.id] = TagCloud.Item(index=i, id=tag.id, links=[])
 
-            # Get all pages for this tag
-            pages = Page.objects.filter(tagged_items__tag=tag).live()
+            # Get all pages for this tag. Filter using the tag translation key
+            # to group together content for tags and their localized versions.
+            pages = Page.objects.filter(
+                tagged_items__tag__translation_key=tag.translation_key).live()
 
             # Pages that link to — or are tagged with — with this tag
             taggings = AtlasTag.objects.filter(content_object__in=pages)

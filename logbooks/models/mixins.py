@@ -10,13 +10,15 @@ from wagtailautocomplete.edit_handlers import AutocompletePanel
 from commonknowledge.django.images import generate_imagegrid_filename, render_image_grid
 from commonknowledge.geo import get_coordinates_data, static_map_marker_image_url
 from commonknowledge.wagtail.models import ChildListMixin
-from django.db.models.query_utils import subclasses
+from django.db.models import Q, BooleanField
+from django.db.models.expressions import ExpressionWrapper
 from logbooks.models.tag_cloud import TagCloud
 from logbooks.tasks import regenerate_page_thumbnails
 from logbooks.thumbnail import get_thumbnail_opts
 from logbooks.models.snippets import AtlasTag
 from logbooks.models.serializers import PageCoordinatesSerializer, UserSerializer, UserField
 from logbooks.models.blocks import ArticleContentStream
+from logbooks.models.fields import TagFieldPanel, LocalizedTaggableManager
 from turbo_response import TurboFrame
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.utils import get_stop_words
@@ -28,7 +30,6 @@ from django.db import models
 from django.http.response import HttpResponseNotFound
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
-from modelcluster.contrib.taggit import ClusterTaggableManager
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, StreamFieldPanel
 from wagtail.api.conf import APIField
 from wagtail.core.models import Page, PageManager, PageRevision
@@ -36,14 +37,14 @@ from django.contrib.gis.db import models as geo
 from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin
 from mapwidgets.widgets import MapboxPointFieldWidget
 from smartforests.models import CmsImage, Tag, User
-from smartforests.util import ensure_list, group_by_title
+from smartforests.util import ensure_list, group_by_tag_name
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from wagtail.snippets.models import register_snippet
-from wagtailseo.models import SeoMixin, SeoType, TwitterCard
-from wagtail.core.rich_text import get_text_for_indexing
+from wagtailseo.models import SeoType, TwitterCard
+from treebeard.mp_tree import get_result_class
 import requests
 from django.core.files.images import ImageFile
-from smartforests.utils.api import APIRichTextField
+from smartforests.mixins import SeoMetadataMixin
 
 
 class BaseLogbooksPage(Page):
@@ -292,41 +293,6 @@ class GeocodedMixin(BaseLogbooksPage):
     ]
 
 
-class SeoMetadataMixin(SeoMixin, Page):
-    class Meta:
-        abstract = True
-
-    promote_panels = SeoMixin.seo_panels
-
-    seo_image_sources = [
-        "og_image",  # Explicit sharing image
-        "default_seo_image"
-    ]
-
-    seo_description_sources = [
-        "search_description",  # Explicit sharing description
-    ]
-
-    @property
-    def default_seo_image(self):
-        from smartforests.wagtail_settings import SocialMediaSettings
-        settings = SocialMediaSettings.for_site(site=self.get_site())
-        return settings.default_seo_image
-
-    @property
-    def seo_description(self) -> str:
-        """
-        Middleware for seo_description_sources
-        """
-        for attr in self.seo_description_sources:
-            if hasattr(self, attr):
-                text = getattr(self, attr)
-                if text:
-                    # Strip HTML if there is any
-                    return get_text_for_indexing(text)
-        return ""
-
-
 class ThumbnailMixin(BaseLogbooksPage):
     '''
     Common configuration for pages that want to generate a thumbnail image derived from a subclass-defined list of images.
@@ -418,9 +384,47 @@ class IndexPage(ChildListMixin, SeoMetadataMixin, BaseLogbooksPage):
         max_count = 1
 
     def get_child_list_queryset(self, *args, **kwargs):
-        return super().get_child_list_queryset().filter(
+        """
+        Get all children in all locales by finding the IDs
+        of the children, then returning a query that matches
+        pages with these IDs.
+
+        This is necessary as it gives us the control we
+        need to (a) prioritize localized content and (b)
+        avoid showing duplicates.
+        """
+
+        # Start by getting the current locale's children - these must come first
+        # Exclude aliases (these are pages that have been duplicated and not yet translated)
+        children = super().get_child_list_queryset().filter(
             alias_of=None
-        )
+        ).values('id', 'translation_key')
+
+        child_ids = [child['id'] for child in children]
+        translation_keys = [child['translation_key'] for child in children]
+
+        # Then get the parent pages for the other locales...
+        other_locale_parent_pages = Page.objects.filter(
+            translation_key=self.translation_key
+        ).exclude(id=self.id)
+
+        # ...and get the children of these pages, excluding pages where
+        # a translation has already been found
+        for page in other_locale_parent_pages:
+            children = page.get_children().live().exclude(
+                translation_key__in=translation_keys
+            ).values('id', 'translation_key')
+            for child in children:
+                child_ids.append(child['id'])
+                translation_keys.append(child['translation_key'])
+
+        # Sort by annotated field "is_current_locale" to show translated content first
+        return get_result_class(self.__class__).objects.filter(
+            id__in=child_ids
+        ).annotate(is_current_locale=ExpressionWrapper(
+            Q(locale__language_code=self.locale.language_code),
+            output_field=BooleanField()
+        )).order_by("-is_current_locale").specific()
 
     def get_filters(self, request):
         filter = {}
@@ -428,8 +432,8 @@ class IndexPage(ChildListMixin, SeoMetadataMixin, BaseLogbooksPage):
         tag_filter = request.GET.get('filter', None)
         if tag_filter is not None:
             try:
-                tag = Tag.objects.get(slug=tag_filter)
-                filter['tagged_items__tag_id'] = tag.id
+                tag_ids = Tag.get_translated_tag_ids(slug=tag_filter)
+                filter['tagged_items__tag_id__in'] = tag_ids
             except Tag.DoesNotExist:
                 pass
 
@@ -443,7 +447,7 @@ class IndexPage(ChildListMixin, SeoMetadataMixin, BaseLogbooksPage):
             logbooks_atlastag_items__content_object__in=children
         ).distinct()
 
-        return group_by_title(tags, key='name')
+        return group_by_tag_name(tags)
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
@@ -467,12 +471,12 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
     class Meta:
         abstract = True
 
-    tags = ClusterTaggableManager(through=AtlasTag, blank=True)
+    tags = LocalizedTaggableManager(through=AtlasTag, blank=True)
     body = ArticleContentStream()
     show_title = True
 
     additional_content_panels = [
-        FieldPanel('tags'),
+        TagFieldPanel('tags'),
         StreamFieldPanel('body'),
         InlinePanel("footnotes", label="Footnotes"),
     ] + ContributorMixin.content_panels + GeocodedMixin.content_panels
