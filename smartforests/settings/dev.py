@@ -29,6 +29,10 @@ if USE_DEBUG_TOOLBAR:
         'debug_toolbar.middleware.DebugToolbarMiddleware',
     ]
 
+WAGTAILLOCALIZE_MACHINE_TRANSLATOR = {
+    "CLASS": "wagtail_localize.machine_translators.dummy.DummyTranslator",
+}
+
 try:
     from .local import *
 except ImportError:

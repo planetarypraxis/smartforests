@@ -329,3 +329,10 @@ WAGTAILLOCALIZE_JOBS = {
 
 USE_BACKGROUND_WORKER = os.getenv(
     "USE_BACKGROUND_WORKER", "False") in ("True", "true", True, 1, "t")
+
+WAGTAILLOCALIZE_MACHINE_TRANSLATOR = {
+    "CLASS": "wagtail_localize.machine_translators.deepl.DeepLTranslator",
+    "OPTIONS": {
+        "AUTH_KEY": os.getenv("DEEPL_AUTH_KEY"),
+    },
+}
