@@ -33,6 +33,7 @@ from django.template.response import TemplateResponse
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, StreamFieldPanel
 from wagtail.api.conf import APIField
 from wagtail.core.models import Page, PageManager, PageRevision
+from wagtail.core.fields import RichTextField
 from django.contrib.gis.db import models as geo
 from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin
 from mapwidgets.widgets import MapboxPointFieldWidget
@@ -473,11 +474,13 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
 
     tags = LocalizedTaggableManager(through=AtlasTag, blank=True)
     body = ArticleContentStream()
+    endnotes = RichTextField()
     show_title = True
 
     additional_content_panels = [
         TagFieldPanel('tags'),
         StreamFieldPanel('body'),
+        FieldPanel('endnotes'),
         InlinePanel("footnotes", label="Footnotes"),
     ] + ContributorMixin.content_panels + GeocodedMixin.content_panels
 
