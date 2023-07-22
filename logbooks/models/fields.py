@@ -38,6 +38,7 @@ class LocalizedTaggableManager(ClusterTaggableManager):
         locale = instance.locale if instance else None
         if locale:
             for name in value:
-                Tag.objects.get_or_create(name=name, defaults={
-                                          "name": name, "locale": locale})
+                existing_tag = Tag.objects.filter(name=name).first()
+                if not existing_tag:
+                    Tag.objects.create(name=name, locale=locale)
         return super().save_form_data(instance, value)

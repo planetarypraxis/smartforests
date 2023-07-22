@@ -474,7 +474,7 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
 
     tags = LocalizedTaggableManager(through=AtlasTag, blank=True)
     body = ArticleContentStream()
-    endnotes = RichTextField()
+    endnotes = RichTextField(blank=True)
     show_title = True
 
     additional_content_panels = [
