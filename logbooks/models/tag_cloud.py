@@ -209,10 +209,22 @@ class TagCloud(models.Model):
 
         items = [item for item in items if item.id in lookup]
 
-        # Correct item indices if some tags do not exist
-        TagCloud.reindex_tag_cloud_items(items)
+        # Combine the scores of tags with the same translation_key
+        deduped_items = {}
+        for item in items:
+            tag = lookup[item.id]
+            deduped_item = deduped_items.get(tag.translation_key)
+            if not deduped_item:
+                deduped_items[tag.translation_key] = item
+            else:
+                deduped_item.count += item.count
 
-        return [item.to_json(lookup[item.id]) for item in items]
+        deduped_items = list(deduped_items.values())
+
+        # Correct item indices after deduplication
+        TagCloud.reindex_tag_cloud_items(deduped_items)
+
+        return [item.to_json(lookup[item.id]) for item in deduped_items]
 
     @staticmethod
     def reindex_tag_cloud_items(items):
