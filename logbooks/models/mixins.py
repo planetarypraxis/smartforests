@@ -422,10 +422,7 @@ class IndexPage(ChildListMixin, SeoMetadataMixin, BaseLogbooksPage):
         # Sort by annotated field "is_current_locale" to show translated content first
         return get_result_class(self.__class__).objects.filter(
             id__in=child_ids
-        ).annotate(is_current_locale=ExpressionWrapper(
-            Q(locale__language_code=self.locale.language_code),
-            output_field=BooleanField()
-        )).order_by("-is_current_locale").specific()
+        ).specific()
 
     def get_filters(self, request):
         filter = {}

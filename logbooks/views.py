@@ -36,11 +36,34 @@ def pages_for_tag(tag_or_tags: Union[Tag, List[Tag]], page_types=tag_panel_types
         translation_key__in=[tag.translation_key for tag in ensure_list(tag_or_tags)])
     page_lists_by_type = [(page_type, page_type.for_tag(list(all_tags)))
                           for page_type in page_types]
+
+    def deduplicate(page_list):
+        """
+        Deduplicate by translation key, favouring pages in the current locale
+        """
+
+        # First filter out alias pages as they are simple duplicates
+        page_list = filter(lambda p: not p.alias_of, page_list)
+
+        # Sort by language code, reversed, so EN comes after PT - EN should be prioritised
+        # as some pages have been "translated" into PT but left in English. The actual English
+        # version should be prioritised.
+        page_list = sorted(
+            page_list, key=lambda p: p.locale.language_code, reverse=True)
+
+        pages_by_trans_key = {}
+        for page in page_list:
+            found_page = pages_by_trans_key.get(page.translation_key)
+            # Always keep the page in the current locale
+            if not found_page or found_page.locale != current_locale:
+                pages_by_trans_key[page.translation_key] = page
+        return list(pages_by_trans_key.values())
+
     localized_pages_by_type = [
         (
             page_type,
             list(sorted(
-                filter(lambda p: p.locale == current_locale, page_list),
+                deduplicate(page_list),
                 key=lambda p: p.title)
             )
         )
