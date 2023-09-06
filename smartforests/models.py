@@ -12,6 +12,7 @@ from wagtail.documents.models import Document, AbstractDocument
 from wagtail.core.models import Page, PageRevision
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from commonknowledge.django.images import generate_imagegrid_filename, render_image_grid
+from commonknowledge.helpers import ensure_list
 import re
 from wagtail.api.conf import APIField
 from wagtail.snippets.models import register_snippet
@@ -40,8 +41,9 @@ class Tag(TranslatableMixin, TagBase):
 
     @staticmethod
     def get_translated_tag_ids(slug):
+        slugs = ensure_list(slug)
         translation_keys = tuple(
-            x.translation_key for x in Tag.objects.filter(slug=slug))
+            x.translation_key for x in Tag.objects.filter(slug__in=slugs))
         return tuple(tag.id for tag in Tag.objects.filter(
             translation_key__in=translation_keys))
 
