@@ -43,7 +43,7 @@ export function MapVisual() {
         minZoom={0}
         maxZoom={16}
       >
-        <NavigationControl showCompass={false} showZoom position='top-left' />
+        <NavigationControl showCompass={false} showZoom position='top-right' />
         <GeocodeControl position="top-left" accessToken={MAPBOX_TOKEN} />
         <FilterControl />
         <AtlasPageFeatureLayer size={size} viewport={viewport} />
@@ -150,15 +150,20 @@ const FilterView: FC<{ onClose: () => void; open: boolean }> = ({
       className={`mapboxgl-ctrl-filters-content top-0 fade-inout p-3 ${open ? "" : "hidden"
         }`}
     >
-      <div className="position-sticky top-0 bg-white d-flex flex-row justify-content-start pb-4">
-        <h2 className="heading-small fw-bold flex-grow-1 font-sans-serif">Filter by tag</h2>
+      <div className="position-sticky top-0 bg-white d-flex flex-row justify-content-start pb-4 align-items-baseline">
+        <h2 className="heading-small fw-bold font-sans-serif">Filter by tag</h2>
 
-        <a href={window.location.pathname} className='font-monospace text-uppercase px-2 cursor-pointer'>
-          Clear All
+        <a href={window.location.pathname} className='ms-2 font-monospace text-uppercase px-2 cursor-pointer text-decoration-none d-flex align-items-center'>
+          Clear
+          <svg class='ms-1' width="6" height="6" viewBox="0 0 6 6" fill="none">
+            <path d="M6 0.604286L5.39571 0L3 2.39571L0.604286 0L0 0.604286L2.39571 3L0 5.39571L0.604286 6L3 3.60429L5.39571 6L6 5.39571L3.60429 3L6 0.604286Z" fill="#026302" />
+          </svg>
         </a>
 
-        <button onClick={onClose} className="icon-btn" style={{ marginTop: -5 }} aria-label="Close">
-          <i className="icon bg-dark icon-close"></i>
+        <button onClick={onClose} className="ms-auto icon-btn" style={{ marginTop: -5 }} aria-label="Close">
+          <svg width="11" height="16" viewBox="0 0 11 16" fill="none">
+            <path d="M10.5467 1.88L4.44003 8L10.5467 14.12L8.66669 16L0.666692 8L8.66669 0L10.5467 1.88Z" fill="#043003" />
+          </svg>
         </button>
       </div>
 
