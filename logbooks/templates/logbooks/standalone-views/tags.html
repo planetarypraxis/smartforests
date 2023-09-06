@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load static ckdjango_tags ckbootstrap_tags %}
+{% block content %}
+  <div style="
+      max-width: 600px;
+      margin: 70px auto 0;
+      padding: 0px !important;
+  " class="logbook-entry-card border-2">
+    {% include "logbooks/frames/tags.html" with tags=tags pages=pages close=False %}
+  </div>
+{% endblock %}
