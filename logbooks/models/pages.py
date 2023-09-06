@@ -240,9 +240,9 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
         to be all logbooks that either have the tag themselves or who have an entry with the tag.
         '''
 
-        logbooks = set(super().for_tag(tag_or_tags))
+        logbooks = set(super().for_tag(tag_or_tags).live().public())
         logbook_entry_logbooks = set(entry.get_parent().specific
-                                     for entry in LogbookEntryPage.for_tag(tag_or_tags))
+                                     for entry in LogbookEntryPage.for_tag(tag_or_tags).live().public())
 
         return logbooks.union(logbook_entry_logbooks)
 
