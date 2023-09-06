@@ -180,6 +180,7 @@ class User(AbstractUser):
             .filter(abstract_page_query_filter(ContributorMixin, {'contributors': self}))\
             .distinct()\
             .live()\
+            .public()\
             .specific()\
             .order_by('title')
         return set(edited_pages)
