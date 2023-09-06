@@ -46,6 +46,7 @@ from treebeard.mp_tree import get_result_class
 import requests
 from django.core.files.images import ImageFile
 from smartforests.mixins import SeoMetadataMixin
+from django.http import HttpResponseRedirect
 
 
 class BaseLogbooksPage(Page):
@@ -364,7 +365,10 @@ class SidebarRenderableMixin(BaseLogbooksPage):
         '''
 
         context = self.get_context(request)
-        return TemplateResponse(request, 'logbooks/content_entry/sidepanel.html', context)
+        if 'Turbo-Frame' in request.headers:
+            return TemplateResponse(request, 'logbooks/content_entry/sidepanel.html', context)
+        elif 'page' in context:
+            return HttpResponseRedirect(context['page'].url)
 
 
 class IndexPage(ChildListMixin, SeoMetadataMixin, BaseLogbooksPage):

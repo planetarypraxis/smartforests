@@ -103,14 +103,25 @@ def tag_panel(request, slug):
         for (page_type, page_list) in pages_for_tag(tags, tag_panel_types)
     ]
 
-    return render(
-        request,
-        'logbooks/frames/tags.html',
-        {
-            'tag': tags[0],
-            'pages': pages
-        }
-    )
+    if 'Turbo-Frame' in request.headers:
+        return render(
+            request,
+            'logbooks/frames/tags.html',
+            {
+                'tag': tags[0],
+                'pages': pages
+            }
+        )
+    else:
+        # If not a turbo frame, we need to render it with page chrome
+        return render(
+            request,
+            'logbooks/standalone-views/tags.html',
+            {
+                'tag': tags[0],
+                'pages': pages
+            }
+        )
 
 
 def metadata(request, page_id, **kwargs):
