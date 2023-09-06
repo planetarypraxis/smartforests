@@ -1,14 +1,22 @@
 from django.core.management.base import BaseCommand
 from django.utils.text import slugify
-from smartforests.models import Tag, User
+from logbooks.models import (
+    LogbookPage,
+    LogbookEntryPage,
+    StoryPage,
+    EpisodePage,
+    ContributorPage,
+)
+from smartforests.models import User
 from wagtail.core.models.i18n import Locale
 from wagtail_localize.models import StringTranslation, Translation, TranslationSource
+from wagtail_localize.operations import translate_object
 from wagtail_localize.views.edit_translation import machine_translate
 
 
 class MockRequest:
     """
-    Used to trigger a "translate this tag" request
+    Used to trigger a "translate this page" request
     """
 
     class MockMessages:
@@ -26,7 +34,10 @@ class MockRequest:
 
 
 class Command(BaseCommand):
-    help = "Translate tags with WAGTAILLOCALIZE_MACHINE_TRANSLATOR"
+    help = """
+    Translate pages with WAGTAILLOCALIZE_MACHINE_TRANSLATOR. Note: if you get an error like
+    'StringSegmentValue does not exist', try running "s
+    """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -34,34 +45,41 @@ class Command(BaseCommand):
         self.mock_request = MockRequest(user=self.admin)
 
     def handle(self, *args, **options):
-        tags = Tag.objects.all()
-        for tag in tags:
-            target_locales = Locale.objects.exclude(id=tag.locale.id)
-            print(f"{str(tag).title()}: ensuring translations")
-            self.ensure_translations(tag, target_locales)
+        for page_class in [
+            LogbookPage,
+            LogbookEntryPage,
+            StoryPage,
+            EpisodePage,
+            ContributorPage,
+        ]:
+            pages = page_class.objects.live().specific()
+            for page in pages:
+                # Can't translate the root page
+                if not page.get_parent():
+                    continue
+                target_locales = Locale.objects.exclude(id=page.locale.id)
+                print(f"{page.title}: ensuring translations")
+                self.ensure_translations(page, target_locales)
 
-    def ensure_translations(self, tag, locales):
+    def ensure_translations(self, page, locales):
         for locale in locales:
             # Check if translation already exists
-            translated_tag = Tag.objects.filter(
-                translation_key=tag.translation_key, locale=locale
+            translated_page = page.specific_class.objects.filter(
+                translation_key=page.translation_key, locale=locale, alias_of=None
             ).first()
 
-            if not translated_tag:
+            if not translated_page:
                 print(f">>>> {locale}: translating")
 
-                # Create translated tag first, then update it (no other way)
-                translated_tag, _ = Tag.objects.get_or_create(
-                    name=tag.name,
-                    translation_key=tag.translation_key,
-                    locale=locale,
-                    defaults={"slug": tag.slug},
+                # Create translation source (or sync with the latest model version)
+                translation_source, _ = TranslationSource.update_or_create_from_instance(
+                    page
                 )
 
+                # Create translated page
+                translate_object(page, locales=[locale])
+
                 # Create translation
-                translation_source, _ = TranslationSource.get_or_create_from_instance(
-                    tag
-                )
                 translation, _ = Translation.objects.get_or_create(
                     source=translation_source, target_locale=locale
                 )
@@ -78,13 +96,13 @@ class Command(BaseCommand):
                     string_translation.data = slugify(string_translation.data)
                     string_translation.save()
 
-                # Update tag
+                # Update page
                 translation.save_target(user=self.admin, publish=True)
 
-                # Refresh from db to print translated tag
-                translated_tag = Tag.objects.filter(
-                    translation_key=tag.translation_key, locale=locale
+                # Refresh from db to print translated page
+                translated_page = page.specific_class.objects.filter(
+                    translation_key=page.translation_key, locale=locale
                 ).first()
-                print(f">>>> {locale}: translated to {translated_tag.name}")
+                print(f">>>> {locale}: translated to {translated_page.title}")
             else:
                 print(f">>>> {locale}: translation exists")
