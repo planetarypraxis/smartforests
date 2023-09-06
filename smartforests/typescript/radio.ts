@@ -236,6 +236,7 @@ export function main() {
     }
     addButtonListeners();
     updateButtonState();
+    episode.pause();
   }
 
   loadRadio();
