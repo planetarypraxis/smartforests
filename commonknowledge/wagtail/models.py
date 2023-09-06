@@ -71,6 +71,9 @@ class ChildListMixin:
                 qs = qs.filter(**filter)
             else:
                 qs = qs.filter(filter)
+            # Complex filters can introduce joins that create duplicate results
+            # Fix with distinct()
+            qs = qs.distinct()
 
         if sort:
             qs = qs.order_by(sort.ordering)
