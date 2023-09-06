@@ -106,7 +106,7 @@ class BasicSearchView(TemplateView):
             'search_results': [
                 {
                     'page': page,
-                    'search_highlight': lambda: self.get_search_highlight(page.specific)
+                    'search_highlight': self.get_search_highlight(page.specific)
                 }
                 for page in paginator.page(page_num)
             ],
