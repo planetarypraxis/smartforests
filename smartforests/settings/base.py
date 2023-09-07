@@ -117,6 +117,7 @@ TEMPLATES = [
                 'wagtail.contrib.settings.context_processors.settings',
                 'django_settings_export.settings_export',
                 'wagtailmenus.context_processors.wagtailmenus',
+                'smartforests.context_processors.wagtail_locales',
             ],
         },
     },
