@@ -1,4 +1,4 @@
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandParser
 from django.utils.text import slugify
 from logbooks.models import (
     LogbookPage,
@@ -44,6 +44,10 @@ class Command(BaseCommand):
         self.admin = User.objects.filter(is_superuser=True).first()
         self.mock_request = MockRequest(user=self.admin)
 
+    def add_arguments(self, parser):
+        parser.add_argument('-n', '--count', dest='count', type=int,
+                            help='Limit the number of translated pages', default=None)
+
     def handle(self, *args, **options):
         for page_class in [
             LogbookPage,
@@ -52,14 +56,19 @@ class Command(BaseCommand):
             EpisodePage,
             ContributorPage,
         ]:
+            count = options.get("count")
             pages = page_class.objects.live().specific()
             for page in pages:
+                if count is not None and count <= 0:
+                    return
                 # Can't translate the root page
                 if not page.get_parent():
                     continue
                 target_locales = Locale.objects.exclude(id=page.locale.id)
                 print(f"{page.title}: ensuring translations")
-                self.ensure_translations(page, target_locales)
+                did_translation = self.ensure_translations(
+                    page, target_locales)
+                count = count - 1 if did_translation else count
 
     def ensure_translations(self, page, locales):
         for locale in locales:
@@ -104,5 +113,7 @@ class Command(BaseCommand):
                     translation_key=page.translation_key, locale=locale
                 ).first()
                 print(f">>>> {locale}: translated to {translated_page.title}")
+                return True
             else:
                 print(f">>>> {locale}: translation exists")
+                return False

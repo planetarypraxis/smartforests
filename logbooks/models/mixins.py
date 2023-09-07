@@ -181,8 +181,6 @@ class ContributorMixin(BaseLogbooksPage):
         '''
         Rebuild the contributors list when the page is edited
         '''
-        print("Saving page", self)
-
         self.update_contributors(save=False)
         super().save(*args, **kwargs)
 
