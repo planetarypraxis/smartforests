@@ -45,8 +45,14 @@ class Command(BaseCommand):
         self.mock_request = MockRequest(user=self.admin)
 
     def add_arguments(self, parser):
-        parser.add_argument('-n', '--count', dest='count', type=int,
-                            help='Limit the number of translated pages', default=None)
+        parser.add_argument(
+            "-n",
+            "--count",
+            dest="count",
+            type=int,
+            help="Limit the number of translated pages",
+            default=None,
+        )
 
     def handle(self, *args, **options):
         for page_class in [
@@ -66,11 +72,11 @@ class Command(BaseCommand):
                     continue
                 target_locales = Locale.objects.exclude(id=page.locale.id)
                 print(f"{page.title}: ensuring translations")
-                did_translation = self.ensure_translations(
-                    page, target_locales)
+                did_translation = self.ensure_translations(page, target_locales)
                 count = count - 1 if count and did_translation else count
 
     def ensure_translations(self, page, locales):
+        did_translation = False
         for locale in locales:
             # Check if translation already exists
             translated_page = page.specific_class.objects.filter(
@@ -81,9 +87,10 @@ class Command(BaseCommand):
                 print(f">>>> {locale}: translating")
 
                 # Create translation source (or sync with the latest model version)
-                translation_source, _ = TranslationSource.update_or_create_from_instance(
-                    page
-                )
+                (
+                    translation_source,
+                    _,
+                ) = TranslationSource.update_or_create_from_instance(page)
 
                 # Create translated page
                 translate_object(page, locales=[locale])
@@ -113,7 +120,8 @@ class Command(BaseCommand):
                     translation_key=page.translation_key, locale=locale
                 ).first()
                 print(f">>>> {locale}: translated to {translated_page.title}")
-                return True
+                did_translation = True
             else:
                 print(f">>>> {locale}: translation exists")
-                return False
+
+        return did_translation
