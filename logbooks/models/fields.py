@@ -41,4 +41,8 @@ class LocalizedTaggableManager(ClusterTaggableManager):
                 existing_tag = Tag.objects.filter(name=name).first()
                 if not existing_tag:
                     Tag.objects.create(name=name, locale=locale)
-        return super().save_form_data(instance, value)
+        super().save_form_data(instance, value)
+        # The tag field updates tags by name, which means we get duplicate tags associated
+        # with the instance (e.g. datafication (en) and datafication (fr)).
+        # The below line deduplicates those tags.
+        instance.tags.set(tag for tag in instance.tags.all() if tag.locale == locale)
