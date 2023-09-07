@@ -68,7 +68,7 @@ class Command(BaseCommand):
                 print(f"{page.title}: ensuring translations")
                 did_translation = self.ensure_translations(
                     page, target_locales)
-                count = count - 1 if did_translation else count
+                count = count - 1 if count and did_translation else count
 
     def ensure_translations(self, page, locales):
         for locale in locales:
