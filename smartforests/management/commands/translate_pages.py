@@ -56,7 +56,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         count = options.get("count")
-        processed = 0
+        checked = 0
+        translated = 0
         total = 0
 
         for page_class in [
@@ -70,7 +71,8 @@ class Command(BaseCommand):
             total += len(pages)
             try:
                 for page in pages:
-                    if count is not None and count == processed:
+                    checked += 1
+                    if count is not None and count == translated:
                         break
                     # Can't translate the root page
                     if not page.get_parent():
@@ -79,10 +81,10 @@ class Command(BaseCommand):
                     print(f"{page.title}: ensuring translations")
                     did_translation = self.ensure_translations(page, target_locales)
                     if did_translation:
-                        processed += 1
+                        translated += 1
             except KeyError as error:
                 print(error)
-        print(f"Processed {processed} of {total}")
+        print(f"Processed {checked} of {total}")
 
     def ensure_translations(self, page, locales):
         did_translation = False
