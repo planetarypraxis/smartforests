@@ -92,7 +92,7 @@ class Command(BaseCommand):
                 translation_key=page.translation_key, locale=locale, alias_of=None
             ).first()
 
-            if True:  # not translated_page:
+            if not translated_page:
                 print(f">>>> {locale}: translating")
 
                 # Create translation source (or sync with the latest model version)
