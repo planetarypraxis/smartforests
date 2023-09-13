@@ -55,6 +55,10 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
+        count = options.get("count")
+        processed = 0
+        total = 0
+
         for page_class in [
             LogbookPage,
             LogbookEntryPage,
@@ -62,18 +66,23 @@ class Command(BaseCommand):
             EpisodePage,
             ContributorPage,
         ]:
-            count = options.get("count")
             pages = page_class.objects.live().specific()
-            for page in pages:
-                if count is not None and count <= 0:
-                    return
-                # Can't translate the root page
-                if not page.get_parent():
-                    continue
-                target_locales = Locale.objects.exclude(id=page.locale.id)
-                print(f"{page.title}: ensuring translations")
-                did_translation = self.ensure_translations(page, target_locales)
-                count = count - 1 if count and did_translation else count
+            total += len(pages)
+            try:
+                for page in pages:
+                    if count is not None and count == processed:
+                        break
+                    # Can't translate the root page
+                    if not page.get_parent():
+                        continue
+                    target_locales = Locale.objects.exclude(id=page.locale.id)
+                    print(f"{page.title}: ensuring translations")
+                    did_translation = self.ensure_translations(page, target_locales)
+                    if did_translation:
+                        processed += 1
+            except KeyError as error:
+                print(error)
+        print(f"Processed {processed} of {total}")
 
     def ensure_translations(self, page, locales):
         did_translation = False
@@ -83,7 +92,7 @@ class Command(BaseCommand):
                 translation_key=page.translation_key, locale=locale, alias_of=None
             ).first()
 
-            if not translated_page:
+            if True:  # not translated_page:
                 print(f">>>> {locale}: translating")
 
                 # Create translation source (or sync with the latest model version)
