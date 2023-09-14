@@ -1,5 +1,6 @@
 {% load i18n %}
 
+{% language LANGUAGE_CODE %}
 <span class="filter-tag {% if orientation == 'vertical' %}mb-2{% endif %} {% if tag_background_class %}{{ tag_background_class }}{% else %}filter-tag-white{% endif %}">
   <a
     class="text-decoration-none"
@@ -10,3 +11,4 @@
     {{tag.localized.name}}
   </a>
 </span>
+{% endlanguage %}
