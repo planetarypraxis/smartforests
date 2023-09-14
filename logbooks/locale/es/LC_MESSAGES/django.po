@@ -1,0 +1,167 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-09-14 14:48+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: logbooks/templates/logbooks/article_page_base.html:59
+msgid "Related Tags"
+msgstr "Etiquetas relacionadas"
+
+#: logbooks/templates/logbooks/content_entry/logbook_entry.html:11
+msgid "By"
+msgstr "Por"
+
+#: logbooks/templates/logbooks/content_entry/logbook_entry.html:29
+msgid "Edit"
+msgstr "Editar"
+
+#: logbooks/templates/logbooks/content_entry/sidepanel.html:18
+#: logbooks/templates/logbooks/frames/tags.html:18
+msgid "Close"
+msgstr "Cerrar"
+
+#: logbooks/templates/logbooks/content_entry/sidepanel.html:53
+msgid "Read More"
+msgstr "Seguir leyendo"
+
+#: logbooks/templates/logbooks/contributor_page.html:34
+#, python-format
+msgid ""
+"\n"
+"        %(page_count)s contribution\n"
+"        "
+msgid_plural ""
+"\n"
+"        %(page_count)s contributions\n"
+"      "
+msgstr[0] ""
+msgstr[1] ""
+
+#: logbooks/templates/logbooks/frames/tags.html:11
+msgid "Tag"
+msgstr "Etiqueta"
+
+#: logbooks/templates/logbooks/frames/tags.html:60
+msgid "View on Map"
+msgstr "Ver en el mapa"
+
+#: logbooks/templates/logbooks/include/masonry.html:15
+msgid "Nothing found"
+msgstr "No se ha encontrado nada"
+
+#: logbooks/templates/logbooks/include/masonry.html:19
+msgid "Load More"
+msgstr "Más información"
+
+#: logbooks/templates/logbooks/include/masonry.html:28
+msgid "Loading"
+msgstr "Cargando"
+
+#: logbooks/templates/logbooks/index_page_base.html:25
+#: logbooks/templates/logbooks/index_page_base.html:55
+msgid "Filters"
+msgstr "Filtros"
+
+#: logbooks/templates/logbooks/index_page_base.html:29
+#: logbooks/templates/logbooks/metadata.html:56
+msgid "Tags"
+msgstr "Etiquetas"
+
+#: logbooks/templates/logbooks/index_page_base.html:71
+#: logbooks/templates/logbooks/index_page_base.html:88
+#: logbooks/templates/logbooks/index_page_base.html:134
+#: logbooks/templates/logbooks/index_page_base.html:151
+#: logbooks/templates/logbooks/logbook_page.html:14
+#: logbooks/templates/logbooks/logbook_page.html:31
+#: logbooks/templates/logbooks/logbook_page.html:67
+#: logbooks/templates/logbooks/logbook_page.html:84
+msgid "Title A—Z"
+msgstr "Título A-Z"
+
+#: logbooks/templates/logbooks/index_page_base.html:73
+#: logbooks/templates/logbooks/index_page_base.html:94
+#: logbooks/templates/logbooks/index_page_base.html:136
+#: logbooks/templates/logbooks/index_page_base.html:157
+#: logbooks/templates/logbooks/logbook_page.html:16
+#: logbooks/templates/logbooks/logbook_page.html:37
+#: logbooks/templates/logbooks/logbook_page.html:69
+#: logbooks/templates/logbooks/logbook_page.html:90
+msgid "Title Z—A"
+msgstr "Título Z-A"
+
+#: logbooks/templates/logbooks/index_page_base.html:75
+#: logbooks/templates/logbooks/index_page_base.html:79
+#: logbooks/templates/logbooks/index_page_base.html:106
+#: logbooks/templates/logbooks/index_page_base.html:138
+#: logbooks/templates/logbooks/index_page_base.html:142
+#: logbooks/templates/logbooks/index_page_base.html:169
+#: logbooks/templates/logbooks/logbook_page.html:18
+#: logbooks/templates/logbooks/logbook_page.html:49
+#: logbooks/templates/logbooks/logbook_page.html:71
+#: logbooks/templates/logbooks/logbook_page.html:102
+msgid "Newest First"
+msgstr "Lo más nuevo primero"
+
+#: logbooks/templates/logbooks/index_page_base.html:77
+#: logbooks/templates/logbooks/index_page_base.html:100
+#: logbooks/templates/logbooks/index_page_base.html:140
+#: logbooks/templates/logbooks/index_page_base.html:163
+#: logbooks/templates/logbooks/logbook_page.html:20
+#: logbooks/templates/logbooks/logbook_page.html:22
+#: logbooks/templates/logbooks/logbook_page.html:43
+#: logbooks/templates/logbooks/logbook_page.html:73
+#: logbooks/templates/logbooks/logbook_page.html:75
+#: logbooks/templates/logbooks/logbook_page.html:96
+msgid "Oldest First"
+msgstr "El más antiguo primero"
+
+#: logbooks/templates/logbooks/metadata.html:6
+msgid "Added"
+msgstr "Añadido"
+
+#: logbooks/templates/logbooks/metadata.html:9
+msgid "Last edited"
+msgstr "Última edición"
+
+#: logbooks/templates/logbooks/metadata.html:14
+msgid "Contributors"
+msgstr "Colaboradores"
+
+#: logbooks/templates/logbooks/metadata.html:20
+msgid "Hide"
+msgstr "Ocultar"
+
+#: logbooks/templates/logbooks/metadata.html:27
+msgid "Hidden Contributors"
+msgstr "Contribuyentes ocultos"
+
+#: logbooks/templates/logbooks/metadata.html:32
+msgid "Show"
+msgstr "Mostrar"
+
+#: logbooks/templates/logbooks/metadata.html:38
+msgid "Location"
+msgstr "Ubicación"
+
+#: logbooks/templates/logbooks/story_page.html:24
+msgid "Footnotes"
+msgstr "Notas a pie de página"
+
+#: logbooks/templates/logbooks/story_page.html:31
+msgid "Back to content"
+msgstr "Volver al contenido"

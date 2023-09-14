@@ -1,4 +1,4 @@
-{% load ckdjango_tags ckbootstrap_tags wagtailcore_tags wagtailimages_tags %}
+{% load i18n ckdjango_tags ckbootstrap_tags wagtailcore_tags wagtailimages_tags %}
 
 
 <head>
@@ -14,7 +14,9 @@
       aria-label="Close"
     >
       <span class="pe-2">&larr;</span>
-      <span class="border-bottom border-1 pb-1 border-dark-green">Close</span>
+      <span class="border-bottom border-1 pb-1 border-dark-green">
+        {% translate "Close" %}
+      </span>
     </button>
   </div>
 
@@ -48,7 +50,7 @@
             class="text-uppercase text-decoration-underline text-mid-green fs-7"
             href="{{ page.link_url }}"
           >
-            Read More
+            {% translate "Read More" %}
           </a>
         </p>
       </div>

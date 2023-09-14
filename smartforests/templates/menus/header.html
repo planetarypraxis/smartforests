@@ -1,4 +1,4 @@
-{% load menu_tags static i18n wagtailcore_tags %}
+{% load i18n menu_tags static i18n wagtailcore_tags %}
 
 <nav class="navbar py-0 {% block header_position %}fixed-top{% endblock %} navbar-expand-lg navbar-light bg-faded-yellow">
     <div class="container-fluid">
@@ -9,7 +9,7 @@
             </div>
         </a>
         <!-- Mobile right-side hamburger icon -->
-        <button class="navbar-toggler fs-6 border-0 pe-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler fs-6 border-0 pe-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label='{% translate "Toggle navigation" %}'>
             <span class="navbar-toggler-icon"></span>
         </button>
         <!-- All dropdowns -->
@@ -81,7 +81,7 @@
               <!--  -->
               <li class="nav-item d-lg-none border-bottom border-soft-green p-2 w-100">
                   <a class="text-dark-green text-decoration-none px-2 d-flex justify-content-between align-items-center" href="{{ important_pages.radio }}" data-bs-toggle="modal" data-bs-target="#searchToggle" aria-controls="searchToggle" aria-expanded="false" aria-label="Toggle sea.localized.urlrch">
-                      Search <i class="ms-2 icon icon-13 bg-dark icon-search"></i>
+                    {% translate "Search" %} <i class="ms-2 icon icon-13 bg-dark icon-search"></i>
                   </a>
               </li>
               <!-- Desktop nav dropdown -->
@@ -109,7 +109,7 @@
                           {% if page %}
                             {{ page.top_level_category.localized.title | default:page.localized.title }}
                           {% else %}
-                            Menu
+                            {% translate "Menu" %}
                           {% endif %}
                         </a>
                         <!-- Dropdown items -->
@@ -184,7 +184,7 @@
                       {% endif %}
                       <!-- -->
                       <button class="btn p-0 text-nowrap" type="button" data-bs-toggle="modal" data-bs-target="#searchToggle" aria-controls="searchToggle" aria-expanded="false" aria-label="Toggle search">
-                          Search<i class="ms-3 icon bg-dark icon-search"></i>
+                        {% translate "Search" %}<i class="ms-3 icon bg-dark icon-search"></i>
                       </button>
                   </div>
               </li>

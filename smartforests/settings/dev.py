@@ -16,7 +16,11 @@ DATABASES['default']['CONN_MAX_AGE'] = 0
 
 INSTALLED_APPS += [
     "wagtail.contrib.styleguide",
+    'django_deep_translator',
 ]
+
+PO_TRANSLATOR_SERVICE = 'django_deep_translator.services.DeeplTranslatorService'
+# DEEPL_TRANSLATE_KEY = "???"
 
 USE_DEBUG_TOOLBAR = False
 

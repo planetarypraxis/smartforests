@@ -1,12 +1,13 @@
-{% load menu_tags %}
+{% load i18n menu_tags %}
 <footer class="border-top border-white bg-panel bg-dark-green container-fluid py-2 px-4">
   <div class="py-1 d-grid d-md-flex gap-2 gap-md-4 gap-lg-7 fs-7 font-monospace text-uppercase text-white links-white">
     {% for item in menu_items %}
     <a
       class="text-decoration-none"
-      href="{{ item.href }}"
+      href="{% firstof item.link_page.localized.url item.href %}"
       data-turbo="false"
-      >{{ item.text }}</a
+      >
+      {% firstof item.link_page.localized.title item.text %}</a
     >
     {% endfor %}
     <a
@@ -14,21 +15,21 @@
       target="_blank"
       rel="noopener noreferrer"
       href="https://commonknowledge.coop"
-      >Site by Common Knowledge</a
+      >{% translate "Site by Common Knowledge" %}</a
     >
     <a
       class="text-decoration-none"
       target="_blank"
       rel="noopener noreferrer"
       href="{% url 'wagtailadmin_home' %}"
-      >Admin area</a
+      >{% translate "Admin area" %}</a
     >
     <a
       class="text-decoration-none"
       target="_blank"
       rel="noopener noreferrer"
       href="{% url 'swagger-ui' %}"
-      >API docs</a
+      >{% translate "API docs" %}</a
     >
   </div>
 </footer>

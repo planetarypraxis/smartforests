@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static ckdjango_tags ckbootstrap_tags %}
+{% load i18n static ckdjango_tags ckbootstrap_tags %}
 {% block content_wrapper_class %}filter-page{% endblock %}
 {% block content %}
     <!-- Filter sidepanel -->
@@ -22,11 +22,11 @@
                 <!-- Problem: selecting a filter then going back breaks the offcanvas show/hide buttons -->
                 <a class="offcanvas-title d-inline-block ms-2" id="offcanvasLabel"
                     onclick="$('.offcanvas').removeClass('show');$('.modal-backdrop').remove()"
-                >Filters</a>
+                >{% translate "Filters" %}</a>
             </div>
             <div class="offcanvas-body">
                 <div class="p-3">
-                    <h3 class="fw-bold">Tags</h3>
+                    <h3 class="fw-bold">{% translate "Tags" %}</h3>
                     {% include "smartforests/include/tag_list.html" with tags=self.relevant_tags target="logbook-search-results" %}
                 </div>
             </div>
@@ -52,7 +52,7 @@
                                  id="open-svg">
                                 <path d="M7.00016 2.33334L6.17766 3.15584L9.43266 6.41668H2.3335V7.58334H9.43266L6.17766 10.8442L7.00016 11.6667L11.6668 7.00001L7.00016 2.33334Z" fill="#043003"/>
                             </svg>
-                            Filters
+                            {% translate "Filters" %}
                         </a>
                     {% endif %}
                 </div>
@@ -68,15 +68,15 @@
                     aria-expanded="false">
 
                         {% if 'sort=a-z' in request.get_full_path %}
-                            Title A—Z
+                            {% translate "Title A—Z" %}
                         {% elif 'sort=z-a' in request.get_full_path %}
-                            Title Z—A
+                            {% translate "Title Z—A" %}
                         {% elif 'sort=most_recent' in request.get_full_path %}
-                            Newest First
+                            {% translate "Newest First" %}
                         {% elif 'sort=oldest' in request.get_full_path %}
-                            Oldest First
+                            {% translate "Oldest First" %}
                         {% else %}
-                            Newest First
+                            {% translate "Newest First" %}
                         {% endif %}
 
                     </a>
@@ -85,25 +85,25 @@
                         <li>
                             <a class="dropdown-item text-dark-green p-2"
                             href="{{ request.path }}?sort=a-z">
-                                <span>Title A—Z</span>
+                                <span>{% translate "Title A—Z" %}</span>
                             </a>
                         </li>
                         <li>
                             <a class="dropdown-item text-dark-green p-2"
                             href="{{ request.path }}?sort=z-a">
-                                <span>Title Z—A</span>
+                                <span>{% translate "Title Z—A" %}</span>
                             </a>
                         </li>
                         <li>
                             <a class="dropdown-item text-dark-green p-2"
                             href="{{ request.path }}?sort=oldest">
-                                <span>Oldest First</span>
+                                <span>{% translate "Oldest First" %}</span>
                             </a>
                         </li>
                         <li>
                             <a class="dropdown-item text-dark-green p-2"
                             href="{{ request.path }}?sort=most_recent">
-                                <span>Newest First</span>
+                                <span>{% translate "Newest First" %}</span>
                             </a>
                         </li>
                     </ul>
@@ -131,15 +131,15 @@
                 data-bs-offset="0,-2"
                 aria-expanded="false">
                     {% if 'sort=a-z' in request.get_full_path %}
-                        Title A—Z
+                        {% translate "Title A—Z" %}
                     {% elif 'sort=z-a' in request.get_full_path %}
-                        Title Z—A
+                        {% translate "Title Z—A" %}
                     {% elif 'sort=most_recent' in request.get_full_path %}
-                        Newest First
+                        {% translate "Newest First" %}
                     {% elif 'sort=oldest' in request.get_full_path %}
-                        Oldest First
+                        {% translate "Oldest First" %}
                     {% else %}
-                        Newest First
+                        {% translate "Newest First" %}
                     {% endif %}
 
                 </a>
@@ -148,25 +148,25 @@
                     <li>
                         <a class="dropdown-item text-dark-green p-2"
                         href="{{ request.path }}?sort=a-z">
-                            <span>Title A—Z</span>
+                            <span>{% translate "Title A—Z" %}</span>
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item text-dark-green p-2"
                         href="{{ request.path }}?sort=z-a">
-                            <span>Title Z—A</span>
+                            <span>{% translate "Title Z—A" %}</span>
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item text-dark-green p-2"
                         href="{{ request.path }}?sort=oldest">
-                            <span>Oldest First</span>
+                            <span>{% translate "Oldest First" %}</span>
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item text-dark-green p-2"
                         href="{{ request.path }}?sort=most_recent">
-                            <span>Newest First</span>
+                            <span>{% translate "Newest First" %}</span>
                         </a>
                     </li>
                 </ul>
