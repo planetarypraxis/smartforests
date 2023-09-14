@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-14 14:24+0000\n"
+"POT-Creation-Date: 2023-09-14 14:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,24 +20,24 @@ msgstr ""
 
 #: logbooks/templates/logbooks/article_page_base.html:59
 msgid "Related Tags"
-msgstr ""
+msgstr "Tags associés"
 
 #: logbooks/templates/logbooks/content_entry/logbook_entry.html:11
 msgid "By"
-msgstr ""
+msgstr "Par"
 
 #: logbooks/templates/logbooks/content_entry/logbook_entry.html:29
 msgid "Edit"
-msgstr ""
+msgstr "Editer"
 
 #: logbooks/templates/logbooks/content_entry/sidepanel.html:18
 #: logbooks/templates/logbooks/frames/tags.html:18
 msgid "Close"
-msgstr ""
+msgstr "Fermer"
 
 #: logbooks/templates/logbooks/content_entry/sidepanel.html:53
 msgid "Read More"
-msgstr ""
+msgstr "Lire la suite"
 
 #: logbooks/templates/logbooks/contributor_page.html:34
 #, python-format
@@ -54,33 +54,33 @@ msgstr[1] ""
 
 #: logbooks/templates/logbooks/frames/tags.html:11
 msgid "Tag"
-msgstr ""
+msgstr "Étiquette"
 
 #: logbooks/templates/logbooks/frames/tags.html:60
 msgid "View on Map"
-msgstr ""
+msgstr "Voir sur la carte"
 
 #: logbooks/templates/logbooks/include/masonry.html:15
 msgid "Nothing found"
-msgstr ""
+msgstr "Rien n'a été trouvé"
 
 #: logbooks/templates/logbooks/include/masonry.html:19
 msgid "Load More"
-msgstr ""
+msgstr "En savoir plus"
 
 #: logbooks/templates/logbooks/include/masonry.html:28
 msgid "Loading"
-msgstr ""
+msgstr "Chargement"
 
 #: logbooks/templates/logbooks/index_page_base.html:25
 #: logbooks/templates/logbooks/index_page_base.html:55
 msgid "Filters"
-msgstr ""
+msgstr "Filtres"
 
 #: logbooks/templates/logbooks/index_page_base.html:29
 #: logbooks/templates/logbooks/metadata.html:56
 msgid "Tags"
-msgstr ""
+msgstr "Tags"
 
 #: logbooks/templates/logbooks/index_page_base.html:71
 #: logbooks/templates/logbooks/index_page_base.html:88
@@ -91,7 +91,7 @@ msgstr ""
 #: logbooks/templates/logbooks/logbook_page.html:67
 #: logbooks/templates/logbooks/logbook_page.html:84
 msgid "Title A—Z"
-msgstr ""
+msgstr "Titre A-Z"
 
 #: logbooks/templates/logbooks/index_page_base.html:73
 #: logbooks/templates/logbooks/index_page_base.html:94
@@ -102,7 +102,7 @@ msgstr ""
 #: logbooks/templates/logbooks/logbook_page.html:69
 #: logbooks/templates/logbooks/logbook_page.html:90
 msgid "Title Z—A"
-msgstr ""
+msgstr "Titre Z-A"
 
 #: logbooks/templates/logbooks/index_page_base.html:75
 #: logbooks/templates/logbooks/index_page_base.html:79
@@ -115,7 +115,7 @@ msgstr ""
 #: logbooks/templates/logbooks/logbook_page.html:71
 #: logbooks/templates/logbooks/logbook_page.html:102
 msgid "Newest First"
-msgstr ""
+msgstr "Le plus récent d'entre eux"
 
 #: logbooks/templates/logbooks/index_page_base.html:77
 #: logbooks/templates/logbooks/index_page_base.html:100
@@ -128,40 +128,40 @@ msgstr ""
 #: logbooks/templates/logbooks/logbook_page.html:75
 #: logbooks/templates/logbooks/logbook_page.html:96
 msgid "Oldest First"
-msgstr ""
+msgstr "Le plus âgé Le premier"
 
 #: logbooks/templates/logbooks/metadata.html:6
 msgid "Added"
-msgstr ""
+msgstr "Ajouté"
 
 #: logbooks/templates/logbooks/metadata.html:9
 msgid "Last edited"
-msgstr ""
+msgstr "Dernière édition"
 
 #: logbooks/templates/logbooks/metadata.html:14
 msgid "Contributors"
-msgstr ""
+msgstr "Les contributeurs"
 
 #: logbooks/templates/logbooks/metadata.html:20
 msgid "Hide"
-msgstr ""
+msgstr "Cacher"
 
 #: logbooks/templates/logbooks/metadata.html:27
 msgid "Hidden Contributors"
-msgstr ""
+msgstr "Les contributeurs cachés"
 
 #: logbooks/templates/logbooks/metadata.html:32
 msgid "Show"
-msgstr ""
+msgstr "Afficher"
 
 #: logbooks/templates/logbooks/metadata.html:38
 msgid "Location"
-msgstr ""
+msgstr "Localisation"
 
 #: logbooks/templates/logbooks/story_page.html:24
 msgid "Footnotes"
-msgstr ""
+msgstr "Notes de bas de page"
 
 #: logbooks/templates/logbooks/story_page.html:31
 msgid "Back to content"
-msgstr ""
+msgstr "Retour au contenu"

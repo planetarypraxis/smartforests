@@ -336,3 +336,10 @@ WAGTAILLOCALIZE_MACHINE_TRANSLATOR = {
         "AUTH_KEY": os.getenv("DEEPL_AUTH_KEY"),
     },
 }
+
+LOCALE_PATHS = (
+    'smartforests/locale',
+    'logbooks/locale',
+    'home/locale',
+    'commonknowledge/locale'
+)

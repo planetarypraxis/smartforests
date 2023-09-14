@@ -85,3 +85,9 @@ You should run this command if you modify the save behaviour of models, or chang
 Tag clouds are also generated with a [background task](https://github.com/planetarypraxis/smartforests/blob/main/logbooks/tasks.py) using [django-background-tasks](https://django-background-tasks.readthedocs.io/en/latest/). This task is run 15 seconds [after a tag is saved](https://github.com/planetarypraxis/smartforests/blob/f6efb6a1ed87433df9d3d4c15e60afef34a5f310/logbooks/models/snippets.py#L21-L25). 
 
 Reindexing all tags takes around 30 minutes.
+
+### Translations
+
+1. To (re)generate the message files (.po), run `yarn makemessages` or `python manage.py makemessages --locale=pt --locale=es --locale=fr --extension=html --ignore=env/**/*`
+2. We use [django-deep-translate](https://pypi.org/project/django-deep-translator/) to automatically translate the message files. Run `python manage.py translate_messages`
+3. After translation, you must compile the message files using `django-admin compilemessages`
