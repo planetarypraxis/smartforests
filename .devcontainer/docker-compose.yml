@@ -45,6 +45,11 @@ services:
       - POSTGRES_DBNAME=postgres
       - POSTGRES_HOSTNAME=postgres
       - POSTGRES_PORT=5432
+    # Uncomment the below line and rebuild the container to log psql queries. View the log with:
+    #
+    #         docker exec smartforests_devcontainer-db-1 tail -f /var/lib/postgresql/13/main/pg_log/postgresql.log
+    #
+    #  - EXTRA_CONF=log_directory = 'pg_log'\nlog_filename = 'postgresql.log'\nlog_statement = 'all'\nlogging_collector = on
 
     # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
