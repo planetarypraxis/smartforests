@@ -75,7 +75,8 @@ class TaggedPagesViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
             "detail_url",
             "html_url",
             "locale",
-            "title"
+            "title",
+            "last_published_at"
         ],
         meta_fields=["type", "detail_url", "html_url", "locale"],
         base=PageSerializer,
