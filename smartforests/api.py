@@ -78,7 +78,8 @@ class TaggedPagesViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
             "title",
             "last_published_at"
         ],
-        meta_fields=["type", "detail_url", "html_url", "locale"],
+        meta_fields=["type", "detail_url", "html_url",
+                     "locale", "last_published_at"],
         base=PageSerializer,
     )
     page_types = (LogbookPage, LogbookEntryPage, StoryPage, EpisodePage,)
