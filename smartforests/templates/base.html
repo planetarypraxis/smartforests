@@ -1,4 +1,4 @@
-{% load static wagtailuserbar wagtailimages_tags ckdjango_tags ckwagtail_tags menu_tags %}
+{% load i18n static wagtailuserbar wagtailimages_tags ckdjango_tags ckwagtail_tags menu_tags %}
 
 <!DOCTYPE html>
 <html class="no-js" lang="en">
@@ -68,15 +68,15 @@
               <div class="offcanvas-header text-dark-green">
                 <div>
                   <div class="microcopy-small">
-                    Tag
+                    {% translate "Tag" %}
                   </div>
               
                   <h5 class="offcanvas-title text-capitalize text-reset fw-bold mt-1" id="offcanvasLabel">
-                    Loading...
+                    {% translate "Loading" %}...
                   </h5>
                 </div>
                 
-                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label='{% translate "Close" %}'></button>
               </div>
             </turbo-frame>
         </div>

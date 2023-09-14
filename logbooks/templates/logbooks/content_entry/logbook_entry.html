@@ -1,4 +1,4 @@
-{% load ckdjango_tags wagtailimages_tags wagtailcore_tags wagtailadmin_tags %}
+{% load i18n ckdjango_tags wagtailimages_tags wagtailcore_tags wagtailadmin_tags %}
 
 <article class='logbook-entry-card' id="{{self.slug}}">
   <div class='row row-cols-1 gy-2'>
@@ -8,7 +8,8 @@
           <div class="me-2">
             {% if self.contributors.all|length > 0 %}
             <div>
-            By {% for user in self.contributors.all %}
+            {% translate "By" %}
+            {% for user in self.contributors.all %}
               <a href='{{ user.contributor_page.localized.link_url }}' data-turbo-frame="_top" class="mr-2 d-inline-block">
                 {{ user }}
               </a>
@@ -25,7 +26,7 @@
           </div>
           {% if user.is_authenticated %}
             <a class="ms-auto align-self-start text-faded-green" href="{% url 'wagtailadmin_pages:edit' self.id %}" target="_parent">
-              Edit
+              {% translate "Edit" %}
             </a>
           {% endif %}
         </div>

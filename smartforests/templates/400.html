@@ -1,15 +1,16 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block body_class %}template-404{% endblock %}
 
 {% block content %}
     <section style='max-width: 500px;' class='mx-auto px-2 py-6 py-md-8 text-grey'>
-      <h1 class='fs-4 fw-bold mb-3 text-soft-black'>Something went wrong</h1>
+      <h1 class='fs-4 fw-bold mb-3 text-soft-black'>{% translate "Something went wrong" %}</h1>
 
-      <p>We're working to fix this problem.</p>
+      <p>{% translate "We're working to fix this problem." %}</p>
 
-      <p>In the meantime, you can try refreshing the page, check again in 30 minutes, or email hello@commonknowledge.coop to report the problem.</p>  
+      <p>{% translate "In the meantime, you can try refreshing the page, check again in 30 minutes, or email hello@commonknowledge.coop to report the problem." %}</p>  
 
-      <a href='/' class='btn btn-dark rounded'>Back to home</a>
+      <a href='/' class='btn btn-dark rounded'>{% translate "Back to home" %}</a>
     </section>
 {% endblock %}

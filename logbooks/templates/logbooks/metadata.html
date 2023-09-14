@@ -1,41 +1,41 @@
-{% load ckdjango_tags wagtailimages_tags site_settings %}
+{% load i18n ckdjango_tags wagtailimages_tags site_settings %}
 
 <div class="d-none d-lg-flex flex-column metadata">
   <section class="d-flex flex-column mb-3">
     <time class="text-dark-grey" datetime="{{ page.first_published_at|date:'Y-m-d' }}">
-      Added {{ page.first_published_at|date:"d E Y" }}
+      {% translate "Added" %} {{ page.first_published_at|date:"d E Y" }}
     </time>
     <time class="text-dark-grey" datetime="{{ page.last_published_at|date:'Y-m-d' }}">
-      Last edited {{ page.last_published_at|date:"d E Y" }}
+      {% translate "Last edited" %} {{ page.last_published_at|date:"d E Y" }}
     </time>
   </section>
   {% if page.contributors.all|length %}
   <section class="d-flex flex-column mb-3">
-    <h4 class="mb-0">Contributors</h4>
+    <h4 class="mb-0">{% translate "Contributors" %}</h4>
     {% for user in page.contributors.all %}
       <a class='d-block' href='{{ user.contributor_page.localized.link_url }}' data-turbo-frame="_top">
         {{ user }}
       </a>
       {% if interactive %}
-        <a href="/_metadata/{{page.id}}/toggle_user/{{user.id}}" data-turbo-frame="_self">(Hide)</a>
+        <a href="/_metadata/{{page.id}}/toggle_user/{{user.id}}" data-turbo-frame="_self">({% translate "Hide" %})</a>
       {% endif %}
     {% endfor %}
   </section>
   {% endif %}
   {% if interactive and page.excluded_contributors.all|length %}
   <section class="d-flex flex-column mb-3">
-    <h4 class="mb-0">(Hidden Contributors)</h4>
+    <h4 class="mb-0">({% translate "Hidden Contributors" %})</h4>
     {% for user in page.excluded_contributors.all %}
       <s><span class='d-block'>
         {{ user }}
       </span></s>
-      <a href="/_metadata/{{page.id}}/toggle_user/{{user.id}}" data-turbo-frame="_self">(Show)</a>
+      <a href="/_metadata/{{page.id}}/toggle_user/{{user.id}}" data-turbo-frame="_self">({% translate "Show" %})</a>
     {% endfor %}
   </section>
   {% endif %}
   {% if page.geographical_location or page.coordinates %}
   <section class="d-flex flex-column mb-3">
-    <h4 class="mb-0">Location</h4>
+    <h4 class="mb-0">{% translate "Location" %}</h4>
     {% if page.coordinates %}
       <div>{{ page.latitude | floatformat:4}}° N, {{ page.longitude | floatformat:4}}° E</div>
     {% endif %}
@@ -53,7 +53,7 @@
   {% with page.all_tags as tags %}
   {% if tags|length %}
   <section class="d-flex flex-column">
-    <h4>Tags</h4>
+    <h4>{% translate "Tags" %}</h4>
     <div class="d-flex flex-column">
     {% for tag in tags %}
       {% include "logbooks/include/tag_label.html" with tag=tag orientation="vertical" tag_background_class=tag_background_class %}

@@ -1,5 +1,5 @@
 {% extends "logbooks/article_page_base.html" %}
-{% load ckdjango_tags wagtailimages_tags wagtailcore_tags static %}
+{% load i18n ckdjango_tags wagtailimages_tags wagtailcore_tags static %}
 
 {% block article_title %}
   <h1 class="mb-3 mb-md-5 d-flex">
@@ -30,7 +30,13 @@
 {% if pages|length %}
 <section class='container-fluid border-top border-light-grey py-6'>
   <header class='row'>
-    <h3 class='col'>{{ pages|length }} {{ pages|length|pluralize:"contribution,contributions"}}</h3>
+    <h3 class='col'>
+      {% blocktranslate count page_count=pages|length %}
+        {{page_count}} contribution
+        {% plural %}
+        {{page_count}} contributions
+      {% endblocktranslate %}
+    </h3>
   </header>
   <div class='row'>
     {% for page in pages %}

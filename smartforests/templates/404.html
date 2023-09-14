@@ -1,15 +1,16 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block body_class %}template-404{% endblock %}
 
 {% block content %}
     <section style='max-width: 500px;' class='mx-auto px-2 py-6 py-md-8 text-grey'>
-      <h1 class='fs-4 fw-bold mb-3 text-soft-black'>Page not found</h1>
+      <h1 class='fs-4 fw-bold mb-3 text-soft-black'>{% translate "Page not found" %}</h1>
 
-      <p>We can't find the page you're looking for.</p>
+      <p>{% translate "We can't find the page you're looking for." %}</p>
 
-      <p>It might have been removed, had its name changed or is temporarily unavailable.</p>
+      <p>{% translate "It might have been removed, had its name changed or is temporarily unavailable." %}</p>
 
-      <a href='/' class='btn btn-dark rounded'>Back to home</a>
+      <a href='/' class='btn btn-dark rounded'>{% translate "Back to home" %}</a>
     </section>
 {% endblock %}
