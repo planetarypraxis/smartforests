@@ -4,9 +4,10 @@
     {% for item in menu_items %}
     <a
       class="text-decoration-none"
-      href="{{ item.href }}"
+      href="{% firstof item.link_page.localized.url item.href %}"
       data-turbo="false"
-      >{{ item.text }}</a
+      >
+      {% firstof item.link_page.localized.title item.text %}</a
     >
     {% endfor %}
     <a
