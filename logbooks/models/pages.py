@@ -226,6 +226,7 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
     settings_panels = [FieldPanel("first_published_at")] + Page.settings_panels
 
     api_fields = [
+        APIField('last_published_at'),
         APIField('icon_class'),
         APIField('tags'),
         APIRichTextField('description'),
@@ -418,6 +419,7 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
         return TagCloud.get_related(self.all_tags)
 
     api_fields = [
+        APIField('last_published_at'),
         APIField('byline'),
         APIField('avatar'),
         APIField('user'),
