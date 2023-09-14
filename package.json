@@ -8,7 +8,8 @@
   "private": true,
   "browserslist": "> 0.25%, not dead, not ie <= 10",
   "scripts": {
-    "build": "yarn webpack"
+    "build": "yarn webpack",
+    "makemessages": "python manage.py makemessages --locale=pt --locale=es --locale=fr --extension=html --ignore=env/**/*"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
