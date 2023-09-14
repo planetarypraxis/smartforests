@@ -89,5 +89,5 @@ Reindexing all tags takes around 30 minutes.
 ### Translations
 
 1. To (re)generate the message files (.po), run `yarn makemessages` or `python manage.py makemessages --locale=pt --locale=es --locale=fr --extension=html --ignore=env/**/*`
-2. We use [django-deep-translate](https://pypi.org/project/django-deep-translator/) to automatically translate the message files. Run `python manage.py translate_messages`
+2. We use [django-deep-translate](https://pypi.org/project/django-deep-translator/) to automatically translate the message files. Ensure `DEEPL_TRANSLATE_KEY` is set in [`smartforests/settings/local.py`](./smartforests/settings/local.py) then run `python manage.py translate_messages`
 3. After translation, you must compile the message files using `django-admin compilemessages`
