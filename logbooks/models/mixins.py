@@ -487,6 +487,7 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
     settings_panels = [FieldPanel("first_published_at")] + Page.settings_panels
 
     api_fields = [
+        APIField('last_published_at'),
         APIField('tags'),
         APIField('icon_class'),
         APIField('body'),
