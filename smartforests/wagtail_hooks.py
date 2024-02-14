@@ -1,6 +1,6 @@
 from django.utils.functional import cached_property
-from wagtail.core import hooks
-from wagtail.core.models import Page
+from wagtail import hooks
+from wagtail.models import Page
 from wagtail.admin.widgets.button import ButtonWithDropdownFromHook
 from wagtail_localize.models import Translation, TranslationSource
 from smartforests.views import RadioEpisodeChooserViewSet

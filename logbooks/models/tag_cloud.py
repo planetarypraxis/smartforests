@@ -8,8 +8,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.signals import m2m_changed
 from django.dispatch import receiver
 from logbooks.tasks import regenerate_tag_cloud
-from wagtail.core.models import Page
-from wagtail.core.models.i18n import Locale
+from wagtail.models import Page
+from wagtail.models.i18n import Locale
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import Tag
 

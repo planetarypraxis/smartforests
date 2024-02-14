@@ -1,5 +1,5 @@
-from wagtail.core.models import Page
-from wagtail.core.rich_text import get_text_for_indexing
+from wagtail.models import Page
+from wagtail.rich_text import get_text_for_indexing
 from wagtailseo.models import SeoMixin
 
 

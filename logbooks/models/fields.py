@@ -1,4 +1,4 @@
-from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.admin.panels import FieldPanel
 from wagtail.admin.widgets.tags import AdminTagWidget
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from smartforests.models import Tag
@@ -22,11 +22,13 @@ class TagFieldPanel(FieldPanel):
         kwargs["widget"] = TagFieldWidget
         super().__init__(field_name, *args, **kwargs)
 
-    def on_form_bound(self):
-        locale = self.form.instance.locale.language_code if self.form.instance and self.form.instance.locale else None
-        tag_field = self.form.fields['tags']
-        tag_field.widget.attrs['locale'] = locale
-        super().on_form_bound()
+    class BoundPanel(FieldPanel.BoundPanel):
+        def __init__(self, **kwargs):
+            super().__init__(**kwargs)
+            locale = self.form.instance.locale.language_code if self.form.instance and self.form.instance.locale else None
+            tag_field = self.form.fields['tags']
+            tag_field.widget.attrs['locale'] = locale
+
 
 
 class LocalizedTaggableManager(ClusterTaggableManager):

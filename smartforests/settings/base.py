@@ -57,8 +57,7 @@ INSTALLED_APPS = [
     'wagtail.images',
     'wagtail.search',
     'wagtail.admin',
-    'wagtail.core',
-    'wagtail.contrib.postgres_search',
+    'wagtail',
     'wagtail.contrib.settings',
     'wagtail.api.v2',
     "wagtail.contrib.routable_page",
@@ -220,6 +219,7 @@ MEDIA_URL = '/media/'
 # Wagtail settings
 
 WAGTAIL_SITE_NAME = "smartforests"
+WAGTAILADMIN_BASE_URL = f"{os.getenv('BASE_URL')}/admin/"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 WAGTAILIMAGES_IMAGE_MODEL = 'smartforests.CmsImage'
@@ -227,7 +227,7 @@ WAGTAILDOCS_DOCUMENT_MODEL = 'smartforests.CmsDocument'
 
 WAGTAILSEARCH_BACKENDS = {
     'default': {
-        'BACKEND': 'wagtail.contrib.postgres_search.backend',
+        'BACKEND': 'wagtail.search.backends.database',
         'SEARCH_CONFIG': 'english',
         'AUTO_UPDATE': True,
     }

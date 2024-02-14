@@ -16,7 +16,7 @@ from wagtail.images.api.v2.views import ImagesAPIViewSet
 from wagtail.documents.api.v2.views import DocumentsAPIViewSet
 from smartforests.models import Tag
 from logbooks.models.pages import LogbookPage
-from wagtail.core.models import Page
+from wagtail.models import Page
 from collections import OrderedDict
 
 # Create the router. "wagtailapi" is the URL namespace

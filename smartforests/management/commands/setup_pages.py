@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.contrib.contenttypes.models import ContentType
-from wagtail.core.models import Page, Site
+from wagtail.models import Page, Site
 
 from home.models import HomePage
 from logbooks.models.pages import ContributorsIndexPage, LogbookIndexPage, RadioIndexPage, StoryIndexPage

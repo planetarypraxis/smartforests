@@ -33,6 +33,8 @@ if USE_DEBUG_TOOLBAR:
         'debug_toolbar.middleware.DebugToolbarMiddleware',
     ]
 
+WAGTAILADMIN_BASE_URL = "http://127.0.0.1:8000/admin/"
+
 WAGTAILLOCALIZE_MACHINE_TRANSLATOR = {
     "CLASS": "wagtail_localize.machine_translators.dummy.DummyTranslator",
 }

@@ -23,6 +23,8 @@ media
 *.py[cod]
 *$py.class
 
+### DB Dump ###
+sf.psql
 # C extensions
 *.so
 

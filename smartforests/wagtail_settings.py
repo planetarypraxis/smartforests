@@ -1,9 +1,9 @@
 from django.urls import reverse
 from wagtail.admin.menu import MenuItem
-from wagtail.core import hooks
-from wagtail.admin.edit_handlers import FieldPanel, PageChooserPanel
+from wagtail import hooks
+from wagtail.admin.panels import FieldPanel, PageChooserPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
-from wagtail.core.models import Page
+from wagtail.models import Page
 from wagtail.contrib.settings.models import BaseSetting, register_setting
 from django.db import models
 from django.contrib.admin.utils import quote

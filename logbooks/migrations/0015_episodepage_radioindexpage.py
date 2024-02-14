@@ -5,8 +5,8 @@ import django.contrib.gis.db.models.fields
 from django.db import migrations, models
 import django.db.models.deletion
 import modelcluster.contrib.taggit
-import wagtail.core.blocks
-import wagtail.core.fields
+import wagtail.blocks
+import wagtail.fields
 import wagtail.embeds.blocks
 import wagtail.images.blocks
 
@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
                 ('indexed_streamfield_text', models.TextField(blank=True, default='')),
                 ('geographical_location', models.CharField(blank=True, max_length=250, null=True)),
                 ('coordinates', django.contrib.gis.db.models.fields.PointField(blank=True, null=True, srid=4326)),
-                ('body', wagtail.core.fields.StreamField([('text', wagtail.core.blocks.RichTextBlock(features=['h3', 'bold', 'italic', 'link', 'ol', 'ul'], template='logbooks/story_blocks/text.html')), ('quote', wagtail.core.blocks.StructBlock([('text', wagtail.core.blocks.RichTextBlock(features=['bold', 'italic', 'link'])), ('author', wagtail.core.blocks.CharBlock(required=False)), ('title', wagtail.core.blocks.CharBlock(required=False)), ('date', wagtail.core.blocks.DateBlock(required=False)), ('link', wagtail.core.blocks.URLBlock(required=False))])), ('embed', wagtail.embeds.blocks.EmbedBlock(template='logbooks/story_blocks/embed.html')), ('image', wagtail.core.blocks.StructBlock([('image', wagtail.images.blocks.ImageChooserBlock(required=False)), ('caption', wagtail.core.blocks.CharBlock())]))])),
+                ('body', wagtail.fields.StreamField([('text', wagtail.blocks.RichTextBlock(features=['h3', 'bold', 'italic', 'link', 'ol', 'ul'], template='logbooks/story_blocks/text.html')), ('quote', wagtail.blocks.StructBlock([('text', wagtail.blocks.RichTextBlock(features=['bold', 'italic', 'link'])), ('author', wagtail.blocks.CharBlock(required=False)), ('title', wagtail.blocks.CharBlock(required=False)), ('date', wagtail.blocks.DateBlock(required=False)), ('link', wagtail.blocks.URLBlock(required=False))])), ('embed', wagtail.embeds.blocks.EmbedBlock(template='logbooks/story_blocks/embed.html')), ('image', wagtail.blocks.StructBlock([('image', wagtail.images.blocks.ImageChooserBlock(required=False)), ('caption', wagtail.blocks.CharBlock())]))])),
                 ('image', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='smartforests.cmsimage')),
                 ('tags', modelcluster.contrib.taggit.ClusterTaggableManager(blank=True, help_text='A comma-separated list of tags.', through='logbooks.AtlasTag', to='taggit.Tag', verbose_name='Tags')),
             ],

@@ -4,8 +4,8 @@ from django.db import migrations, models
 import django.db.models.deletion
 import modelcluster.contrib.taggit
 import modelcluster.fields
-import wagtail.core.blocks
-import wagtail.core.fields
+import wagtail.blocks
+import wagtail.fields
 import wagtail.images.blocks
 
 
@@ -54,7 +54,7 @@ class Migration(migrations.Migration):
             name='StoryPage',
             fields=[
                 ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
-                ('body', wagtail.core.fields.StreamField([('text', wagtail.core.blocks.RichTextBlock(features=['h3', 'bold', 'italic', 'link', 'ol', 'ul'])), ('quote', wagtail.core.blocks.StructBlock([('text', wagtail.core.blocks.RichTextBlock(features=['bold', 'italic', 'link'])), ('author', wagtail.core.blocks.CharBlock(required=False)), ('date', wagtail.core.blocks.DateBlock(required=False)), ('link', wagtail.core.blocks.URLBlock(required=False))])), ('embed', wagtail.core.blocks.RichTextBlock(features=['embed'])), ('image', wagtail.core.blocks.StructBlock([('caption', wagtail.core.blocks.CharBlock()), ('image', wagtail.images.blocks.ImageChooserBlock())]))])),
+                ('body', wagtail.fields.StreamField([('text', wagtail.blocks.RichTextBlock(features=['h3', 'bold', 'italic', 'link', 'ol', 'ul'])), ('quote', wagtail.blocks.StructBlock([('text', wagtail.blocks.RichTextBlock(features=['bold', 'italic', 'link'])), ('author', wagtail.blocks.CharBlock(required=False)), ('date', wagtail.blocks.DateBlock(required=False)), ('link', wagtail.blocks.URLBlock(required=False))])), ('embed', wagtail.blocks.RichTextBlock(features=['embed'])), ('image', wagtail.blocks.StructBlock([('caption', wagtail.blocks.CharBlock()), ('image', wagtail.images.blocks.ImageChooserBlock())]))])),
                 ('tags', modelcluster.contrib.taggit.ClusterTaggableManager(blank=True, help_text='A comma-separated list of tags.', through='logbooks.AtlasTag', to='taggit.Tag', verbose_name='Tags')),
             ],
             options={

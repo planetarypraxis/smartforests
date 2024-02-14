@@ -30,10 +30,10 @@ from django.db import models
 from django.http.response import HttpResponseNotFound
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, StreamFieldPanel
+from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel, StreamFieldPanel
 from wagtail.api.conf import APIField
-from wagtail.core.models import Page, PageManager, PageRevision
-from wagtail.core.fields import RichTextField
+from wagtail.models import Page, PageManager, PageRevision
+from wagtail.fields import RichTextField
 from django.contrib.gis.db import models as geo
 from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin
 from mapwidgets.widgets import MapboxPointFieldWidget

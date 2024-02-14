@@ -1,10 +1,10 @@
-from wagtail.core import blocks
-from wagtail.core.blocks.field_block import PageChooserBlock
-from wagtail.core.fields import StreamField
+from wagtail import blocks
+from wagtail.blocks.field_block import PageChooserBlock
+from wagtail.fields import StreamField
 from wagtail.embeds.blocks import EmbedBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail_footnotes.blocks import RichTextBlockWithFootnotes
-from wagtail.core.rich_text import expand_db_html
+from wagtail.rich_text import expand_db_html
 
 from commonknowledge.wagtail.search.models import StreamfieldIndexer, StructIndexer, TextIndexer
 

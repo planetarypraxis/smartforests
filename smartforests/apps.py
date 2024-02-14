@@ -15,4 +15,5 @@ class SmartForestsConfig(AppConfig):
             posthog.api_key = settings.POSTHOG_PUBLIC_TOKEN
             posthog.host = settings.POSTHOG_URL
         if settings.DEBUG:
+            posthog.api_key = ""
             posthog.disabled = True
