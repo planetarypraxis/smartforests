@@ -21,7 +21,7 @@ psycopg2 = '>=2.8.6'
 pytz = '>=2021.1'
 requests = '>=2.25.1'
 urllib3 = '>=1.26.4'
-wagtail = '~=3.0.3'
+wagtail = '~=4.2.4'
 wagtail-content-import = "*"
 django-import-export = "*"
 django-storages = "*"

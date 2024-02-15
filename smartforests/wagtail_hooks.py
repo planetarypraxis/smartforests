@@ -36,7 +36,7 @@ def customise_page_actions(menu_items, request, context):
 
 
 @hooks.register('construct_page_listing_buttons')
-def remove_page_listing_button_item(buttons, page, page_perms, is_parent=False, context=None):
+def remove_page_listing_button_item(buttons, page, page_perms, context=None):
     '''
     Disallow non-admins from deleting pages via the listing
     '''
@@ -54,11 +54,10 @@ class ButtonWithDropdownFromHookExcludingDelete(ButtonWithDropdownFromHook):
         self.hook_name = base_class.hook_name
         self.page = base_class.page
         self.page_perms = base_class.page_perms
-        self.is_parent = base_class.is_parent
         self.next_url = base_class.next_url
 
         super().__init__(base_class.label, hook_name=base_class.hook_name, page=base_class.page,
-                         page_perms=base_class.page_perms, is_parent=base_class.is_parent, next_url=base_class.next_url, **kwargs)
+                         page_perms=base_class.page_perms, next_url=base_class.next_url, **kwargs)
 
     @cached_property
     def dropdown_buttons(self):
