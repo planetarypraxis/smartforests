@@ -30,7 +30,7 @@ from django.db import models
 from django.http.response import HttpResponseNotFound
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
-from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel, StreamFieldPanel
+from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.api.conf import APIField
 from wagtail.models import Page, Revision
 from wagtail.fields import RichTextField
@@ -480,7 +480,7 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
 
     additional_content_panels = [
         TagFieldPanel('tags'),
-        StreamFieldPanel('body'),
+        FieldPanel('body'),
         FieldPanel('endnotes'),
         InlinePanel("footnotes", label="Footnotes"),
     ] + ContributorMixin.content_panels + GeocodedMixin.content_panels

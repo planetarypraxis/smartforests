@@ -58,7 +58,7 @@ def ArticleContentStream(block_types=None, **kwargs):
         ('image', ImageBlock()),
     ]
 
-    return StreamField(common_block_types + (block_types or []), **kwargs)
+    return StreamField(common_block_types + (block_types or []), use_json_field=False, **kwargs)
 
 
 ArticleContentStream.text_indexer = StreamfieldIndexer(

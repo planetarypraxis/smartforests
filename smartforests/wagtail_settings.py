@@ -2,7 +2,6 @@ from django.urls import reverse
 from wagtail.admin.menu import MenuItem
 from wagtail import hooks
 from wagtail.admin.panels import FieldPanel, PageChooserPanel
-from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.models import Page
 from wagtail.contrib.settings.models import BaseSiteSetting, register_setting
 from django.db import models
@@ -58,7 +57,7 @@ class SocialMediaSettings(BaseSiteSetting):
     )
 
     panels = [
-        ImageChooserPanel('default_seo_image')
+        FieldPanel('default_seo_image')
     ]
 
 
