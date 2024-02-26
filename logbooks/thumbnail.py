@@ -1,6 +1,6 @@
 from math import sqrt
 from commonknowledge.django.images import get_aspect_ratio, render_image_grid
-
+from PIL import Image
 
 def get_thumbnail_opts(images):
     '''
@@ -9,6 +9,16 @@ def get_thumbnail_opts(images):
     '''
 
     num_images = len(images)
+
+    # Discard any images that can't be opened
+    for i in range(images):
+        try:
+            img = images[i].file.open()
+            image = Image.open(img)
+            image.close()
+            img.close()
+        except:
+            num_images = num_images - 1
 
     # Text only, no image
     if num_images == 0:
