@@ -45,7 +45,7 @@ def get_thumbnail_opts(images):
 
     return {
         'format': 'JPEG',
-        'imgs': images[:num_images],
+        'images': images[:num_images],
         **dims
     }
 

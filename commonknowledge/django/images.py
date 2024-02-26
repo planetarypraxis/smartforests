@@ -44,10 +44,10 @@ def get_aspect_ratio(image):
     return image.width / image.height
 
 
-def generate_imagegrid_filename(imgs, rows, cols, format, slug, prefix, width, height):
+def generate_imagegrid_filename(images, rows, cols, format, slug, prefix, width, height):
     extension = format.lower()
     hash = hashlib.sha256(
-        json.dumps([[img.name for img in imgs], rows, cols]).encode()
+        json.dumps([[img.name for img in images], rows, cols]).encode()
     )
     digest = base64.urlsafe_b64encode(hash.digest()).decode()[:16]
 
