@@ -70,7 +70,7 @@ class Tag(TranslatableMixin, TagBase):
             return
 
         grid_opts = {
-            'images': [img.file for img in thumbnails],
+            'images': [img.get_rendition('width-400').file for img in thumbnails],
             'rows': 1,
             'cols': len(thumbnails),
             'format': 'JPEG',
