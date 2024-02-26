@@ -77,7 +77,7 @@ class StoryPage(ArticlePage):
             return [self.cover_image]
         image = self.get_first_image_from_body()
         if image is not None:
-            return [image]
+            return [image.get_rendition('width-400')]
         else:
             return []
 
@@ -256,7 +256,7 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
         images = list(set(flatten_list(image_lists)))
         images.reverse()
 
-        return images
+        return [image.get_rendition('width-400') for image in images]
 
     card_content_html = 'logbooks/thumbnails/basic_thumbnail.html'
 

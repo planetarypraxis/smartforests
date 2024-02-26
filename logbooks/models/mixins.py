@@ -534,7 +534,7 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
         return None if len(images) == 0 else images[0]
 
     def get_thumbnail_images(self):
-        return self.body_images()
+        return [image.get_rendition('width-400') for image in self.body_images()]
 
     seo_description_sources = SeoMetadataMixin.seo_description_sources + [
         'preview_text'

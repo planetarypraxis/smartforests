@@ -10,6 +10,7 @@ from django.core.files.storage import default_storage
 
 
 def render_image_grid(images, rows, cols, format, filename='image-grid', width=400, height=400):
+    print("render_image_grid")
     new_im = Image.new('RGB', (width, height))
     i = 0
 
@@ -19,15 +20,20 @@ def render_image_grid(images, rows, cols, format, filename='image-grid', width=4
     successful_images = []
 
     for row in range(rows):
+        print(row)
         for col in range(cols):
+            print(col)
             try:
-                with images[i].file.open() as d_img:
+                image = images[i]
+                with image.file.open() as d_img:
                     with Image.open(d_img) as img:
+                        print(image, d_img, img)
                         img = ImageOps.fit(img, (int(col_w), int(row_h)),
                                           Image.ANTIALIAS, 0, (0.5, 0.5))
                         new_im.paste(img, (int(col * col_w), int(row * row_h)))
                         successful_images += [images[i]]
-            except:
+            except Exception as e:
+                print("Error rendering image", e)
                 pass
 
             i += 1
