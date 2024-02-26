@@ -16,6 +16,8 @@ def render_image_grid(images, rows, cols, format, filename='image-grid', width=4
     col_w = width / cols
     row_h = height / rows
 
+    successful_images = []
+
     for row in range(rows):
         for col in range(cols):
             try:
@@ -24,10 +26,17 @@ def render_image_grid(images, rows, cols, format, filename='image-grid', width=4
                         img = ImageOps.fit(img, (int(col_w), int(row_h)),
                                           Image.ANTIALIAS, 0, (0.5, 0.5))
                         new_im.paste(img, (int(col * col_w), int(row * row_h)))
+                        successful_images += [images[i]]
             except:
                 pass
 
             i += 1
+    
+    if successful_images == 1:
+        return successful_images[0].file
+    
+    if successful_images == 0:
+        return None
 
     with BytesIO() as output:
         new_im.save(output, format)

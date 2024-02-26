@@ -322,6 +322,14 @@ class ThumbnailMixin(BaseLogbooksPage):
 
     def regenerate_thumbnail(self):
         images = [img.file for img in self.get_thumbnail_images()]
+
+        if len(images) == 0:
+            return
+        
+        if len(images) == 1:
+            self.thumbnail_image = images[0]
+            return
+
         imagegrid_opts = get_thumbnail_opts(images)
 
         if imagegrid_opts is None:
