@@ -19,10 +19,11 @@ def render_image_grid(imgs, rows, cols, format, filename='image-grid', width=400
     for row in range(rows):
         for col in range(cols):
             try:
-                with Image.open(imgs[i].file.open()) as img:
-                    img = ImageOps.fit(img, (int(col_w), int(row_h)),
-                                      Image.ANTIALIAS, 0, (0.5, 0.5))
-                    new_im.paste(img, (int(col * col_w), int(row * row_h)))
+                with imgs[i].file.open() as d_img:
+                    with Image.open(d_img) as img:
+                        img = ImageOps.fit(img, (int(col_w), int(row_h)),
+                                          Image.ANTIALIAS, 0, (0.5, 0.5))
+                        new_im.paste(img, (int(col * col_w), int(row * row_h)))
             except:
                 pass
 

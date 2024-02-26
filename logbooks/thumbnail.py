@@ -13,10 +13,9 @@ def get_thumbnail_opts(images):
     # Discard any images that can't be opened
     for i in range(images):
         try:
-            img = images[i].file.open()
-            image = Image.open(img)
-            image.close()
-            img.close()
+            with images[i].file.open() as d_img:
+                with Image.open(d_img) as img:
+                    pass
         except:
             num_images = num_images - 1
 
