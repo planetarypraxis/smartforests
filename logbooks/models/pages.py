@@ -73,6 +73,8 @@ class StoryPage(ArticlePage):
         return None
 
     def get_thumbnail_images(self):
+        if self.cover_image is not None:
+            return [self.cover_image]
         image = self.get_first_image_from_body()
         if image is not None:
             return [image]
