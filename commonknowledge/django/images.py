@@ -9,7 +9,7 @@ from django.core.files.images import ImageFile
 from django.core.files.storage import default_storage
 
 
-def render_image_grid(imgs, rows, cols, format, filename='image-grid', width=400, height=400):
+def render_image_grid(images, rows, cols, format, filename='image-grid', width=400, height=400):
     new_im = Image.new('RGB', (width, height))
     i = 0
 
@@ -19,7 +19,7 @@ def render_image_grid(imgs, rows, cols, format, filename='image-grid', width=400
     for row in range(rows):
         for col in range(cols):
             try:
-                with imgs[i].file.open() as d_img:
+                with images[i].file.open() as d_img:
                     with Image.open(d_img) as img:
                         img = ImageOps.fit(img, (int(col_w), int(row_h)),
                                           Image.ANTIALIAS, 0, (0.5, 0.5))
