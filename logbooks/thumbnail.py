@@ -8,19 +8,20 @@ def get_thumbnail_opts(images):
     source images. This can be saved to a django imagefield and then accessed by templates.
     '''
 
-    num_images = len(images)
+    initial_num_images = len(images)
+    final_num_images = len(images)
 
     # Discard any images that can't be opened
-    for i in range(images):
+    for i in range(initial_num_images):
         try:
             with images[i].file.open() as d_img:
                 with Image.open(d_img) as img:
                     pass
         except:
-            num_images = num_images - 1
+            final_num_images = final_num_images - 1
 
     # Text only, no image
-    if num_images == 0:
+    if final_num_images == 0:
         return None
 
     # If 1 or 2 images, we don't need a perfect square, so derive the aspect ratio from the constituent images
