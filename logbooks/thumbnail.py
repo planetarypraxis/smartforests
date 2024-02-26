@@ -26,17 +26,21 @@ def get_thumbnail_opts(images):
 
     # If 1 or 2 images, we don't need a perfect square, so derive the aspect ratio from the constituent images
     # so that we get a bit of variation
-    elif num_images <= 3:
-        rows = min(2, num_images)
+    elif final_num_images <= 3:
+        rows = min(2, final_num_images)
+        try:
+            aspect_ratio = calculate_aspect_ratio(images)
+        except:
+            aspect_ratio = 1
         dims = {
             'rows': rows,
             'cols': 1,
             'width': 400,
-            'height': int(400 / calculate_aspect_ratio(images))
+            'height': int(400 / aspect_ratio)
         }
     else:
         # Otherwise make a symmetric grid like 1x1, 2x2, 3x3, 4x4, etc.
-        rows = max(2, int(sqrt(num_images) - sqrt(num_images) % 2))
+        rows = max(2, int(sqrt(final_num_images) - sqrt(final_num_images) % 2))
         dims = {
             'rows': rows,
             'cols': rows,
@@ -46,7 +50,7 @@ def get_thumbnail_opts(images):
 
     return {
         'format': 'JPEG',
-        'images': images[:num_images],
+        'images': images[:final_num_images],
         **dims
     }
 
