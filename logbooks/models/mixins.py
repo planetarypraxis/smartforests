@@ -310,6 +310,15 @@ class ThumbnailMixin(BaseLogbooksPage):
 
     thumbnail_image = models.ImageField(null=True, blank=True)
 
+    @property
+    def thumbnail_image_resilient(self):
+        if self.thumbnail_image:
+            return self.thumbnail_image
+        if self.most_recent_image:
+            return self.most_recent_image
+        else:
+            return self.default_seo_image
+
     def get_thumbnail_images(self):
         return []
 
