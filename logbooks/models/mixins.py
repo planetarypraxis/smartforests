@@ -315,9 +315,9 @@ class ThumbnailMixin(BaseLogbooksPage):
         if self.thumbnail_image:
             return self.thumbnail_image
         if self.most_recent_image:
-            return self.most_recent_image
+            return self.most_recent_image.get_rendition('width-400')
         else:
-            return self.default_seo_image
+            return self.default_seo_image.get_rendition('width-400')
 
     def get_thumbnail_images(self):
         return []
