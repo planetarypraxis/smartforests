@@ -279,10 +279,15 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
         ))
 
     @property
-    def all_tags(self):
-        return list(sorted(list(set(
-            self.entry_tags + list(self.tags.all())
-        )), key=lambda tag: tag.name))
+    def all_localized_tags(self):
+        localized_tags = set()
+        tags_including_child_pages = list(self.tags.all()) + self.entry_tags
+        for tag in tags_including_child_pages:
+            if tag.localized:
+                localized_tags.add(tag.localized)
+            else:
+                localized_tags.add(tag)
+        return list(sorted(localized_tags, key=lambda tag: tag.name))
 
     @property
     def preview_text(self):
@@ -290,7 +295,7 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
 
     @property
     def tag_cloud(self):
-        return TagCloud.get_related(self.all_tags)
+        return TagCloud.get_related(self.all_localized_tags)
 
     @route(r'^(?P<path>.*)/?$')
     def serve_subpages_too(self, request, path, *args, **kwargs):
@@ -405,9 +410,17 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
     card_content_html = 'logbooks/thumbnails/contributor_thumbnail.html'
 
     @property
-    def all_tags(self):
-        if self.user:
-            return self.user.edited_tags
+    def all_localized_tags(self):
+        if not self.user:
+            return []
+
+        localized_tags = set()
+        for tag in self.user.edited_tags:
+            if tag.localized:
+                localized_tags.add(tag.localized)
+            else:
+                localized_tags.add(tag)
+        return list(sorted(localized_tags, key=lambda tag: tag.name))
 
     @classmethod
     def for_tag(cls, tag_or_tags):
@@ -417,7 +430,7 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
 
     @property
     def tag_cloud(self):
-        return TagCloud.get_related(self.all_tags)
+        return TagCloud.get_related(self.all_localized_tags)
 
     api_fields = [
         APIField('last_published_at'),
