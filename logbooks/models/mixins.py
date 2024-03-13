@@ -561,5 +561,11 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
         return TagCloud.get_related(self.tags.all())
 
     @property
-    def all_tags(self):
-        return list(sorted(list(self.tags.all()), key=lambda tag: tag.name))
+    def all_localized_tags(self):
+        localized_tags = set()
+        for tag in self.tags.all():
+            if tag.localized:
+                localized_tags.add(tag.localized)
+            else:
+                localized_tags.add(tag)
+        return list(sorted(localized_tags, key=lambda tag: tag.name))
