@@ -210,9 +210,6 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
             # Show the localized page if it exists
             if localized_page:
                 localized_pages.add(localized_page)
-            # Otherwise show this page if it is an original, not an auto-created dummy translation
-            elif not page.alias_of:
-                localized_pages.add(page)
         return Response(self.ResultSerializer(localized_pages, many=True).data)
 
     def get_object(self, request):
