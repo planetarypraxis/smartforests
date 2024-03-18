@@ -94,45 +94,43 @@ class Command(BaseCommand):
                 translation_key=page.translation_key, locale=locale, alias_of=None
             ).first()
 
-            if not translated_page:
-                print(f">>>> {locale}: translating")
+            print(f">>>> {locale}: translating")
 
-                # Create translation source (or sync with the latest model version)
-                (
-                    translation_source,
-                    _,
-                ) = TranslationSource.update_or_create_from_instance(page)
+            # Create translation source (or sync with the latest model version)
+            (
+                translation_source,
+                _,
+            ) = TranslationSource.update_or_create_from_instance(page)
 
-                # Create translated page
-                translate_object(page, locales=[locale])
+            # Create translated page
+            translate_object(page, locales=[locale])
 
-                # Create translation
-                translation, _ = Translation.objects.get_or_create(
-                    source=translation_source, target_locale=locale
-                )
+            # Create translation
+            translation, _ = Translation.objects.get_or_create(
+                source=translation_source, target_locale=locale
+            )
 
-                # Update translation
-                machine_translate(self.mock_request, translation.id)
+            # Update translation
+            # This skips already translated segments, so safe to re-run on the same page
+            machine_translate(self.mock_request, translation.id)
 
-                # Fix translated slugs (slugify them)
-                string_translations = StringTranslation.objects.filter(
-                    context__path="slug",
-                    translation_of__segments__source=translation_source,
-                )
-                for string_translation in string_translations:
-                    string_translation.data = slugify(string_translation.data)
-                    string_translation.save()
+            # Fix translated slugs (slugify them)
+            string_translations = StringTranslation.objects.filter(
+                context__path="slug",
+                translation_of__segments__source=translation_source,
+            )
+            for string_translation in string_translations:
+                string_translation.data = slugify(string_translation.data)
+                string_translation.save()
 
-                # Update page
-                translation.save_target(user=self.admin, publish=True)
+            # Update page
+            translation.save_target(user=self.admin, publish=True)
 
-                # Refresh from db to print translated page
-                translated_page = page.specific_class.objects.filter(
-                    translation_key=page.translation_key, locale=locale
-                ).first()
-                print(f">>>> {locale}: translated to {translated_page.title}")
-                did_translation = True
-            else:
-                print(f">>>> {locale}: translation exists")
+            # Refresh from db to print translated page
+            translated_page = page.specific_class.objects.filter(
+                translation_key=page.translation_key, locale=locale
+            ).first()
+            print(f">>>> {locale}: translated to {translated_page.title}")
+            did_translation = True
 
         return did_translation
