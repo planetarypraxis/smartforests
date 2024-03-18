@@ -34,6 +34,7 @@ from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.api.conf import APIField
 from wagtail.models import Page, Revision
 from wagtail.fields import RichTextField
+from wagtail_localize.fields import SynchronizedField
 from django.contrib.gis.db import models as geo
 from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin
 from mapwidgets.widgets import MapboxPointFieldWidget
@@ -131,6 +132,11 @@ class ContributorMixin(BaseLogbooksPage):
         related_name='+',
         help_text="Index list of contributors"
     )
+
+    override_translatable_fields = [
+        SynchronizedField("additional_contributors"),
+        SynchronizedField("excluded_contributors"),
+    ]
 
     def get_page_revision_editors(self):
         content_type = ContentType.objects.get_for_model(self)
