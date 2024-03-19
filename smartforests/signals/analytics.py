@@ -3,7 +3,7 @@ import wagtail.signals
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
-from wagtail.models import Page, PageRevision
+from wagtail.models import Revision
 import posthog
 
 from logbooks.models.pages import ContributorPage, ContributorsIndexPage
@@ -79,7 +79,7 @@ def page_published(sender, instance, **kwargs):
 wagtail.signals.page_published.connect(page_published)
 
 
-@receiver(post_save, sender=PageRevision)
+@receiver(post_save, sender=Revision)
 def page_revision_created(sender, instance=None, created=False, **kwargs):
     if created:
         user = instance.user
@@ -90,9 +90,9 @@ def page_revision_created(sender, instance=None, created=False, **kwargs):
         posthog.capture(
             user.id,
             event='page revised',
-            properties={'id': instance.page.id,
-                        'page': instance.page.title,
-                        'pageType': instance.page.specific_class._meta.verbose_name}
+            properties={'id': instance.content_object.id,
+                        'page': instance.content_object.title,
+                        'pageType': instance.content_object.specific_class._meta.verbose_name}
         )
 
 

@@ -2,9 +2,8 @@ from django.urls import reverse
 from wagtail.admin.menu import MenuItem
 from wagtail import hooks
 from wagtail.admin.panels import FieldPanel, PageChooserPanel
-from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.models import Page
-from wagtail.contrib.settings.models import BaseSetting, register_setting
+from wagtail.contrib.settings.models import BaseSiteSetting, register_setting
 from django.db import models
 from django.contrib.admin.utils import quote
 from django.urls import reverse
@@ -25,11 +24,11 @@ class RadioEpisodeChooser(AdminChooser):
     choose_modal_url_name = 'radio_episode_chooser:choose'
 
     def get_edit_item_url(self, item):
-        return reverse('wagtailsnippets:edit', args=('logbooks', 'episodepage', quote(item.pk)))
+        return reverse('wagtailadmin_pages:edit', args=[quote(item.pk)])
 
 
 @register_setting(icon='pick')
-class FeaturedContent(BaseSetting):
+class FeaturedContent(BaseSiteSetting):
     class Meta:
         verbose_name = 'Featured content'
 
@@ -46,7 +45,7 @@ class FeaturedContent(BaseSetting):
 
 
 @register_setting(icon='web')
-class SocialMediaSettings(BaseSetting):
+class SocialMediaSettings(BaseSiteSetting):
     class Meta:
         verbose_name = 'Social media settings'
 
@@ -58,7 +57,7 @@ class SocialMediaSettings(BaseSetting):
     )
 
     panels = [
-        ImageChooserPanel('default_seo_image')
+        FieldPanel('default_seo_image')
     ]
 
 

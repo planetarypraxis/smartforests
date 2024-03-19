@@ -19,7 +19,7 @@ class APIRichTextSerializer(Field):
 
     def to_representation(self, obj):
         value = getattr(obj, self.name)
-        if value and value is not None and value is not '':
+        if value and value is not None and value != '':
             # Expands Wagtail XML to HTML
             return expand_db_html(value)
         return None

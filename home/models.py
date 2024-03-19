@@ -1,5 +1,4 @@
 from wagtail.admin.panels import FieldPanel
-from wagtail.images.edit_handlers import ImageChooserPanel
 from logbooks.models.mixins import ArticleSeoMixin
 from logbooks.models.tag_cloud import TagCloud
 from smartforests.models import CmsImage
@@ -37,7 +36,7 @@ class InformationPage(ArticleSeoMixin, Page):
     text = RichTextField()
 
     content_panels = Page.content_panels + [
-        ImageChooserPanel('cover_image'),
+        FieldPanel('cover_image'),
         FieldPanel('text')
     ]
 

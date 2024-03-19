@@ -1,3 +1,7 @@
 ul.bulk-actions-buttons.hide_serious .serious {
   display: none;
 }
+
+.c-wagtailautocomplete__suggestions__item {
+  color: black;
+}

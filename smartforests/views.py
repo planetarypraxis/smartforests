@@ -74,7 +74,10 @@ class LocaleFromLanguageCode:
 class RadioEpisodeChooserViewSetMixin(ModelChooserMixin):
     def get_unfiltered_object_list(self):
         objects = super().get_unfiltered_object_list()
-        return list(set(o.localized for o in objects))
+        locale = Locale.get_active()
+        if locale:
+            objects = objects.filter(locale=locale)
+        return objects
 
 
 class RadioEpisodeChooserViewSet(ModelChooserViewSet):

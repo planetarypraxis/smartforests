@@ -9,7 +9,7 @@ from taggit.models import TagBase
 from wagtail.fields import RichTextField
 from wagtail.images.models import AbstractImage, AbstractRendition
 from wagtail.documents.models import Document, AbstractDocument
-from wagtail.models import Page, PageRevision
+from wagtail.models import Page
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from commonknowledge.django.images import generate_imagegrid_filename, render_image_grid
 from commonknowledge.helpers import ensure_list
