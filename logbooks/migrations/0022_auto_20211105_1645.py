@@ -4,7 +4,7 @@ from django.conf import settings
 import django.contrib.gis.db.models.fields
 from django.db import migrations, models
 import django.db.models.deletion
-import wagtail.core.fields
+import wagtail.fields
 
 
 class Migration(migrations.Migration):
@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
                 ('coordinates', django.contrib.gis.db.models.fields.PointField(
                     blank=True, null=True, srid=4326)),
                 ('byline', models.CharField(blank=True, max_length=1000, null=True)),
-                ('bio', wagtail.core.fields.RichTextField(blank=True, null=True)),
+                ('bio', wagtail.fields.RichTextField(blank=True, null=True)),
                 ('avatar', models.ForeignKey(blank=True, null=True,
                  on_delete=django.db.models.deletion.SET_NULL, to='smartforests.cmsimage')),
                 ('user', models.OneToOneField(blank=True, null=True,

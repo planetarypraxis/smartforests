@@ -6,10 +6,10 @@ from django.db.models.query import QuerySet
 from django.dispatch.dispatcher import receiver
 from django.utils.translation import pgettext_lazy
 from taggit.models import TagBase
-from wagtail.core.fields import RichTextField
+from wagtail.fields import RichTextField
 from wagtail.images.models import AbstractImage, AbstractRendition
 from wagtail.documents.models import Document, AbstractDocument
-from wagtail.core.models import Page, PageRevision
+from wagtail.models import Page
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from commonknowledge.django.images import generate_imagegrid_filename, render_image_grid
 from commonknowledge.helpers import ensure_list
@@ -17,7 +17,7 @@ import re
 from wagtail.api.conf import APIField
 from wagtail.snippets.models import register_snippet
 from wagtail.api.v2.utils import get_full_url
-from wagtail.core.models import TranslatableMixin
+from wagtail.models import TranslatableMixin
 from smartforests.mixins import SeoMetadataMixin
 
 from commonknowledge.wagtail.helpers import abstract_page_query_filter

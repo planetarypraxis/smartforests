@@ -5,12 +5,11 @@ from django.db.models.fields.related import ForeignKey
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
 from django.utils.text import slugify
-from wagtail.core.models import Page
+from wagtail.models import Page
 from smartforests.models import Tag, User
-from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.admin.panels import FieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
-from wagtail.images.edit_handlers import ImageChooserPanel
-from wagtail.core.fields import RichTextField
+from wagtail.fields import RichTextField
 from wagtailmedia.edit_handlers import MediaChooserPanel
 from commonknowledge.wagtail.helpers import get_children_of_type
 from commonknowledge.wagtail.models import ChildListMixin
@@ -55,7 +54,7 @@ class StoryPage(ArticlePage):
                        null=True, blank=True)
 
     content_panels = ArticlePage.content_panels + [
-        ImageChooserPanel('image')
+        FieldPanel('image')
     ]
 
     api_fields = ArticlePage.api_fields + [
@@ -133,8 +132,8 @@ class EpisodePage(ArticlePage):
 
     content_panels = Page.content_panels + [
         MediaChooserPanel('audio', media_type='audio'),
-        ImageChooserPanel('image'),
-        ImageChooserPanel('thumbnail'),
+        FieldPanel('image'),
+        FieldPanel('thumbnail'),
     ] + ArticlePage.additional_content_panels
 
     @property
@@ -372,7 +371,7 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
     content_panels = [
         FieldPanel('title', classname="full title"),
         FieldPanel('byline'),
-        ImageChooserPanel('avatar'),
+        FieldPanel('avatar'),
         AutocompletePanel('user'),
         FieldPanel('bio')
     ] + GeocodedMixin.content_panels

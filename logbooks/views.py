@@ -5,8 +5,8 @@ from rest_framework import serializers, viewsets
 from rest_framework.response import Response
 from rest_framework_gis.serializers import GeoFeatureModelSerializer, GeometrySerializerMethodField
 from django.urls import path
-from wagtail.core.models import Page
-from wagtail.core.models.i18n import Locale
+from wagtail.models import Page
+from wagtail.models.i18n import Locale
 from smartforests.models import Tag, User
 from wagtail.api.v2.utils import BadRequestError
 from commonknowledge.helpers import ensure_list

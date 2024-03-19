@@ -1,7 +1,7 @@
 from urllib import parse
-from wagtail.core.blocks.base import Block
+from wagtail.blocks.base import Block
 
-from wagtail.core.models import Site
+from wagtail.models import Site
 from django import template
 from django.utils.safestring import mark_safe
 from commonknowledge.helpers import safe_to_int

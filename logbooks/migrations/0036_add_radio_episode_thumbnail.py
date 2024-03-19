@@ -2,8 +2,8 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
-import wagtail.core.blocks
-import wagtail.core.fields
+import wagtail.blocks
+import wagtail.fields
 import wagtail.embeds.blocks
 import wagtail.images.blocks
 import wagtail_footnotes.blocks
@@ -25,16 +25,16 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='episodepage',
             name='body',
-            field=wagtail.core.fields.StreamField([('text', wagtail_footnotes.blocks.RichTextBlockWithFootnotes(features=['h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'footnotes'], template='logbooks/story_blocks/text.html')), ('quote', wagtail.core.blocks.StructBlock([('text', wagtail.core.blocks.RichTextBlock(features=['bold', 'italic', 'link'])), ('author', wagtail.core.blocks.CharBlock(required=False)), ('title', wagtail.core.blocks.CharBlock(required=False)), ('date', wagtail.core.blocks.DateBlock(required=False)), ('link', wagtail.core.blocks.URLBlock(required=False))])), ('embed', wagtail.embeds.blocks.EmbedBlock(template='logbooks/story_blocks/embed.html')), ('image', wagtail.core.blocks.StructBlock([('image', wagtail.images.blocks.ImageChooserBlock(required=False)), ('caption', wagtail.core.blocks.RichTextBlock(features=['bold', 'italic', 'link', 'ol', 'ul', 'hr', 'code', 'blockquote']))]))]),
+            field=wagtail.fields.StreamField([('text', wagtail_footnotes.blocks.RichTextBlockWithFootnotes(features=['h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'footnotes'], template='logbooks/story_blocks/text.html')), ('quote', wagtail.blocks.StructBlock([('text', wagtail.blocks.RichTextBlock(features=['bold', 'italic', 'link'])), ('author', wagtail.blocks.CharBlock(required=False)), ('title', wagtail.blocks.CharBlock(required=False)), ('date', wagtail.blocks.DateBlock(required=False)), ('link', wagtail.blocks.URLBlock(required=False))])), ('embed', wagtail.embeds.blocks.EmbedBlock(template='logbooks/story_blocks/embed.html')), ('image', wagtail.blocks.StructBlock([('image', wagtail.images.blocks.ImageChooserBlock(required=False)), ('caption', wagtail.blocks.RichTextBlock(features=['bold', 'italic', 'link', 'ol', 'ul', 'hr', 'code', 'blockquote']))]))]),
         ),
         migrations.AlterField(
             model_name='logbookentrypage',
             name='body',
-            field=wagtail.core.fields.StreamField([('text', wagtail_footnotes.blocks.RichTextBlockWithFootnotes(features=['h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'footnotes'], template='logbooks/story_blocks/text.html')), ('quote', wagtail.core.blocks.StructBlock([('text', wagtail.core.blocks.RichTextBlock(features=['bold', 'italic', 'link'])), ('author', wagtail.core.blocks.CharBlock(required=False)), ('title', wagtail.core.blocks.CharBlock(required=False)), ('date', wagtail.core.blocks.DateBlock(required=False)), ('link', wagtail.core.blocks.URLBlock(required=False))])), ('embed', wagtail.embeds.blocks.EmbedBlock(template='logbooks/story_blocks/embed.html')), ('image', wagtail.core.blocks.StructBlock([('image', wagtail.images.blocks.ImageChooserBlock(required=False)), ('caption', wagtail.core.blocks.RichTextBlock(features=['bold', 'italic', 'link', 'ol', 'ul', 'hr', 'code', 'blockquote']))]))]),
+            field=wagtail.fields.StreamField([('text', wagtail_footnotes.blocks.RichTextBlockWithFootnotes(features=['h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'footnotes'], template='logbooks/story_blocks/text.html')), ('quote', wagtail.blocks.StructBlock([('text', wagtail.blocks.RichTextBlock(features=['bold', 'italic', 'link'])), ('author', wagtail.blocks.CharBlock(required=False)), ('title', wagtail.blocks.CharBlock(required=False)), ('date', wagtail.blocks.DateBlock(required=False)), ('link', wagtail.blocks.URLBlock(required=False))])), ('embed', wagtail.embeds.blocks.EmbedBlock(template='logbooks/story_blocks/embed.html')), ('image', wagtail.blocks.StructBlock([('image', wagtail.images.blocks.ImageChooserBlock(required=False)), ('caption', wagtail.blocks.RichTextBlock(features=['bold', 'italic', 'link', 'ol', 'ul', 'hr', 'code', 'blockquote']))]))]),
         ),
         migrations.AlterField(
             model_name='storypage',
             name='body',
-            field=wagtail.core.fields.StreamField([('text', wagtail_footnotes.blocks.RichTextBlockWithFootnotes(features=['h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'footnotes'], template='logbooks/story_blocks/text.html')), ('quote', wagtail.core.blocks.StructBlock([('text', wagtail.core.blocks.RichTextBlock(features=['bold', 'italic', 'link'])), ('author', wagtail.core.blocks.CharBlock(required=False)), ('title', wagtail.core.blocks.CharBlock(required=False)), ('date', wagtail.core.blocks.DateBlock(required=False)), ('link', wagtail.core.blocks.URLBlock(required=False))])), ('embed', wagtail.embeds.blocks.EmbedBlock(template='logbooks/story_blocks/embed.html')), ('image', wagtail.core.blocks.StructBlock([('image', wagtail.images.blocks.ImageChooserBlock(required=False)), ('caption', wagtail.core.blocks.RichTextBlock(features=['bold', 'italic', 'link', 'ol', 'ul', 'hr', 'code', 'blockquote']))]))]),
+            field=wagtail.fields.StreamField([('text', wagtail_footnotes.blocks.RichTextBlockWithFootnotes(features=['h3', 'h4', 'bold', 'italic', 'link', 'ol', 'ul', 'footnotes'], template='logbooks/story_blocks/text.html')), ('quote', wagtail.blocks.StructBlock([('text', wagtail.blocks.RichTextBlock(features=['bold', 'italic', 'link'])), ('author', wagtail.blocks.CharBlock(required=False)), ('title', wagtail.blocks.CharBlock(required=False)), ('date', wagtail.blocks.DateBlock(required=False)), ('link', wagtail.blocks.URLBlock(required=False))])), ('embed', wagtail.embeds.blocks.EmbedBlock(template='logbooks/story_blocks/embed.html')), ('image', wagtail.blocks.StructBlock([('image', wagtail.images.blocks.ImageChooserBlock(required=False)), ('caption', wagtail.blocks.RichTextBlock(features=['bold', 'italic', 'link', 'ol', 'ul', 'hr', 'code', 'blockquote']))]))]),
         ),
     ]

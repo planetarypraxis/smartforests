@@ -1,12 +1,11 @@
-from wagtail.admin.edit_handlers import FieldPanel
-from wagtail.images.edit_handlers import ImageChooserPanel
+from wagtail.admin.panels import FieldPanel
 from logbooks.models.mixins import ArticleSeoMixin
 from logbooks.models.tag_cloud import TagCloud
 from smartforests.models import CmsImage
 from smartforests.mixins import SeoMetadataMixin
 from django.db import models
-from wagtail.core.fields import RichTextField
-from wagtail.core.models import Page
+from wagtail.fields import RichTextField
+from wagtail.models import Page
 from commonknowledge.wagtail.models import ChildListMixin
 
 
@@ -37,7 +36,7 @@ class InformationPage(ArticleSeoMixin, Page):
     text = RichTextField()
 
     content_panels = Page.content_panels + [
-        ImageChooserPanel('cover_image'),
+        FieldPanel('cover_image'),
         FieldPanel('text')
     ]
 

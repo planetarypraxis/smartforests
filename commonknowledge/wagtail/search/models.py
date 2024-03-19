@@ -1,9 +1,9 @@
 from django.db import models
-from wagtail.core.models import Page
+from wagtail.models import Page
 from wagtail.search import index
-from wagtail.core.blocks.stream_block import StreamBlock, StreamValue
-from wagtail.core.blocks.struct_block import StructValue
-from wagtail.core.rich_text import RichText, get_text_for_indexing
+from wagtail.blocks.stream_block import StreamBlock, StreamValue
+from wagtail.blocks.struct_block import StructValue
+from wagtail.rich_text import RichText, get_text_for_indexing
 
 from commonknowledge.helpers import get_path
 

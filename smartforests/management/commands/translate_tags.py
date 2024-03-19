@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.utils.text import slugify
 from smartforests.models import Tag, User
-from wagtail.core.models.i18n import Locale
+from wagtail.models.i18n import Locale
 from wagtail_localize.models import StringTranslation, Translation, TranslationSource
 from wagtail_localize.views.edit_translation import machine_translate
 

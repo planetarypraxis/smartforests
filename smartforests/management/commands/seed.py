@@ -6,7 +6,7 @@ from smartforests.models import CmsImage
 from django.core.management.base import BaseCommand
 from django.core.files.temp import NamedTemporaryFile
 from django.db import transaction
-from wagtail.core.rich_text import RichText
+from wagtail.rich_text import RichText
 from commonknowledge.wagtail.helpers import get_children_of_type
 from datetime import datetime
 

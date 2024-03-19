@@ -1,5 +1,5 @@
 from rest_framework.fields import Field
-from wagtail.core.rich_text import expand_db_html
+from wagtail.rich_text import expand_db_html
 from wagtail.api import APIField
 
 
@@ -19,7 +19,7 @@ class APIRichTextSerializer(Field):
 
     def to_representation(self, obj):
         value = getattr(obj, self.name)
-        if value and value is not None and value is not '':
+        if value and value is not None and value != '':
             # Expands Wagtail XML to HTML
             return expand_db_html(value)
         return None

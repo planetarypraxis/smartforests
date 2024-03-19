@@ -2,7 +2,7 @@ from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 from logbooks.models.mixins import ContributorMixin
 from logbooks.models.pages import LogbookEntryPage
-from wagtail.core.signals import page_published
+from wagtail.signals import page_published
 
 from logbooks.tasks import regenerate_page_thumbnails
 

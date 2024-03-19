@@ -30,10 +30,10 @@ from django.db import models
 from django.http.response import HttpResponseNotFound
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, StreamFieldPanel
+from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.api.conf import APIField
-from wagtail.core.models import Page, PageManager, PageRevision
-from wagtail.core.fields import RichTextField
+from wagtail.models import Page, Revision
+from wagtail.fields import RichTextField
 from django.contrib.gis.db import models as geo
 from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin
 from mapwidgets.widgets import MapboxPointFieldWidget
@@ -133,12 +133,14 @@ class ContributorMixin(BaseLogbooksPage):
     )
 
     def get_page_revision_editors(self):
+        content_type = ContentType.objects.get_for_model(self)
+
         return set(
             [self.owner] + [
                 user
                 for user in [
                     revision.user
-                    for revision in PageRevision.objects.filter(page=self).select_related('user')
+                    for revision in Revision.objects.filter(object_id=self.id, content_type=content_type).select_related('user')
                 ]
                 if user is not None
             ]
@@ -495,7 +497,7 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
 
     additional_content_panels = [
         TagFieldPanel('tags'),
-        StreamFieldPanel('body'),
+        FieldPanel('body'),
         FieldPanel('endnotes'),
         InlinePanel("footnotes", label="Footnotes"),
     ] + ContributorMixin.content_panels + GeocodedMixin.content_panels

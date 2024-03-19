@@ -11,4 +11,8 @@
   "python.linting.enabled": true,
   "python.analysis.extraPaths": [],
   "html-css-class-completion.includeGlobPattern": "**/*.{scss,css,html}",
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  "python.formatting.provider": "none",
 }

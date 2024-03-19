@@ -2,7 +2,7 @@
 
 from django.db import migrations
 import logbooks.models.fields
-import wagtail.core.fields
+import wagtail.fields
 
 
 class Migration(migrations.Migration):
@@ -15,19 +15,19 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='episodepage',
             name='endnotes',
-            field=wagtail.core.fields.RichTextField(default=''),
+            field=wagtail.fields.RichTextField(default=''),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='logbookentrypage',
             name='endnotes',
-            field=wagtail.core.fields.RichTextField(default=''),
+            field=wagtail.fields.RichTextField(default=''),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='storypage',
             name='endnotes',
-            field=wagtail.core.fields.RichTextField(default=''),
+            field=wagtail.fields.RichTextField(default=''),
             preserve_default=False,
         ),
     ]
