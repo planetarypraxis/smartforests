@@ -51,6 +51,10 @@ def tag_autocomplete_view(request: HttpRequest):
     return HttpResponse(json.dumps(suggestions), content_type='application/json; charset=utf8')
 
 
+def smoke_view(request: HttpRequest):
+    return HttpResponse("OK")
+
+
 class LocaleFromLanguageCode:
     '''
     Can be used for API requests and so on.
