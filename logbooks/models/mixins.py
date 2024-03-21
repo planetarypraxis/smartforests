@@ -12,7 +12,6 @@ from commonknowledge.geo import get_coordinates_data, static_map_marker_image_ur
 from commonknowledge.wagtail.models import ChildListMixin
 from django.db.models import Q, BooleanField
 from django.db.models.expressions import ExpressionWrapper
-from logbooks.models.tag_cloud import TagCloud
 from logbooks.tasks import regenerate_page_thumbnails
 from logbooks.thumbnail import get_thumbnail_opts
 from logbooks.models.snippets import AtlasTag
@@ -39,6 +38,7 @@ from django.contrib.gis.db import models as geo
 from commonknowledge.wagtail.search.models import IndexedStreamfieldMixin
 from mapwidgets.widgets import MapboxPointFieldWidget
 from smartforests.models import CmsImage, Tag, User
+from smartforests.tag_cloud import get_nodes_and_links
 from smartforests.util import ensure_list, group_by_tag_name
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from wagtail.snippets.models import register_snippet
@@ -581,7 +581,7 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
 
     @property
     def tag_cloud(self):
-        return TagCloud.get_related(self.tags.all())
+        return get_nodes_and_links(self.all_localized_tags)
 
     @property
     def all_localized_tags(self):
