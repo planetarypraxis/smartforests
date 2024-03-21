@@ -181,7 +181,6 @@ STATICFILES_FINDERS = [
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "dist"),
-    os.path.join(BASE_DIR, "smartforests", "static"),
 ]
 
 WEBPACK_LOADER = {

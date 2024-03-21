@@ -11,7 +11,8 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 media
-/static
+/static/**/*
+!/static/.gitkeep
 .tmp
 
 # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/
@@ -32,7 +33,8 @@ sf.psql
 .Python
 build/
 develop-eggs/
-dist/
+dist/**/*
+!dist/**/.gitkeep
 downloads/
 eggs/
 .eggs/
@@ -299,7 +301,6 @@ typings/
 
 # Nuxt.js build / generate output
 .nuxt
-dist
 
 # Storybook build outputs
 .out

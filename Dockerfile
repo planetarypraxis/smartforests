@@ -10,6 +10,9 @@ COPY --chown=app:app . ./
 ENV DJANGO_SETTINGS_MODULE=smartforests.settings.production
 ENV NODE_ENV=production
 
+# Build
+RUN pipenv run bash .bin/build.sh
+
 # Run
 EXPOSE ${PORT:-8080}
 #RUN pipenv run bash .bin/release.sh
