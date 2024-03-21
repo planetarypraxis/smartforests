@@ -8,11 +8,11 @@ from smartforests.tag_cloud import recalculate_taglinks
 @background(schedule=15, remove_existing_tasks=True)
 def regenerate_page_thumbnails(page_id: int):
     from logbooks.models.mixins import ThumbnailMixin
+
     try:
         page = Page.objects.get(pk=page_id).specific
     except Page.DoesNotExist:
         return
-
     if isinstance(page, ThumbnailMixin):
         page.regenerate_thumbnail()
         page.save(regenerate_thumbnails=False)
