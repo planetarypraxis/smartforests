@@ -2,7 +2,7 @@
 {% load static ckbootstrap_tags %}
 
 {% block content %}
-  <main data-turbo-permanent id="tag-cloud" class="h-100" data-tag-offcanvas="tagpanel-offcanvas" data-tag-frame="tagpanel-turboframe" data-tag-cloud-data="tag_cloud"></main>
+  <main id="tag-cloud" class="h-100" data-tag-offcanvas="tagpanel-offcanvas" data-tag-frame="tagpanel-turboframe" data-tag-cloud-data="tag_cloud"></main>
   {{self.tag_cloud|json_script:"tag_cloud"}}
 {% endblock %}
   
