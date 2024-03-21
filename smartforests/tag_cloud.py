@@ -1,5 +1,5 @@
 import sys
-from django.core.management.base import BaseCommand
+from django.db.models import Q
 from wagtail.models.i18n import Locale
 from logbooks import models
 from smartforests.models import Tag, TagLink
@@ -8,54 +8,44 @@ from smartforests.models import Tag, TagLink
 def get_nodes_and_links(tags=None):
     locale = Locale.get_active()
 
-    if tags is None or len(tags) == 0:
-        tags = Tag.objects.filter(locale=locale).order_by("id")
+    tag_links = TagLink.objects.select_related("source", "target").filter(
+        source__locale=locale, target__locale=locale, relatedness__gt=0
+    )
 
-    tags_by_id = {tag.id: tag for tag in tags}
+    if tags is not None:
+        tag_links = tag_links.filter(Q(source__in=tags) | Q(target__in=tags))
+
+    tags_by_id = {}
+
     links = []
 
-    max_count = 0
-    extra_tag_ids = []
-    for tag in tags:
-        if tag.cached_page_count > max_count:
-            max_count = tag.cached_page_count
-        tag_links = TagLink.objects.filter(
-            source=tag, target__id__gt=tag.id, relatedness__gt=0
-        )
-        for tag_link in tag_links:
-            links.append(
-                {
-                    "source": tag_link.source.id,
-                    "target": tag_link.target.id,
-                    "value": tag_link.relatedness,
-                }
-            )
-            if tag_link.target.id not in tags_by_id:
-                extra_tag_ids.append(tag_link.target.id)
+    for tag_link in tag_links:
+        tags_by_id[tag_link.source.id] = tag_link.source
+        tags_by_id[tag_link.target.id] = tag_link.target
 
-    nodes = []
-    for tag in tags_by_id.values():
-        nodes.append(
+        links.append(
             {
-                "id": tag.id,
-                "name": tag.name,
-                "slug": tag.slug,
-                "count": tag.cached_page_count,
+                "source": tag_link.source.id,
+                "target": tag_link.target.id,
+                "value": tag_link.relatedness,
             }
         )
 
-    for tag in Tag.objects.filter(id__in=extra_tag_ids):
-        nodes.append(
-            {
-                "id": tag.id,
-                "name": tag.name,
-                "slug": tag.slug,
-                "count": tag.cached_page_count,
-            }
-        )
-
+    nodes = [
+        {
+            "id": tag.id,
+            "name": tag.name,
+            "slug": tag.slug,
+            "count": tag.cached_page_count,
+        }
+        for tag in tags_by_id.values()
+    ]
     nodes = sorted(nodes, key=lambda x: x["count"], reverse=True)
-    return {"nodes": nodes, "links": links, "max_count": max_count}
+    return {
+        "nodes": nodes,
+        "links": links,
+        "max_count": nodes[0]["count"] if nodes else 0,
+    }
 
 
 def page_classes():

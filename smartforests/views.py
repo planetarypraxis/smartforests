@@ -54,6 +54,23 @@ def tag_autocomplete_view(request: HttpRequest):
 def smoke_view(request: HttpRequest):
     return HttpResponse("OK")
 
+from wagtail.models import Site
+
+def smoke_site_view(request: HttpRequest):
+        # we need a valid Site object corresponding to this request in order to proceed
+    site = Site.find_for_request(request)
+    return HttpResponse(f"{site}")
+
+
+def smoke_home_view(request: HttpRequest):
+    page = Page.objects.filter(id=3).specific().first()
+    return page.serve(request)
+
+
+def smoke_about_view(request: HttpRequest):
+    page = Page.objects.filter(id=208).specific().first()
+    return page.serve(request)
+
 
 class LocaleFromLanguageCode:
     '''

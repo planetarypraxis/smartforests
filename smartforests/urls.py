@@ -39,7 +39,10 @@ urlpatterns = [
     path('403', TemplateView.as_view(template_name='403.html')),
     path('404', TemplateView.as_view(template_name='404.html')),
     path('500', TemplateView.as_view(template_name='500.html')),
-    path('smoke', sf_views.smoke_view)
+    path('smoke/', sf_views.smoke_view),
+    path('smoke/site/', sf_views.smoke_site_view),
+    path('smoke/home/', sf_views.smoke_home_view),
+    path('smoke/about/', sf_views.smoke_about_view),
 ]
 
 urlpatterns += i18n_patterns(
