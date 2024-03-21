@@ -21,11 +21,11 @@ from logbooks.models.fields import TagFieldPanel, LocalizedTaggableManager
 from logbooks.models.mixins import ArticlePage, ArticleSeoMixin, BaseLogbooksPage, ContributorMixin, GeocodedMixin, IndexPage, ThumbnailMixin, SidebarRenderableMixin
 from logbooks.models.snippets import AtlasTag
 from smartforests.models import CmsImage
-from logbooks.models.tag_cloud import TagCloud
 from django.shortcuts import redirect
 from wagtailautocomplete.edit_handlers import AutocompletePanel
 from smartforests.utils.api import APIRichTextField
 from smartforests.mixins import SeoMetadataMixin
+from smartforests.tag_cloud import get_nodes_and_links
 
 
 class StoryPage(ArticlePage):
@@ -295,7 +295,7 @@ class LogbookPage(RoutablePageMixin, SidebarRenderableMixin, ChildListMixin, Con
 
     @property
     def tag_cloud(self):
-        return TagCloud.get_related(self.all_localized_tags)
+        return get_nodes_and_links(self.all_localized_tags)
 
     @route(r'^(?P<path>.*)/?$')
     def serve_subpages_too(self, request, path, *args, **kwargs):
@@ -430,7 +430,7 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
 
     @property
     def tag_cloud(self):
-        return TagCloud.get_related(self.all_localized_tags)
+        return get_nodes_and_links(self.all_localized_tags)
 
     api_fields = [
         APIField('last_published_at'),

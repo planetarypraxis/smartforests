@@ -2,6 +2,7 @@ from wagtail.models import Page
 from background_task import background
 
 from smartforests.models import Tag
+from smartforests.tag_cloud import recalculate_taglinks
 
 
 @background(schedule=15, remove_existing_tasks=True)
@@ -30,10 +31,4 @@ def regenerate_tag_thumbnails(tag_id: int):
 
 @background(schedule=15, remove_existing_tasks=True)
 def regenerate_tag_cloud(tag_id: int):
-    from logbooks.models import TagCloud
-    try:
-        tag = Tag.objects.get(pk=tag_id)
-    except Tag.DoesNotExist:
-        return
-
-    TagCloud.build_for_tag(tag)
+    recalculate_taglinks(tag_id)
