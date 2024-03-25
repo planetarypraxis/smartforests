@@ -44,8 +44,14 @@ class LocalizedTaggableManager(ClusterTaggableManager):
 
     def save_form_data(self, instance, value):
         locale = instance.locale if instance else None
+        # Fix accidental submission of tags with commas
+        clean_values = set()
+        for name in value:
+            clean_values = clean_values.union(
+                set((v.strip() for v in name.split(",") if v.strip()))
+            )
         if locale:
-            for name in value:
+            for name in clean_values:
                 existing_tag = Tag.objects.filter(name=name).first()
                 if not existing_tag:
                     Tag.objects.create(name=name, locale=locale)
