@@ -12,6 +12,7 @@ from wagtail.models.i18n import Locale
 from wagtail_localize.models import StringTranslation, Translation, TranslationSource
 from wagtail_localize.operations import translate_object
 from wagtail_localize.views.edit_translation import machine_translate
+from smartforests.management.commands.sync_translations import is_original
 
 
 class MockRequest:
@@ -77,6 +78,10 @@ class Command(BaseCommand):
                     # Can't translate the root page
                     if not page.get_parent():
                         continue
+
+                    if not is_original(page):
+                        continue
+
                     target_locales = Locale.objects.exclude(id=page.locale.id)
                     print(f"{page.title}: ensuring translations")
                     did_translation = self.ensure_translations(page, target_locales)

@@ -6,6 +6,7 @@ from wagtail_localize.models import Translation, TranslationSource
 from smartforests.views import RadioEpisodeChooserViewSet
 from django.utils.html import format_html
 from django.templatetags.static import static
+from smartforests.management.commands.sync_translations import is_original
 
 
 @hooks.register("construct_page_action_menu")
@@ -104,6 +105,9 @@ def global_admin_js():
 def after_publish_page_update_translations(request, page):
     """Update translations when original page is saved."""
     if hasattr(page, "translation_key"):
+        if not is_original(page):
+            return
+
         # Update translation source (this stores synched fields, e.g. tags and coordinates)
         TranslationSource.update_or_create_from_instance(page)
 

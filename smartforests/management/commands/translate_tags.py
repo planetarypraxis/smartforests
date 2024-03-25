@@ -2,7 +2,11 @@ from django.core.management.base import BaseCommand
 from django.utils.text import slugify
 from smartforests.models import Tag, User
 from wagtail.models.i18n import Locale
-from wagtail_localize.models import StringTranslation, Translation, TranslationSource
+from wagtail_localize.models import (
+    StringTranslation,
+    Translation,
+    TranslationSource,
+)
 from wagtail_localize.views.edit_translation import machine_translate
 
 
@@ -36,9 +40,24 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         tags = Tag.objects.all()
         for tag in tags:
-            target_locales = Locale.objects.exclude(id=tag.locale.id)
-            print(f"{str(tag).title()}: ensuring translations")
-            self.ensure_translations(tag, target_locales)
+            if self.is_original(tag):
+                target_locales = Locale.objects.exclude(id=tag.locale.id)
+                print(f"{str(tag).title()}: ensuring translations")
+                self.ensure_translations(tag, target_locales)
+
+    def is_original(self, tag):
+        """
+        Returns True if this is the original version of the tag.
+        Works by checking if the TranslationSource of the tag has
+        the same locale.
+        """
+        sources = TranslationSource.objects.filter(object_id=tag.translation_key)
+
+        # No TranslationSource => no translation => is original
+        if not sources:
+            return True
+
+        return sources[0].locale.id == tag.locale.id
 
     def ensure_translations(self, tag, locales):
         for locale in locales:

@@ -1,6 +1,7 @@
 import sys
 from django.db.models import Q
 from wagtail.models.i18n import Locale
+from wagtail_localize.models import TranslationSource
 from logbooks import models
 from smartforests.models import Tag, TagLink
 
@@ -86,10 +87,29 @@ def recalculate_taglinks(tag_id=None):
                 target=source_tag,
                 defaults={"relatedness": relatedness},
             )
-            print(f"{'Created' if created else 'Updated'} TagLink: {link}")
+            if relatedness > 0:
+                print(f"{'Created' if created else 'Updated'} TagLink: {link}")
 
         i += 1
         print(f"Complete: {round(i * 100 / n, 1)}%", file=sys.stderr)
+
+
+def get_original(tag):
+    """
+    If this tag is translated, return the original
+    version of the tag (e.g. Spanish => English)
+    """
+    sources = TranslationSource.objects.filter(object_id=tag.translation_key)
+    if not sources:
+        return None
+
+    original = sources.first().get_source_instance()
+    if not original:
+        return None
+    if original.id == tag.id:
+        return None
+
+    return original
 
 
 def count_pages(tag):
@@ -97,6 +117,18 @@ def count_pages(tag):
     for page_class in page_classes():
         c = len(
             page_class.objects.filter(locale=tag.locale).filter(tagged_items__tag=tag)
+        )
+        count += c
+
+    original = get_original(tag)
+    if not original:
+        return count
+
+    for page_class in page_classes():
+        c = len(
+            page_class.objects.filter(locale=tag.locale).filter(
+                tagged_items__tag=original
+            )
         )
         count += c
 
@@ -113,6 +145,21 @@ def count_and(tag_a, tag_b):
             .distinct()
         )
         count += c
+
+    original_a = get_original(tag_a)
+    original_b = get_original(tag_b)
+    if not original_a or not original_b:
+        return count
+
+    for page_class in page_classes():
+        c = len(
+            page_class.objects.filter(locale=original_a.locale)
+            .filter(tagged_items__tag=original_a)
+            .filter(tagged_items__tag=original_b)
+            .distinct()
+        )
+        count += c
+
     return count
 
 
@@ -125,4 +172,18 @@ def count_or(tag_a, tag_b):
             ).distinct()
         )
         count += c
+
+    original_a = get_original(tag_a)
+    original_b = get_original(tag_b)
+    if not original_a or not original_b:
+        return count
+
+    for page_class in page_classes():
+        c = len(
+            page_class.objects.filter(
+                locale=original_a.locale, tagged_items__tag__in=[original_a, original_b]
+            ).distinct()
+        )
+        count += c
+
     return count

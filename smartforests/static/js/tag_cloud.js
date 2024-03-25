@@ -2,38 +2,32 @@ import * as d3 from "https://cdn.skypack.dev/d3@7.9.0";
 import "https://cdn.skypack.dev/d3-force@3.0.0";
 import forceBoundary from "https://cdn.skypack.dev/d3-force-boundary@0.0.1";
 
-document.querySelectorAll("[data-tag-cloud-data]").forEach(($parent) => {
-  const dataElementId = $parent.getAttribute("data-tag-cloud-data");
-  const $data = document.getElementById(dataElementId);
-  if (!$data) {
-    return;
-  }
+document.addEventListener("turbo:load", () => {
+  initTagCloud();
+});
 
-  const tagOffCanvasId = $parent.getAttribute("data-tag-offcanvas");
-  let tagOffcanvas = null;
-  if (tagOffCanvasId) {
-    tagOffcanvas = document.getElementById(tagOffCanvasId);
-  }
-  const initialOffCanvasContent = tagOffcanvas?.innerHTML || "";
+function initTagCloud() {
+  document.querySelectorAll("[data-tag-cloud-data]").forEach(($parent) => {
+    const dataElementId = $parent.getAttribute("data-tag-cloud-data");
+    const $data = document.getElementById(dataElementId);
+    if (!$data) {
+      return;
+    }
 
-  // Specify the dimensions of the chart.
-  const { width, height } = calculateCanvasDimensions();
-  const data = JSON.parse(document.getElementById(dataElementId).innerText);
+    const tagOffCanvasId = $parent.getAttribute("data-tag-offcanvas");
+    let tagOffcanvas = null;
+    if (tagOffCanvasId) {
+      tagOffcanvas = document.getElementById(tagOffCanvasId);
+    }
+    const initialOffCanvasContent = tagOffcanvas?.innerHTML || "";
 
-  const $container = document.createElement("div");
-  $parent.appendChild($container);
-
-  doTagCloud(
-    $container,
-    width,
-    height,
-    data,
-    tagOffcanvas,
-    initialOffCanvasContent
-  );
-
-  window.addEventListener("resize", () => {
+    // Specify the dimensions of the chart.
     const { width, height } = calculateCanvasDimensions();
+    const data = JSON.parse(document.getElementById(dataElementId).innerText);
+
+    const $container = document.createElement("div");
+    $parent.appendChild($container);
+
     doTagCloud(
       $container,
       width,
@@ -42,8 +36,20 @@ document.querySelectorAll("[data-tag-cloud-data]").forEach(($parent) => {
       tagOffcanvas,
       initialOffCanvasContent
     );
+
+    window.addEventListener("resize", () => {
+      const { width, height } = calculateCanvasDimensions();
+      doTagCloud(
+        $container,
+        width,
+        height,
+        data,
+        tagOffcanvas,
+        initialOffCanvasContent
+      );
+    });
   });
-});
+}
 
 function calculateCanvasDimensions() {
   const width = window.innerWidth;
