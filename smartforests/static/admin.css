@@ -5,3 +5,7 @@ ul.bulk-actions-buttons.hide_serious .serious {
 .c-wagtailautocomplete__suggestions__item {
   color: black;
 }
+
+.Tooltip.Tooltip--top {
+  z-index: 999;
+}
