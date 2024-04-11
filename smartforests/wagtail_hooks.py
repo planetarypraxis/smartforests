@@ -23,18 +23,6 @@ def customise_page_actions(menu_items, request, context):
         except:
             pass
 
-    """
-    Make 'publish' the default action in Page Editor
-    """
-    try:
-        for index, item in enumerate(menu_items):
-            if item.name == "action-publish" or item.name == "action-submit":
-                menu_items.pop(index)
-                menu_items.insert(0, item)
-                break
-    except:
-        pass
-
 
 @hooks.register("construct_page_listing_buttons")
 def remove_page_listing_button_item(buttons, page, page_perms, context=None):

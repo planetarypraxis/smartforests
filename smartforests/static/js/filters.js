@@ -8,8 +8,8 @@
 
     // When a tag is clicked, `hide.bs.offcanvas` does not fire,
     // so do this manually to prevent glitchy behaviour on subsequent Turbo visits.
-    let offcanvas = bootstrap.Offcanvas.getInstance(filters)
-    if (offcanvas) offcanvas.hide()
+    let offcanvas = bootstrap.Offcanvas.getInstance(filters);
+    if (offcanvas) offcanvas.hide();
   };
 
   /**
@@ -50,13 +50,13 @@
     // Ensure Boostrap Offcanvases (sidepanels) are in the correct state
     // according to the Turbo Frame cache'd history. If going back in the history
     // and the Offcanvas was previously open, then re-open it
-    const offcanvas = document.querySelectorAll(".offcanvas")
-  
+    const offcanvas = document.querySelectorAll(".offcanvas");
+
     for (const el of offcanvas) {
-      const visible = window.getComputedStyle(el)['visibility'] === 'visible'
-      let offcanvas = new window.bootstrap.Offcanvas(el)
-      offcanvas.show()
-      if (!visible) offcanvas.hide()
+      const visible = window.getComputedStyle(el)["visibility"] === "visible";
+      let offcanvas = new window.bootstrap.Offcanvas(el);
+      offcanvas.show();
+      if (!visible) offcanvas.hide();
     }
-  }
+  };
 })();

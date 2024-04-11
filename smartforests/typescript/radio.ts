@@ -142,7 +142,7 @@ export function main() {
    * Load audio into player from any 'play' button in the UI
    */
 
-  function loadEpisode(episodeMeta: EpisodeMeta, play = true) {
+  function loadEpisode(episodeMeta: EpisodeMeta, play = false) {
     (["title", "owner", "lastPublishedAt"] as Array<keyof EpisodeMeta>).forEach((prop) => {
       const element = radioUI.querySelector(`[data-smartforests-radio-episode-${snakeCase(prop)}]`);
       if (element) element.innerHTML = episodeMeta[prop];
@@ -192,12 +192,12 @@ export function main() {
           buttonElement = event.target;
         }
 
-        loadEpisodeViaButton(buttonElement);
+        loadEpisodeViaButton(buttonElement, true);
       });
     });
   }
 
-  function loadEpisodeViaButton(buttonElement: PlayButton, play = true): EpisodeMeta {
+  function loadEpisodeViaButton(buttonElement: PlayButton, play = false): EpisodeMeta {
     const audioUrl = buttonElement.dataset.smartforestsAudio;
     const title = buttonElement.dataset.smartforestsTitle;
     const lastPublishedAt = buttonElement.dataset.smartforestsLastPublishedAt;
@@ -236,7 +236,6 @@ export function main() {
     }
     addButtonListeners();
     updateButtonState();
-    episode.pause();
   }
 
   loadRadio();

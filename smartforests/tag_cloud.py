@@ -10,7 +10,11 @@ def get_nodes_and_links(tags=None):
     locale = Locale.get_active()
 
     tag_links = TagLink.objects.select_related("source", "target").filter(
-        source__locale=locale, target__locale=locale, relatedness__gt=0
+        source__locale=locale,
+        target__locale=locale,
+        relatedness__gt=0,
+        source__cached_page_count__gt=0,
+        target__cached_page_count__gt=0,
     )
 
     if tags is not None:

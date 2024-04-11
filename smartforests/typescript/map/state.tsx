@@ -32,11 +32,7 @@ export const useFocusContext = (focusId: FocusID, type: FocusType) => {
   const [thisIsFocused, setFocusId] = useAtom(isFocused(focusId));
   return [
     thisIsFocused,
-    (
-      isFocusing: boolean,
-      nextFocusSource: FocusSource,
-      nextFocusId: FocusID = focusId
-    ) => {
+    (isFocusing: boolean, nextFocusSource: FocusSource, nextFocusId: FocusID = focusId) => {
       setFocusSource(nextFocusSource);
       setFocusType(type);
       setFocusId(isFocusing ? focusId : null);

@@ -5,9 +5,9 @@ load();
 
 document.addEventListener("turbo:load", async (event) => {
   load();
-  if (window) {
-    window?.resetJSForTurboFrame();
-  } 
+  if (window && typeof window.resetJSForTurboFrame === "function") {
+    window.resetJSForTurboFrame();
+  }
 });
 
 function getModelInfo() {
@@ -20,47 +20,46 @@ function getModelInfo() {
   const modelInfo = JSON.parse(modelInfoInDOM.innerHTML) as {
     app_label: string;
     model: string;
-    page_id: string
+    page_id: string;
   };
 
-  return modelInfo
+  return modelInfo;
 }
 
-const PAGE_ID_REGEX = /pages\/[0-9]+/gim
+const PAGE_ID_REGEX = /pages\/[0-9]+/gim;
 document.addEventListener("turbo:render", () => {
-  const btns = document.getElementById("wagtail-userbar-items")
+  const btns = document.getElementById("wagtail-userbar-items");
   // get the page ID from the HTML
-  const modelInfo = getModelInfo()
-  if (!modelInfo || !btns) return
+  const modelInfo = getModelInfo();
+  if (!modelInfo || !btns) return;
   // find all the anchor links
   const links = btns.querySelectorAll<HTMLAnchorElement>("a[role='menuitem']");
   // loop over them, replace `page/oldID/` with `page/newID/`
   for (const link of links) {
     link.setAttribute("href", link.href.replace(PAGE_ID_REGEX, `pages/${modelInfo.page_id}`));
   }
-})
+});
 
 async function load() {
-  const modelInfo = getModelInfo()
-  if (!modelInfo) return
+  const modelInfo = getModelInfo();
+  if (!modelInfo) return;
 
   const modelName = modelInfo.model?.toLowerCase();
 
-  let modules: Array<() => void> = []
+  let modules: Array<() => void> = [];
 
   switch (modelName) {
     case "mappage":
-      const { main } = await import("./map")
-      modules.push(main)
+      const { main } = await import("./map");
+      modules.push(main);
       break;
   }
 
   // Load radio player on all pages
   {
-    const { main } = await import("./radio")
-    modules.push(main)
+    const { main } = await import("./radio");
+    modules.push(main);
   }
 
-  modules.forEach(fn => fn());
+  modules.forEach((fn) => fn());
 }
-

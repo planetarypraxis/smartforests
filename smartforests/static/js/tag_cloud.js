@@ -26,6 +26,8 @@ function initTagCloud() {
     const data = JSON.parse(document.getElementById(dataElementId).innerText);
 
     const $container = document.createElement("div");
+    $container.setAttribute("id", new Date().toISOString());
+    $parent.innerHTML = "";
     $parent.appendChild($container);
 
     doTagCloud(

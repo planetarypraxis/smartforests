@@ -92,7 +92,7 @@
       "configurations": [
         "Python: Django",
         "Webpack",
-        "Python: Run background tasks"
+        //"Python: Run background tasks"
       ]
     }
   ]
