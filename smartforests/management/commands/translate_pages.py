@@ -54,9 +54,18 @@ class Command(BaseCommand):
             help="Limit the number of translated pages",
             default=None,
         )
+        parser.add_argument(
+            "-s",
+            "--slug",
+            dest="slug",
+            type=str,
+            help="Translate pages with this slug",
+            default="",
+        )
 
     def handle(self, *args, **options):
         count = options.get("count")
+        slug = options.get("slug")
         checked = 0
         translated = 0
         total = 0
@@ -69,6 +78,8 @@ class Command(BaseCommand):
             ContributorPage,
         ]:
             pages = page_class.objects.live().specific()
+            if slug != "":
+                pages = pages.filter(slug=slug)
             total += len(pages)
             try:
                 for page in pages:
