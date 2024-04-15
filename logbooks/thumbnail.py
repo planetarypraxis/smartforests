@@ -1,5 +1,5 @@
 from math import sqrt
-from commonknowledge.django.images import get_aspect_ratio, render_image_grid
+from commonknowledge.django.images import get_aspect_ratio
 from PIL import Image
 
 def get_thumbnail_opts(images):

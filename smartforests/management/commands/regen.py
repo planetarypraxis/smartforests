@@ -63,6 +63,8 @@ class Command(BaseCommand):
             page.save(regenerate_thumbnails=False)
         elif slug != "":
             print("Regenerating thumbnail for", slug)
-            page = Page.objects.get(slug=slug).specific
-            page.regenerate_thumbnail(force=force)
-            page.save(regenerate_thumbnails=False)
+            pages = Page.objects.filter(slug=slug)
+            for page in pages:
+                page = page.specific
+                page.regenerate_thumbnail(force=force)
+                page.save(regenerate_thumbnails=False)
