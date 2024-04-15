@@ -28,6 +28,8 @@ class TagFieldPanel(FieldPanel):
     class BoundPanel(FieldPanel.BoundPanel):
         def __init__(self, **kwargs):
             super().__init__(**kwargs)
+            if not self.form:
+                return
             locale = (
                 self.form.instance.locale.language_code
                 if self.form.instance and self.form.instance.locale

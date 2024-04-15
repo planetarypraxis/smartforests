@@ -3,20 +3,34 @@ from django.apps import apps
 from django.shortcuts import get_list_or_404, get_object_or_404, render
 from rest_framework import serializers, viewsets
 from rest_framework.response import Response
-from rest_framework_gis.serializers import GeoFeatureModelSerializer, GeometrySerializerMethodField
+from rest_framework_gis.serializers import (
+    GeoFeatureModelSerializer,
+    GeometrySerializerMethodField,
+)
 from django.urls import path
+from wagtail.admin.views.pages import history
 from wagtail.models import Page
 from wagtail.models.i18n import Locale
 from smartforests.models import Tag, User
 from wagtail.api.v2.utils import BadRequestError
 from commonknowledge.helpers import ensure_list
 
-from logbooks.models.pages import ContributorPage, EpisodePage, LogbookEntryPage, LogbookPage, StoryPage
+from logbooks.models.pages import (
+    ContributorPage,
+    EpisodePage,
+    LogbookEntryPage,
+    LogbookPage,
+    StoryPage,
+)
 from smartforests.views import LocaleFromLanguageCode
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
 
 
-content_list_types = (LogbookPage, StoryPage, EpisodePage,)
+content_list_types = (
+    LogbookPage,
+    StoryPage,
+    EpisodePage,
+)
 tag_panel_types = content_list_types + (ContributorPage,)
 
 
@@ -33,9 +47,11 @@ def pages_for_tag(tag_or_tags: Union[Tag, List[Tag]], page_types=tag_panel_types
     # In the second case, the translated pages will be tagged with
     # the translated tag.
     all_tags = Tag.objects.filter(
-        translation_key__in=[tag.translation_key for tag in ensure_list(tag_or_tags)])
-    page_lists_by_type = [(page_type, page_type.for_tag(list(all_tags)))
-                          for page_type in page_types]
+        translation_key__in=[tag.translation_key for tag in ensure_list(tag_or_tags)]
+    )
+    page_lists_by_type = [
+        (page_type, page_type.for_tag(list(all_tags))) for page_type in page_types
+    ]
 
     def deduplicate(page_list):
         """
@@ -49,7 +65,8 @@ def pages_for_tag(tag_or_tags: Union[Tag, List[Tag]], page_types=tag_panel_types
         # as some pages have been "translated" into PT but left in English. The actual English
         # version should be prioritised.
         page_list = sorted(
-            page_list, key=lambda p: p.locale.language_code, reverse=True)
+            page_list, key=lambda p: p.locale.language_code, reverse=True
+        )
 
         pages_by_trans_key = {}
         for page in page_list:
@@ -60,17 +77,15 @@ def pages_for_tag(tag_or_tags: Union[Tag, List[Tag]], page_types=tag_panel_types
         return list(pages_by_trans_key.values())
 
     localized_pages_by_type = [
-        (
-            page_type,
-            list(sorted(
-                deduplicate(page_list),
-                key=lambda p: p.title)
-            )
-        )
+        (page_type, list(sorted(deduplicate(page_list), key=lambda p: p.title)))
         for (page_type, page_list) in page_lists_by_type
     ]
 
-    return [(page_type, page_list) for (page_type, page_list) in localized_pages_by_type if page_list]
+    return [
+        (page_type, page_list)
+        for (page_type, page_list) in localized_pages_by_type
+        if page_list
+    ]
 
 
 def get_localized_title_for_page_type(page_type):
@@ -87,7 +102,8 @@ def get_localized_title_for_page_type(page_type):
     parent_page_type = page_type.parent_page_types[0]
     [parent_page_app, parent_page_model_name] = parent_page_type.split(".")
     parent_page_model = apps.get_model(
-        app_label=parent_page_app, model_name=parent_page_model_name)
+        app_label=parent_page_app, model_name=parent_page_model_name
+    )
     parent_page = parent_page_model.objects.first()
     if not parent_page:
         return default
@@ -103,31 +119,23 @@ def tag_panel(request, slug):
         for (page_type, page_list) in pages_for_tag(tags, tag_panel_types)
     ]
 
-    if 'Turbo-Frame' in request.headers:
+    if "Turbo-Frame" in request.headers:
         return render(
-            request,
-            'logbooks/frames/tags.html',
-            {
-                'tag': tags[0],
-                'pages': pages
-            }
+            request, "logbooks/frames/tags.html", {"tag": tags[0], "pages": pages}
         )
     else:
         # If not a turbo frame, we need to render it with page chrome
         return render(
             request,
-            'logbooks/standalone-views/tags.html',
-            {
-                'tag': tags[0],
-                'pages': pages
-            }
+            "logbooks/standalone-views/tags.html",
+            {"tag": tags[0], "pages": pages},
         )
 
 
 def metadata(request, page_id, **kwargs):
     page = get_object_or_404(Page.objects.filter(id=page_id).specific())
 
-    user_id = kwargs.get('user_id', None)
+    user_id = kwargs.get("user_id", None)
     if user_id:
         user = User.objects.get(id=user_id)
         if user in page.additional_contributors.all():
@@ -140,31 +148,40 @@ def metadata(request, page_id, **kwargs):
 
     return render(
         request,
-        'logbooks/frames/metadata.html',
-        {
-            'page': page,
-            'interactive': request.user.is_authenticated
-        }
+        "logbooks/frames/metadata.html",
+        {"page": page, "interactive": request.user.is_authenticated},
     )
 
 
 class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
-    '''
+    """
     Query the page metadata index, filtering by tag, returning a geojson FeatureCollection
-    '''
+    """
 
-    page_types = (LogbookPage, LogbookEntryPage, StoryPage, EpisodePage,)
+    page_types = (
+        LogbookPage,
+        LogbookEntryPage,
+        StoryPage,
+        EpisodePage,
+    )
 
     class RequestSerializer(serializers.Serializer):
         tag = serializers.ListField(child=serializers.CharField(), default=())
-        language_code = serializers.CharField(default='en')
+        language_code = serializers.CharField(default="en")
 
     class ResultSerializer(GeoFeatureModelSerializer):
         class Meta:
             model = LogbookPage
-            geo_field = 'coordinates'
-            fields = ('id', 'link_url', 'title', 'icon_class',
-                      'geographical_location', 'tags', 'page_type', )
+            geo_field = "coordinates"
+            fields = (
+                "id",
+                "link_url",
+                "title",
+                "icon_class",
+                "geographical_location",
+                "tags",
+                "page_type",
+            )
 
         coordinates = GeometrySerializerMethodField()
         id = serializers.IntegerField()
@@ -176,7 +193,7 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
         tags = serializers.StringRelatedField(many=True)
 
         def get_coordinates(self, obj):
-            return getattr(obj, 'coordinates', None)
+            return getattr(obj, "coordinates", None)
 
     model = Page
     serializer_class = ResultSerializer
@@ -186,7 +203,7 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
         if not params.is_valid():
             raise BadRequestError()
 
-        tag = params.data.get('tag', ())
+        tag = params.data.get("tag", ())
 
         if tag:
             tag_ids = Tag.get_translated_tag_ids(tag)
@@ -221,5 +238,9 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
     @classmethod
     def get_urlpatterns(cls):
         return [
-            path('', cls.as_view({'get': 'list'}), name='geo.search'),
+            path("", cls.as_view({"get": "list"}), name="geo.search"),
         ]
+
+
+class PageHistoryView(history.PageHistoryView):
+    template_name = "logbooks/wagtailadmin/pages/history.html"
