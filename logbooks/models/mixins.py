@@ -15,7 +15,11 @@ from django.db.models.expressions import ExpressionWrapper
 from logbooks.tasks import regenerate_page_thumbnails
 from logbooks.thumbnail import get_thumbnail_opts
 from logbooks.models.snippets import AtlasTag
-from logbooks.models.serializers import PageCoordinatesSerializer, UserSerializer, UserField
+from logbooks.models.serializers import (
+    PageCoordinatesSerializer,
+    UserSerializer,
+    UserField,
+)
 from logbooks.models.blocks import ArticleContentStream
 from logbooks.models.fields import TagFieldPanel, LocalizedTaggableManager
 from turbo_response import TurboFrame
@@ -51,9 +55,9 @@ from django.http import HttpResponseRedirect
 
 
 class BaseLogbooksPage(Page):
-    '''
+    """
     Common utilities for pages in this module
-    '''
+    """
 
     class Meta:
         abstract = True
@@ -63,18 +67,16 @@ class BaseLogbooksPage(Page):
 
     @classmethod
     def for_tag(cls, tag_or_tags):
-        '''
+        """
         Return all live pages matching the tag
-        '''
-        return cls.objects.filter(
-            tagged_items__tag__in=ensure_list(tag_or_tags)
-        ).live()
+        """
+        return cls.objects.filter(tagged_items__tag__in=ensure_list(tag_or_tags)).live()
 
     @classmethod
     def model_info(cls):
-        ''''
+        """'
         Expose the meta attr to templates
-        '''
+        """
         return cls._meta
 
     @classmethod
@@ -87,11 +89,11 @@ class BaseLogbooksPage(Page):
 
     @property
     def link_url(self):
-        '''
+        """
         Wrapper for url allowing us to link to a page embedded in a parent (as with logbook entries) without
         overriding any wagtail internals
 
-        '''
+        """
 
         return self.url
 
@@ -105,9 +107,9 @@ class BaseLogbooksPage(Page):
 
 
 class ContributorMixin(BaseLogbooksPage):
-    '''
+    """
     Common configuration for pages that want to track their contributors.
-    '''
+    """
 
     class Meta:
         abstract = True
@@ -115,22 +117,19 @@ class ContributorMixin(BaseLogbooksPage):
     additional_contributors = ParentalManyToManyField(
         User,
         blank=True,
-        help_text="Contributors who have not directly edited this page"
+        help_text="Contributors who have not directly edited this page",
     )
 
     excluded_contributors = ParentalManyToManyField(
         User,
         blank=True,
-        related_name='+',
-        help_text="Contributors who should be hidden from public citation"
+        related_name="+",
+        help_text="Contributors who should be hidden from public citation",
     )
 
     # Materialised list of contributors
     contributors = ParentalManyToManyField(
-        User,
-        blank=True,
-        related_name='+',
-        help_text="Index list of contributors"
+        User, blank=True, related_name="+", help_text="Index list of contributors"
     )
 
     override_translatable_fields = [
@@ -142,11 +141,14 @@ class ContributorMixin(BaseLogbooksPage):
         content_type = ContentType.objects.get_for_model(self)
 
         return set(
-            [self.owner] + [
+            [self.owner]
+            + [
                 user
                 for user in [
                     revision.user
-                    for revision in Revision.objects.filter(object_id=self.id, content_type=content_type).select_related('user')
+                    for revision in Revision.objects.filter(
+                        object_id=self.id, content_type=content_type
+                    ).select_related("user")
                 ]
                 if user is not None
             ]
@@ -155,19 +157,25 @@ class ContributorMixin(BaseLogbooksPage):
     def get_page_contributors(self):
         return list(
             set(
-                list(self.get_page_revision_editors()) +
-                list(self.additional_contributors.all())
-            ) - set(self.excluded_contributors.all())
+                list(self.get_page_revision_editors())
+                + list(self.additional_contributors.all())
+            )
+            - set(self.excluded_contributors.all())
         )
 
     def update_contributors(self, save=True):
-        '''
+        """
         Return all the people who have contributed to this page and its subpages
-        '''
+        """
         self.contributors.set(self.get_page_contributors())
 
         # Add page tree's contributors
-        for page in Page.objects.type(ContributorMixin).descendant_of(self, inclusive=False).live().specific():
+        for page in (
+            Page.objects.type(ContributorMixin)
+            .descendant_of(self, inclusive=False)
+            .live()
+            .specific()
+        ):
             self.contributors.add(*page.get_page_contributors())
 
         # Re-assert top-level exclusions
@@ -177,37 +185,37 @@ class ContributorMixin(BaseLogbooksPage):
             self.save()
 
     api_fields = [
-        APIField('contributors', serializer=UserSerializer(many=True)),
+        APIField("contributors", serializer=UserSerializer(many=True)),
     ]
 
     content_panels = [
-        AutocompletePanel('additional_contributors'),
-        AutocompletePanel('excluded_contributors'),
+        AutocompletePanel("additional_contributors"),
+        AutocompletePanel("excluded_contributors"),
     ]
 
     def save(self, *args, **kwargs):
-        '''
+        """
         Rebuild the contributors list when the page is edited
-        '''
+        """
         self.update_contributors(save=False)
         super().save(*args, **kwargs)
 
 
 class GeocodedMixin(BaseLogbooksPage):
-    '''
+    """
     Common configuration for pages that want to track a geographical location.
-    '''
+    """
 
     class Meta:
         abstract = True
         verbose_name = "Location"
         verbose_name_plural = "Locations"
 
-    geographical_location = models.CharField(
-        max_length=250, null=True, blank=True)
+    geographical_location = models.CharField(max_length=250, null=True, blank=True)
     coordinates = geo.PointField(null=True, blank=True)
     map_image = models.ForeignKey(
-        CmsImage, on_delete=models.SET_NULL, null=True, blank=True, related_name='+')
+        CmsImage, on_delete=models.SET_NULL, null=True, blank=True, related_name="+"
+    )
 
     @property
     def longitude(self):
@@ -233,7 +241,9 @@ class GeocodedMixin(BaseLogbooksPage):
             coordinates_changed = self.__previous_coordinates != self.coordinates
             if self.has_coordinates is True and self.geographical_location is None:
                 self.update_location_name()
-            if self.has_coordinates is True and (self.map_image is None or coordinates_changed):
+            if self.has_coordinates is True and (
+                self.map_image is None or coordinates_changed
+            ):
                 self.update_map_thumbnail()
         except:
             pass
@@ -242,12 +252,9 @@ class GeocodedMixin(BaseLogbooksPage):
     def update_location_name(self):
         if self.coordinates is not None:
             location_data = get_coordinates_data(
-                self.coordinates,
-                zoom=5,
-                username='jennifer@planetarypraxis.org'
+                self.coordinates, zoom=5, username="jennifer@planetarypraxis.org"
             )
-            self.geographical_location = location_data.get(
-                'display_name', None)
+            self.geographical_location = location_data.get("display_name", None)
 
     def update_map_thumbnail(self):
         if self.coordinates is None:
@@ -260,16 +267,17 @@ class GeocodedMixin(BaseLogbooksPage):
             print("Map generator error:", url)
             print(response.status_code, response.content)
             return
-        image = ImageFile(BytesIO(response.content),
-                          name=f'{urllib.parse.quote(url)}.png')
+        image = ImageFile(
+            BytesIO(response.content), name=f"{urllib.parse.quote(url)}.png"
+        )
 
         if self.map_image is not None:
             self.map_image.delete()
 
         self.map_image = CmsImage(
             alt_text=f"Map of {self.geographical_location}",
-            title=f'Generated map thumbnail for {self._meta.model_name} {self.slug}',
-            file=image
+            title=f"Generated map thumbnail for {self._meta.model_name} {self.slug}",
+            file=image,
         )
         self.map_image.save()
 
@@ -278,8 +286,8 @@ class GeocodedMixin(BaseLogbooksPage):
             self.coordinates,
             access_token=settings.MAPBOX_API_PUBLIC_TOKEN,
             marker_url=self.map_marker,
-            username='smartforests',
-            style_id='ckziehr6u001e14ohgl2brzlu',
+            username="smartforests",
+            style_id="ckziehr6u001e14ohgl2brzlu",
             width=300,
             height=200,
         )
@@ -287,24 +295,24 @@ class GeocodedMixin(BaseLogbooksPage):
     content_panels = [
         MultiFieldPanel(
             [
-                FieldPanel('geographical_location'),
-                FieldPanel('coordinates', widget=MapboxPointFieldWidget)
+                FieldPanel("geographical_location"),
+                FieldPanel("coordinates", widget=MapboxPointFieldWidget),
             ],
             heading="Geographical data",
         )
     ]
 
     api_fields = [
-        APIField('label'),
-        APIField('geographical_location'),
-        APIField('coordinates', serializer=PageCoordinatesSerializer)
+        APIField("label"),
+        APIField("geographical_location"),
+        APIField("coordinates", serializer=PageCoordinatesSerializer),
     ]
 
 
 class ThumbnailMixin(BaseLogbooksPage):
-    '''
+    """
     Common configuration for pages that want to generate a thumbnail image derived from a subclass-defined list of images.
-    '''
+    """
 
     class Meta:
         abstract = True
@@ -313,7 +321,7 @@ class ThumbnailMixin(BaseLogbooksPage):
         "og_image",
         "most_recent_image",
         # TODO: use `thumbnail_image`, requires migration to CmsImage
-        "default_seo_image"
+        "default_seo_image",
     ]
 
     thumbnail_image = models.ImageField(null=True, blank=True)
@@ -323,9 +331,9 @@ class ThumbnailMixin(BaseLogbooksPage):
         if self.thumbnail_image:
             return self.thumbnail_image
         if self.most_recent_image:
-            return self.most_recent_image.get_rendition('width-400')
+            return self.most_recent_image.get_rendition("width-400")
         else:
-            return self.default_seo_image.get_rendition('width-400')
+            return self.default_seo_image.get_rendition("width-400")
 
     def get_thumbnail_images(self):
         return []
@@ -338,34 +346,43 @@ class ThumbnailMixin(BaseLogbooksPage):
         return None
 
     def regenerate_thumbnail(self):
-        images = [img.get_rendition('width-400').file for img in self.get_thumbnail_images()]
+        images = [
+            img.get_rendition("width-400").file for img in self.get_thumbnail_images()
+        ]
+
+        print(f"Regenerating thumbnail for {self.slug}: images {images}")
 
         if len(images) == 0:
             return
-        
+
         if len(images) == 1:
             self.thumbnail_image = images[0]
             return
 
         imagegrid_opts = get_thumbnail_opts(images)
 
+        print(f"Regenerating thumbnail for {self.slug}: opts {imagegrid_opts}")
+
         if imagegrid_opts is None:
             self.thumbnail_image.name = None
             return
 
         filename = generate_imagegrid_filename(
-            prefix='page_thumbs', slug=self.slug, **imagegrid_opts)
+            prefix="page_thumbs", slug=self.slug, **imagegrid_opts
+        )
+
+        print(f"Regenerating thumbnail for {self.slug}: filename {filename}")
 
         if default_storage.exists(filename):
+            print(f"Regenerating thumbnail for {self.slug}: filename {filename} exists")
             self.thumbnail_image.name = filename
             return
 
-        self.thumbnail_image = render_image_grid(
-            filename=filename,
-            **imagegrid_opts
-        )
+        self.thumbnail_image = render_image_grid(filename=filename, **imagegrid_opts)
 
-    card_content_html = 'logbooks/thumbnails/basic_thumbnail.html'
+        print(f"Regenerating thumbnail for {self.slug}: created {self.thumbnail_image}")
+
+    card_content_html = "logbooks/thumbnails/basic_thumbnail.html"
 
     def save(self, *args, regenerate_thumbnails=True, **kwargs):
         if regenerate_thumbnails:
@@ -383,21 +400,24 @@ class SidebarRenderableMixin(BaseLogbooksPage):
         abstract = True
 
     def get_sidebar_frame_response(self, request, *args, **kwargs):
-        '''
+        """
         Render the sidebar frame's html.
-        '''
+        """
 
         context = self.get_context(request)
-        if 'Turbo-Frame' in request.headers:
-            return TemplateResponse(request, 'logbooks/content_entry/sidepanel.html', context)
-        elif 'page' in context:
-            return HttpResponseRedirect(context['page'].url)
+        if "Turbo-Frame" in request.headers:
+            return TemplateResponse(
+                request, "logbooks/content_entry/sidepanel.html", context
+            )
+        elif "page" in context:
+            return HttpResponseRedirect(context["page"].url)
 
 
 class IndexPage(ChildListMixin, SeoMetadataMixin, BaseLogbooksPage):
-    '''
+    """
     Common configuration for index pages for logbooks, stories and radio episodes.
-    '''
+    """
+
     class Meta:
         abstract = True
 
@@ -405,7 +425,7 @@ class IndexPage(ChildListMixin, SeoMetadataMixin, BaseLogbooksPage):
     allow_search = True
     page_size = 50
     show_in_menus_default = True
-    parent_page_types = ['home.HomePage']
+    parent_page_types = ["home.HomePage"]
     seo_twitter_card = TwitterCard.SUMMARY
 
     if not settings.DEBUG:
@@ -424,12 +444,15 @@ class IndexPage(ChildListMixin, SeoMetadataMixin, BaseLogbooksPage):
 
         # Start by getting the current locale's children - these must come first
         # Exclude aliases (these are pages that have been duplicated and not yet translated)
-        children = super().get_child_list_queryset().filter(
-            alias_of=None
-        ).values('id', 'translation_key')
+        children = (
+            super()
+            .get_child_list_queryset()
+            .filter(alias_of=None)
+            .values("id", "translation_key")
+        )
 
-        child_ids = [child['id'] for child in children]
-        translation_keys = [child['translation_key'] for child in children]
+        child_ids = [child["id"] for child in children]
+        translation_keys = [child["translation_key"] for child in children]
 
         # Then get the parent pages for the other locales...
         other_locale_parent_pages = Page.objects.filter(
@@ -439,26 +462,29 @@ class IndexPage(ChildListMixin, SeoMetadataMixin, BaseLogbooksPage):
         # ...and get the children of these pages, excluding pages where
         # a translation has already been found
         for page in other_locale_parent_pages:
-            children = page.get_children().live().exclude(
-                translation_key__in=translation_keys
-            ).values('id', 'translation_key')
+            children = (
+                page.get_children()
+                .live()
+                .exclude(translation_key__in=translation_keys)
+                .values("id", "translation_key")
+            )
             for child in children:
-                child_ids.append(child['id'])
-                translation_keys.append(child['translation_key'])
+                child_ids.append(child["id"])
+                translation_keys.append(child["translation_key"])
 
         # Sort by annotated field "is_current_locale" to show translated content first
-        return get_result_class(self.__class__).objects.filter(
-            id__in=child_ids
-        ).specific()
+        return (
+            get_result_class(self.__class__).objects.filter(id__in=child_ids).specific()
+        )
 
     def get_filters(self, request):
         filter = {}
 
-        tag_filter = request.GET.get('filter', None)
+        tag_filter = request.GET.get("filter", None)
         if tag_filter is not None:
             try:
                 tag_ids = Tag.get_translated_tag_ids(slug=tag_filter)
-                filter['tagged_items__tag_id__in'] = tag_ids
+                filter["tagged_items__tag_id__in"] = tag_ids
             except Tag.DoesNotExist:
                 pass
 
@@ -469,14 +495,14 @@ class IndexPage(ChildListMixin, SeoMetadataMixin, BaseLogbooksPage):
 
         tags = Tag.objects.filter(
             logbooks_atlastag_items__content_object__live=True,
-            logbooks_atlastag_items__content_object__in=children
+            logbooks_atlastag_items__content_object__in=children,
         ).distinct()
 
         return group_by_tag_name(tags)
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
-        context['tag_filter'] = request.GET.get('filter', None)
+        context["tag_filter"] = request.GET.get("filter", None)
 
         return context
 
@@ -489,10 +515,19 @@ class ArticleSeoMixin(SeoMetadataMixin):
     seo_twitter_card = TwitterCard.LARGE
 
 
-class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, GeocodedMixin, SidebarRenderableMixin, ArticleSeoMixin, BaseLogbooksPage):
-    '''
+class ArticlePage(
+    IndexedStreamfieldMixin,
+    ContributorMixin,
+    ThumbnailMixin,
+    GeocodedMixin,
+    SidebarRenderableMixin,
+    ArticleSeoMixin,
+    BaseLogbooksPage,
+):
+    """
     Common configuration for logbook entries, stories and radio episodes.
-    '''
+    """
+
     class Meta:
         abstract = True
 
@@ -501,51 +536,54 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
     endnotes = RichTextField(blank=True)
     show_title = True
 
-    additional_content_panels = [
-        TagFieldPanel('tags'),
-        FieldPanel('body'),
-        FieldPanel('endnotes'),
-        InlinePanel("footnotes", label="Footnotes"),
-    ] + ContributorMixin.content_panels + GeocodedMixin.content_panels
+    additional_content_panels = (
+        [
+            TagFieldPanel("tags"),
+            FieldPanel("body"),
+            FieldPanel("endnotes"),
+            InlinePanel("footnotes", label="Footnotes"),
+        ]
+        + ContributorMixin.content_panels
+        + GeocodedMixin.content_panels
+    )
 
     content_panels = Page.content_panels + additional_content_panels
     settings_panels = [FieldPanel("first_published_at")] + Page.settings_panels
 
-    api_fields = [
-        APIField('last_published_at'),
-        APIField('tags'),
-        APIField('icon_class'),
-        APIField('body'),
-    ] + ContributorMixin.api_fields + GeocodedMixin.api_fields
+    api_fields = (
+        [
+            APIField("last_published_at"),
+            APIField("tags"),
+            APIField("icon_class"),
+            APIField("body"),
+        ]
+        + ContributorMixin.api_fields
+        + GeocodedMixin.api_fields
+    )
 
     search_fields = IndexedStreamfieldMixin.search_fields + Page.search_fields
     streamfield_indexer = ArticleContentStream.text_indexer
 
     def body_images(self):
-        '''
+        """
         Return all the images in this page's body stream.
-        '''
+        """
 
         return tuple(
-            block.value.get('image')
+            block.value.get("image")
             for block in self.body
-            if block.block_type == 'image'
-            and block.value.get('image')
+            if block.block_type == "image" and block.value.get("image")
         )
 
-    seo_image_sources = [
-        "og_image",
-        "cover_image",
-        "default_seo_image"
-    ]
+    seo_image_sources = ["og_image", "cover_image", "default_seo_image"]
 
     @property
     def cover_image(self):
-        '''
+        """
         Returns the first image in the body stream (or None if there aren't any).
 
         Used to determine which image to contribute to a thumbnail when images from multiple pages are combined into a single thumbnail (as with logbooks)
-        '''
+        """
 
         images = self.body_images()
         return None if len(images) == 0 else images[0]
@@ -554,24 +592,23 @@ class ArticlePage(IndexedStreamfieldMixin, ContributorMixin, ThumbnailMixin, Geo
         return [image for image in self.body_images()]
 
     seo_description_sources = SeoMetadataMixin.seo_description_sources + [
-        'preview_text'
+        "preview_text"
     ]
 
     @property
     def preview_text(self):
-        language = 'english'
+        language = "english"
 
         parser = PlaintextParser.from_string(
-            self.indexed_streamfield_text, Tokenizer(language))
+            self.indexed_streamfield_text, Tokenizer(language)
+        )
         stemmer = Stemmer(language)
 
         summarizer = Summarizer(stemmer)
         summarizer.stop_words = get_stop_words(language)
 
-        summary = ' '.join(
-            str(x)
-            for x in summarizer(parser.document, 2)
-            if str(x).strip() != ''
+        summary = " ".join(
+            str(x) for x in summarizer(parser.document, 2) if str(x).strip() != ""
         )
 
         if summary:

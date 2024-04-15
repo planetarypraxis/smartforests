@@ -12,7 +12,7 @@ from django.core.files.storage import default_storage
 def render_image_grid(
     images, rows, cols, format, filename="image-grid", width=400, height=400
 ):
-    print("render_image_grid")
+    print(f"Render image grid: {images}")
     new_im = Image.new("RGB", (width, height))
     i = 0
 
@@ -41,6 +41,8 @@ def render_image_grid(
 
             i += 1
 
+    print(f"Render image grid: {successful_images} successful images")
+
     if successful_images == 1:
         return successful_images[0].file
 
@@ -48,9 +50,14 @@ def render_image_grid(
         return None
 
     with BytesIO() as output:
+        print(f"Render image grid: saving")
         new_im.save(output, format)
 
-        return ImageFile(ContentFile(output.getvalue(), filename))
+        file = ImageFile(ContentFile(output.getvalue(), filename))
+
+        print(f"Render image grid: saved {file}")
+
+        return file
 
 
 def get_aspect_ratio(image):

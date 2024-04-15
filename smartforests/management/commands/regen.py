@@ -46,9 +46,11 @@ class Command(BaseCommand):
                     print("Ignored error when regenerating thumbnail for", page, e)
         elif options.get("pk") > -1:
             page = Page.objects.get(pk=options.get("pk")).specific
+            print("Regenerating thumbnail for", page)
             page.regenerate_thumbnail()
             page.save(regenerate_thumbnails=False)
         elif options.get("slug") != "":
             page = Page.objects.get(slug=options.get("slug")).specific
+            print("Regenerating thumbnail for", page)
             page.regenerate_thumbnail()
             page.save(regenerate_thumbnails=False)
