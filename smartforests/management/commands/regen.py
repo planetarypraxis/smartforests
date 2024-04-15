@@ -8,20 +8,20 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            "-all",
+            "-a",
             "--all",
             dest="all",
-            type=bool,
             help="Regen ALL pages?",
             default=False,
+            action="store_true",
         )
 
         parser.add_argument(
-            "-pk", "--pk", dest="pk", type=int, help="Page ID to test", default=-1
+            "-k", "--pk", dest="pk", type=int, help="Page ID to test", default=-1
         )
 
         parser.add_argument(
-            "-slug",
+            "-s",
             "--slug",
             dest="slug",
             type=str,
@@ -29,8 +29,20 @@ class Command(BaseCommand):
             default="",
         )
 
+        parser.add_argument(
+            "-f",
+            "--force",
+            dest="force",
+            help="Force regenerate and re-save",
+            default=False,
+            action="store_true",
+        )
+
     @transaction.atomic
     def handle(self, *args, **options):
+        force = options.get("force")
+        pk = options.get("pk")
+        slug = options.get("slug")
         if options.get("all"):
             pages = [
                 page
@@ -40,17 +52,17 @@ class Command(BaseCommand):
             for page in pages:
                 try:
                     print("Regenerating thumbnail for", page)
-                    page.specific.regenerate_thumbnail()
+                    page.specific.regenerate_thumbnail(force=force)
                     page.specific.save(regenerate_thumbnails=False)
                 except Exception as e:
                     print("Ignored error when regenerating thumbnail for", page, e)
-        elif options.get("pk") > -1:
-            page = Page.objects.get(pk=options.get("pk")).specific
+        elif pk > -1:
+            page = Page.objects.get(pk=pk).specific
             print("Regenerating thumbnail for", page)
-            page.regenerate_thumbnail()
+            page.regenerate_thumbnail(force=force)
             page.save(regenerate_thumbnails=False)
-        elif options.get("slug") != "":
-            page = Page.objects.get(slug=options.get("slug")).specific
-            print("Regenerating thumbnail for", page)
-            page.regenerate_thumbnail()
+        elif slug != "":
+            print("Regenerating thumbnail for", slug)
+            page = Page.objects.get(slug=slug).specific
+            page.regenerate_thumbnail(force=force)
             page.save(regenerate_thumbnails=False)

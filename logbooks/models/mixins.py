@@ -345,7 +345,7 @@ class ThumbnailMixin(BaseLogbooksPage):
             return images[0]
         return None
 
-    def regenerate_thumbnail(self):
+    def regenerate_thumbnail(self, force=False):
         images = [
             img.get_rendition("width-400").file for img in self.get_thumbnail_images()
         ]
@@ -374,9 +374,17 @@ class ThumbnailMixin(BaseLogbooksPage):
         print(f"Regenerating thumbnail for {self.slug}: filename {filename}")
 
         if default_storage.exists(filename):
-            print(f"Regenerating thumbnail for {self.slug}: filename {filename} exists")
-            self.thumbnail_image.name = filename
-            return
+            if not force:
+                print(
+                    f"Regenerating thumbnail for {self.slug}: filename {filename} exists, skipping regen"
+                )
+                self.thumbnail_image.name = filename
+                return
+            else:
+                print(
+                    f"Regenerating thumbnail for {self.slug}: "
+                    f"filename {filename} exists but regen is forced"
+                )
 
         self.thumbnail_image = render_image_grid(filename=filename, **imagegrid_opts)
 
