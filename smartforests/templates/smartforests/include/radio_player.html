@@ -1,6 +1,6 @@
 {% load i18n static wagtailimages_tags %}
 
-<div id="radioPlayer" data-turbo-permanent class="{% firstof position 'position-sticky bottom-0 z-index-50 mt-auto' %} offcanvas offcanvas-bottom min-h-60px h-auto bg-dark-green border-0 drop-shadow-mid-green-glow {{ class }}" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" aria-labelledby="radioPlayerLabel">
+<div id="radioPlayer" data-turbo-permanent class="{% firstof position 'position-sticky bottom-0 z-index-50 mt-auto' %} min-h-60px h-auto bg-dark-green border-0 drop-shadow-mid-green-glow {{ class }}" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" aria-labelledby="radioPlayerLabel">
   <div class="position-relative text-white ps-md-3 d-flex align-items-center justify-content-between">
     <progress id="radioPlayerSeeker" min="0" max="1" value="0" data-smartforests-radio-episode-seeker></progress>
     <div class='w-100 d-flex align-items-center justify-content-between pe-3'>
