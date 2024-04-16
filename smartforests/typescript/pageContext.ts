@@ -4,16 +4,7 @@ import { useEffect, useMemo } from "react";
 import { TurboFrameElement } from "./turbo";
 
 export const getLanguageCode = (): string => {
-  try {
-    const requestInfoElement = document.getElementById('request-info')
-    if (!requestInfoElement) throw new Error("Request info was not provided by Django")
-    const { languageCode } = JSON.parse(requestInfoElement.innerHTML)
-    if (!languageCode || typeof languageCode !== 'string') throw new Error("Language code was not defined")
-    return languageCode
-  } catch (e) {
-    // In case of malformed JSON
-    return 'en'
-  }
+  return window.LANGUAGE_CODE || "en";
 }
 
 export const languageCodeAtom = atom(getLanguageCode())

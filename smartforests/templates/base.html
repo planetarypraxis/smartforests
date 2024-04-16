@@ -28,7 +28,7 @@
         {% webpack_bundle 'main' 'css' %}
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@300&family=Open+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-        <link href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@v2.8.9/dist/cookieconsent.css" rel="stylesheet"> 
+        <link href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3.0.1/dist/cookieconsent.css" rel="stylesheet">
         {% block extra_css %}
         {% endblock %}
     </head>
@@ -44,8 +44,8 @@
           }
         </script>
         {% endif %}
-        <script type="application/json" id="request-info">
-          { "languageCode": "{{ LANGUAGE_CODE }}" }
+        <script type="application/json">
+          window.LANGUAGE_CODE = "{{ LANGUAGE_CODE }}"
         </script>
         <div id='wagtailuserbar-data-turbo-permanent-wrapper' data-turbo-permanent>
           {% wagtailuserbar %}
