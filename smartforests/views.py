@@ -13,6 +13,18 @@ from commonknowledge.django.cache import django_cached
 from smartforests.util import group_by_tag_name
 
 
+def robots(request):
+    """
+    Disallow Amazonbot because it sometimes gets stuck
+    and slows the site down.
+    """
+    txt = """
+User-agent: Amazonbot
+Disallow: /
+    """.strip() + "\n"
+    return HttpResponse(content=txt)
+
+
 def frame_content(request, page_id):
     page = get_object_or_404(Page.objects.filter(pk=page_id).specific())
     if hasattr(page, 'get_sidebar_frame_response'):
