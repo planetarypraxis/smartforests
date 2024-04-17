@@ -85,7 +85,7 @@
 
         {% block body %}
           {% block header %}
-            {% main_menu max_levels=1 template="menus/header.html" %}
+            {% safe_main_menu max_levels=1 template="menus/header.html" %}
             <div class='mb-5'>
               <!-- Spacer for the floating header -->
             </div>
@@ -105,7 +105,7 @@
           {% if self %}
             {% include "smartforests/include/radio_player.html" with episode=self %}
           {% endif %}
-          {% flat_menu 'footer' max_levels=1 show_menu_heading=False template="menus/footer.html" %}
+        {% safe_flat_menu 'footer' max_levels=1 show_menu_heading=False template="menus/footer.html" %}
         {% endblock %}
 
         {% include "wagtailseo/struct_data.html" %}

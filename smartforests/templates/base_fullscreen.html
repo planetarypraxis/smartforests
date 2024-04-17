@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% load static ckbootstrap_tags menu_tags %}
+{% load static ckwagtail_tags ckbootstrap_tags menu_tags %}
 
 {% block body_height %}vh-100 overflow-hidden{% endblock %}
 
 {% block body %}
   <!-- No floating header -->
-  {% main_menu max_levels=1 template="menus/header_static.html" %}
+  {% safe_main_menu max_levels=1 template="menus/header_static.html" %}
 
   {% block content %}
   {% endblock %}

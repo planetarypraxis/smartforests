@@ -2,6 +2,7 @@ from urllib import parse
 from wagtail.blocks.base import Block
 
 from wagtail.models import Site
+from wagtailmenus.templatetags.menu_tags import main_menu, flat_menu
 from django import template
 from django.utils.safestring import mark_safe
 from commonknowledge.helpers import safe_to_int
@@ -61,3 +62,19 @@ def bulk_action_classes(context):
     else:
         return ''
 
+
+@register.simple_tag(takes_context=True)
+def safe_main_menu(context, *args, **kwargs):
+    try:
+        return main_menu(context, *args, **kwargs)
+    except Exception as e:
+        print(f"Menu error: {e}")
+        return ""
+
+@register.simple_tag(takes_context=True)
+def safe_flat_menu(context, *args, **kwargs):
+    try:
+        return flat_menu(context, *args, **kwargs)
+    except Exception as e:
+        print(f"Flat menu error: {e}")
+        return ""
