@@ -32,7 +32,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/manage.py",
       "args": [
-        "process_tasks"
+        "ck_process_tasks"
       ],
       "justMyCode": true,
       "django": true

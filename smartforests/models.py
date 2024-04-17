@@ -106,6 +106,10 @@ class TagLink(models.Model):
         validators=[MinValueValidator(0.0), MaxValueValidator(1.0)],
     )
 
+    class Meta:
+        unique_together = ('source', 'target',)
+
+
     def __str__(self):
         return f"Tag {self.source} <-> {self.target}: {self.relatedness}"
 

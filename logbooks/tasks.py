@@ -1,9 +1,9 @@
+from django.core.management import call_command
 from wagtail.models import Page
 from background_task import background
 
 from smartforests.models import Tag
 from smartforests.tag_cloud import recalculate_taglinks
-
 
 @background(schedule=15, remove_existing_tasks=True)
 def regenerate_page_thumbnails(page_id: int):
@@ -32,3 +32,9 @@ def regenerate_tag_thumbnails(tag_id: int):
 @background(schedule=15, remove_existing_tasks=True)
 def regenerate_tag_cloud(tag_id: int):
     recalculate_taglinks(tag_id=tag_id)
+
+
+@background(schedule=15, remove_existing_tasks=True)
+def publish():
+    print(f"Publishing scheduled pages")
+    call_command('publish_scheduled_pages')
