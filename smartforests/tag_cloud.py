@@ -62,12 +62,15 @@ def page_classes():
     ]
 
 
-def recalculate_taglinks(tag_id=None):
+def recalculate_taglinks(tag_id=None, language_code=None):
     tags = Tag.objects.order_by("id")
+    if language_code:
+        tags = tags.filter(locale__language_code=language_code)
     if tag_id is not None:
         tags = tags.filter(id=tag_id)
 
     n = len(tags)
+    print(f"Recalculating taglinks for {n} tags")
     i = 0
     for source_tag in tags:
         source_tag.cached_page_count = count_pages(source_tag)
@@ -130,7 +133,7 @@ def count_pages(tag):
 
     for page_class in page_classes():
         c = len(
-            page_class.objects.filter(locale=tag.locale).filter(
+            page_class.objects.filter(locale=original.locale).filter(
                 tagged_items__tag=original
             )
         )

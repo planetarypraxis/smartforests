@@ -37,11 +37,24 @@ class Command(BaseCommand):
         self.admin = User.objects.filter(is_superuser=True).first()
         self.mock_request = MockRequest(user=self.admin)
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "-l",
+            "--locale",
+            dest="locale",
+            type=str,
+            help="Translate pages to this locale",
+            default="",
+        )
+
     def handle(self, *args, **options):
+        locale = options.get("locale")
         tags = Tag.objects.all()
         for tag in tags:
             if self.is_original(tag):
                 target_locales = Locale.objects.exclude(id=tag.locale.id)
+                if locale != "":
+                    target_locales = target_locales.filter(language_code=locale)
                 print(f"{str(tag).title()}: ensuring translations")
                 self.ensure_translations(tag, target_locales)
 

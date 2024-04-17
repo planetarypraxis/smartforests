@@ -62,10 +62,19 @@ class Command(BaseCommand):
             help="Translate pages with this slug",
             default="",
         )
+        parser.add_argument(
+            "-l",
+            "--locale",
+            dest="locale",
+            type=str,
+            help="Translate pages to this locale",
+            default="",
+        )
 
     def handle(self, *args, **options):
         count = options.get("count")
         slug = options.get("slug")
+        locale = options.get("locale")
         checked = 0
         translated = 0
         total = 0
@@ -94,6 +103,8 @@ class Command(BaseCommand):
                         continue
 
                     target_locales = Locale.objects.exclude(id=page.locale.id)
+                    if locale != "":
+                        target_locales = target_locales.filter(language_code=locale)
                     print(f"{page.title}: ensuring translations")
                     did_translation = self.ensure_translations(page, target_locales)
                     if did_translation:

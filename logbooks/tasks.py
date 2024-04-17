@@ -31,4 +31,4 @@ def regenerate_tag_thumbnails(tag_id: int):
 
 @background(schedule=15, remove_existing_tasks=True)
 def regenerate_tag_cloud(tag_id: int):
-    recalculate_taglinks(tag_id)
+    recalculate_taglinks(tag_id=tag_id)
