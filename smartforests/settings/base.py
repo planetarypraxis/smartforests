@@ -204,6 +204,9 @@ STATIC_URL = "/static/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 
+# General settings
+# Block Amazonbot because (a) we don't like them and (b) they DOS the site
+DISALLOWED_USER_AGENTS = (re.compile(r'Amazonbot', re.IGNORECASE), )
 
 # Wagtail settings
 
