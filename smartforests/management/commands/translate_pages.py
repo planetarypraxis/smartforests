@@ -91,34 +91,29 @@ class Command(BaseCommand):
             if slug != "":
                 pages = pages.filter(slug=slug)
             total += len(pages)
-            last_page = None
-            try:
-                for page in pages:
-                    last_page = page
-                    checked += 1
-                    if count is not None and count == translated:
-                        break
-                    # Can't translate the root page
-                    try:
-                        if not page.get_parent():
-                            continue
-                    except ObjectDoesNotExist:
+            for page in pages:
+                checked += 1
+                if count is not None and count == translated:
+                    break
+                # Can't translate the root page
+                try:
+                    if not page.get_parent():
                         continue
+                except ObjectDoesNotExist:
+                    continue
 
-                    if not is_original(page):
-                        continue
+                if not is_original(page):
+                    continue
 
-                    target_locales = Locale.objects.exclude(id=page.locale.id)
-                    if locale != "":
-                        target_locales = target_locales.filter(language_code=locale)
-                    print(f"{page.title}: ensuring translations")
-                    did_translation = self.ensure_translations(page, target_locales)
-                    if did_translation:
-                        translated += 1
-            except KeyError as error:
-                print(f"Failed to translate {last_page}, KeyError: {error}")
-                print(f"Processed {checked} of {total}")
-                raise error
+                target_locales = Locale.objects.exclude(id=page.locale.id)
+                if locale != "":
+                    target_locales = target_locales.filter(language_code=locale)
+                print(f"{page.title}: ensuring translations")
+                did_translation = self.ensure_translations(page, target_locales)
+                if did_translation:
+                    translated += 1
+            print(f"Processed {checked} of {total}")
+
 
     def ensure_translations(self, page, locales):
         did_translation = False
@@ -146,7 +141,12 @@ class Command(BaseCommand):
 
             # Update translation
             # This skips already translated segments, so safe to re-run on the same page
-            machine_translate(self.mock_request, translation.id)
+            try:
+                machine_translate(self.mock_request, translation.id)
+            except KeyError as e:
+                # Squash error caused by DeepL returning no translations
+                if str(e) != "'translations'":
+                    raise e
 
             # Fix translated slugs (slugify them)
             string_translations = StringTranslation.objects.filter(
