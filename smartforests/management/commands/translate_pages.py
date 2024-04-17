@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand, CommandParser
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.text import slugify
 from logbooks.models import (
     LogbookPage,
@@ -90,13 +91,18 @@ class Command(BaseCommand):
             if slug != "":
                 pages = pages.filter(slug=slug)
             total += len(pages)
+            last_page = None
             try:
                 for page in pages:
+                    last_page = page
                     checked += 1
                     if count is not None and count == translated:
                         break
                     # Can't translate the root page
-                    if not page.get_parent():
+                    try:
+                        if not page.get_parent():
+                            continue
+                    except ObjectDoesNotExist:
                         continue
 
                     if not is_original(page):
@@ -110,8 +116,9 @@ class Command(BaseCommand):
                     if did_translation:
                         translated += 1
             except KeyError as error:
-                print(error)
-        print(f"Processed {checked} of {total}")
+                print(f"Failed to translate {last_page}, KeyError: {error}")
+                print(f"Processed {checked} of {total}")
+                raise error
 
     def ensure_translations(self, page, locales):
         did_translation = False
