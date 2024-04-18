@@ -8,6 +8,7 @@ from logbooks.models import (
     EpisodePage,
     ContributorPage,
 )
+from requests.exceptions import JSONDecodeError
 from smartforests.models import User
 from wagtail.models.i18n import Locale
 from wagtail_localize.models import StringTranslation, Translation, TranslationSource
@@ -143,9 +144,10 @@ class Command(BaseCommand):
             # This skips already translated segments, so safe to re-run on the same page
             try:
                 machine_translate(self.mock_request, translation.id)
-            except KeyError as e:
+            except (KeyError, JSONDecodeError) as e:
+                print(f"Warning: no translations for page {page}")
                 # Squash error caused by DeepL returning no translations
-                if str(e) != "'translations'":
+                if isinstance(e, KeyError) and str(e) != "'translations'":
                     raise e
 
             # Fix translated slugs (slugify them)
