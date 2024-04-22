@@ -99,11 +99,14 @@ class Command(BaseCommand):
                 # Can't translate the root page
                 try:
                     if not page.get_parent():
+                        print(f"{page.title}: has no parent, skipping")
                         continue
                 except ObjectDoesNotExist:
+                    print(f"{page.title}: has no parent, skipping")
                     continue
 
                 if not is_original(page):
+                    print(f"{page.title}: is not the original, skipping")
                     continue
 
                 target_locales = Locale.objects.exclude(id=page.locale.id)
@@ -114,7 +117,6 @@ class Command(BaseCommand):
                 if did_translation:
                     translated += 1
             print(f"Processed {checked} of {total}")
-
 
     def ensure_translations(self, page, locales):
         did_translation = False

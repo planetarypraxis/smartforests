@@ -53,7 +53,11 @@ def is_original(page):
     if not sources:
         return True
 
-    return sources[0].locale.id == page.locale.id
+    if sources[0].locale.id != page.locale.id:
+        print(f"{page.title} is not the original, which is in {sources[0].locale}")
+        return False
+
+    return True
 
 
 def sync_translation(page, source, locale):
