@@ -258,11 +258,21 @@
   color: $dark-green;
   font-family: $font-family-sans-serif !important;
   font-size: $font-size-root !important;
-  padding: 2.5px 5px;
+  padding: 4px 8px;
   text-transform: none;
 
   a {
     color: $dark-green;
+  }
+
+  &:hover,&:focus {
+    background-color: $soft-green !important;
+    box-shadow: 1px 1px 5px 0px #0430034D;
+    color: $mid-green;
+
+    a {
+      color: $mid-green;
+    }
   }
 }
 
