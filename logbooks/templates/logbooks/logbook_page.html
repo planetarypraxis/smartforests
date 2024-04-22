@@ -1,5 +1,5 @@
 {% extends "logbooks/article_page_base.html" %}
-{% load i18n ckdjango_tags ckbootstrap_tags static wagtailcore_tags %}
+{% load i18n ckdjango_tags ckbootstrap_tags ckwagtail_tags static wagtailcore_tags %}
 {% block filter_mobile %}
     <!-- Display on small screens -->
     <div class='dropdown dropdown-fixed-width bg-off-white d-lg-none logbooks-dropdown'>
@@ -109,7 +109,7 @@
     <div class="mb-6">
         {% if self.description %}
             <div class='logbook-entry'>
-                <div class="logbook-entry-card border-2">{{ self.description|richtext }}</div>
+                <div class="logbook-entry-card border-2">{{ self.description|richtext|highlight_tags }}</div>
             </div>
         {% endif %}
     </div>
