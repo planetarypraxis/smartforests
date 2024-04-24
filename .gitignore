@@ -131,6 +131,9 @@ env.bak/
 venv.bak/
 pythonenv*
 
+# Credentials
+google_credentials.json
+
 # Spyder project settings
 .spyderproject
 .spyproject

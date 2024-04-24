@@ -81,42 +81,52 @@ class Command(BaseCommand):
         translated = 0
         total = 0
 
-        for page_class in [
-            LogbookPage,
-            LogbookEntryPage,
-            StoryPage,
-            EpisodePage,
-            ContributorPage,
-        ]:
-            pages = page_class.objects.live().specific()
-            if slug != "":
-                pages = pages.filter(slug=slug)
-            total += len(pages)
-            for page in pages:
-                checked += 1
-                if count is not None and count == translated:
-                    break
-                # Can't translate the root page
-                try:
-                    if not page.get_parent():
-                        print(f"{page.title}: has no parent, skipping")
+        last_id = 0
+        last_class = None
+
+        try:
+            for page_class in [
+                LogbookPage,
+                LogbookEntryPage,
+                StoryPage,
+                EpisodePage,
+                ContributorPage,
+            ]:
+                last_class = page_class
+                pages = page_class.objects.order_by("id").live().specific()
+                if slug != "":
+                    pages = pages.filter(slug=slug)
+                total += len(pages)
+                for page in pages:
+                    last_id = page.id
+                    checked += 1
+                    if count is not None and count == translated:
+                        break
+                    # Can't translate the root page
+                    try:
+                        if not page.get_parent():
+                            print(f"Warning: {page.title} has no parent, skipping")
+                            continue
+                    except ObjectDoesNotExist:
+                        print(f"Warning: {page.title} has no parent, skipping")
                         continue
-                except ObjectDoesNotExist:
-                    print(f"{page.title}: has no parent, skipping")
-                    continue
 
-                if not is_original(page):
-                    print(f"{page.title}: is not the original, skipping")
-                    continue
+                    if not is_original(page):
+                        print(f"Warning: {page.title} is not the original, skipping")
+                        continue
 
-                target_locales = Locale.objects.exclude(id=page.locale.id)
-                if locale != "":
-                    target_locales = target_locales.filter(language_code=locale)
-                print(f"{page.title}: ensuring translations")
-                did_translation = self.ensure_translations(page, target_locales)
-                if did_translation:
-                    translated += 1
-            print(f"Processed {checked} of {total}")
+                    target_locales = Locale.objects.exclude(id=page.locale.id)
+                    if locale != "":
+                        target_locales = target_locales.filter(language_code=locale)
+                    print(f"{page.title}: ensuring translations")
+                    did_translation = self.ensure_translations(page, target_locales)
+                    if did_translation:
+                        translated += 1
+        except Exception as e:
+            print(f"Last item: {last_class}: {last_id}")
+            raise e
+
+        print(f"Processed {checked} of {total}")
 
     def ensure_translations(self, page, locales):
         did_translation = False
@@ -135,7 +145,13 @@ class Command(BaseCommand):
             ) = TranslationSource.update_or_create_from_instance(page)
 
             # Create translated page
-            translate_object(page, locales=[locale])
+            try:
+                translate_object(page, locales=[locale])
+            except ObjectDoesNotExist:
+                print(
+                    f"Warning: ObjectDoesNotExist error translating {page} into {locale}"
+                )
+                continue
 
             # Create translation
             translation, _ = Translation.objects.get_or_create(
@@ -147,7 +163,7 @@ class Command(BaseCommand):
             try:
                 machine_translate(self.mock_request, translation.id)
             except (KeyError, JSONDecodeError) as e:
-                print(f"Warning: no translations for page {page}")
+                print(f"Warning: no machine translations for page {page}")
                 # Squash error caused by DeepL returning no translations
                 if isinstance(e, KeyError) and str(e) != "'translations'":
                     raise e

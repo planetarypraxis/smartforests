@@ -91,10 +91,6 @@ def safe_flat_menu(context, *args, **kwargs):
 def highlight_tags(content: SafeText):
     locale = Locale.get_active()
 
-    from rich import inspect
-
-    inspect(content)
-
     content = str(content)
 
     words = []

@@ -321,9 +321,29 @@ USE_BACKGROUND_WORKER = os.getenv("USE_BACKGROUND_WORKER", "False") in (
 )
 
 WAGTAILLOCALIZE_MACHINE_TRANSLATOR = {
-    "CLASS": "wagtail_localize.machine_translators.deepl.DeepLTranslator",
+    "CLASS": "smartforests.machine_translators.MultiTranslator",
     "OPTIONS": {
-        "AUTH_KEY": os.getenv("DEEPL_AUTH_KEY"),
+        "DEFAULT_TRANSLATOR": "DEEPL",
+        "TRANSLATORS_BY_LOCALE": {
+            "hi": "GOOGLE",
+        },
+        "TRANSLATORS": {
+            "DEEPL": {
+                "CLASS": "wagtail_localize.machine_translators.deepl.DeepLTranslator",
+                "OPTIONS": {
+                    "AUTH_KEY": os.getenv("DEEPL_AUTH_KEY"),
+                },
+            },
+            "GOOGLE": {
+                "CLASS": "wagtail_localize.machine_translators.google.GoogleCloudTranslator",
+                "OPTIONS": {
+                    "CREDENTIALS_PATH": os.path.join(
+                        BASE_DIR, "google_credentials.json"
+                    ),
+                    "PROJECT_ID": os.getenv("GOOGLE_CLOUD_PROJECT_ID"),
+                },
+            },
+        },
     },
 }
 

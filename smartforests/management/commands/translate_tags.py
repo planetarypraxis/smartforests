@@ -74,49 +74,52 @@ class Command(BaseCommand):
 
     def ensure_translations(self, tag, locales):
         for locale in locales:
-            # Check if translation already exists
-            translated_tag = Tag.objects.filter(
-                translation_key=tag.translation_key, locale=locale
-            ).first()
-
-            if not translated_tag:
-                print(f">>>> {locale}: translating")
-
-                # Create translated tag first, then update it (no other way)
-                translated_tag, _ = Tag.objects.get_or_create(
-                    name=tag.name,
-                    translation_key=tag.translation_key,
-                    locale=locale,
-                    defaults={"slug": tag.slug},
-                )
-
-                # Create translation
-                translation_source, _ = TranslationSource.get_or_create_from_instance(
-                    tag
-                )
-                translation, _ = Translation.objects.get_or_create(
-                    source=translation_source, target_locale=locale
-                )
-
-                # Update translation
-                machine_translate(self.mock_request, translation.id)
-
-                # Fix translated slugs (slugify them)
-                string_translations = StringTranslation.objects.filter(
-                    context__path="slug",
-                    translation_of__segments__source=translation_source,
-                )
-                for string_translation in string_translations:
-                    string_translation.data = slugify(string_translation.data)
-                    string_translation.save()
-
-                # Update tag
-                translation.save_target(user=self.admin, publish=True)
-
-                # Refresh from db to print translated tag
+            try:
+                # Check if translation already exists
                 translated_tag = Tag.objects.filter(
                     translation_key=tag.translation_key, locale=locale
                 ).first()
-                print(f">>>> {locale}: translated to {translated_tag.name}")
-            else:
-                print(f">>>> {locale}: translation exists")
+
+                if not translated_tag:
+                    print(f">>>> {locale}: translating")
+
+                    # Create translated tag first, then update it (no other way)
+                    translated_tag, _ = Tag.objects.get_or_create(
+                        name=tag.name,
+                        translation_key=tag.translation_key,
+                        locale=locale,
+                        defaults={"slug": tag.slug},
+                    )
+
+                    # Create translation
+                    translation_source, _ = (
+                        TranslationSource.get_or_create_from_instance(tag)
+                    )
+                    translation, _ = Translation.objects.get_or_create(
+                        source=translation_source, target_locale=locale
+                    )
+
+                    # Update translation
+                    machine_translate(self.mock_request, translation.id)
+
+                    # Fix translated slugs (slugify them)
+                    string_translations = StringTranslation.objects.filter(
+                        context__path="slug",
+                        translation_of__segments__source=translation_source,
+                    )
+                    for string_translation in string_translations:
+                        string_translation.data = slugify(string_translation.data)
+                        string_translation.save()
+
+                    # Update tag
+                    translation.save_target(user=self.admin, publish=True)
+
+                    # Refresh from db to print translated tag
+                    translated_tag = Tag.objects.filter(
+                        translation_key=tag.translation_key, locale=locale
+                    ).first()
+                    print(f">>>> {locale}: translated to {translated_tag.name}")
+                else:
+                    print(f">>>> {locale}: translation exists")
+            except Exception as e:
+                print(f"Warning: could not translate tag {tag} to {locale}: {e}")
