@@ -38,7 +38,6 @@ django-map-widgets = {editable = true, ref = "master", git = "https://git@github
 django-settings-export = "*"
 posthog = "*"
 wagtail-autocomplete = "*"
-wagtail-localize = "~=1.8.2"
 django-background-tasks = "*"
 human-readable = '>= 1.1.0'
 drf-spectacular = "*"
@@ -52,3 +51,4 @@ rich = "*"
 wagtailmenus = "*"
 wagtail-modeladmin = "*"
 cd = "*"
+wagtail-localize = {extras = ["google"], version = "*"}
