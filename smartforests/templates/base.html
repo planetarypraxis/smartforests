@@ -45,7 +45,7 @@
         </script>
         {% endif %}
         <script type="application/javascript">
-          window.LANGUAGE_CODE = "{{ LANGUAGE_CODE }}"
+          window.LANGUAGE_CODE = ("{{ LANGUAGE_CODE }}" || "en").split('-')[0]
         </script>
         <div id='wagtailuserbar-data-turbo-permanent-wrapper' data-turbo-permanent>
           {% wagtailuserbar %}
