@@ -1,0 +1,206 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-04-25 08:55+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: logbooks/templates/logbooks/article_page_base.html:59
+msgid "Related Tags"
+msgstr "संबंधित टैग"
+
+#: logbooks/templates/logbooks/content_entry/logbook_entry.html:11
+msgid "By"
+msgstr "द्वारा"
+
+#: logbooks/templates/logbooks/content_entry/logbook_entry.html:29
+msgid "Edit"
+msgstr "संपादित करें"
+
+#: logbooks/templates/logbooks/content_entry/sidepanel.html:18
+#: logbooks/templates/logbooks/frames/tags.html:18
+msgid "Close"
+msgstr "बंद करें"
+
+#: logbooks/templates/logbooks/content_entry/sidepanel.html:53
+msgid "Read More"
+msgstr "और पढ़ें"
+
+#: logbooks/templates/logbooks/contributor_page.html:34
+#, python-format
+msgid ""
+"\n"
+"        %(page_count)s contribution\n"
+"        "
+msgid_plural ""
+"\n"
+"        %(page_count)s contributions\n"
+"      "
+msgstr[0] ""
+msgstr[1] ""
+
+#: logbooks/templates/logbooks/frames/tags.html:11
+msgid "Tag"
+msgstr "टैग"
+
+#: logbooks/templates/logbooks/frames/tags.html:60
+msgid "View on Map"
+msgstr "मानचित्र पर देखें"
+
+#: logbooks/templates/logbooks/include/masonry.html:15
+msgid "Nothing found"
+msgstr "कुछ नहीं मिला"
+
+#: logbooks/templates/logbooks/include/masonry.html:19
+msgid "Load More"
+msgstr "अधिक लोड करें"
+
+#: logbooks/templates/logbooks/include/masonry.html:28
+msgid "Loading"
+msgstr "लोड हो रहा है"
+
+#: logbooks/templates/logbooks/index_page_base.html:25
+#: logbooks/templates/logbooks/index_page_base.html:55
+msgid "Filters"
+msgstr "फ़िल्टर"
+
+#: logbooks/templates/logbooks/index_page_base.html:29
+#: logbooks/templates/logbooks/metadata.html:56
+msgid "Tags"
+msgstr "टैग"
+
+#: logbooks/templates/logbooks/index_page_base.html:71
+#: logbooks/templates/logbooks/index_page_base.html:88
+#: logbooks/templates/logbooks/index_page_base.html:134
+#: logbooks/templates/logbooks/index_page_base.html:151
+#: logbooks/templates/logbooks/logbook_page.html:14
+#: logbooks/templates/logbooks/logbook_page.html:31
+#: logbooks/templates/logbooks/logbook_page.html:67
+#: logbooks/templates/logbooks/logbook_page.html:84
+msgid "Title A—Z"
+msgstr "शीर्षक ए-जेड"
+
+#: logbooks/templates/logbooks/index_page_base.html:73
+#: logbooks/templates/logbooks/index_page_base.html:94
+#: logbooks/templates/logbooks/index_page_base.html:136
+#: logbooks/templates/logbooks/index_page_base.html:157
+#: logbooks/templates/logbooks/logbook_page.html:16
+#: logbooks/templates/logbooks/logbook_page.html:37
+#: logbooks/templates/logbooks/logbook_page.html:69
+#: logbooks/templates/logbooks/logbook_page.html:90
+msgid "Title Z—A"
+msgstr "शीर्षक जेड—ए"
+
+#: logbooks/templates/logbooks/index_page_base.html:75
+#: logbooks/templates/logbooks/index_page_base.html:79
+#: logbooks/templates/logbooks/index_page_base.html:106
+#: logbooks/templates/logbooks/index_page_base.html:138
+#: logbooks/templates/logbooks/index_page_base.html:142
+#: logbooks/templates/logbooks/index_page_base.html:169
+#: logbooks/templates/logbooks/logbook_page.html:18
+#: logbooks/templates/logbooks/logbook_page.html:22
+#: logbooks/templates/logbooks/logbook_page.html:49
+#: logbooks/templates/logbooks/logbook_page.html:71
+#: logbooks/templates/logbooks/logbook_page.html:75
+#: logbooks/templates/logbooks/logbook_page.html:102
+msgid "Newest First"
+msgstr "नवीनतम प्रथम"
+
+#: logbooks/templates/logbooks/index_page_base.html:77
+#: logbooks/templates/logbooks/index_page_base.html:100
+#: logbooks/templates/logbooks/index_page_base.html:140
+#: logbooks/templates/logbooks/index_page_base.html:163
+#: logbooks/templates/logbooks/logbook_page.html:20
+#: logbooks/templates/logbooks/logbook_page.html:43
+#: logbooks/templates/logbooks/logbook_page.html:73
+#: logbooks/templates/logbooks/logbook_page.html:96
+msgid "Oldest First"
+msgstr "सबसे पुराना प्रथम"
+
+#: logbooks/templates/logbooks/metadata.html:6
+msgid "Added"
+msgstr "जोड़ा गया"
+
+#: logbooks/templates/logbooks/metadata.html:9
+msgid "Last edited"
+msgstr "अंतिम बार संपादित"
+
+#: logbooks/templates/logbooks/metadata.html:14
+msgid "Contributors"
+msgstr "योगदानकर्ता"
+
+#: logbooks/templates/logbooks/metadata.html:20
+msgid "Hide"
+msgstr "छिपाओ"
+
+#: logbooks/templates/logbooks/metadata.html:27
+msgid "Hidden Contributors"
+msgstr "छिपे हुए योगदानकर्ता"
+
+#: logbooks/templates/logbooks/metadata.html:32
+msgid "Show"
+msgstr "दिखाओ"
+
+#: logbooks/templates/logbooks/metadata.html:38
+msgid "Location"
+msgstr "स्थान"
+
+#: logbooks/templates/logbooks/story_page.html:24
+msgid "Footnotes"
+msgstr "फुटनोट्स"
+
+#: logbooks/templates/logbooks/story_page.html:31
+msgid "Back to content"
+msgstr "सामग्री पर वापस जाएँ"
+
+#: logbooks/templates/logbooks/wagtailadmin/pages/history.html:6
+#, python-format
+msgid "Page history for %(subtitle)s"
+msgstr "%(subtitle)s के लिए पृष्ठ इतिहास"
+
+#: logbooks/templates/logbooks/wagtailadmin/pages/history.html:9
+msgid "Edit this page"
+msgstr "इस पृष्ठ को संपादित करें"
+
+#: logbooks/templates/logbooks/wagtailadmin/pages/history.html:18
+msgid "Action"
+msgstr "क्रिया"
+
+#: logbooks/templates/logbooks/wagtailadmin/pages/history.html:21
+msgid "User"
+msgstr "उपयोगकर्ता"
+
+#: logbooks/templates/logbooks/wagtailadmin/pages/history.html:24
+msgid "Date / Time"
+msgstr "दिनांक/समय"
+
+#: logbooks/templates/logbooks/wagtailadmin/pages/history.html:37
+msgid "Comment"
+msgstr "टिप्पणी"
+
+#: logbooks/templates/logbooks/wagtailadmin/pages/history.html:41
+msgid "Live version"
+msgstr "लाइव संस्करण"
+
+#: logbooks/templates/logbooks/wagtailadmin/pages/history.html:44
+msgid "Current draft"
+msgstr "वर्तमान ड्राफ्ट"
+
+#: logbooks/templates/logbooks/wagtailadmin/pages/history.html:58
+#: logbooks/templates/logbooks/wagtailadmin/pages/history.html:63
+msgid "No log entries found."
+msgstr "कोई लॉग प्रविष्टियाँ नहीं मिलीं।"
+

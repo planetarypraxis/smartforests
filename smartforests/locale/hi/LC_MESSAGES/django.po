@@ -1,0 +1,129 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-04-25 08:55+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: smartforests/models.py:30
+msgctxt "A tag name"
+msgid "name"
+msgstr "नाम"
+
+#: smartforests/models.py:33
+msgctxt "A tag slug"
+msgid "slug"
+msgstr "स्लग"
+
+#: smartforests/templates/400.html:8 smartforests/templates/500.html:8
+msgid "Something went wrong"
+msgstr "कुछ गलत हो गया"
+
+#: smartforests/templates/400.html:10 smartforests/templates/500.html:10
+msgid "We're working to fix this problem."
+msgstr "हम इस समस्या को ठीक करने के लिए काम कर रहे हैं।"
+
+#: smartforests/templates/400.html:12 smartforests/templates/500.html:12
+msgid ""
+"In the meantime, you can try refreshing the page, check again in 30 minutes, "
+"or email hello@commonknowledge.coop to report the problem."
+msgstr "इस बीच, आप पृष्ठ को ताज़ा करने का प्रयास कर सकते हैं, 30 मिनट में फिर से जाँच कर सकते हैं, या समस्या की रिपोर्ट करने के लिए hello@commonknowledge.coop पर ईमेल कर सकते हैं।"
+
+#: smartforests/templates/400.html:14 smartforests/templates/403.html:12
+#: smartforests/templates/404.html:14 smartforests/templates/500.html:14
+msgid "Back to home"
+msgstr "घर वापस"
+
+#: smartforests/templates/403.html:8
+msgid "You're not allowed to see this"
+msgstr "आपको इसे देखने की अनुमति नहीं है"
+
+#: smartforests/templates/403.html:10
+msgid ""
+"If you think this isn't right, email hello@commonknowledge.coop to report "
+"the problem."
+msgstr "यदि आपको लगता है कि यह सही नहीं है, तो समस्या की रिपोर्ट करने के लिए hello@commonknowledge.coop पर ईमेल करें।"
+
+#: smartforests/templates/404.html:8
+msgid "Page not found"
+msgstr "पेज नहीं मिला"
+
+#: smartforests/templates/404.html:10
+msgid "We can't find the page you're looking for."
+msgstr "आप जिस पृष्ठ को खोज रहे हैं वह हमें नहीं मिल रहा है।"
+
+#: smartforests/templates/404.html:12
+msgid ""
+"It might have been removed, had its name changed or is temporarily "
+"unavailable."
+msgstr "इसे हटा दिया गया होगा, इसका नाम बदल दिया गया होगा या अस्थायी रूप से अनुपलब्ध होगा।"
+
+#: smartforests/templates/base.html:73
+msgid "Tag"
+msgstr "टैग"
+
+#: smartforests/templates/base.html:77
+msgid "Loading"
+msgstr "लोड हो रहा है"
+
+#: smartforests/templates/base.html:81
+msgid "Close"
+msgstr "बंद करें"
+
+#: smartforests/templates/menus/footer.html:18
+msgid "Site by Common Knowledge"
+msgstr "सामान्य ज्ञान द्वारा साइट"
+
+#: smartforests/templates/menus/footer.html:25
+msgid "Admin area"
+msgstr "प्रशासन क्षेत्र"
+
+#: smartforests/templates/menus/footer.html:32
+msgid "API docs"
+msgstr "एपीआई दस्तावेज़"
+
+#: smartforests/templates/menus/header.html:12
+msgid "Toggle navigation"
+msgstr "नेविगेशन टॉगल करें"
+
+#: smartforests/templates/menus/header.html:84
+#: smartforests/templates/menus/header.html:187
+msgid "Search"
+msgstr "खोजें"
+
+#: smartforests/templates/menus/header.html:112
+msgid "Menu"
+msgstr "मेनू"
+
+#: smartforests/templates/smartforests/include/radio_player.html:24
+msgid "smart forests radio"
+msgstr "स्मार्ट वन रेडियो"
+
+#: smartforests/templates/wagtailadmin/bulk_actions/footer.html:4
+msgid "Bulk actions"
+msgstr "थोक क्रियाएँ"
+
+#: smartforests/wagtail_settings.py:20
+msgid "Choose a radio episode"
+msgstr "एक रेडियो एपिसोड चुनें"
+
+#: smartforests/wagtail_settings.py:21
+msgid "Choose another episode"
+msgstr "दूसरा एपिसोड चुनें"
+
+#: smartforests/wagtail_settings.py:22
+msgid "Edit this episode"
+msgstr "इस प्रकरण को संपादित करें"
+
