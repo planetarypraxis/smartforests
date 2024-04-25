@@ -63,7 +63,7 @@ def page_classes():
 
 
 def recalculate_taglinks(tag_id=None, language_code=None):
-    tags = Tag.objects.order_by("id")
+    tags = Tag.objects.order_by("id").filter(id=1079)
     if language_code:
         tags = tags.filter(locale__language_code=language_code)
     if tag_id is not None:
@@ -123,7 +123,9 @@ def count_pages(tag):
     count = 0
     for page_class in page_classes():
         c = len(
-            page_class.objects.filter(locale=tag.locale).filter(tagged_items__tag=tag)
+            page_class.objects.live()
+            .filter(locale=tag.locale)
+            .filter(tagged_items__tag=tag)
         )
         count += c
 
@@ -133,9 +135,9 @@ def count_pages(tag):
 
     for page_class in page_classes():
         c = len(
-            page_class.objects.filter(locale=original.locale).filter(
-                tagged_items__tag=original
-            )
+            page_class.objects.live()
+            .filter(locale=original.locale)
+            .filter(tagged_items__tag=original)
         )
         count += c
 
@@ -146,7 +148,8 @@ def count_and(tag_a, tag_b):
     count = 0
     for page_class in page_classes():
         c = len(
-            page_class.objects.filter(locale=tag_a.locale)
+            page_class.objects.live()
+            .filter(locale=tag_a.locale)
             .filter(tagged_items__tag=tag_a)
             .filter(tagged_items__tag=tag_b)
             .distinct()
@@ -160,7 +163,8 @@ def count_and(tag_a, tag_b):
 
     for page_class in page_classes():
         c = len(
-            page_class.objects.filter(locale=original_a.locale)
+            page_class.objects.live()
+            .filter(locale=original_a.locale)
             .filter(tagged_items__tag=original_a)
             .filter(tagged_items__tag=original_b)
             .distinct()
@@ -174,9 +178,9 @@ def count_or(tag_a, tag_b):
     count = 0
     for page_class in page_classes():
         c = len(
-            page_class.objects.filter(
-                locale=tag_a.locale, tagged_items__tag__in=[tag_a, tag_b]
-            ).distinct()
+            page_class.objects.live()
+            .filter(locale=tag_a.locale, tagged_items__tag__in=[tag_a, tag_b])
+            .distinct()
         )
         count += c
 
@@ -187,9 +191,11 @@ def count_or(tag_a, tag_b):
 
     for page_class in page_classes():
         c = len(
-            page_class.objects.filter(
+            page_class.objects.live()
+            .filter(
                 locale=original_a.locale, tagged_items__tag__in=[original_a, original_b]
-            ).distinct()
+            )
+            .distinct()
         )
         count += c
 
