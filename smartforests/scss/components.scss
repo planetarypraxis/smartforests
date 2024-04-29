@@ -162,11 +162,6 @@
 
 
 #sidebar-show {
-  width: 100%;
-
-  @include media-breakpoint-up(md) {
-    width: auto;
-  }
 }
 
 
@@ -474,4 +469,23 @@
   height: 1px;
   opacity: 1;
   width: 2rem;
+}
+
+.radio-nav {
+  @include media-breakpoint-up(md) {
+    /* align with header logo */
+    margin-left: 170px;
+  }
+}
+
+.playlist-item {
+  .playlist-item__overlay {
+    background: linear-gradient(180deg, #043003 0%, rgba(4, 48, 3, 0) 100%);
+
+    h2 {
+      &:hover, &:focus {
+        text-decoration: underline;
+      }
+    }
+  }
 }

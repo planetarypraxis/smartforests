@@ -1,0 +1,72 @@
+{% extends "logbooks/article_page_base.html" %}
+{% load i18n ckdjango_tags ckwagtail_tags wagtailimages_tags wagtailcore_tags static %}
+
+{% block article_header %}
+  {% if self.image %}
+    {% image self.image height-500 class="img-fluid hero-img" %}
+  {% endif %}
+{% endblock %}
+
+{% block article %}
+  {% render_streamfield self.body %}
+
+  {% if self.endnotes %}
+  <div class="endnotes">
+    <hr>
+    {{ self.endnotes|richtext }}
+  </div>
+  {% endif %}
+
+  <div>
+    <h2>{% translate 'Episodes' %}</h2>
+    <div class="row">
+      {% for child_episode in self.episodes.all %}
+      {% with child_episode.episode as episode %}
+      <div class="col col-12 d-flex mb-3">
+        <div class="flex-shrink-0 flex-grow-0">
+          {% if episode.thumbnail %}
+          {% image episode.thumbnail fill-100x100 as tmp_thumbnail %}
+          <img src="{{ tmp_thumbnail.url }}" alt="{{ episode }}" class="w-100">
+          {% else %}
+          <img src="{% static 'img/radio-icon.svg' %}" alt="{{ episode }}" style="width:100px;height:100px">
+          {% endif %}
+        </div>
+        <div class="d-flex flex-column overflow-y-auto">
+          <div class="d-flex align-items-center mb-2">
+            {% include 'logbooks/include/episode_button.html' with episode=episode %}
+            <a class="link-reset ml-2" href="{{episode.url}}">
+              <span class="fs-6">{{ episode.title }}</span>
+            </a>
+          </div>
+          <div class="ps-2">
+            {% for tag in episode.all_localized_tags %}
+            {% include 'logbooks/include/tag_label.html' with tag=tag %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endwith %}
+      {% endfor %}
+    </div>
+  </div>
+
+  {% with page.footnotes.all as footnotes %}
+  {% if footnotes|length %}
+  <footer class="footnotes mt-5" id="footnotes">
+    <h5 id="footnote-label" class='fs-6a text-body'>
+      {% translate "Footnotes" %}
+    </h5>
+    <ol class='fs-6a ps-4 microcopy text-dark-grey'>
+        {% for footnote in footnotes %}
+          <li id="footnote-{{ forloop.counter }}">
+            <div class='d-flex flex-row'>
+              <span class='pe-2 child-mb-0 mb-1'>{{ footnote.text|richtext }}</span>
+              <a href="#footnote-source-{{ forloop.counter }}" aria-label='{% translate "Back to content" %}'>↩</a>
+            </div>
+          </li>
+        {% endfor %}
+    </ol>
+  </footer>
+  {% endif %}
+  {% endwith %}
+{% endblock %}
