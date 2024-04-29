@@ -69,7 +69,7 @@
                   {% for translation in page.get_translations.live %}
                     {% get_language_info for translation.locale.language_code as lang %}
                     <li class='fs-body-text dropdown-item border-bottom border-soft-green px-3 py-2 w-100'>
-                      <a rel="alternate" hreflang="{{ language_code }}" href="{% pageurl translation %}">
+                      <a rel="alternate" hreflang="{{ language_code }}" href="{% pageurl translation %}" data-turbo="false">
                         <span>{{ lang.name_local|title }} {% if lang.name_local != lang.name %}({{ lang.name|title }}){% endif %}</span>
                       </a>
                     </li>
@@ -173,7 +173,7 @@
                           {% for translation in page.get_translations.live %}
                             {% get_language_info for translation.locale.language_code as lang %}
                             <li>
-                              <a rel="alternate" hreflang="{{ language_code }}" href="{% pageurl translation %}" class="dropdown-item text-dark-green d-flex justify-content-between align-items-center">
+                              <a rel="alternate" hreflang="{{ language_code }}" href="{% pageurl translation %}" class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" data-turbo="false">
                                 <span>{{ lang.name_local|title }} {% if lang.name_local != lang.name %}({{ lang.name|title }}){% endif %}</span>
                               </a>
                             </li>
