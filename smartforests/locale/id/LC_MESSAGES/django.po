@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-25 08:52+0000\n"
+"POT-Creation-Date: 2024-04-29 10:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
 #: smartforests/models.py:30
 msgctxt "A tag name"
 msgid "name"
@@ -39,7 +40,10 @@ msgstr "Kami sedang berupaya memperbaiki masalah ini."
 msgid ""
 "In the meantime, you can try refreshing the page, check again in 30 minutes, "
 "or email hello@commonknowledge.coop to report the problem."
-msgstr "Sementara itu, Anda dapat mencoba menyegarkan halaman, memeriksa lagi dalam 30 menit, atau mengirim email ke hello@commonknowledge.coop untuk melaporkan masalah tersebut."
+msgstr ""
+"Sementara itu, Anda dapat mencoba menyegarkan halaman, memeriksa lagi dalam "
+"30 menit, atau mengirim email ke hello@commonknowledge.coop untuk melaporkan "
+"masalah tersebut."
 
 #: smartforests/templates/400.html:14 smartforests/templates/403.html:12
 #: smartforests/templates/404.html:14 smartforests/templates/500.html:14
@@ -54,7 +58,9 @@ msgstr "Kamu tidak diperbolehkan melihat ini"
 msgid ""
 "If you think this isn't right, email hello@commonknowledge.coop to report "
 "the problem."
-msgstr "Jika menurut Anda ini tidak benar, kirim email ke hello@commonknowledge.coop untuk melaporkan masalahnya."
+msgstr ""
+"Jika menurut Anda ini tidak benar, kirim email ke hello@commonknowledge.coop "
+"untuk melaporkan masalahnya."
 
 #: smartforests/templates/404.html:8
 msgid "Page not found"
@@ -68,17 +74,18 @@ msgstr "Kami tidak dapat menemukan halaman yang Anda cari."
 msgid ""
 "It might have been removed, had its name changed or is temporarily "
 "unavailable."
-msgstr "Mungkin telah dihapus, namanya diubah, atau untuk sementara tidak tersedia."
+msgstr ""
+"Mungkin telah dihapus, namanya diubah, atau untuk sementara tidak tersedia."
 
-#: smartforests/templates/base.html:73
+#: smartforests/templates/base.html:74
 msgid "Tag"
 msgstr "Tandai"
 
-#: smartforests/templates/base.html:77
+#: smartforests/templates/base.html:78
 msgid "Loading"
 msgstr "Memuat"
 
-#: smartforests/templates/base.html:81
+#: smartforests/templates/base.html:82
 msgid "Close"
 msgstr "Tutup"
 
@@ -115,15 +122,14 @@ msgstr "radio hutan pintar"
 msgid "Bulk actions"
 msgstr "Tindakan massal"
 
-#: smartforests/wagtail_settings.py:20
+#: smartforests/wagtail_settings.py:17
 msgid "Choose a radio episode"
 msgstr "Pilih episode radio"
 
-#: smartforests/wagtail_settings.py:21
+#: smartforests/wagtail_settings.py:18
 msgid "Choose another episode"
 msgstr "Pilih episode lain"
 
-#: smartforests/wagtail_settings.py:22
+#: smartforests/wagtail_settings.py:19
 msgid "Edit this episode"
 msgstr "Edit episode ini"
-

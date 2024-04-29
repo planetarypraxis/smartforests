@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-14 14:48+0000\n"
+"POT-Creation-Date: 2024-04-29 10:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,16 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: smartforests/models.py:30
+msgctxt "A tag name"
+msgid "name"
+msgstr "nom"
+
+#: smartforests/models.py:33
+msgctxt "A tag slug"
+msgid "slug"
+msgstr "limace"
 
 #: smartforests/templates/400.html:8 smartforests/templates/500.html:8
 msgid "Something went wrong"
@@ -28,8 +38,8 @@ msgstr "Nous travaillons à la résolution de ce problème."
 
 #: smartforests/templates/400.html:12 smartforests/templates/500.html:12
 msgid ""
-"In the meantime, you can try refreshing the page, check again in 30 minutes,"
-" or email hello@commonknowledge.coop to report the problem."
+"In the meantime, you can try refreshing the page, check again in 30 minutes, "
+"or email hello@commonknowledge.coop to report the problem."
 msgstr ""
 "En attendant, vous pouvez essayer d'actualiser la page, vérifier à nouveau "
 "dans 30 minutes ou envoyer un courriel à hello@commonknowledge.coop pour "
@@ -65,30 +75,30 @@ msgid ""
 "It might have been removed, had its name changed or is temporarily "
 "unavailable."
 msgstr ""
-"Il se peut qu'il ait été supprimé, que son nom ait été modifié ou qu'il soit"
-" temporairement indisponible."
+"Il se peut qu'il ait été supprimé, que son nom ait été modifié ou qu'il soit "
+"temporairement indisponible."
 
-#: smartforests/templates/base.html:71
+#: smartforests/templates/base.html:74
 msgid "Tag"
 msgstr "Étiquette"
 
-#: smartforests/templates/base.html:75
+#: smartforests/templates/base.html:78
 msgid "Loading"
 msgstr "Chargement"
 
-#: smartforests/templates/base.html:79
+#: smartforests/templates/base.html:82
 msgid "Close"
 msgstr "Fermer"
 
-#: smartforests/templates/menus/footer.html:17
+#: smartforests/templates/menus/footer.html:18
 msgid "Site by Common Knowledge"
 msgstr "Site de Common Knowledge"
 
-#: smartforests/templates/menus/footer.html:24
+#: smartforests/templates/menus/footer.html:25
 msgid "Admin area"
 msgstr "Zone administrative"
 
-#: smartforests/templates/menus/footer.html:31
+#: smartforests/templates/menus/footer.html:32
 msgid "API docs"
 msgstr "Documentation sur l'API"
 
@@ -112,3 +122,15 @@ msgstr "radio smart forests"
 #: smartforests/templates/wagtailadmin/bulk_actions/footer.html:4
 msgid "Bulk actions"
 msgstr "Actions en bloc"
+
+#: smartforests/wagtail_settings.py:17
+msgid "Choose a radio episode"
+msgstr "Choisissez un épisode radio"
+
+#: smartforests/wagtail_settings.py:18
+msgid "Choose another episode"
+msgstr "Choisissez un autre épisode"
+
+#: smartforests/wagtail_settings.py:19
+msgid "Edit this episode"
+msgstr "Modifier cet épisode"

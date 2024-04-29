@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-25 08:55+0000\n"
+"POT-Creation-Date: 2024-04-29 10:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
 #: smartforests/models.py:30
 msgctxt "A tag name"
 msgid "name"
@@ -39,7 +40,9 @@ msgstr "हम इस समस्या को ठीक करने के �
 msgid ""
 "In the meantime, you can try refreshing the page, check again in 30 minutes, "
 "or email hello@commonknowledge.coop to report the problem."
-msgstr "इस बीच, आप पृष्ठ को ताज़ा करने का प्रयास कर सकते हैं, 30 मिनट में फिर से जाँच कर सकते हैं, या समस्या की रिपोर्ट करने के लिए hello@commonknowledge.coop पर ईमेल कर सकते हैं।"
+msgstr ""
+"इस बीच, आप पृष्ठ को ताज़ा करने का प्रयास कर सकते हैं, 30 मिनट में फिर से जाँच कर सकते हैं, "
+"या समस्या की रिपोर्ट करने के लिए hello@commonknowledge.coop पर ईमेल कर सकते हैं।"
 
 #: smartforests/templates/400.html:14 smartforests/templates/403.html:12
 #: smartforests/templates/404.html:14 smartforests/templates/500.html:14
@@ -54,7 +57,9 @@ msgstr "आपको इसे देखने की अनुमति नह�
 msgid ""
 "If you think this isn't right, email hello@commonknowledge.coop to report "
 "the problem."
-msgstr "यदि आपको लगता है कि यह सही नहीं है, तो समस्या की रिपोर्ट करने के लिए hello@commonknowledge.coop पर ईमेल करें।"
+msgstr ""
+"यदि आपको लगता है कि यह सही नहीं है, तो समस्या की रिपोर्ट करने के लिए "
+"hello@commonknowledge.coop पर ईमेल करें।"
 
 #: smartforests/templates/404.html:8
 msgid "Page not found"
@@ -68,17 +73,18 @@ msgstr "आप जिस पृष्ठ को खोज रहे हैं �
 msgid ""
 "It might have been removed, had its name changed or is temporarily "
 "unavailable."
-msgstr "इसे हटा दिया गया होगा, इसका नाम बदल दिया गया होगा या अस्थायी रूप से अनुपलब्ध होगा।"
+msgstr ""
+"इसे हटा दिया गया होगा, इसका नाम बदल दिया गया होगा या अस्थायी रूप से अनुपलब्ध होगा।"
 
-#: smartforests/templates/base.html:73
+#: smartforests/templates/base.html:74
 msgid "Tag"
 msgstr "टैग"
 
-#: smartforests/templates/base.html:77
+#: smartforests/templates/base.html:78
 msgid "Loading"
 msgstr "लोड हो रहा है"
 
-#: smartforests/templates/base.html:81
+#: smartforests/templates/base.html:82
 msgid "Close"
 msgstr "बंद करें"
 
@@ -115,15 +121,14 @@ msgstr "स्मार्ट वन रेडियो"
 msgid "Bulk actions"
 msgstr "थोक क्रियाएँ"
 
-#: smartforests/wagtail_settings.py:20
+#: smartforests/wagtail_settings.py:17
 msgid "Choose a radio episode"
 msgstr "एक रेडियो एपिसोड चुनें"
 
-#: smartforests/wagtail_settings.py:21
+#: smartforests/wagtail_settings.py:18
 msgid "Choose another episode"
 msgstr "दूसरा एपिसोड चुनें"
 
-#: smartforests/wagtail_settings.py:22
+#: smartforests/wagtail_settings.py:19
 msgid "Edit this episode"
 msgstr "इस प्रकरण को संपादित करें"
-

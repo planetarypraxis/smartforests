@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-14 14:48+0000\n"
+"POT-Creation-Date: 2024-04-29 10:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,7 +73,7 @@ msgid "Loading"
 msgstr "Carregamento"
 
 #: logbooks/templates/logbooks/index_page_base.html:25
-#: logbooks/templates/logbooks/index_page_base.html:55
+#: logbooks/templates/logbooks/index_page_base.html:58
 msgid "Filters"
 msgstr "Filtros"
 
@@ -82,10 +82,10 @@ msgstr "Filtros"
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: logbooks/templates/logbooks/index_page_base.html:71
-#: logbooks/templates/logbooks/index_page_base.html:88
-#: logbooks/templates/logbooks/index_page_base.html:134
-#: logbooks/templates/logbooks/index_page_base.html:151
+#: logbooks/templates/logbooks/index_page_base.html:74
+#: logbooks/templates/logbooks/index_page_base.html:91
+#: logbooks/templates/logbooks/index_page_base.html:138
+#: logbooks/templates/logbooks/index_page_base.html:155
 #: logbooks/templates/logbooks/logbook_page.html:14
 #: logbooks/templates/logbooks/logbook_page.html:31
 #: logbooks/templates/logbooks/logbook_page.html:67
@@ -93,10 +93,10 @@ msgstr "Etiquetas"
 msgid "Title A—Z"
 msgstr "Título A-Z"
 
-#: logbooks/templates/logbooks/index_page_base.html:73
-#: logbooks/templates/logbooks/index_page_base.html:94
-#: logbooks/templates/logbooks/index_page_base.html:136
-#: logbooks/templates/logbooks/index_page_base.html:157
+#: logbooks/templates/logbooks/index_page_base.html:76
+#: logbooks/templates/logbooks/index_page_base.html:97
+#: logbooks/templates/logbooks/index_page_base.html:140
+#: logbooks/templates/logbooks/index_page_base.html:161
 #: logbooks/templates/logbooks/logbook_page.html:16
 #: logbooks/templates/logbooks/logbook_page.html:37
 #: logbooks/templates/logbooks/logbook_page.html:69
@@ -104,28 +104,28 @@ msgstr "Título A-Z"
 msgid "Title Z—A"
 msgstr "Título Z-A"
 
-#: logbooks/templates/logbooks/index_page_base.html:75
-#: logbooks/templates/logbooks/index_page_base.html:79
-#: logbooks/templates/logbooks/index_page_base.html:106
-#: logbooks/templates/logbooks/index_page_base.html:138
+#: logbooks/templates/logbooks/index_page_base.html:78
+#: logbooks/templates/logbooks/index_page_base.html:82
+#: logbooks/templates/logbooks/index_page_base.html:109
 #: logbooks/templates/logbooks/index_page_base.html:142
-#: logbooks/templates/logbooks/index_page_base.html:169
+#: logbooks/templates/logbooks/index_page_base.html:146
+#: logbooks/templates/logbooks/index_page_base.html:173
 #: logbooks/templates/logbooks/logbook_page.html:18
+#: logbooks/templates/logbooks/logbook_page.html:22
 #: logbooks/templates/logbooks/logbook_page.html:49
 #: logbooks/templates/logbooks/logbook_page.html:71
+#: logbooks/templates/logbooks/logbook_page.html:75
 #: logbooks/templates/logbooks/logbook_page.html:102
 msgid "Newest First"
 msgstr "Mais recente Primeiro"
 
-#: logbooks/templates/logbooks/index_page_base.html:77
-#: logbooks/templates/logbooks/index_page_base.html:100
-#: logbooks/templates/logbooks/index_page_base.html:140
-#: logbooks/templates/logbooks/index_page_base.html:163
+#: logbooks/templates/logbooks/index_page_base.html:80
+#: logbooks/templates/logbooks/index_page_base.html:103
+#: logbooks/templates/logbooks/index_page_base.html:144
+#: logbooks/templates/logbooks/index_page_base.html:167
 #: logbooks/templates/logbooks/logbook_page.html:20
-#: logbooks/templates/logbooks/logbook_page.html:22
 #: logbooks/templates/logbooks/logbook_page.html:43
 #: logbooks/templates/logbooks/logbook_page.html:73
-#: logbooks/templates/logbooks/logbook_page.html:75
 #: logbooks/templates/logbooks/logbook_page.html:96
 msgid "Oldest First"
 msgstr "Mais antigo Primeiro"
@@ -158,10 +158,72 @@ msgstr "Mostrar"
 msgid "Location"
 msgstr "Localização"
 
+#: logbooks/templates/logbooks/playlist_page.html:21
+msgid "Episodes"
+msgstr "Episódios"
+
+#: logbooks/templates/logbooks/playlist_page.html:57
 #: logbooks/templates/logbooks/story_page.html:24
 msgid "Footnotes"
 msgstr "Notas de rodapé"
 
+#: logbooks/templates/logbooks/playlist_page.html:64
 #: logbooks/templates/logbooks/story_page.html:31
 msgid "Back to content"
 msgstr "Voltar ao conteúdo"
+
+#: logbooks/templates/logbooks/radio_home_page.html:11
+msgid "Featured episodes"
+msgstr "Episódios em destaque"
+
+#: logbooks/templates/logbooks/radio_home_page.html:49
+msgid "Playlists"
+msgstr "Listas de reprodução"
+
+#: logbooks/templates/logbooks/radio_index_page_base.html:11
+msgid "Featured"
+msgstr "Destaque"
+
+#: logbooks/templates/logbooks/radio_index_page_base.html:17
+msgid "Archive"
+msgstr "Arquivo"
+
+#: logbooks/templates/logbooks/wagtailadmin/pages/history.html:6
+#, python-format
+msgid "Page history for %(subtitle)s"
+msgstr "Histórico da página para %(subtitle)s"
+
+#: logbooks/templates/logbooks/wagtailadmin/pages/history.html:9
+msgid "Edit this page"
+msgstr "Edite esta página"
+
+#: logbooks/templates/logbooks/wagtailadmin/pages/history.html:18
+#, fuzzy
+#| msgid "Location"
+msgid "Action"
+msgstr "Localização"
+
+#: logbooks/templates/logbooks/wagtailadmin/pages/history.html:21
+msgid "User"
+msgstr "Usuário"
+
+#: logbooks/templates/logbooks/wagtailadmin/pages/history.html:24
+msgid "Date / Time"
+msgstr "Data/Hora"
+
+#: logbooks/templates/logbooks/wagtailadmin/pages/history.html:37
+msgid "Comment"
+msgstr "Comentário"
+
+#: logbooks/templates/logbooks/wagtailadmin/pages/history.html:41
+msgid "Live version"
+msgstr "Versão ao vivo"
+
+#: logbooks/templates/logbooks/wagtailadmin/pages/history.html:44
+msgid "Current draft"
+msgstr "Rascunho atual"
+
+#: logbooks/templates/logbooks/wagtailadmin/pages/history.html:58
+#: logbooks/templates/logbooks/wagtailadmin/pages/history.html:63
+msgid "No log entries found."
+msgstr "Nenhuma entrada de log encontrada."
