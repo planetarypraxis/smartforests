@@ -198,6 +198,14 @@ class PlaylistPage(ArticlePage):
             return None
         return first_child_episode.episode.image
 
+    @property
+    def all_localized_tags(self):
+        localized_tags = set()
+        for child_episode in self.episodes.all():
+            for tag in child_episode.episode.tags.all():
+                localized_tags.add(tag.localized)
+        return list(sorted(localized_tags, key=lambda tag: tag.name))
+
 
 class PlaylistPageEpisode(Orderable):
     page = ParentalKey(PlaylistPage, on_delete=models.CASCADE, related_name="episodes")

@@ -70,7 +70,7 @@ def sync_translation(page, source, locale):
         return False
 
     try:
-        source.create_or_update_translation(locale)
+        source.create_or_update_translation(locale, publish=False)
     except ObjectDoesNotExist:
         return False
     except MissingTranslationError:
