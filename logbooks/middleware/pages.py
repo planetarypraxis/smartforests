@@ -3,7 +3,7 @@ from home.models import HomePage
 from logbooks.models.pages import (
     ContributorsIndexPage,
     LogbookIndexPage,
-    RadioHomePage,
+    RadioIndexPage,
     StoryIndexPage,
 )
 from smartforests.models import MapPage
@@ -33,5 +33,5 @@ class ImportantPagesMiddleware(object):
             "map": MapPage.objects.first(),
             "logbooks": LogbookIndexPage.objects.first(),
             "stories": StoryIndexPage.objects.first(),
-            "radio": RadioHomePage.objects.first(),
+            "radio": RadioIndexPage.objects.first(),
         }
