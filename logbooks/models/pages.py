@@ -5,6 +5,7 @@ from django.db.models.fields.related import ForeignKey
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
 from django.utils.text import slugify
+from django.utils.translation import gettext_lazy as _
 from modelcluster.fields import ParentalKey
 from wagtail.models import Page
 from smartforests.models import Tag, User
@@ -51,8 +52,8 @@ class StoryPage(ArticlePage):
     """
 
     class Meta:
-        verbose_name = "Story"
-        verbose_name_plural = "Stories"
+        verbose_name = _("Story")
+        verbose_name_plural = _("Stories")
 
     icon_class = "icon-stories"
 
@@ -110,8 +111,8 @@ class EpisodePage(ArticlePage):
     """
 
     class Meta:
-        verbose_name = "Radio Episode"
-        verbose_name_plural = "Radio Episodes"
+        verbose_name = _("Radio Episode")
+        verbose_name_plural = _("Radio Episodes")
 
     show_in_menus_default = True
     parent_page_types = ["logbooks.RadioIndexPage"]
@@ -264,8 +265,8 @@ class LogbookEntryPage(ArticlePage):
     """
 
     class Meta:
-        verbose_name = "Logbook Entry"
-        verbose_name_plural = "Logbook Entries"
+        verbose_name = _("Logbook Entry")
+        verbose_name_plural = _("Logbook Entries")
 
     show_in_menus_default = True
     parent_page_types = ["logbooks.LogbookPage"]
@@ -312,8 +313,8 @@ class LogbookPage(
     """
 
     class Meta:
-        verbose_name = "Logbook"
-        verbose_name_plural = "Logbooks"
+        verbose_name = _("Logbook")
+        verbose_name_plural = _("Logbooks")
 
     icon_class = "icon-logbooks"
     show_in_menus_default = True
@@ -497,8 +498,8 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
             return static_file_absolute_url("img/mapicons/circle.png")
 
     class Meta:
-        verbose_name = "Contributor"
-        verbose_name_plural = "Contributors"
+        verbose_name = _("Contributor")
+        verbose_name_plural = _("Contributors")
 
     user = models.ForeignKey(
         User,

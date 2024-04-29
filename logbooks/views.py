@@ -220,7 +220,7 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
     @extend_schema(parameters=[RequestSerializer])
     def list(self, request):
         pages = self.get_queryset()
-        locale = self.get_locale()
+        locale = Locale.get_active()
         localized_pages = set()
         for page in pages:
             localized_page = page.get_translation_or_none(locale)
@@ -231,7 +231,7 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
 
     def get_object(self, request):
         page = self.get_queryset()
-        locale = self.get_locale()
+        locale = Locale.get_active()
         localized_page = page.get_translation_or_none(locale) or page
         return Response(self.ResultSerializer(localized_page).data)
 
