@@ -9,10 +9,10 @@
       {% translate "Last edited" %} {{ page.last_published_at|date:"d E Y" }}
     </time>
   </section>
-  {% if page.contributors.all|length %}
+  {% if page.cached_contributors|length %}
   <section class="d-flex flex-column mb-3">
     <h4 class="mb-0">{% translate "Contributors" %}</h4>
-    {% for user in page.contributors.all %}
+    {% for user in page.cached_contributors %}
       <a class='d-block' href='{{ user.contributor_page.localized.link_url }}' data-turbo-frame="_top">
         {{ user }}
       </a>
@@ -54,7 +54,7 @@
   {% if tags|length %}
   <section class="d-flex flex-column">
     <h4>{% translate "Tags" %}</h4>
-    <div class="d-flex flex-column">
+    <div class="d-flex flex-column overflow-auto">
     {% for tag in tags %}
       {% include "logbooks/include/tag_label.html" with tag=tag orientation="vertical" tag_background_class=tag_background_class %}
     {% endfor %}
