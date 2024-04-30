@@ -220,9 +220,9 @@ class PlaylistPageEpisode(Orderable):
 class RadioIndexPageMixin:
     def radio_parent_pages(self):
         return {
-            "home": RadioHomePage.objects.first(),
+            "home": RadioIndexPage.objects.first(),
             "playlists": RadioPlaylistIndexPage.objects.first(),
-            "archive": RadioIndexPage.objects.first(),
+            "archive": RadioArchivePage.objects.first(),
         }
 
 
@@ -232,27 +232,35 @@ class RadioIndexPage(RadioIndexPageMixin, IndexPage):
     """
 
     class Meta:
-        verbose_name = "Radio archive page"
+        verbose_name = "Radio index page"
 
+    def get_template(self, request, *args, **kwargs):
+        if request.GET.get("new"):
+            return "logbooks/radio_index_page.html"
+        return "logbooks/radio_archive_page.html"
 
-class RadioHomePage(RadioIndexPageMixin, IndexPage):
-    """
-    Index page for the Radio. Featured episodes and playlists.
-    """
-
-    class Meta:
-        verbose_name = "Radio home page"
-
-    def get_child_list_queryset(self, *args, **kwargs):
+    def featured(self):
         return EpisodePage.objects.live().filter(featured=True, locale=self.locale)
 
     def playlists(self):
         return PlaylistPage.objects.live().filter(locale=self.locale)
 
 
+class RadioArchivePage(RadioIndexPageMixin, IndexPage):
+    """
+    Index page for the Radio. Featured episodes and playlists.
+    """
+
+    class Meta:
+        verbose_name = "Radio archive page"
+
+    def get_child_list_queryset(self, *args, **kwargs):
+        return EpisodePage.objects.live().filter(locale=self.locale)
+
+
 class RadioPlaylistIndexPage(RadioIndexPageMixin, IndexPage):
     """
-    Index page for the Radio. A collection of episodes.
+    Index page for playlists. A collection of episodes.
     """
 
     class Meta:
