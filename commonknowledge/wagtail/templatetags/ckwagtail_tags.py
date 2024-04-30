@@ -93,23 +93,28 @@ def highlight_tags(content: SafeText):
 
     content = str(content)
 
-    words = []
-    for word in re.split(r"\b", content):
-        words.append(word)
-        words.append(word.lower())
+    words = set()
+    splitter = r"[ !#()-;:'\",./]" if locale.language_code == "hi" else r"\b"
+    for word in re.split(splitter, content):
+        words.add(word)
+        words.add(word.lower())
 
     tags = Tag.objects.filter(locale=locale, name__in=words)
     for tag in tags:
-        link = f"""
-        <span class="filter-tag filter-tag-inline">
+        replace = rf"""
+        \1<span class="filter-tag filter-tag-inline">
             <a class="text-decoration-none" 
                data-smartforests-sidepanel-open="#tagpanel-offcanvas"
                data-turbo-frame="tagpanel-turboframe"
                href="/{locale.language_code}/_tags/{tag.slug}/">
-                {tag.name}
+                \2
             </a>
         </span>
         """.strip()
-        content = re.sub(rf"\b{tag.name}\b", link, content)
+        # The character class "[>\s]" matches the start of innerText or a word after whitespace
+        # Should catch most of the tags without matching inside URLs (e.g. https://example.com/tag/)
+        content = re.sub(
+            rf"([>\s])({tag.name})\b", replace, content, flags=re.IGNORECASE
+        )
 
     return mark_safe(content)
