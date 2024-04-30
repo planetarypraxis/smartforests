@@ -17,6 +17,5 @@ class LocaleMiddleware(_LocaleMiddleware):
         super().process_request(request)
 
         language_code = request.GET.get("language_code")
-        print(f"language_code is {language_code}")
         if language_code is not None:
             translation.activate(language_code)

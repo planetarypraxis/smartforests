@@ -199,6 +199,7 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
     serializer_class = ResultSerializer
 
     def get_queryset(self):
+        locale = Locale.get_active()
         params = MapSearchViewset.RequestSerializer(data=self.request.GET)
         if not params.is_valid():
             raise BadRequestError()
@@ -212,28 +213,17 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
                 tagged_pages = []
                 for PageClass in self.page_types:
                     tagged_pages += PageClass.for_tag(tag_ids)
-                return tagged_pages
+                return filter(lambda p: p.locale == locale, tagged_pages)
 
         # If no filters, return all possible geo pages
-        return Page.objects.live().specific().type(*self.page_types)
+        return (
+            Page.objects.live().filter(locale=locale).specific().type(*self.page_types)
+        )
 
     @extend_schema(parameters=[RequestSerializer])
     def list(self, request):
         pages = self.get_queryset()
-        locale = Locale.get_active()
-        localized_pages = set()
-        for page in pages:
-            localized_page = page.get_translation_or_none(locale)
-            # Show the localized page if it exists
-            if localized_page:
-                localized_pages.add(localized_page)
-        return Response(self.ResultSerializer(localized_pages, many=True).data)
-
-    def get_object(self, request):
-        page = self.get_queryset()
-        locale = Locale.get_active()
-        localized_page = page.get_translation_or_none(locale) or page
-        return Response(self.ResultSerializer(localized_page).data)
+        return Response(self.ResultSerializer(pages, many=True).data)
 
     @classmethod
     def get_urlpatterns(cls):
