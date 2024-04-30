@@ -2,6 +2,7 @@ import * as d3 from "https://cdn.skypack.dev/d3@7.9.0";
 import "https://cdn.skypack.dev/d3-force@3.0.0";
 import forceBoundary from "https://cdn.skypack.dev/d3-force-boundary@0.0.1";
 
+let initialOffCanvasContent = "";
 document.addEventListener("turbo:load", () => {
   initTagCloud();
 });
@@ -19,7 +20,9 @@ function initTagCloud() {
     if (tagOffCanvasId) {
       tagOffcanvas = document.getElementById(tagOffCanvasId);
     }
-    const initialOffCanvasContent = tagOffcanvas?.innerHTML || "";
+    if (!initialOffCanvasContent) {
+      initialOffCanvasContent = tagOffcanvas?.innerHTML || "";
+    }
 
     // Specify the dimensions of the chart.
     const { width, height } = calculateCanvasDimensions();
@@ -30,25 +33,11 @@ function initTagCloud() {
     $parent.innerHTML = "";
     $parent.appendChild($container);
 
-    doTagCloud(
-      $container,
-      width,
-      height,
-      data,
-      tagOffcanvas,
-      initialOffCanvasContent
-    );
+    doTagCloud($container, width, height, data, tagOffcanvas);
 
     window.addEventListener("resize", () => {
       const { width, height } = calculateCanvasDimensions();
-      doTagCloud(
-        $container,
-        width,
-        height,
-        data,
-        tagOffcanvas,
-        initialOffCanvasContent
-      );
+      doTagCloud($container, width, height, data, tagOffcanvas);
     });
   });
 }
@@ -66,14 +55,7 @@ function calculateCanvasDimensions() {
   return { width, height };
 }
 
-function doTagCloud(
-  $container,
-  width,
-  height,
-  data,
-  tagOffcanvas,
-  initialOffCanvasContent
-) {
+function doTagCloud($container, width, height, data, tagOffcanvas) {
   $container.innerHTML = "";
 
   let focusedNode = null;

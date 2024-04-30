@@ -53,19 +53,22 @@ class Tag(TranslatableMixin, TagBase):
 
     @staticmethod
     def regenerate_thumbnails():
-        for tag in Tag.objects.iterator():
+        for tag in Tag.objects.all():
             tag.regenerate_thumbnail()
             tag.save()
 
-    def regenerate_thumbnail(self):
+    def regenerate_thumbnail(self, force=False):
         thumbnails = []
 
-        for tagging in self.logbooks_atlastag_items.all():
-            if hasattr(tagging.content_object.specific, "get_thumbnail_images"):
-                thumbnails += tagging.content_object.specific.get_thumbnail_images()
+        all_tags = Tag.objects.filter(translation_key=self.translation_key)
 
-            if len(thumbnails) >= 3:
-                break
+        for tag in all_tags:
+            for tagging in tag.logbooks_atlastag_items.all():
+                if hasattr(tagging.content_object.specific, "get_thumbnail_images"):
+                    thumbnails += tagging.content_object.specific.get_thumbnail_images()
+
+                if len(thumbnails) >= 3:
+                    break
 
         thumbnails = thumbnails[:3]
 
@@ -87,7 +90,7 @@ class Tag(TranslatableMixin, TagBase):
             **grid_opts,
         )
 
-        if default_storage.exists(filename):
+        if default_storage.exists(filename) and not force:
             self.thumbnail.name = filename
             return
 
@@ -107,8 +110,10 @@ class TagLink(models.Model):
     )
 
     class Meta:
-        unique_together = ('source', 'target',)
-
+        unique_together = (
+            "source",
+            "target",
+        )
 
     def __str__(self):
         return f"Tag {self.source} <-> {self.target}: {self.relatedness}"

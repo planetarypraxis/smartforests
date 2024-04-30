@@ -25,7 +25,7 @@ def regenerate_tag_thumbnails(tag_id: int):
     except Tag.DoesNotExist:
         return
 
-    tag.regenerate_thumbnail()
+    tag.regenerate_thumbnail(force=True)
     tag.save()
 
 
