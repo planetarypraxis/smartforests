@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-29 10:37+0000\n"
+"POT-Creation-Date: 2024-04-30 10:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,46 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
+#: logbooks/models/pages.py:55
+msgid "Story"
+msgstr "Cerita"
+
+#: logbooks/models/pages.py:56
+msgid "Stories"
+msgstr "Cerita"
+
+#: logbooks/models/pages.py:114
+msgid "Radio Episode"
+msgstr "Episode Radio"
+
+#: logbooks/models/pages.py:115
+msgid "Radio Episodes"
+msgstr "Episode Radio"
+
+#: logbooks/models/pages.py:268
+msgid "Logbook Entry"
+msgstr "Entri Buku Catatan"
+
+#: logbooks/models/pages.py:269
+msgid "Logbook Entries"
+msgstr "Entri Buku Catatan"
+
+#: logbooks/models/pages.py:316
+msgid "Logbook"
+msgstr "Buku Catatan"
+
+#: logbooks/models/pages.py:317
+msgid "Logbooks"
+msgstr "Buku catatan"
+
+#: logbooks/models/pages.py:501
+msgid "Contributor"
+msgstr "Kontributor"
+
+#: logbooks/models/pages.py:502 logbooks/templates/logbooks/metadata.html:14
+msgid "Contributors"
+msgstr "Kontributor"
 
 #: logbooks/templates/logbooks/article_page_base.html:59
 msgid "Related Tags"
@@ -138,10 +178,6 @@ msgstr "Ditambahkan"
 msgid "Last edited"
 msgstr "Terakhir diedit"
 
-#: logbooks/templates/logbooks/metadata.html:14
-msgid "Contributors"
-msgstr "Kontributor"
-
 #: logbooks/templates/logbooks/metadata.html:20
 msgid "Hide"
 msgstr "Sembunyikan"
@@ -160,7 +196,7 @@ msgstr "Lokasi"
 
 #: logbooks/templates/logbooks/playlist_page.html:21
 msgid "Episodes"
-msgstr "Semua episode"
+msgstr "Episode"
 
 #: logbooks/templates/logbooks/playlist_page.html:57
 #: logbooks/templates/logbooks/story_page.html:24

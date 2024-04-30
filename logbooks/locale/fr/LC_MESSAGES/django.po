@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-29 10:37+0000\n"
+"POT-Creation-Date: 2024-04-30 10:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,47 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+
+#: logbooks/models/pages.py:55
+msgid "Story"
+msgstr "Histoire"
+
+#: logbooks/models/pages.py:56
+msgid "Stories"
+msgstr "Histoires"
+
+#: logbooks/models/pages.py:114
+msgid "Radio Episode"
+msgstr "Épisode radio"
+
+#: logbooks/models/pages.py:115
+msgid "Radio Episodes"
+msgstr "Épisodes radio"
+
+#: logbooks/models/pages.py:268
+msgid "Logbook Entry"
+msgstr "Entrée du journal de bord"
+
+#: logbooks/models/pages.py:269
+msgid "Logbook Entries"
+msgstr "Entrée du journal de bord"
+
+#: logbooks/models/pages.py:316
+msgid "Logbook"
+msgstr "Journal de bord"
+
+#: logbooks/models/pages.py:317
+msgid "Logbooks"
+msgstr "Journaux de bord"
+
+#: logbooks/models/pages.py:501
+msgid "Contributor"
+msgstr "Contributeur"
+
+#: logbooks/models/pages.py:502 logbooks/templates/logbooks/metadata.html:14
+msgid "Contributors"
+msgstr "Contributeurs"
 
 #: logbooks/templates/logbooks/article_page_base.html:59
 msgid "Related Tags"
@@ -102,7 +143,7 @@ msgstr "Titre A-Z"
 #: logbooks/templates/logbooks/logbook_page.html:69
 #: logbooks/templates/logbooks/logbook_page.html:90
 msgid "Title Z—A"
-msgstr "Titre Z-A"
+msgstr "Titre Z—A"
 
 #: logbooks/templates/logbooks/index_page_base.html:78
 #: logbooks/templates/logbooks/index_page_base.html:82
@@ -128,7 +169,7 @@ msgstr "Le plus récent d'entre eux"
 #: logbooks/templates/logbooks/logbook_page.html:73
 #: logbooks/templates/logbooks/logbook_page.html:96
 msgid "Oldest First"
-msgstr "Le plus âgé Le premier"
+msgstr "Le plus âgé le premier"
 
 #: logbooks/templates/logbooks/metadata.html:6
 msgid "Added"
@@ -137,10 +178,6 @@ msgstr "Ajouté"
 #: logbooks/templates/logbooks/metadata.html:9
 msgid "Last edited"
 msgstr "Dernière édition"
-
-#: logbooks/templates/logbooks/metadata.html:14
-msgid "Contributors"
-msgstr "Les contributeurs"
 
 #: logbooks/templates/logbooks/metadata.html:20
 msgid "Hide"
@@ -198,10 +235,8 @@ msgid "Edit this page"
 msgstr "Modifier cette page"
 
 #: logbooks/templates/logbooks/wagtailadmin/pages/history.html:18
-#, fuzzy
-#| msgid "Location"
 msgid "Action"
-msgstr "Localisation"
+msgstr "Action"
 
 #: logbooks/templates/logbooks/wagtailadmin/pages/history.html:21
 msgid "User"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-29 10:37+0000\n"
+"POT-Creation-Date: 2024-04-30 10:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,47 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+
+#: logbooks/models/pages.py:55
+msgid "Story"
+msgstr "História"
+
+#: logbooks/models/pages.py:56
+msgid "Stories"
+msgstr "Histórias"
+
+#: logbooks/models/pages.py:114
+msgid "Radio Episode"
+msgstr "Episódio de Rádio"
+
+#: logbooks/models/pages.py:115
+msgid "Radio Episodes"
+msgstr "Episódios de Rádio"
+
+#: logbooks/models/pages.py:268
+msgid "Logbook Entry"
+msgstr "Entrada no diário de bordo"
+
+#: logbooks/models/pages.py:269
+msgid "Logbook Entries"
+msgstr "Entradas no diário de bordo"
+
+#: logbooks/models/pages.py:316
+msgid "Logbook"
+msgstr "Diário de bordo"
+
+#: logbooks/models/pages.py:317
+msgid "Logbooks"
+msgstr "Diários de bordo"
+
+#: logbooks/models/pages.py:501
+msgid "Contributor"
+msgstr "Contribuidor"
+
+#: logbooks/models/pages.py:502 logbooks/templates/logbooks/metadata.html:14
+msgid "Contributors"
+msgstr "Contribuidores"
 
 #: logbooks/templates/logbooks/article_page_base.html:59
 msgid "Related Tags"
@@ -138,10 +179,6 @@ msgstr "Adicionado"
 msgid "Last edited"
 msgstr "Última edição"
 
-#: logbooks/templates/logbooks/metadata.html:14
-msgid "Contributors"
-msgstr "Contribuintes"
-
 #: logbooks/templates/logbooks/metadata.html:20
 msgid "Hide"
 msgstr "Esconder"
@@ -198,10 +235,8 @@ msgid "Edit this page"
 msgstr "Edite esta página"
 
 #: logbooks/templates/logbooks/wagtailadmin/pages/history.html:18
-#, fuzzy
-#| msgid "Location"
 msgid "Action"
-msgstr "Localização"
+msgstr "Ação"
 
 #: logbooks/templates/logbooks/wagtailadmin/pages/history.html:21
 msgid "User"
