@@ -7,6 +7,7 @@ import Supercluster from 'supercluster'
 import useSWR from "swr";
 import WebMercatorViewport from "@math.gl/web-mercator";
 import { FeatureCollection, Point } from "geojson";
+import { getLanguageCode } from "../pageContext";
 
 export type MapViewport = Viewport;
 
@@ -96,10 +97,11 @@ export const useSize = (target: RefObject<HTMLElement>) => {
   return size;
 };
 
-const getFeaturesUrl = (opts: { tag?: string, languageCode?: string }) => {
+const getFeaturesUrl = (opts: { tag?: string }) => {
+  const languageCode = getLanguageCode();
   const q = stringifyQuery({
     ...(opts.tag ? { tag: opts.tag } : {}),
-    ...(opts.languageCode ? { language_code: opts.languageCode } : {}),
+    ...(languageCode ? { language_code: languageCode } : {}),
   });
 
   return `${window.location.protocol}//${window.location.host}/api/v2/geo/${q}`;

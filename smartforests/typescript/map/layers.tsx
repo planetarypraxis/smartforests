@@ -1,10 +1,9 @@
-import { useAtomValue } from "jotai/utils";
 import React, { FC, Fragment, useEffect, useRef, useState } from "react";
-import { languageCodeAtom } from "../pageContext";
 import { MapViewport, useFeatures } from "./data";
 import { AtlasPageMarker, ClusterMarker } from "./markers";
 import { stringifyQuery, useFilterParam } from "./state";
 import { SmartForest } from "./types";
+import { getLanguageCode } from "../pageContext";
 
 export const AtlasPageFeatureLayer: FC<{
   size: DOMRectReadOnly;
@@ -13,23 +12,20 @@ export const AtlasPageFeatureLayer: FC<{
   const tag = useFilterParam();
 
   // @ts-ignore
-  const languageCode = useAtomValue(languageCodeAtom)
+  const languageCode = getLanguageCode();
 
-  const data = useFeatures<SmartForest.MapItem>(
-    size,
-    viewport,
-    () => ({ tag, languageCode }),
-    [tag, languageCode]
-  );
+  const data = useFeatures<SmartForest.MapItem>(size, viewport, () => ({ tag, languageCode }), [
+    tag,
+    languageCode,
+  ]);
 
   if (!data) {
     return (
-      <div
-      className="mapbox-loading-overlay position-absolute w-100 h-100 d-flex align-items-center justify-content-center">
-      <div className="spinner-border" role="status">
-        <span className="sr-only">Loading...</span>
+      <div className="mapbox-loading-overlay position-absolute w-100 h-100 d-flex align-items-center justify-content-center">
+        <div className="spinner-border" role="status">
+          <span className="sr-only">Loading...</span>
+        </div>
       </div>
-    </div>
     );
   }
 

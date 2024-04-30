@@ -7,23 +7,6 @@ export const getLanguageCode = (): string => {
   return window.LANGUAGE_CODE || "en";
 }
 
-export const languageCodeAtom = atom(getLanguageCode())
-
-export function LanguageContext({ children }) {
-  const [languageCode, setLanguageCode] = useAtom(languageCodeAtom)
-
-  async function loadRequestInfo(event) {
-    setLanguageCode(getLanguageCode())
-  }
-
-  useEffect(() => {
-    document.addEventListener("turbo:load", loadRequestInfo);
-    return () => document.removeEventListener("turbo:load", loadRequestInfo)
-  }, [])
-
-  return children
-}
-
 export function TurboContext({ children }) {
   // Register Turbo Frames to track as atoms, identified by the DOM ID.
   // Access via the live atom via frameAtomFamily('#sidepanel-turboframe').
