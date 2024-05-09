@@ -1,4 +1,4 @@
-FROM ghcr.io/commonknowledge/do-app-baseimage-django-node@sha256:451f5e98c024ff3d03a92f7739d24a4d7ad0bb257f2518a908b3b470972ef940
+FROM ghcr.io/planetarypraxis/do-app-baseimage-django-node:24a4ebbbf9fa315ab6b151e499c9db654f1fce97
 
 # Install the project requirements and build.
 COPY --chown=app:app .bin/install.sh Pipfile Pipfile.lock package.json yarn.lock ./
