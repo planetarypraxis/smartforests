@@ -52,3 +52,4 @@ wagtailmenus = "*"
 wagtail-modeladmin = "*"
 cd = "*"
 wagtail-localize = {extras = ["google"], version = "*"}
+sentry-sdk = {extras = ["django"], version = "*"}

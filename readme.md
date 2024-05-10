@@ -56,7 +56,7 @@ They both run .bin in ./.bin to configure their environments and install depende
 - Frequently-run .bin (installing pip packages, etc) should go in install.sh. The difference between these is that changing prepare.sh triggers a full rebuild of the development container, whereas install.sh is only run after the container is built.
 - `build.sh` is the last thing run on deploy to production
 
-### Seed content
+### Seed content - BROKEN
 
 ```
 python manage.py seed
