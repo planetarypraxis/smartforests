@@ -234,12 +234,6 @@ class RadioIndexPage(RadioIndexPageMixin, IndexPage):
     class Meta:
         verbose_name = "Radio index page"
 
-    # TODO: When the new radio pages are launched, remove this
-    def get_template(self, request, *args, **kwargs):
-        if request.GET.get("new"):
-            return "logbooks/radio_index_page.html"
-        return "logbooks/radio_archive_page.html"
-
     def featured(self):
         return EpisodePage.objects.live().filter(featured=True, locale=self.locale)
 

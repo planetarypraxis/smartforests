@@ -8,8 +8,7 @@
     {% with self.radio_parent_pages as parent_pages %}
     <ul class="d-flex list-unstyled">
       <li class="me-2">
-        <!-- TODO: When the new radio pages are launched, remove ?new=true here-->
-        <a href="{{ parent_pages.home.localized.url }}?new=true">{% translate 'Featured' %}</a>
+        <a href="{{ parent_pages.home.localized.url }}">{% translate 'Featured' %}</a>
       </li>
       <li class="mx-2">
         <a href="{{ parent_pages.playlists.localized.url }}">{{ parent_pages.playlists.localized.title }}</a>
