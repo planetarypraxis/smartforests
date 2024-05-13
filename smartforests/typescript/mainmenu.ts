@@ -7,6 +7,7 @@ const SEARCH_BACKDROP_ID = 'search-backdrop'
 const init = () => {
   const search = document.getElementById("search-box");
   const searchResults = document.getElementById("search-results");
+  const searchResultsLoading = document.getElementById("search-results-loading");
   const searchToggle = document.getElementById(SEARCH_ID);
   const modal = new window.bootstrap.Modal(searchToggle);
   const languageCode = getLanguageCode()
@@ -16,7 +17,7 @@ const init = () => {
   search.addEventListener(
     "input",
     _.debounce(() => {
-      searchResults.innerHTML = '<div class="position-relative search-item p-3 border-bottom">Loading...</div>'
+      searchResults.innerHTML = `<div class="position-relative search-item p-3 border-bottom">${searchResultsLoading?.textContent}</div>`
       searchResults.src = qs.stringifyUrl({
         url: '/search/',
         query: {
