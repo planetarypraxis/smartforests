@@ -16,6 +16,7 @@ const init = () => {
   search.addEventListener(
     "input",
     _.debounce(() => {
+      searchResults.innerHTML = '<div class="position-relative search-item p-3 border-bottom">Loading...</div>'
       searchResults.src = qs.stringifyUrl({
         url: '/search/',
         query: {
@@ -58,7 +59,7 @@ const init = () => {
           event.preventDefault();
         }
       } else if (event.keyCode == enter) {
-        if (searchResults.children[index].href) {
+        if (searchResults.children[index]?.href) {
           modal.hide();
           Turbo.visit(searchResults.children[index].href);
         }
