@@ -1,5 +1,5 @@
 import re
-from django.http import HttpRequest, HttpResponseForbidden
+from django.http import HttpRequest, HttpResponseGone
 from django.shortcuts import redirect
 from django.middleware.locale import LocaleMiddleware as _LocaleMiddleware
 from django.utils import translation
@@ -29,5 +29,5 @@ class BlockAmazonMiddleware:
         if "Amazonbot" in request.META.get(
             "HTTP_USER_AGENT", ""
         ) and not request.path.lower().endswith("robots.txt"):
-            return HttpResponseForbidden()
+            return HttpResponseGone()
         return self.get_response(request)
