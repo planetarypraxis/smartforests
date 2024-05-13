@@ -63,7 +63,7 @@ def page_classes():
 
 
 def recalculate_taglinks(tag_id=None, language_code=None):
-    tags = Tag.objects.order_by("id").filter(id=1079)
+    tags = Tag.objects.order_by("id")
     if language_code:
         tags = tags.filter(locale__language_code=language_code)
     if tag_id is not None:
