@@ -9,17 +9,6 @@ ALLOWED_HOSTS = [
     "localhost",
 ]  # localhost required for wagtail admin self-requests
 
-common_middleware_index = MIDDLEWARE.index("django.middleware.common.CommonMiddleware")
-
-MIDDLEWARE = (
-    MIDDLEWARE[0:common_middleware_index]
-    + [
-        "django.middleware.cache.UpdateCacheMiddleware",
-        MIDDLEWARE[common_middleware_index],
-        "django.middleware.cache.FetchFromCacheMiddleware",
-    ]
-    + MIDDLEWARE[common_middleware_index + 1 :]
-)
 
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"

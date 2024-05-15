@@ -78,6 +78,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "django.middleware.cache.UpdateCacheMiddleware",
     "smartforests.middleware.BlockAmazonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "turbo_response.middleware.TurboMiddleware",
@@ -90,6 +91,7 @@ MIDDLEWARE = [
     "smartforests.middleware.LocaleMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
     "logbooks.middleware.pages.ImportantPagesMiddleware",
+    "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 ROOT_URLCONF = "smartforests.urls"
@@ -352,3 +354,12 @@ LOCALE_PATHS = (
     "home/locale",
     "commonknowledge/locale",
 )
+
+
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "django_database_cache",
+    }
+}
