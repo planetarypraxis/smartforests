@@ -7,7 +7,7 @@
       <div>
         <a
           class="mb-1 filter-tag {% if tag_filter == tag.slug %}active{% endif %}"
-          href="{% qs_link 'filter' tag.slug %}"
+          href="?filter={{ tag.slug }}"
           data-filter-tag="{{tag.slug}}"
         >
           {{tag}}
