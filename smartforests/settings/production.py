@@ -4,7 +4,21 @@ from urllib.parse import urlparse
 DEBUG = False
 SECRET_KEY = os.getenv("SECRET_KEY")
 BASE_URL = re.sub(r"/$", "", os.getenv("BASE_URL", ""))
-ALLOWED_HOSTS = [urlparse(BASE_URL).netloc, "localhost"] # localhost required for wagtail admin self-requests
+ALLOWED_HOSTS = [
+    urlparse(BASE_URL).netloc,
+    "localhost",
+]  # localhost required for wagtail admin self-requests
+
+common_middleware_index = MIDDLEWARE.index("django.middleware.common.CommonMiddleware")
+
+MIDDLEWARE = (
+    MIDDLEWARE[0:common_middleware_index]
+    + [
+        "django.middleware.cache.UpdateCacheMiddleware",
+        MIDDLEWARE[common_middleware_index],
+    ]
+    + MIDDLEWARE[common_middleware_index + 1 :]
+)
 
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
