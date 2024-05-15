@@ -16,6 +16,7 @@ MIDDLEWARE = (
     + [
         "django.middleware.cache.UpdateCacheMiddleware",
         MIDDLEWARE[common_middleware_index],
+        "django.middleware.cache.FetchFromCacheMiddleware",
     ]
     + MIDDLEWARE[common_middleware_index + 1 :]
 )
