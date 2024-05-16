@@ -367,11 +367,12 @@ CACHES = {
 
 USE_PROFILING = os.getenv("USE_PROFILING", True)
 
+def custom_show_pyinstrument(request):
+    return request.user.is_superuser
+
 if USE_PROFILING:
     print("Profiler active. Add ?profile to URLs to view profiling.")
     MIDDLEWARE += [
         "pyinstrument.middleware.ProfilerMiddleware",
     ]
-    def custom_show_pyinstrument(request):
-        return request.user.is_superuser
     PYINSTRUMENT_SHOW_CALLBACK = "%s.custom_show_pyinstrument" % __name__
