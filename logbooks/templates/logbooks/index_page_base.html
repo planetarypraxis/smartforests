@@ -2,8 +2,7 @@
 {% load i18n static ckdjango_tags ckbootstrap_tags %}
 {% block content_wrapper_class %}filter-page{% endblock %}
 {% block content %}
-    <!-- Filter sidepanel -->
-    {% if self.relevant_tags %}
+    <!-- Filter sidepanel --> 
         <div id='filters'
              class="offcanvas offcanvas-start"
              tabindex="-1"
@@ -30,8 +29,7 @@
                     {% include "smartforests/include/tag_list.html" with tags=self.relevant_tags target="logbook-search-results" %}
                 </div>
             </div>
-        </div>
-    {% endif %}
+        </div> 
     <div class="container-fluid mt-0 filter-page__content">
         {% block pre_index_header %}
         {% endblock %}
@@ -40,7 +38,7 @@
             <div id="sidebar-show"
                  class="col-md-1 filters-reveal collapse-horizontal d-flex justify-content-between align-items-center">
                 <div class="sidebar-sized">
-                    {% if self.relevant_tags %}
+    
                         <a class="btn btn-link p-0 text-decoration-none"
                            href="#filters"
                            data-bs-toggle="offcanvas"
@@ -56,8 +54,7 @@
                                 <path d="M7.00016 2.33334L6.17766 3.15584L9.43266 6.41668H2.3335V7.58334H9.43266L6.17766 10.8442L7.00016 11.6667L11.6668 7.00001L7.00016 2.33334Z" fill="#043003"/>
                             </svg>
                             {% translate "Filters" %}
-                        </a>
-                    {% endif %}
+                        </a> 
                 </div>
                 {% block filter_mobile %}
                 <!-- Display on small screens -->
