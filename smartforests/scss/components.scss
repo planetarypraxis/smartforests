@@ -143,6 +143,14 @@
   }
 }
 
+.sidebar-tag-list {
+  .filter-tag {
+    max-width: 100%;
+    text-wrap: unset;
+    text-align: left;
+  }
+}
+
 /** Sizing **/
 
 .index-header {

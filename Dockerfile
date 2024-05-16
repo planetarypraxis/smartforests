@@ -14,5 +14,4 @@ ENV NODE_ENV=production
 RUN pipenv run bash .bin/build.sh
 
 # Run
-RUN pipenv run bash .bin/release.sh
 EXPOSE ${PORT:-8080}

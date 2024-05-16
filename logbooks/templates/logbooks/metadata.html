@@ -54,7 +54,7 @@
   {% if tags|length %}
   <section class="d-flex flex-column">
     <h4>{% translate "Tags" %}</h4>
-    <div class="d-flex flex-column overflow-auto">
+    <div class="sidebar-tag-list d-flex flex-column align-items-start">
     {% for tag in tags %}
       {% include "logbooks/include/tag_label.html" with tag=tag orientation="vertical" tag_background_class=tag_background_class %}
     {% endfor %}
