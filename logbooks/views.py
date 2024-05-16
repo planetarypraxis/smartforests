@@ -152,6 +152,13 @@ def metadata(request, page_id, **kwargs):
         {"page": page, "interactive": request.user.is_authenticated},
     )
 
+def page_tagcloud(request, page_id):
+    page = get_object_or_404(Page.objects.filter(id=page_id).specific())
+    return render(
+        request,
+        "logbooks/frames/page_tagcloud.html",
+        {"page": page},
+    )
 
 class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
     """
