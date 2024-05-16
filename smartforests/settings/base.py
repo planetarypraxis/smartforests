@@ -75,10 +75,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "wagtailcache",
 ]
 
 MIDDLEWARE = [
-    "django.middleware.cache.UpdateCacheMiddleware",
+    "wagtailcache.cache.UpdateCacheMiddleware", 
     "smartforests.middleware.BlockAmazonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "turbo_response.middleware.TurboMiddleware",
@@ -91,7 +92,7 @@ MIDDLEWARE = [
     "smartforests.middleware.LocaleMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
     "logbooks.middleware.pages.ImportantPagesMiddleware",
-    "django.middleware.cache.FetchFromCacheMiddleware",
+    "wagtailcache.cache.FetchFromCacheMiddleware",
 ]
 
 ROOT_URLCONF = "smartforests.urls"
@@ -361,5 +362,6 @@ CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.db.DatabaseCache",
         "LOCATION": "django_database_cache",
+        "TIMEOUT": os.getenv("CACHE_MIDDLEWARE_SECONDS") or 600,
     }
 }
