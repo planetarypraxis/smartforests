@@ -6,6 +6,9 @@ let initialOffCanvasContent = "";
 document.addEventListener("turbo:load", () => {
   initTagCloud();
 });
+document.addEventListener("turbo:frame-load", () => {
+  initTagCloud();
+});
 
 function initTagCloud() {
   document.querySelectorAll("[data-tag-cloud-data]").forEach(($parent) => {
