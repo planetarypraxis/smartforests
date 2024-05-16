@@ -6,10 +6,10 @@
       <section class='caption text-grey fw-lighter'>
         <div class="d-flex flex-column flex-sm-row">
           <div class="me-2">
-            {% if self.contributors.all|length > 0 %}
+            {% if self.real_contributors.all|length > 0 %}
             <div>
             {% translate "By" %}
-            {% for user in self.contributors.all %}
+            {% for user in self.real_contributors.all %}
               <a href='{{ user.contributor_page.localized.link_url }}' data-turbo-frame="_top" class="mr-2 d-inline-block">
                 {{ user }}
               </a>

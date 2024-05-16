@@ -9,10 +9,10 @@
       {% translate "Last edited" %} {{ page.last_published_at|date:"d E Y" }}
     </time>
   </section>
-  {% if page.cached_contributors|length %}
+  {% if page.real_contributors|length %}
   <section class="d-flex flex-column mb-3">
     <h4 class="mb-0">{% translate "Contributors" %}</h4>
-    {% for user in page.cached_contributors %}
+    {% for user in page.real_contributors %}
       <a class='d-block' href='{{ user.contributor_page.localized.link_url }}' data-turbo-frame="_top">
         {{ user }}
       </a>

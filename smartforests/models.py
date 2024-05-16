@@ -191,9 +191,9 @@ class User(AbstractUser):
 
         contributors = set(
             flatten_list(
-                page.contributors.all()
+                page.real_contributors
                 for page in tagged_pages
-                if hasattr(page, "contributors")
+                if hasattr(page, "real_contributors")
             )
         )
 

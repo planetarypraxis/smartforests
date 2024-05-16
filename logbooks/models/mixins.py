@@ -146,8 +146,10 @@ class ContributorMixin(BaseLogbooksPage):
         )
 
     @property
-    def cached_contributors(self):
-        return self.contributors.filter(username="common-knowledge")
+    def real_contributors(self):
+        return self.contributors.filter(
+            ~models.Q(username__in=["common-knowledge", "hello@commonknowledge.coop"])
+        )
 
     def get_page_contributors(self):
         return list(
