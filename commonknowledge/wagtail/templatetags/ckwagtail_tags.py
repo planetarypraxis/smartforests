@@ -94,10 +94,16 @@ def highlight_tags(content: SafeText):
     content = str(content)
 
     words = set()
-    splitter = r"[ !#()-;:'\",./]" if locale.language_code == "hi" else r"\b"
+    splitter = r"[ !#()-;:'\",./<>]" if locale.language_code == "hi" else r"\b"
     for word in re.split(splitter, content):
         words.add(word)
         words.add(word.lower())
+
+    # Remove links and re-insert after highlighting tags
+    # Matching tags inside <a> tags breaks them
+    links = re.findall(r"<a[^<]*</a>", content, re.IGNORECASE)
+    for i, link in enumerate(links):
+        content = content.replace(link, f"[#~{i}~#]")
 
     tags = Tag.objects.filter(locale=locale, name__in=words)
     for tag in tags:
@@ -109,12 +115,16 @@ def highlight_tags(content: SafeText):
                href="/{locale.language_code}/_tags/{tag.slug}/">
                 \2
             </a>
-        </span>
+        </span>\3
         """.strip()
-        # The character class "[>\s]" matches the start of innerText or a word after whitespace
-        # Should catch most of the tags without matching inside URLs (e.g. https://example.com/tag/)
         content = re.sub(
-            rf"([>\s])({tag.name})\b", replace, content, flags=re.IGNORECASE
+            rf"({splitter})({tag.name})({splitter})",
+            replace,
+            content,
+            flags=re.IGNORECASE,
         )
+
+    for i, link in enumerate(links):
+        content = content.replace(f"[#~{i}~#]", link)
 
     return mark_safe(content)

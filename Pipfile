@@ -54,3 +54,4 @@ cd = "*"
 wagtail-localize = {extras = ["google"], version = "*"}
 sentry-sdk = {extras = ["django"], version = "*"}
 wagtail-cache = "*"
+pyinstrument = "*"
