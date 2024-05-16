@@ -1,5 +1,5 @@
 set -e
 
-#python manage.py migrate
-#python manage.py setup_pages
-python manage.py createcachetable
+#pipenv run python manage.py migrate
+#pipenv run python manage.py setup_pages
+pipenv run python manage.py createcachetable
