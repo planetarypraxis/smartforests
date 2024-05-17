@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-30 10:27+0000\n"
+"POT-Creation-Date: 2024-05-17 10:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -83,6 +83,7 @@ msgid "Tag"
 msgstr "Étiquette"
 
 #: smartforests/templates/base.html:78
+#: smartforests/templates/menus/header.html:212
 msgid "Loading"
 msgstr "Chargement"
 
@@ -104,7 +105,11 @@ msgstr "Documentation sur l'API"
 
 #: smartforests/templates/menus/header.html:12
 msgid "Toggle navigation"
-msgstr "Toggle navigation"
+msgstr "Changer de navigation"
+
+#: smartforests/templates/menus/header.html:83
+msgid "Toggle search"
+msgstr "Changer de recherche"
 
 #: smartforests/templates/menus/header.html:84
 #: smartforests/templates/menus/header.html:187

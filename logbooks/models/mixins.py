@@ -539,6 +539,7 @@ class ArticlePage(
     tags = LocalizedTaggableManager(through=AtlasTag, blank=True)
     body = ArticleContentStream()
     endnotes = RichTextField(blank=True)
+    citation = models.TextField(blank=True)
     show_title = True
 
     additional_content_panels = (
@@ -546,6 +547,7 @@ class ArticlePage(
             TagFieldPanel("tags"),
             FieldPanel("body"),
             FieldPanel("endnotes"),
+            FieldPanel("citation"),
             InlinePanel("footnotes", label="Footnotes"),
         ]
         + ContributorMixin.content_panels
@@ -568,6 +570,10 @@ class ArticlePage(
 
     search_fields = IndexedStreamfieldMixin.search_fields + Page.search_fields
     streamfield_indexer = ArticleContentStream.text_indexer
+
+    override_translatable_fields = ContributorMixin.override_translatable_fields + [
+        SynchronizedField("citation"),
+    ]
 
     def body_images(self):
         """

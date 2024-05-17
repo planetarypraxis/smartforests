@@ -10,12 +10,7 @@
 {% block article %}
   {% render_streamfield self.body %}
 
-  {% if self.endnotes %}
-  <div class="endnotes">
-    <hr>
-    {{ self.endnotes|richtext }}
-  </div>
-  {% endif %}
+  {% include 'logbooks/include/endnotes.html' %}
 
   <div>
     <h2>{% translate 'Episodes' %}</h2>

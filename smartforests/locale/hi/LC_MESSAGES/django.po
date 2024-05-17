@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-30 10:42+0000\n"
+"POT-Creation-Date: 2024-05-17 10:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -81,6 +81,7 @@ msgid "Tag"
 msgstr "टैग"
 
 #: smartforests/templates/base.html:78
+#: smartforests/templates/menus/header.html:212
 msgid "Loading"
 msgstr "लोड हो रहा है"
 
@@ -103,6 +104,10 @@ msgstr "एपीआई दस्तावेज़"
 #: smartforests/templates/menus/header.html:12
 msgid "Toggle navigation"
 msgstr "नेविगेशन टॉगल करें"
+
+#: smartforests/templates/menus/header.html:83
+msgid "Toggle search"
+msgstr "खोज टॉगल करें"
 
 #: smartforests/templates/menus/header.html:84
 #: smartforests/templates/menus/header.html:187

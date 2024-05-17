@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-30 10:42+0000\n"
+"POT-Creation-Date: 2024-05-17 10:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
 
 #: logbooks/models/pages.py:55
 msgid "Story"
@@ -35,33 +34,29 @@ msgstr "रेडियो एपिसोड"
 msgid "Radio Episodes"
 msgstr "रेडियो एपिसोड"
 
-#: logbooks/models/pages.py:268
+#: logbooks/models/pages.py:271
 msgid "Logbook Entry"
 msgstr "लॉगबुक प्रविष्टि"
 
-#: logbooks/models/pages.py:269
+#: logbooks/models/pages.py:272
 msgid "Logbook Entries"
 msgstr "लॉगबुक प्रविष्टियाँ"
 
-#: logbooks/models/pages.py:316
+#: logbooks/models/pages.py:319
 msgid "Logbook"
 msgstr "लॉगबुक"
 
-#: logbooks/models/pages.py:317
+#: logbooks/models/pages.py:320
 msgid "Logbooks"
 msgstr "लॉगबुक"
 
-#: logbooks/models/pages.py:501
+#: logbooks/models/pages.py:504
 msgid "Contributor"
 msgstr "योगदानकर्ता"
 
-#: logbooks/models/pages.py:502 logbooks/templates/logbooks/metadata.html:14
+#: logbooks/models/pages.py:505 logbooks/templates/logbooks/metadata.html:14
 msgid "Contributors"
 msgstr "योगदानकर्ता"
-
-#: logbooks/templates/logbooks/article_page_base.html:59
-msgid "Related Tags"
-msgstr "संबंधित टैग"
 
 #: logbooks/templates/logbooks/content_entry/logbook_entry.html:11
 msgid "By"
@@ -93,6 +88,10 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
+#: logbooks/templates/logbooks/frames/page_tagcloud.html:9
+msgid "Related Tags"
+msgstr "संबंधित टैग"
+
 #: logbooks/templates/logbooks/frames/tags.html:11
 msgid "Tag"
 msgstr "टैग"
@@ -101,32 +100,39 @@ msgstr "टैग"
 msgid "View on Map"
 msgstr "मानचित्र पर देखें"
 
+#: logbooks/templates/logbooks/include/endnotes.html:8
+msgid ""
+"\n"
+"        Smart Forests Atlas materials are free to use for non-commercial "
+"purposes (with attribution) under a \n"
+"        <a href=\"https://creativecommons.org/licenses/by-nc-sa/4.0/\" "
+"target=\"_blank\">CC BY-NC-SA 4.0</a> license.\n"
+"        To cite this page:\n"
+"        "
+msgstr "\nस्मार्ट फॉरेस्ट एटलस की सामग्री गैर-व्यावसायिक उद्देश्यों (एट्रिब्यूशन के साथ) के लिए <a href=\"https://creativecommons.org/licenses/by-nc-sa/4.0/\">CC BY-NC-SA 4.0</a> लाइसेंस के तहत उपयोग करने के लिए स्वतंत्र है। इस पृष्ठ को उद्धृत करने के लिए: "
+
 #: logbooks/templates/logbooks/include/masonry.html:15
 msgid "Nothing found"
 msgstr "कुछ नहीं मिला"
 
-#: logbooks/templates/logbooks/include/masonry.html:19
-msgid "Load More"
-msgstr "अधिक लोड करें"
-
-#: logbooks/templates/logbooks/include/masonry.html:28
+#: logbooks/templates/logbooks/include/masonry.html:24
 msgid "Loading"
 msgstr "लोड हो रहा है"
 
-#: logbooks/templates/logbooks/index_page_base.html:25
-#: logbooks/templates/logbooks/index_page_base.html:58
+#: logbooks/templates/logbooks/index_page_base.html:24
+#: logbooks/templates/logbooks/index_page_base.html:56
 msgid "Filters"
 msgstr "फ़िल्टर"
 
-#: logbooks/templates/logbooks/index_page_base.html:29
+#: logbooks/templates/logbooks/index_page_base.html:28
 #: logbooks/templates/logbooks/metadata.html:56
 msgid "Tags"
 msgstr "टैग"
 
-#: logbooks/templates/logbooks/index_page_base.html:74
-#: logbooks/templates/logbooks/index_page_base.html:91
-#: logbooks/templates/logbooks/index_page_base.html:138
-#: logbooks/templates/logbooks/index_page_base.html:155
+#: logbooks/templates/logbooks/index_page_base.html:71
+#: logbooks/templates/logbooks/index_page_base.html:88
+#: logbooks/templates/logbooks/index_page_base.html:135
+#: logbooks/templates/logbooks/index_page_base.html:152
 #: logbooks/templates/logbooks/logbook_page.html:14
 #: logbooks/templates/logbooks/logbook_page.html:31
 #: logbooks/templates/logbooks/logbook_page.html:67
@@ -134,10 +140,10 @@ msgstr "टैग"
 msgid "Title A—Z"
 msgstr "शीर्षक ए-जेड"
 
-#: logbooks/templates/logbooks/index_page_base.html:76
-#: logbooks/templates/logbooks/index_page_base.html:97
-#: logbooks/templates/logbooks/index_page_base.html:140
-#: logbooks/templates/logbooks/index_page_base.html:161
+#: logbooks/templates/logbooks/index_page_base.html:73
+#: logbooks/templates/logbooks/index_page_base.html:94
+#: logbooks/templates/logbooks/index_page_base.html:137
+#: logbooks/templates/logbooks/index_page_base.html:158
 #: logbooks/templates/logbooks/logbook_page.html:16
 #: logbooks/templates/logbooks/logbook_page.html:37
 #: logbooks/templates/logbooks/logbook_page.html:69
@@ -145,12 +151,12 @@ msgstr "शीर्षक ए-जेड"
 msgid "Title Z—A"
 msgstr "शीर्षक जेड—ए"
 
-#: logbooks/templates/logbooks/index_page_base.html:78
-#: logbooks/templates/logbooks/index_page_base.html:82
-#: logbooks/templates/logbooks/index_page_base.html:109
-#: logbooks/templates/logbooks/index_page_base.html:142
-#: logbooks/templates/logbooks/index_page_base.html:146
-#: logbooks/templates/logbooks/index_page_base.html:173
+#: logbooks/templates/logbooks/index_page_base.html:75
+#: logbooks/templates/logbooks/index_page_base.html:79
+#: logbooks/templates/logbooks/index_page_base.html:106
+#: logbooks/templates/logbooks/index_page_base.html:139
+#: logbooks/templates/logbooks/index_page_base.html:143
+#: logbooks/templates/logbooks/index_page_base.html:170
 #: logbooks/templates/logbooks/logbook_page.html:18
 #: logbooks/templates/logbooks/logbook_page.html:22
 #: logbooks/templates/logbooks/logbook_page.html:49
@@ -160,10 +166,10 @@ msgstr "शीर्षक जेड—ए"
 msgid "Newest First"
 msgstr "नवीनतम प्रथम"
 
-#: logbooks/templates/logbooks/index_page_base.html:80
-#: logbooks/templates/logbooks/index_page_base.html:103
-#: logbooks/templates/logbooks/index_page_base.html:144
-#: logbooks/templates/logbooks/index_page_base.html:167
+#: logbooks/templates/logbooks/index_page_base.html:77
+#: logbooks/templates/logbooks/index_page_base.html:100
+#: logbooks/templates/logbooks/index_page_base.html:141
+#: logbooks/templates/logbooks/index_page_base.html:164
 #: logbooks/templates/logbooks/logbook_page.html:20
 #: logbooks/templates/logbooks/logbook_page.html:43
 #: logbooks/templates/logbooks/logbook_page.html:73
@@ -195,25 +201,25 @@ msgstr "दिखाओ"
 msgid "Location"
 msgstr "स्थान"
 
-#: logbooks/templates/logbooks/playlist_page.html:21
+#: logbooks/templates/logbooks/playlist_page.html:16
 msgid "Episodes"
 msgstr "एपिसोड"
 
-#: logbooks/templates/logbooks/playlist_page.html:57
-#: logbooks/templates/logbooks/story_page.html:24
+#: logbooks/templates/logbooks/playlist_page.html:52
+#: logbooks/templates/logbooks/story_page.html:19
 msgid "Footnotes"
 msgstr "फुटनोट्स"
 
-#: logbooks/templates/logbooks/playlist_page.html:64
-#: logbooks/templates/logbooks/story_page.html:31
+#: logbooks/templates/logbooks/playlist_page.html:59
+#: logbooks/templates/logbooks/story_page.html:26
 msgid "Back to content"
 msgstr "सामग्री पर वापस जाएँ"
 
-#: logbooks/templates/logbooks/radio_home_page.html:11
+#: logbooks/templates/logbooks/radio_index_page.html:11
 msgid "Featured episodes"
 msgstr "विशेष रुप से प्रदर्शित एपिसोड"
 
-#: logbooks/templates/logbooks/radio_home_page.html:49
+#: logbooks/templates/logbooks/radio_index_page.html:49
 msgid "Playlists"
 msgstr "प्लेलिस्ट"
 
@@ -262,3 +268,6 @@ msgstr "वर्तमान ड्राफ्ट"
 #: logbooks/templates/logbooks/wagtailadmin/pages/history.html:63
 msgid "No log entries found."
 msgstr "कोई लॉग प्रविष्टियाँ नहीं मिलीं।"
+
+#~ msgid "Load More"
+#~ msgstr "अधिक लोड करें"

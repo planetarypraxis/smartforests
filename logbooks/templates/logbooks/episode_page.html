@@ -17,11 +17,6 @@
 {% block article %}
   <div class="mb-7">
     {{self.body}}
-    {% if self.endnotes %}
-    <div class="endnotes">
-      <hr>
-      {{ self.endnotes|richtext }}
-    </div>
-    {% endif %}
+    {% include 'logbooks/include/endnotes.html' %}
   </div>
 {% endblock %}

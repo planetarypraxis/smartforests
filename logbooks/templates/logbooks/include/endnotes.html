@@ -1,0 +1,17 @@
+{% load i18n wagtailcore_tags %}
+{% if self.endnotes %}
+<div class="endnotes">
+    <hr>
+    {{ self.endnotes|richtext }}
+    {% if self.citation %}
+    <p>
+        {% blocktranslate %}
+        Smart Forests Atlas materials are free to use for non-commercial purposes (with attribution) under a 
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> license.
+        To cite this page:
+        {% endblocktranslate %}
+        {{ self.citation }}
+    </p>
+    {% endif %}
+</div>
+{% endif %}
