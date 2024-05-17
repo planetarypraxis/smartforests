@@ -17,7 +17,7 @@
         {{ user }}
       </a>
       {% if interactive %}
-        <a href="/_metadata/{{page.id}}/toggle_user/{{user.id}}" data-turbo-frame="_self">({% translate "Hide" %})</a>
+        <a href="/_metadata/{{page.id}}/toggle_user/{{user.id}}/" data-turbo-frame="_self">({% translate "Hide" %})</a>
       {% endif %}
     {% endfor %}
   </section>
@@ -29,7 +29,7 @@
       <s><span class='d-block'>
         {{ user }}
       </span></s>
-      <a href="/_metadata/{{page.id}}/toggle_user/{{user.id}}" data-turbo-frame="_self">({% translate "Show" %})</a>
+      <a href="/_metadata/{{page.id}}/toggle_user/{{user.id}}/" data-turbo-frame="_self">({% translate "Show" %})</a>
     {% endfor %}
   </section>
   {% endif %}
