@@ -121,6 +121,7 @@ def highlight_tags(content: SafeText):
             rf"({splitter})({tag.name})({splitter})",
             replace,
             content,
+            count=1,
             flags=re.IGNORECASE,
         )
 
