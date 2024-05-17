@@ -1,5 +1,6 @@
 from wagtail.admin.panels import FieldPanel
 from wagtail.admin.widgets.tags import AdminTagWidget
+from wagtail.models import Locale
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from smartforests.models import Tag
 
@@ -45,20 +46,18 @@ class LocalizedTaggableManager(ClusterTaggableManager):
     """
 
     def save_form_data(self, instance, value):
-        locale = instance.locale if instance else None
+        locale = instance.locale if instance else Locale.active()
         # Fix accidental submission of tags with commas
         clean_values = set()
         for name in value:
-            clean_values = clean_values.union(
-                set((v.strip() for v in name.split(",") if v.strip()))
-            )
-        if locale:
-            for name in clean_values:
-                existing_tag = Tag.objects.filter(name=name).first()
-                if not existing_tag:
-                    Tag.objects.create(name=name, locale=locale)
-        super().save_form_data(instance, value)
+            names = [name.strip() for name in name.split(",") if name.strip()]
+            for name in names:
+                clean_values.add(name.strip())
+        tags = []
+        for name in clean_values:
+            tag, _ = Tag.objects.get_or_create(name=name, locale=locale)
+            tags.append(tag)
         # The tag field updates tags by name, which means we get duplicate tags associated
         # with the instance (e.g. datafication (en) and datafication (fr)).
         # The below line deduplicates those tags.
-        instance.tags.set(tag for tag in instance.tags.all() if tag.locale == locale)
+        instance.tags.set(tags)
