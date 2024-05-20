@@ -381,7 +381,7 @@ class LogbookPage(
     )
 
     @classmethod
-    def for_tag(cls, tag_or_tags):
+    def for_tag(cls, tag_or_tags, locale=None):
         """
         Return all live pages matching the tag.
 
@@ -389,10 +389,14 @@ class LogbookPage(
         to be all logbooks that either have the tag themselves or who have an entry with the tag.
         """
 
-        logbooks = set(super().for_tag(tag_or_tags).live().public())
+        logbooks = super().for_tag(tag_or_tags).live().public()
+        if locale is not None:
+            logbooks = logbooks.filter(locale=locale)
+        logbooks = set(logbooks)
+
         logbook_entry_logbooks = set(
             entry.get_parent().specific
-            for entry in LogbookEntryPage.for_tag(tag_or_tags).live().public()
+            for entry in LogbookEntryPage.for_tag(tag_or_tags, locale=locale).live().public()
         )
 
         return logbooks.union(logbook_entry_logbooks)
@@ -562,8 +566,11 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
         return list(sorted(localized_tags, key=lambda tag: tag.name))
 
     @classmethod
-    def for_tag(cls, tag_or_tags):
-        return cls.objects.live().filter(user__in=User.for_tag(tag_or_tags))
+    def for_tag(cls, tag_or_tags, locale=None):
+        qs = cls.objects.live().filter(user__in=User.for_tag(tag_or_tags))
+        if locale is not None:
+            qs = qs.filter(locale=locale)
+        return qs.distinct()
 
     @property
     def tag_cloud(self):

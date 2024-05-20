@@ -48,25 +48,36 @@ def pages_for_tag(tag: Tag, page_types=tag_panel_types):
     # the translated tag.
     all_tags = Tag.objects.filter(translation_key=tag.translation_key)
     page_lists_by_type = [
-        (page_type, page_type.for_tag(list(all_tags))) for page_type in page_types
+        (page_type, page_type.for_tag(list(all_tags), locale=current_locale))
+        for page_type in page_types
+        if page_type != ContributorPage
     ]
 
-    localized_pages_by_type = [
+    if ContributorPage in page_types:
+        contributors = set()
+        for page_type, pages in page_lists_by_type:
+            for page in pages:
+                contributors = contributors.union(page.real_contributors)
+        page_lists_by_type.append(
+            (
+                ContributorPage,
+                ContributorPage.objects.live().filter(
+                    user__in=contributors, locale=current_locale
+                ),
+            )
+        )
+
+    return [
         (
             page_type,
             list(
                 sorted(
-                    [page for page in page_list if page.locale == current_locale],
+                    page_list,
                     key=lambda p: p.title,
                 )
             ),
         )
         for (page_type, page_list) in page_lists_by_type
-    ]
-
-    return [
-        (page_type, page_list)
-        for (page_type, page_list) in localized_pages_by_type
         if page_list
     ]
 

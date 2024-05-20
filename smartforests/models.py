@@ -185,13 +185,13 @@ class User(AbstractUser):
         }
 
     @classmethod
-    def for_tag(cls, tag_or_tags):
+    def for_tag(cls, tag_or_tags, locale=None):
         from logbooks.views import content_list_types
 
         contributors = set()
 
         for page_type in content_list_types:
-            pages = page_type.for_tag(tag_or_tags)
+            pages = page_type.for_tag(tag_or_tags, locale=locale)
             for page in pages:
                 if hasattr(page, "real_contributors"):
                     contributors = contributors.union(page.real_contributors)

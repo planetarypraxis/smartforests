@@ -57,11 +57,14 @@ class BaseLogbooksPage(Page):
     show_title = False
 
     @classmethod
-    def for_tag(cls, tag_or_tags):
+    def for_tag(cls, tag_or_tags, locale=None):
         """
         Return all live pages matching the tag
         """
-        return cls.objects.filter(tagged_items__tag__in=ensure_list(tag_or_tags)).live()
+        qs = cls.objects.filter(tagged_items__tag__in=ensure_list(tag_or_tags)).live()
+        if locale is not None:
+            qs = qs.filter(locale=locale)
+        return qs.distinct()
 
     @classmethod
     def model_info(cls):
