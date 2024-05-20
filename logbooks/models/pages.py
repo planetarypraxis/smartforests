@@ -12,7 +12,7 @@ from smartforests.models import Tag, User
 from wagtail.admin.panels import FieldPanel, InlinePanel, MultipleChooserPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.fields import RichTextField
-from wagtail.models import Orderable
+from wagtail.models import Locale, Orderable
 from wagtailmedia.edit_handlers import MediaChooserPanel
 from commonknowledge.wagtail.helpers import get_children_of_type
 from commonknowledge.wagtail.models import ChildListMixin
@@ -201,10 +201,16 @@ class PlaylistPage(ArticlePage):
 
     @property
     def all_localized_tags(self):
-        localized_tags = set()
+        locale = Locale.get_active()
+        all_tag_keys = set()
         for child_episode in self.episodes.all():
-            for tag in child_episode.episode.tags.all():
-                localized_tags.add(tag.localized)
+            tag_keys = child_episode.episode.tags.all().values_list(
+                "translation_key", flat=True
+            )
+            all_tag_keys = all_tag_keys.union(tag_keys)
+        localized_tags = Tag.objects.filter(
+            translation_key__in=all_tag_keys, locale=locale
+        )
         return list(sorted(localized_tags, key=lambda tag: tag.name))
 
 
@@ -426,13 +432,12 @@ class LogbookPage(
 
     @property
     def all_localized_tags(self):
-        localized_tags = set()
+        locale = Locale.get_active()
         tags_including_child_pages = list(self.tags.all()) + self.entry_tags
-        for tag in tags_including_child_pages:
-            if tag.localized:
-                localized_tags.add(tag.localized)
-            else:
-                localized_tags.add(tag)
+        translation_keys = [tag.translation_key for tag in tags_including_child_pages]
+        localized_tags = Tag.objects.filter(
+            translation_key__in=translation_keys, locale=locale
+        )
         return list(sorted(localized_tags, key=lambda tag: tag.name))
 
     @property
@@ -547,12 +552,13 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
         if not self.user:
             return []
 
-        localized_tags = set()
-        for tag in self.user.edited_tags:
-            if tag.localized:
-                localized_tags.add(tag.localized)
-            else:
-                localized_tags.add(tag)
+        locale = Locale.get_active()
+        translation_keys = self.user.edited_tags.values_list(
+            "translation_key", flat=True
+        )
+        localized_tags = Tag.objects.filter(
+            translation_key__in=translation_keys, locale=locale
+        )
         return list(sorted(localized_tags, key=lambda tag: tag.name))
 
     @classmethod

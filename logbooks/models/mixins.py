@@ -27,7 +27,7 @@ from django.db import models
 from django.template.response import TemplateResponse
 from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.api.conf import APIField
-from wagtail.models import Page, Revision
+from wagtail.models import Page, Revision, Locale
 from wagtail.fields import RichTextField
 from wagtail_localize.fields import SynchronizedField
 from django.contrib.gis.db import models as geo
@@ -633,10 +633,7 @@ class ArticlePage(
 
     @property
     def all_localized_tags(self):
-        localized_tags = set()
-        for tag in self.tags.all():
-            if tag.localized:
-                localized_tags.add(tag.localized)
-            else:
-                localized_tags.add(tag)
-        return list(sorted(localized_tags, key=lambda tag: tag.name))
+        locale = Locale.get_active()
+        translation_keys = self.tags.all().values_list("translation_key", flat=True)
+        tags = Tag.objects.filter(locale=locale, translation_key__in=translation_keys)
+        return list(sorted(tags, key=lambda tag: tag.name))
