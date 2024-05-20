@@ -34,7 +34,7 @@ content_list_types = (
 tag_panel_types = content_list_types + (ContributorPage,)
 
 
-def pages_for_tag(tag_or_tags: Union[Tag, List[Tag]], page_types=tag_panel_types):
+def pages_for_tag(tag: Tag, page_types=tag_panel_types):
     current_locale = Locale.get_active()
     # Expand the list of tags to include all localized versions
     #
@@ -46,38 +46,21 @@ def pages_for_tag(tag_or_tags: Union[Tag, List[Tag]], page_types=tag_panel_types
     # the original tag (not the translated tag).
     # In the second case, the translated pages will be tagged with
     # the translated tag.
-    all_tags = Tag.objects.filter(
-        translation_key__in=[tag.translation_key for tag in ensure_list(tag_or_tags)]
-    )
+    all_tags = Tag.objects.filter(translation_key=tag.translation_key)
     page_lists_by_type = [
         (page_type, page_type.for_tag(list(all_tags))) for page_type in page_types
     ]
 
-    def deduplicate(page_list):
-        """
-        Deduplicate by translation key, favouring pages in the current locale
-        """
-
-        # First filter out alias pages as they are simple duplicates
-        page_list = filter(lambda p: not p.alias_of, page_list)
-
-        # Sort by language code, reversed, so EN comes after PT - EN should be prioritised
-        # as some pages have been "translated" into PT but left in English. The actual English
-        # version should be prioritised.
-        page_list = sorted(
-            page_list, key=lambda p: p.locale.language_code, reverse=True
-        )
-
-        pages_by_trans_key = {}
-        for page in page_list:
-            found_page = pages_by_trans_key.get(page.translation_key)
-            # Always keep the page in the current locale
-            if not found_page or found_page.locale != current_locale:
-                pages_by_trans_key[page.translation_key] = page
-        return list(pages_by_trans_key.values())
-
     localized_pages_by_type = [
-        (page_type, list(sorted(deduplicate(page_list), key=lambda p: p.title)))
+        (
+            page_type,
+            list(
+                sorted(
+                    [page for page in page_list if page.locale == current_locale],
+                    key=lambda p: p.title,
+                )
+            ),
+        )
         for (page_type, page_list) in page_lists_by_type
     ]
 
@@ -112,23 +95,24 @@ def get_localized_title_for_page_type(page_type):
 
 
 def tag_panel(request, slug):
-    tags = get_list_or_404(Tag.objects.filter(slug=slug))
+    locale = Locale.get_active()
+    tag = get_object_or_404(Tag, slug=slug, locale=locale)
 
     pages = [
         (page_type, get_localized_title_for_page_type(page_type), page_list)
-        for (page_type, page_list) in pages_for_tag(tags, tag_panel_types)
+        for (page_type, page_list) in pages_for_tag(tag, tag_panel_types)
     ]
 
     if "Turbo-Frame" in request.headers:
         return render(
-            request, "logbooks/frames/tags.html", {"tag": tags[0], "pages": pages}
+            request, "logbooks/frames/tags.html", {"tag": tag, "pages": pages}
         )
     else:
         # If not a turbo frame, we need to render it with page chrome
         return render(
             request,
             "logbooks/standalone-views/tags.html",
-            {"tag": tags[0], "pages": pages},
+            {"tag": tag, "pages": pages},
         )
 
 
@@ -152,6 +136,7 @@ def metadata(request, page_id, **kwargs):
         {"page": page, "interactive": request.user.is_authenticated},
     )
 
+
 def page_tagcloud(request, page_id):
     page = get_object_or_404(Page.objects.filter(id=page_id).specific())
     return render(
@@ -159,6 +144,7 @@ def page_tagcloud(request, page_id):
         "logbooks/frames/page_tagcloud.html",
         {"page": page},
     )
+
 
 class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
     """

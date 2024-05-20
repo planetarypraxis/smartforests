@@ -186,20 +186,15 @@ class User(AbstractUser):
 
     @classmethod
     def for_tag(cls, tag_or_tags):
-        from smartforests.util import flatten_list
-        from logbooks.views import pages_for_tag, content_list_types
+        from logbooks.views import content_list_types
 
-        tagged_pages_groups = pages_for_tag(tag_or_tags, content_list_types)
+        contributors = set()
 
-        tagged_pages = flatten_list(items for t, items in tagged_pages_groups)
-
-        contributors = set(
-            flatten_list(
-                page.real_contributors
-                for page in tagged_pages
-                if hasattr(page, "real_contributors")
-            )
-        )
+        for page_type in content_list_types:
+            pages = page_type.for_tag(tag_or_tags)
+            for page in pages:
+                if hasattr(page, "real_contributors"):
+                    contributors = contributors.union(page.real_contributors)
 
         return list(sorted(contributors, key=lambda person: str(person)))
 
