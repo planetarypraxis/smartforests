@@ -87,8 +87,14 @@ def safe_flat_menu(context, *args, **kwargs):
         return ""
 
 
-@register.filter()
-def highlight_tags(content: SafeText):
+@register.simple_tag(takes_context=True)
+def highlight_tags(context, content: SafeText):
+    request = context.get("request")
+    if request and hasattr(request, "highlighted_tag_ids"):
+        highlighted_tag_ids = request.highlighted_tag_ids
+    else:
+        highlighted_tag_ids = []
+
     locale = Locale.get_active()
 
     content = str(content)
@@ -105,7 +111,9 @@ def highlight_tags(content: SafeText):
     for i, link in enumerate(links):
         content = content.replace(link, f"[#~{i}~#]")
 
-    tags = Tag.objects.filter(locale=locale, name__in=words)
+    tags = Tag.objects.filter(locale=locale, name__in=words).exclude(
+        id__in=highlighted_tag_ids
+    )
     for tag in tags:
         replace = rf"""
         \1<span class="filter-tag filter-tag-inline">
@@ -117,6 +125,7 @@ def highlight_tags(content: SafeText):
             </a>
         </span>\3
         """.strip()
+        prev_content = content
         content = re.sub(
             rf"({splitter})({tag.name})({splitter})",
             replace,
@@ -124,8 +133,14 @@ def highlight_tags(content: SafeText):
             count=1,
             flags=re.IGNORECASE,
         )
+        if content != prev_content:
+            # Only highlight a tag once per request
+            highlighted_tag_ids.append(tag.id)
 
     for i, link in enumerate(links):
         content = content.replace(f"[#~{i}~#]", link)
+
+    if request:
+        request.highlighted_tag_ids = highlighted_tag_ids
 
     return mark_safe(content)

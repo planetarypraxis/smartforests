@@ -109,7 +109,9 @@
     <div class="mb-6">
         {% if self.description %}
             <div class='logbook-entry'>
-                <div class="logbook-entry-card border-2">{{ self.description|richtext|highlight_tags }}</div>
+                <div class="logbook-entry-card border-2">
+                    {% highlight_tags self.description|richtext %}
+                </div>
             </div>
         {% endif %}
     </div>

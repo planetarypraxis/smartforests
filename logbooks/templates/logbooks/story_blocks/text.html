@@ -1,2 +1,2 @@
 {% load wagtailcore_tags ckwagtail_tags %}
-<div class='child-mb-0'>{{value|richtext|highlight_tags}}</div>
+<div class='child-mb-0'>{% highlight_tags value|richtext %}</div>
