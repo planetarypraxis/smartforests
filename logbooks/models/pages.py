@@ -257,7 +257,11 @@ class RadioArchivePage(RadioIndexPageMixin, IndexPage):
         verbose_name = "Radio archive page"
 
     def get_child_list_queryset(self, *args, **kwargs):
-        return EpisodePage.objects.live().filter(locale=self.locale)
+        return (
+            EpisodePage.objects.live()
+            .filter(locale=self.locale)
+            .select_related("audio", "image", "thumbnail")
+        )
 
 
 class RadioPlaylistIndexPage(RadioIndexPageMixin, IndexPage):
