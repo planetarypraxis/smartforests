@@ -259,8 +259,8 @@
 .filter-tag-inline {
   background: $soft-green;
   color: $dark-green;
-  font-family: $font-family-sans-serif !important;
-  font-size: $font-size-root !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
   padding: 4px 8px;
   text-transform: none;
 

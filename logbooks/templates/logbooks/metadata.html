@@ -13,7 +13,7 @@
   <section class="d-flex flex-column mb-3">
     <h4 class="mb-0">{% translate "Contributors" %}</h4>
     {% for user in page.real_contributors %}
-      <a class='d-block' href='{{ user.contributor_page.localized.link_url }}' data-turbo-frame="_top">
+      <a class='d-block' href='{{ user.contributor_page.link_url }}' data-turbo-frame="_top">
         {{ user }}
       </a>
       {% if interactive %}

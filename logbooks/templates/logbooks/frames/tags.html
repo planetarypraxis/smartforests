@@ -11,7 +11,7 @@
         {% translate "Tag" %}
       </div>
   
-      <h5 class="offcanvas-title text-capitalize text-reset fw-bold mt-1" id="offcanvasLabel">{{tag.localized.name}}</h5>
+      <h5 class="offcanvas-title text-capitalize text-reset fw-bold mt-1" id="offcanvasLabel">{{tag.name}}</h5>
     </div>
     
     {% if close is not False %}
@@ -56,7 +56,7 @@
 
     {% site_settings "map" as map_page %}
     <div class="pt-4 mt-auto mb-6">
-      <a href="{{ map_page.localized.url }}?filter={{tag.slug}}" data-turbo-frame="_top" class="btn btn-light rounded-3 fw-bold p-2">
+      <a href="{{ map_page.url }}?filter={{tag.slug}}" data-turbo-frame="_top" class="btn btn-light rounded-3 fw-bold p-2">
         <img src="{% static 'img/map.svg' %}" /> {% translate "View on Map" %} &rarr;
       </a>
     </div>

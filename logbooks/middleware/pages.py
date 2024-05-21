@@ -7,6 +7,7 @@ from logbooks.models.pages import (
     StoryIndexPage,
 )
 from smartforests.models import MapPage
+from wagtail.models import Locale
 
 
 class ImportantPagesMiddleware(object):
@@ -17,21 +18,24 @@ class ImportantPagesMiddleware(object):
         return self.get_response(request)
 
     def process_template_response(self, request, response):
+        locale = Locale.get_active()
         if response.context_data:
-            response.context_data["homepage"] = HomePage.objects.first()
+            response.context_data["homepage"] = HomePage.objects.filter(
+                locale=locale
+            ).first()
             response.context_data["important_pages"] = (
-                ImportantPagesMiddleware.get_menu_items()
+                ImportantPagesMiddleware.get_menu_items(locale)
             )
 
         return response
 
     @classmethod
-    def get_menu_items(self):
+    def get_menu_items(self, locale):
         return {
-            "home": HomePage.objects.first(),
-            "contributors": ContributorsIndexPage.objects.first(),
-            "map": MapPage.objects.first(),
-            "logbooks": LogbookIndexPage.objects.first(),
-            "stories": StoryIndexPage.objects.first(),
-            "radio": RadioIndexPage.objects.first(),
+            "home": HomePage.objects.filter(locale=locale).first(),
+            "contributors": ContributorsIndexPage.objects.filter(locale=locale).first(),
+            "map": MapPage.objects.filter(locale=locale).first(),
+            "logbooks": LogbookIndexPage.objects.filter(locale=locale).first(),
+            "stories": StoryIndexPage.objects.filter(locale=locale).first(),
+            "radio": RadioIndexPage.objects.filter(locale=locale).first(),
         }

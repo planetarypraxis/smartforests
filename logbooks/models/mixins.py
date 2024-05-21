@@ -439,52 +439,6 @@ class IndexPage(ChildListMixin, SeoMetadataMixin, BaseLogbooksPage):
     if not settings.DEBUG:
         max_count = 1
 
-    def get_child_list_queryset(self, *args, **kwargs):
-        """
-        Get all children in all locales by finding the IDs
-        of the children, then returning a query that matches
-        pages with these IDs.
-
-        This is necessary as it gives us the control we
-        need to (a) prioritize localized content and (b)
-        avoid showing duplicates.
-        """
-
-        # Start by getting the current locale's children - these must come first
-        # Exclude aliases (these are pages that have been duplicated and not yet translated)
-        children = (
-            super()
-            .get_child_list_queryset()
-            .filter(alias_of=None)
-            .values("id", "translation_key")
-        )
-
-        child_ids = [child["id"] for child in children]
-        translation_keys = [child["translation_key"] for child in children]
-
-        # Then get the parent pages for the other locales...
-        other_locale_parent_pages = Page.objects.filter(
-            translation_key=self.translation_key
-        ).exclude(id=self.id)
-
-        # ...and get the children of these pages, excluding pages where
-        # a translation has already been found
-        for page in other_locale_parent_pages:
-            children = (
-                page.get_children()
-                .live()
-                .exclude(translation_key__in=translation_keys)
-                .values("id", "translation_key")
-            )
-            for child in children:
-                child_ids.append(child["id"])
-                translation_keys.append(child["translation_key"])
-
-        # Sort by annotated field "is_current_locale" to show translated content first
-        return (
-            get_result_class(self.__class__).objects.filter(id__in=child_ids).specific()
-        )
-
     def get_filters(self, request):
         filter = {}
 

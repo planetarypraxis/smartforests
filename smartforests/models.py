@@ -14,7 +14,7 @@ from wagtail.images.models import (
     get_upload_to,
 )
 from wagtail.documents.models import Document, AbstractDocument
-from wagtail.models import Page
+from wagtail.models import Locale, Page
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from commonknowledge.django.images import generate_imagegrid_filename, render_image_grid
 from commonknowledge.helpers import ensure_list
@@ -174,7 +174,9 @@ class User(AbstractUser):
     # /-- wagtail autocomplete ends
 
     def contributor_page(self):
-        return self.contributor_pages.first()
+        locale = Locale.get_active()
+        qs = self.contributor_pages.filter(locale=locale)
+        return qs.first()
 
     def get_api_representation(self):
         return {
@@ -198,12 +200,11 @@ class User(AbstractUser):
 
         return list(sorted(contributors, key=lambda person: str(person)))
 
-    @property
-    def edited_content_pages(self):
+    def get_edited_content_pages(self, locale=None):
         from logbooks.models.mixins import ContributorMixin
         from logbooks.views import content_list_types
 
-        edited_pages = (
+        qs = (
             Page.objects.type(content_list_types)
             .filter(
                 abstract_page_query_filter(ContributorMixin, {"contributors": self})
@@ -214,13 +215,23 @@ class User(AbstractUser):
             .specific()
             .order_by("title")
         )
-        return set(edited_pages)
+
+        if locale is not None:
+            qs = qs.filter(locale=locale)
+
+        return qs
+
+    @property
+    def edited_content_pages(self):
+        return set(self.get_edited_content_pages())
 
     @property
     def edited_content_pages_localized(self):
+        locale = Locale.get_active()
+        pages = set(self.get_edited_content_pages(locale))
         return list(
             sorted(
-                list(set(p.localized for p in self.edited_content_pages)),
+                pages,
                 key=lambda p: p.title,
             )
         )

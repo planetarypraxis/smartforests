@@ -25,17 +25,6 @@
       const $items = $grid.find(".grid__item");
       $grid.masonry("appended", $items);
     });
-
-    //-------------------------------------//
-    // init Infinte Scroll
-
-    $grid.infiniteScroll({
-      path: ".next_page_link",
-      append: ".grid__item",
-      outlayer: msnry,
-      history: false,
-      status: ".page-load-status",
-    });
   };
 
   window.addEventListener("sf:layout", () => {

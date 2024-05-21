@@ -225,10 +225,11 @@ class PlaylistPageEpisode(Orderable):
 
 class RadioIndexPageMixin:
     def radio_parent_pages(self):
+        locale = Locale.get_active()
         return {
-            "home": RadioIndexPage.objects.first(),
-            "playlists": RadioPlaylistIndexPage.objects.first(),
-            "archive": RadioArchivePage.objects.first(),
+            "home": RadioIndexPage.objects.filter(locale=locale).first(),
+            "playlists": RadioPlaylistIndexPage.objects.filter(locale=locale).first(),
+            "archive": RadioArchivePage.objects.filter(locale=locale).first(),
         }
 
 
@@ -396,7 +397,9 @@ class LogbookPage(
 
         logbook_entry_logbooks = set(
             entry.get_parent().specific
-            for entry in LogbookEntryPage.for_tag(tag_or_tags, locale=locale).live().public()
+            for entry in LogbookEntryPage.for_tag(tag_or_tags, locale=locale)
+            .live()
+            .public()
         )
 
         return logbooks.union(logbook_entry_logbooks)
