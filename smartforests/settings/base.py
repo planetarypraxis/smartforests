@@ -363,6 +363,7 @@ CACHES = {
         "BACKEND": "django.core.cache.backends.db.DatabaseCache",
         "LOCATION": "django_database_cache",
         "TIMEOUT": os.getenv("CACHE_MIDDLEWARE_SECONDS") or 600,
+        "KEY_PREFIX": "wagtailcache",
     }
 }
 
