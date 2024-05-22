@@ -42,6 +42,8 @@ def ensure_list(list_or_el):
         return list_or_el
     if isinstance(list_or_el, tuple):
         return list(list_or_el)
+    if isinstance(list_or_el, QuerySet):
+        return list_or_el
     return [
         list_or_el,
     ]

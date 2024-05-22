@@ -621,7 +621,7 @@ class ContributorsIndexPage(IndexPage):
         if tag_filter is not None:
             try:
                 tags = Tag.objects.filter(slug=tag_filter)
-                filter["pk__in"] = ContributorPage.for_tag(tags)
+                filter["pk__in"] = [page.id for page in ContributorPage.for_tag(tags)]
 
             except Tag.DoesNotExist:
                 pass
