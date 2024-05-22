@@ -1,3 +1,5 @@
+import re
+
 from bs4 import BeautifulSoup
 from django.core.management.base import BaseCommand
 from django.db import transaction, models
@@ -13,30 +15,20 @@ class Command(BaseCommand):
             if not hasattr(page, "endnotes"):
                 continue
             endnotes = page.endnotes
-            if "DOI" not in endnotes:
+            if "BY-NC-SA" not in endnotes:
                 continue
-            html_content = BeautifulSoup(endnotes, features="lxml")
+            html_content = BeautifulSoup(endnotes, features="html.parser")
             ps = html_content.find_all("p")
             block_to_remove = None
             for p in ps:
                 text = p.get_text()
-                if "DOI" not in text:
+                if "BY-NC-SA" not in text:
                     continue
-                text = text.replace(
-                    "Smart Forests Atlas materials are free to use for non-commercial purposes "
-                    "(with attribution) under a CC BY-NC-SA 4.0 license. To cite this radio episode: ",
-                    "",
-                )
-                page.citation = text
+                parts = re.split(r"To cite this ([^:]+): ", text)
+                page.citation = parts[-1]
                 block_to_remove = p.attrs.get("data-block-key")
                 p.extract()
-                new_content = (
-                    str(html_content)
-                    .replace("<html>", "")
-                    .replace("<body>", "")
-                    .replace("</html>", "")
-                    .replace("</body>", "")
-                )
+                new_content = str(html_content)
                 page.endnotes = new_content
             print(f"Updated page: {page}")
             page.save()
@@ -48,19 +40,13 @@ class Command(BaseCommand):
                 ).specific()
                 for translated_page in translated_pages:
                     html_content = BeautifulSoup(
-                        translated_page.endnotes, features="lxml"
+                        translated_page.endnotes, features="html.parser"
                     )
                     ps = html_content.find_all("p")
                     for p in ps:
                         if p.attrs.get("data-block-key") == block_to_remove:
                             p.extract()
-                    new_content = (
-                        str(html_content)
-                        .replace("<html>", "")
-                        .replace("<body>", "")
-                        .replace("</html>", "")
-                        .replace("</body>", "")
-                    )
+                    new_content = str(html_content)
                     translated_page.endnotes = new_content
                     translated_page.citation = page.citation
                     translated_page.save()
