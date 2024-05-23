@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-17 10:56+0000\n"
+"POT-Creation-Date: 2024-05-23 10:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,6 +18,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: logbooks/models/mixins.py:92
+msgid "To cite this page: "
+msgstr "Para citar esta página: "
+
 #: logbooks/models/pages.py:55
 msgid "Story"
 msgstr "História"
@@ -26,35 +30,47 @@ msgstr "História"
 msgid "Stories"
 msgstr "Histórias"
 
-#: logbooks/models/pages.py:114
+#: logbooks/models/pages.py:85
+msgid "To cite this story: "
+msgstr "Para citar esta história: "
+
+#: logbooks/models/pages.py:118
 msgid "Radio Episode"
 msgstr "Episódio de Rádio"
 
-#: logbooks/models/pages.py:115
+#: logbooks/models/pages.py:119
 msgid "Radio Episodes"
 msgstr "Episódios de Rádio"
 
-#: logbooks/models/pages.py:271
+#: logbooks/models/pages.py:176
+msgid "To cite this radio episode: "
+msgstr "Para citar este episódio de rádio: "
+
+#: logbooks/models/pages.py:290
 msgid "Logbook Entry"
 msgstr "Entrada no diário de bordo"
 
-#: logbooks/models/pages.py:272
+#: logbooks/models/pages.py:291
 msgid "Logbook Entries"
 msgstr "Entradas no diário de bordo"
 
-#: logbooks/models/pages.py:319
+#: logbooks/models/pages.py:338
 msgid "Logbook"
 msgstr "Diário de bordo"
 
-#: logbooks/models/pages.py:320
+#: logbooks/models/pages.py:339
 msgid "Logbooks"
 msgstr "Diários de bordo"
 
-#: logbooks/models/pages.py:504
+#: logbooks/models/pages.py:472
+msgid "To cite this logbook: "
+msgstr "Para citar este diário de bordo: "
+
+#: logbooks/models/pages.py:532
 msgid "Contributor"
 msgstr "Contribuidor"
 
-#: logbooks/models/pages.py:505 logbooks/templates/logbooks/metadata.html:14
+#: logbooks/models/pages.py:533 logbooks/templates/logbooks/metadata.html:14
 msgid "Contributors"
 msgstr "Contribuidores"
 
@@ -107,9 +123,13 @@ msgid ""
 "purposes (with attribution) under a \n"
 "        <a href=\"https://creativecommons.org/licenses/by-nc-sa/4.0/\" "
 "target=\"_blank\">CC BY-NC-SA 4.0</a> license.\n"
-"        To cite this page:\n"
 "        "
-msgstr "\nOs materiais do Atlas das Florestas Inteligentes podem ser utilizados gratuitamente para fins não comerciais (com atribuição) ao abrigo de uma licença <a href=\"https://creativecommons.org/licenses/by-nc-sa/4.0/\">CC BY-NC-SA 4.0</a>. Para citar esta página: "
+msgstr ""
+"\n"
+"Os materiais do Atlas das Florestas Inteligentes podem ser utilizados "
+"gratuitamente para fins não comerciais (com atribuição) ao abrigo de uma "
+"licença <a href=\"https://creativecommons.org/licenses/by-nc-sa/4.0/\">CC BY-"
+"NC-SA 4.0</a>."
 
 #: logbooks/templates/logbooks/include/masonry.html:15
 msgid "Nothing found"

@@ -4,6 +4,7 @@ import urllib
 from django.conf import settings
 from django.core.files.storage import default_storage
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from wagtailautocomplete.edit_handlers import AutocompletePanel
 from commonknowledge.django.images import generate_imagegrid_filename, render_image_grid
 from commonknowledge.geo import get_coordinates_data, static_map_marker_image_url
@@ -80,6 +81,15 @@ class BaseLogbooksPage(Page):
     @property
     def page_type(self):
         return self._meta.verbose_name
+
+    @property
+    def citation_intro(self):
+        """
+        Added so that the citation itself can be left
+        untranslated, while the sentence as a whole
+        is translated.
+        """
+        return _("To cite this page: ")
 
     @property
     def link_url(self):

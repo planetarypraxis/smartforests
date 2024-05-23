@@ -80,6 +80,10 @@ class StoryPage(ArticlePage):
     def cover_image(self):
         return self.image
 
+    @property
+    def citation_intro(self):
+        return _("To cite this story: ")
+
     def get_first_image_from_body(self):
         images = self.body_images()
         if len(images) > 0:
@@ -166,6 +170,10 @@ class EpisodePage(ArticlePage):
     @property
     def cover_image(self):
         return self.image
+
+    @property
+    def citation_intro(self):
+        return _("To cite this radio episode: ")
 
 
 class PlaylistPage(ArticlePage):
@@ -458,6 +466,10 @@ class LogbookPage(
     @property
     def tag_cloud(self):
         return get_nodes_and_links(self.all_localized_tags)
+
+    @property
+    def citation_intro(self):
+        return _("To cite this logbook: ")
 
     @route(r"^(?P<path>.*)/?$")
     def serve_subpages_too(self, request, path, *args, **kwargs):

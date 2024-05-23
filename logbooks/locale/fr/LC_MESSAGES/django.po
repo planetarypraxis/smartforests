@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-17 10:56+0000\n"
+"POT-Creation-Date: 2024-05-23 10:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,6 +18,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
+#: logbooks/models/mixins.py:92
+msgid "To cite this page: "
+msgstr "Pour citer cette page: "
+
 #: logbooks/models/pages.py:55
 msgid "Story"
 msgstr "Histoire"
@@ -26,35 +30,47 @@ msgstr "Histoire"
 msgid "Stories"
 msgstr "Histoires"
 
-#: logbooks/models/pages.py:114
+#: logbooks/models/pages.py:85
+msgid "To cite this story: "
+msgstr "Pour citer cette histoire: "
+
+#: logbooks/models/pages.py:118
 msgid "Radio Episode"
 msgstr "Épisode radio"
 
-#: logbooks/models/pages.py:115
+#: logbooks/models/pages.py:119
 msgid "Radio Episodes"
 msgstr "Épisodes radio"
 
-#: logbooks/models/pages.py:271
+#: logbooks/models/pages.py:176
+msgid "To cite this radio episode: "
+msgstr "Pour citer cet épisode radio: "
+
+#: logbooks/models/pages.py:290
 msgid "Logbook Entry"
 msgstr "Entrée du journal de bord"
 
-#: logbooks/models/pages.py:272
+#: logbooks/models/pages.py:291
 msgid "Logbook Entries"
 msgstr "Entrée du journal de bord"
 
-#: logbooks/models/pages.py:319
+#: logbooks/models/pages.py:338
 msgid "Logbook"
 msgstr "Journal de bord"
 
-#: logbooks/models/pages.py:320
+#: logbooks/models/pages.py:339
 msgid "Logbooks"
 msgstr "Journaux de bord"
 
-#: logbooks/models/pages.py:504
+#: logbooks/models/pages.py:472
+msgid "To cite this logbook: "
+msgstr "Pour citer ce journal de bord: "
+
+#: logbooks/models/pages.py:532
 msgid "Contributor"
 msgstr "Contributeur"
 
-#: logbooks/models/pages.py:505 logbooks/templates/logbooks/metadata.html:14
+#: logbooks/models/pages.py:533 logbooks/templates/logbooks/metadata.html:14
 msgid "Contributors"
 msgstr "Contributeurs"
 
@@ -107,9 +123,8 @@ msgid ""
 "purposes (with attribution) under a \n"
 "        <a href=\"https://creativecommons.org/licenses/by-nc-sa/4.0/\" "
 "target=\"_blank\">CC BY-NC-SA 4.0</a> license.\n"
-"        To cite this page:\n"
 "        "
-msgstr "\nLe matériel de l'Atlas des forêts intelligentes est libre d'utilisation à des fins non commerciales (avec attribution) sous une licence <a href=\"https://creativecommons.org/licenses/by-nc-sa/4.0/\">CC BY-NC-SA 4.0</a>. Pour citer cette page:"
+msgstr "\nLe matériel de l'Atlas des forêts intelligentes est libre d'utilisation à des fins non commerciales (avec attribution) sous une licence <a href=\"https://creativecommons.org/licenses/by-nc-sa/4.0/\">CC BY-NC-SA 4.0</a>."
 
 #: logbooks/templates/logbooks/include/masonry.html:15
 msgid "Nothing found"
