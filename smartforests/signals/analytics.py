@@ -117,14 +117,19 @@ def workflow_submitted(sender, instance, user, **kwargs):
     if user is None:
         return
 
+    page = instance.content_object
+
+    if page is None:
+        return
+
     identify_user(user)
 
     posthog.capture(
         user.id,
         event='workflow submitted',
         properties={'id': instance.id, 'workflow': instance.workflow.name,
-                    'page': instance.page.title,
-                    'pageType': instance.page.specific_class._meta.verbose_name}
+                    'page': page.title,
+                    'pageType': page._meta.verbose_name}
     )
 
 
@@ -135,14 +140,19 @@ def workflow_rejected(sender, instance, user, **kwargs):
     if user is None:
         return
 
+    page = instance.content_object
+
+    if page is None:
+        return
+
     identify_user(user)
 
     posthog.capture(
         user.id,
         event='workflow rejected',
         properties={'id': instance.id, 'workflow': instance.workflow.name,
-                    'page': instance.page.title,
-                    'pageType': instance.page.specific_class._meta.verbose_name}
+                    'page': page.title,
+                    'pageType': page.specific_class._meta.verbose_name}
     )
 
 
@@ -153,14 +163,19 @@ def workflow_approved(sender, instance, user, **kwargs):
     if user is None:
         return
 
+    page = instance.content_object
+
+    if page is None:
+        return
+
     identify_user(user)
 
     posthog.capture(
         user.id,
         event='workflow approved',
         properties={'id': instance.id, 'workflow': instance.workflow.name,
-                    'page': instance.page.title,
-                    'pageType': instance.page.specific_class._meta.verbose_name}
+                    'page': page.title,
+                    'pageType': page.specific_class._meta.verbose_name}
     )
 
 
@@ -172,12 +187,17 @@ def workflow_cancelled(sender, instance, user, **kwargs):
     if user is None:
         return
 
+    page = instance.content_object
+
+    if page is None:
+        return
+
     posthog.capture(
         user.id,
         event='workflow cancelled',
         properties={'id': instance.id, 'workflow': instance.workflow.name,
-                    'page': instance.page.title,
-                    'pageType': instance.page.specific_class._meta.verbose_name}
+                    'page': page.title,
+                    'pageType': page.specific_class._meta.verbose_name}
     )
 
 
@@ -188,8 +208,10 @@ def task_submitted(sender, instance, user, **kwargs):
     if user is None:
         return
 
-    page = instance.workflow_state.page
-    identify_user(user)
+    page = instance.revision.content_object if instance.revision else None
+
+    if page is None:
+        return
 
     posthog.capture(
         user.id,
@@ -197,7 +219,7 @@ def task_submitted(sender, instance, user, **kwargs):
         properties={'id': instance.id, 'status': instance.status,
                     'task': instance.task.name, 'workflow': instance.workflow_state.workflow.name,
                     'page': page.title,
-                    'pageType': page.specific_class._meta.verbose_name}
+                    'pageType': page._meta.verbose_name}
     )
 
 

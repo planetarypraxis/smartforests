@@ -1,5 +1,5 @@
 {% load static wagtailcore_tags %}
-
+{% if episode %}
 <button class="text-white btn btn-link {{ extra_classes }}" title="Play episode: {{episode.title}}" type="button" aria-controls="radioPlayer" {% if preload %} data-smartforests-should-preload-episode {% endif %} data-smartforests-radio-play-button data-smartforests-audio="{{ episode.audio.file.url }}" data-smartforests-page-url="{% pageurl episode %}" data-smartforests-owner="{{ episode.real_contributors | join:' / ' }}" data-smartforests-last-published-at="{{ episode.last_published_at|date:'SHORT_DATE_FORMAT' }}" data-smartforests-title="{{ episode.title }}" data-smartforests-image="{{ episode.image.file.url }}">
     {% if large == True %}
     <img class="play-button" style="width: 50px" src="{% static 'img/button-play-dark.svg' %}" alt="Play episode: {{episode.title}}"/>
@@ -9,3 +9,4 @@
     <img class="pause-button d-none" style="width: 20px" src="{% static 'img/button-pause-dark.svg' %}" alt="Pause episode: {{episode.title}}"/>
     {% endif %}
 </button>
+{% endif %}
