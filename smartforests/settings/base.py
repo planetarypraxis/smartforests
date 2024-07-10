@@ -337,7 +337,7 @@ WAGTAILLOCALIZE_MACHINE_TRANSLATOR = {
                 },
             },
             "GOOGLE": {
-                "CLASS": "wagtail_localize.machine_translators.google.GoogleCloudTranslator",
+                "CLASS": "smartforests.machine_translators.GoogleCloudTranslator",
                 "OPTIONS": {
                     "CREDENTIALS_PATH": os.path.join(
                         BASE_DIR, "google_credentials.json"
