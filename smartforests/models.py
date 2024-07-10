@@ -1,8 +1,13 @@
+import re
+import willow
+from io import BytesIO
+
 from django.contrib.auth.models import AbstractUser
 from django.core.files.storage import default_storage
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.conf import settings
 from django.utils.translation import pgettext_lazy
 from taggit.models import TagBase
@@ -11,6 +16,7 @@ from wagtail.images.models import (
     AbstractImage,
     AbstractRendition,
     WagtailImageField,
+    WagtailImageFieldFile,
     get_upload_to,
 )
 from wagtail.documents.models import Document, AbstractDocument
@@ -18,7 +24,6 @@ from wagtail.models import Locale, Page
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from commonknowledge.django.images import generate_imagegrid_filename, render_image_grid
 from commonknowledge.helpers import ensure_list
-import re
 from wagtail.api.conf import APIField
 from wagtail.snippets.models import register_snippet
 from wagtail.api.v2.utils import get_full_url
@@ -247,24 +252,66 @@ class User(AbstractUser):
         )
 
 
-def image_size_validator(image):
-    max_width = 1024
-    max_size = max_width * max_width
-    image_size = image.width * image.height if image.width and image.height else 0
-    if image_size > max_size:
-        raise ValidationError(
-            f"Image size needs to be less than {max_size} pixels, "
-            f"e.g. {max_width}x{max_width} or {max_width * 2}x{int(max_width / 2)}"
-        )
+class CmsImageField(WagtailImageField):
+    """
+    Resize the uploaded image to have a maximum side width of 1024px.
+    """
+    def clean(self, value, model_instance: models.Model | None):
+        value = super().clean(value, model_instance)
+        close = value.closed
+        old_file = None
+        try:
+            value.open()
+            image = willow.Image.open(value)
+            size = image.get_size()
+            if not size:
+                raise ValidationError("Could not calculate image size")
+            (width, height) = size
+            image_size = width * height
 
+            max_width = 1024
+            max_size = max_width * max_width
+            if image_size < max_size:
+                return value
+
+            if width > height:
+                new_width = max_width
+                new_height = int(height * max_width / width)
+            else:
+                new_height = max_width
+                new_width = int(width * max_width / height)
+            image = image.resize((new_width, new_height))
+
+            image_bytes = BytesIO()
+            image.save_as_png(image_bytes)
+
+            new_file = InMemoryUploadedFile(
+                file=image_bytes,
+                field_name=value.file.field_name,
+                name=f"{value.file.name}-resized.png",
+                content_type="image/png",
+                size=image_bytes.getbuffer().nbytes,
+                charset=None,
+                content_type_extra={}
+            )
+            old_file = value.file
+            value.file = new_file
+        finally:
+            if close:
+                value.close()
+            else:
+                value.seek(0)
+            if old_file:
+                old_file.close()
+        value._dimensions_cache = value.get_image_dimensions()
+        return value
 
 class CmsImage(AbstractImage):
-    file = WagtailImageField(
+    file = CmsImageField(
         verbose_name="file",
         upload_to=get_upload_to,
         width_field="width",
         height_field="height",
-        validators=[image_size_validator],
     )
 
     import_ref = models.CharField(max_length=1024, null=True, blank=True)
