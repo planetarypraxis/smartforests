@@ -29,27 +29,29 @@ def remove_page_listing_button_item(buttons, page, page_perms, context=None):
     """
     Disallow non-admins from deleting pages via the listing
     """
-    is_superuser = "request" in context and context["request"].user.is_superuser
+    user = context["request"].user if "request" in context else None
+    is_superuser = user.is_superuser if user else False
     if not is_superuser:
         more_actions_dropdown = buttons.pop()
-        buttons.append(ButtonWithDropdownFromHookExcludingDelete(more_actions_dropdown))
+        buttons.append(ButtonWithDropdownFromHookExcludingDelete(more_actions_dropdown, user, page_perms))
     return buttons
 
 
 class ButtonWithDropdownFromHookExcludingDelete(ButtonWithDropdownFromHook):
     template_name = "wagtailadmin/pages/listing/_button_with_dropdown.html"
 
-    def __init__(self, base_class, **kwargs):
+    def __init__(self, base_class, user, page_perms, **kwargs):
         self.hook_name = base_class.hook_name
         self.page = base_class.page
-        self.page_perms = base_class.page_perms
+        self.page_perms = page_perms
         self.next_url = base_class.next_url
 
         super().__init__(
             base_class.label,
             hook_name=base_class.hook_name,
             page=base_class.page,
-            page_perms=base_class.page_perms,
+            user=user,
+            page_perms=page_perms,
             next_url=base_class.next_url,
             **kwargs
         )
