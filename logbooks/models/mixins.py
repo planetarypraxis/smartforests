@@ -404,11 +404,13 @@ class ThumbnailMixin(BaseLogbooksPage):
 
     def save(self, *args, regenerate_thumbnails=True, **kwargs):
         if regenerate_thumbnails:
-
             page = self
             while isinstance(page, ThumbnailMixin):
                 regenerate_page_thumbnails(page.id)
-                page = page.get_parent().specific
+                try:
+                    page = page.get_parent().specific
+                except Page.DoesNotExist:
+                    break
 
         return super().save(*args, **kwargs)
 

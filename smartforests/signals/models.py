@@ -3,6 +3,7 @@ from django.dispatch import receiver
 from logbooks.models.mixins import ContributorMixin
 from logbooks.models.pages import LogbookEntryPage
 from wagtail.signals import page_published
+from wagtail.models import Page
 
 from logbooks.tasks import regenerate_page_thumbnails
 
@@ -28,8 +29,11 @@ def logbookentrypage_delete_signal(sender, instance, using, **kwargs):
     '''
     Regenerate thumbnails for parent page, when a child page is deleted
     '''
-    if instance.live:
-        # Unpublish so its images aren't included in the parent's thumbnail
-        instance.live = False
-        instance.save()
-    regenerate_page_thumbnails(instance.get_parent().id)
+    try:
+        if instance.live:
+            # Unpublish so its images aren't included in the parent's thumbnail
+            instance.live = False
+            instance.save()
+            regenerate_page_thumbnails(instance.get_parent().id)
+    except Page.DoesNotExist:
+        pass

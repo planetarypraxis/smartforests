@@ -230,7 +230,10 @@ def task_rejected(sender, instance, user, **kwargs):
     if user is None:
         return
 
-    page = instance.workflow_state.page
+    page = instance.revision.content_object if instance.revision else None
+
+    if page is None:
+        return
 
     identify_user(user)
     posthog.capture(
@@ -250,7 +253,11 @@ def task_approved(sender, instance, user, **kwargs):
     if user is None:
         return
 
-    page = instance.workflow_state.page
+    page = instance.revision.content_object if instance.revision else None
+
+    if page is None:
+        return
+
     identify_user(user)
     posthog.capture(
         user.id,
@@ -269,7 +276,11 @@ def task_cancelled(sender, instance, user, **kwargs):
     if user is None:
         return
 
-    page = instance.workflow_state.page
+    page = instance.revision.content_object if instance.revision else None
+
+    if page is None:
+        return
+
     identify_user(user)
     posthog.capture(
         user.id,
