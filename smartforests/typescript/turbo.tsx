@@ -1,5 +1,5 @@
 import React, { createContext, FC, useContext, useEffect, useMemo, useRef, useState } from "react";
-import qs, { ParsedQuery } from 'query-string'
+import qs, { ParsedQuery } from "query-string";
 
 export interface TurboFrameElement extends HTMLElement {
   src?: string;
@@ -7,44 +7,41 @@ export interface TurboFrameElement extends HTMLElement {
 }
 
 function getParams() {
-  if (typeof window === 'undefined') return {}
-  return qs.parseUrl(window.location.toString()).query
+  if (typeof window === "undefined") return {};
+  return qs.parseUrl(window.location.toString()).query;
 }
 
-export const TurboURLParamsContext = createContext([
-  getParams(),
-  (query: object) => { }
-] as const)
+export const TurboURLParamsContext = createContext([getParams(), (query: object) => {}] as const);
 
 export function TurboURLParamsContextProvider({ children }) {
-  const [params, _setParams] = useState(getParams())
+  const [params, _setParams] = useState(getParams());
 
   function updateParams() {
-    _setParams(getParams())
+    _setParams(getParams());
   }
 
   useEffect(() => {
-    window.addEventListener("turbo:visit", updateParams);
-    return () => window.addEventListener("turbo:visit", updateParams);
-  }, [])
+    window.addEventListener("turbo:render", updateParams);
+    return () => window.removeEventListener("turbo:render", updateParams);
+  }, []);
 
   function setParams(query) {
     // @ts-ignore
     Turbo.visit(
       qs.stringifyUrl({
         url: window.location.toString(),
-        query
+        query,
       })
-    )
+    );
   }
 
-  const args = useMemo(() => [params, setParams], [params])
+  const args = useMemo(() => [params, setParams], [params]);
 
-  return <TurboURLParamsContext.Provider value={args as any}>
-    {children}
-  </TurboURLParamsContext.Provider>
+  return (
+    <TurboURLParamsContext.Provider value={args as any}>{children}</TurboURLParamsContext.Provider>
+  );
 }
 
 export function useTurboURLParams() {
-  return useContext(TurboURLParamsContext)
+  return useContext(TurboURLParamsContext);
 }
