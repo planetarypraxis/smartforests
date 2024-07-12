@@ -368,7 +368,7 @@ CACHES = {
 }
 
 
-USE_PROFILING = os.getenv("USE_PROFILING", True)
+USE_PROFILING = os.getenv("USE_PROFILING", False)
 
 def custom_show_pyinstrument(request):
     return request.user.is_superuser
