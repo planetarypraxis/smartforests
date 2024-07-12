@@ -216,8 +216,8 @@ class MapSearchViewset(viewsets.ReadOnlyModelViewSet, LocaleFromLanguageCode):
             if tag_ids:
                 tagged_pages = []
                 for PageClass in self.page_types:
-                    tagged_pages += PageClass.for_tag(tag_ids)
-                return filter(lambda p: p.locale == locale, tagged_pages)
+                    tagged_pages += PageClass.for_tag(tag_ids, locale=locale)
+                return tagged_pages
 
         # If no filters, return all possible geo pages
         return (
