@@ -100,7 +100,7 @@ def highlight_tags(context, content: SafeText):
     content = str(content)
 
     words = set()
-    splitter = r"[ !#()-;:'\",./<>]" if locale.language_code == "hi" else r"\b"
+    splitter = r"[ !#()\-;:'\",./<>&]"
     for word in re.split(splitter, content):
         words.add(word)
         words.add(word.lower())
@@ -127,7 +127,7 @@ def highlight_tags(context, content: SafeText):
         """.strip()
         prev_content = content
         content = re.sub(
-            rf"({splitter})({tag.name})({splitter})",
+            rf"({splitter})({re.escape(tag.name)})({splitter})",
             replace,
             content,
             count=1,
