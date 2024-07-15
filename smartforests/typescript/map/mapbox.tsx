@@ -12,7 +12,7 @@ import { useSize } from "./data";
 import { AtlasPageFeatureLayer } from "./layers";
 import { unmountComponentAtNode } from "react-dom";
 import { useAtom } from "jotai";
-import { viewportAtom } from "./state";
+import { useFilterParam, viewportAtom, DEFAULT_VIEWPORT } from "./state";
 import { TurboURLParamsContextProvider, useTurboURLParams } from "../turbo";
 import { getLanguageCode } from "../pageContext";
 
@@ -211,6 +211,7 @@ function FilterPopover() {
 }
 
 export function FilterControl() {
+  const [_, setViewport] = useAtom(viewportAtom);
   const map: mapboxgl.Map = useContext(MapContext);
   useEffect(() => {
     const control = new FilterControlRenderer();
@@ -218,5 +219,18 @@ export function FilterControl() {
     map?.addControl(control, "top-left");
     return () => void map?.removeControl(control as any);
   }, [map]);
+
+  const tag = useFilterParam();
+  useEffect(() => {
+    if (!map) {
+      return;
+    }
+    map.flyTo({
+      center: [DEFAULT_VIEWPORT.longitude, DEFAULT_VIEWPORT.latitude],
+      zoom: DEFAULT_VIEWPORT.zoom,
+    });
+    setViewport(DEFAULT_VIEWPORT);
+  }, [map, tag]);
+
   return null;
 }

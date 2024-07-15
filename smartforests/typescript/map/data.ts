@@ -3,7 +3,7 @@ import useResizeObserver from "@react-hook/resize-observer";
 import type { ClusteredFeature, Viewport } from "superclusterd";
 import { SmartForest } from "./types";
 import { stringifyQuery } from "./state";
-import Supercluster from 'supercluster'
+import Supercluster from "supercluster";
 import useSWR from "swr";
 import WebMercatorViewport from "@math.gl/web-mercator";
 import { FeatureCollection, Point } from "geojson";
@@ -23,36 +23,37 @@ export const useFeatures = <T>(
     useMemo(() => getFeaturesUrl(getQuery()), deps)
   );
 
-
 function useClusteredMapDataLocal<T>(
   dimensions: {
-    width: number
-    height: number
+    width: number;
+    height: number;
   },
   viewport: Viewport,
   url: string
 ): ClusteredFeature<T>[] {
-  const [state, setState] = useState<ClusteredFeature<T>[]>([])
+  const [state, setState] = useState<ClusteredFeature<T>[]>([]);
 
   const data = useSWR(
     url,
     async (url) => {
-      const data: FeatureCollection<Point, T> = await fetch(url).then((response) => response.json())
+      const data: FeatureCollection<Point, T> = await fetch(url).then((response) =>
+        response.json()
+      );
       const supercluster = new Supercluster<T>({
         map: (props) => {
           return {
-            features: [props]
-          }
+            features: [props],
+          };
         },
         reduce: (accumulated, props) => {
-          accumulated.features = [...accumulated.features, ...props.features]
+          accumulated.features = [...accumulated.features, ...props.features];
         },
       });
-      supercluster.load(data.features)
+      supercluster.load(data.features);
       return {
         supercluster,
-        data
-      }
+        data,
+      };
     },
     { revalidateOnFocus: false, revalidateOnReconnect: false }
   );
@@ -68,11 +69,11 @@ function useClusteredMapDataLocal<T>(
     });
 
     const bounds = projection.getBounds();
-    const bbox = [...bounds[0], ...bounds[1]] as any
+    const bbox = [...bounds[0], ...bounds[1]] as any;
 
     // Generate clusters
-    const clusters = data.data?.supercluster?.getClusters(bbox, projection.zoom)
-    setState(clusters)
+    const clusters = data.data?.supercluster?.getClusters(bbox, projection.zoom);
+    setState(clusters);
   }, [
     data.data,
     dimensions.width,
@@ -80,9 +81,9 @@ function useClusteredMapDataLocal<T>(
     viewport.latitude,
     viewport.longitude,
     viewport.zoom,
-  ])
+  ]);
 
-  return state
+  return state;
 }
 
 export const useSize = (target: RefObject<HTMLElement>) => {

@@ -13,11 +13,12 @@ export const focusTypeAtom = atom<FocusType | "">("");
 type FocusSource = "list" | "map" | "url";
 export const focusSourceAtom = atom<FocusSource | "">("url");
 
-export const viewportAtom = atom<MapViewport>({
+export const DEFAULT_VIEWPORT = {
   latitude: 20,
   longitude: 0,
   zoom: 1.15,
-});
+};
+export const viewportAtom = atom<MapViewport>(DEFAULT_VIEWPORT);
 
 export const isFocused = atomFamily((FocusId: FocusID) =>
   atom(
