@@ -1,4 +1,5 @@
 import re
+import logging
 from urllib import parse
 from wagtail.blocks.base import Block
 
@@ -12,6 +13,7 @@ from smartforests.models import Tag
 
 register = template.Library()
 
+logger = logging.getLogger(__name__)
 
 @register.inclusion_tag("ckwagtail/include/menubar.html", takes_context=True)
 def menubar(context, **kwargs):
@@ -105,6 +107,9 @@ def highlight_tags(context, content: SafeText):
         words.add(word)
         words.add(word.lower())
 
+    logger.info(f"Wordlist to highlight: {words}")
+    logger.info(f"Already highlighted: {highlighted_tag_ids}")
+
     # Remove links and re-insert after highlighting tags
     # Matching tags inside <a> tags breaks them
     links = re.findall(r"<a[^<]*</a>", content, re.IGNORECASE)
@@ -114,6 +119,9 @@ def highlight_tags(context, content: SafeText):
     tags = Tag.objects.filter(locale=locale, name__in=words).exclude(
         id__in=highlighted_tag_ids
     )
+
+    logger.info(f"Tags found: {list(tags)}")
+
     for tag in tags:
         replace = rf"""
         \1<span class="filter-tag filter-tag-inline">
@@ -136,6 +144,8 @@ def highlight_tags(context, content: SafeText):
         if content != prev_content:
             # Only highlight a tag once per request
             highlighted_tag_ids.append(tag.id)
+        else:
+            logger.error(f"Failed to convert {tag.id}: {tag.name} to tag")
 
     for i, link in enumerate(links):
         content = content.replace(f"[#~{i}~#]", link)
