@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-23 10:02+0000\n"
+"POT-Creation-Date: 2024-07-16 11:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,57 +22,61 @@ msgstr ""
 msgid "To cite this page: "
 msgstr "Para citar esta página: "
 
-#: logbooks/models/pages.py:55
+#: logbooks/models/pages.py:57
 msgid "Story"
 msgstr "Historia"
 
-#: logbooks/models/pages.py:56
+#: logbooks/models/pages.py:58
 msgid "Stories"
 msgstr "Historias"
 
-#: logbooks/models/pages.py:85
+#: logbooks/models/pages.py:87
 msgid "To cite this story: "
 msgstr "Para citar esta historia: "
 
-#: logbooks/models/pages.py:118
+#: logbooks/models/pages.py:120
 msgid "Radio Episode"
 msgstr "Episodio de radio"
 
-#: logbooks/models/pages.py:119
+#: logbooks/models/pages.py:121
 msgid "Radio Episodes"
 msgstr "Episodios de radio"
 
-#: logbooks/models/pages.py:176
+#: logbooks/models/pages.py:178
 msgid "To cite this radio episode: "
 msgstr "Para citar este episodio de radio: "
 
-#: logbooks/models/pages.py:290
+#: logbooks/models/pages.py:292
 msgid "Logbook Entry"
 msgstr "Entrada de bitácoria"
 
-#: logbooks/models/pages.py:291
+#: logbooks/models/pages.py:293
 msgid "Logbook Entries"
 msgstr "Entradas de bitácoria"
 
-#: logbooks/models/pages.py:338
+#: logbooks/models/pages.py:340
 msgid "Logbook"
 msgstr "Bitácoria"
 
-#: logbooks/models/pages.py:339
+#: logbooks/models/pages.py:341
 msgid "Logbooks"
 msgstr "Bitácorias"
 
-#: logbooks/models/pages.py:472
+#: logbooks/models/pages.py:474
 msgid "To cite this logbook: "
 msgstr "Para citar esta bitácoria: "
 
-#: logbooks/models/pages.py:532
+#: logbooks/models/pages.py:534
 msgid "Contributor"
 msgstr "Colaborador"
 
-#: logbooks/models/pages.py:533 logbooks/templates/logbooks/metadata.html:14
+#: logbooks/models/pages.py:535 logbooks/templates/logbooks/metadata.html:14
 msgid "Contributors"
 msgstr "Colaboradores"
+
+#: logbooks/models/pages.py:690
+msgid "Uncategorized"
+msgstr "Sin categoría"
 
 #: logbooks/templates/logbooks/content_entry/logbook_entry.html:11
 msgid "By"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-23 11:20+0000\n"
+"POT-Creation-Date: 2024-07-16 11:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,12 +18,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: smartforests/models.py:34
+#: smartforests/models.py:39
 msgctxt "A tag name"
 msgid "name"
 msgstr "नाम"
 
-#: smartforests/models.py:37
+#: smartforests/models.py:42
 msgctxt "A tag slug"
 msgid "slug"
 msgstr "स्लग"
@@ -81,7 +81,7 @@ msgid "Tag"
 msgstr "टैग"
 
 #: smartforests/templates/base.html:78
-#: smartforests/templates/menus/header.html:212
+#: smartforests/templates/menus/header.html:216
 msgid "Loading"
 msgstr "लोड हो रहा है"
 
@@ -105,16 +105,16 @@ msgstr "एपीआई दस्तावेज़"
 msgid "Toggle navigation"
 msgstr "नेविगेशन टॉगल करें"
 
-#: smartforests/templates/menus/header.html:83
+#: smartforests/templates/menus/header.html:85
 msgid "Toggle search"
 msgstr "खोज टॉगल करें"
 
-#: smartforests/templates/menus/header.html:84
-#: smartforests/templates/menus/header.html:187
+#: smartforests/templates/menus/header.html:86
+#: smartforests/templates/menus/header.html:191
 msgid "Search"
 msgstr "खोजें"
 
-#: smartforests/templates/menus/header.html:112
+#: smartforests/templates/menus/header.html:114
 msgid "Menu"
 msgstr "मेनू"
 

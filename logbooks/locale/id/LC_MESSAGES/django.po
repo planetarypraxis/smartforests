@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-23 10:36+0000\n"
+"POT-Creation-Date: 2024-07-16 11:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,57 +22,61 @@ msgstr ""
 msgid "To cite this page: "
 msgstr "Untuk mengutip halaman ini: "
 
-#: logbooks/models/pages.py:55
+#: logbooks/models/pages.py:57
 msgid "Story"
 msgstr "Cerita"
 
-#: logbooks/models/pages.py:56
+#: logbooks/models/pages.py:58
 msgid "Stories"
 msgstr "Cerita"
 
-#: logbooks/models/pages.py:85
+#: logbooks/models/pages.py:87
 msgid "To cite this story: "
 msgstr "Untuk mengutip cerita ini: "
 
-#: logbooks/models/pages.py:118
+#: logbooks/models/pages.py:120
 msgid "Radio Episode"
 msgstr "Episode Radio"
 
-#: logbooks/models/pages.py:119
+#: logbooks/models/pages.py:121
 msgid "Radio Episodes"
 msgstr "Episode Radio"
 
-#: logbooks/models/pages.py:176
+#: logbooks/models/pages.py:178
 msgid "To cite this radio episode: "
 msgstr "Untuk mengutip episode radio ini: "
 
-#: logbooks/models/pages.py:290
+#: logbooks/models/pages.py:292
 msgid "Logbook Entry"
 msgstr "Entri Buku Catatan"
 
-#: logbooks/models/pages.py:291
+#: logbooks/models/pages.py:293
 msgid "Logbook Entries"
 msgstr "Entri Buku Catatan"
 
-#: logbooks/models/pages.py:338
+#: logbooks/models/pages.py:340
 msgid "Logbook"
 msgstr "Buku Catatan"
 
-#: logbooks/models/pages.py:339
+#: logbooks/models/pages.py:341
 msgid "Logbooks"
 msgstr "Buku catatan"
 
-#: logbooks/models/pages.py:472
+#: logbooks/models/pages.py:474
 msgid "To cite this logbook: "
 msgstr "Untuk mengutip buku catatan ini: "
 
-#: logbooks/models/pages.py:532
+#: logbooks/models/pages.py:534
 msgid "Contributor"
 msgstr "Kontributor"
 
-#: logbooks/models/pages.py:533 logbooks/templates/logbooks/metadata.html:14
+#: logbooks/models/pages.py:535 logbooks/templates/logbooks/metadata.html:14
 msgid "Contributors"
 msgstr "Kontributor"
+
+#: logbooks/models/pages.py:690
+msgid "Uncategorized"
+msgstr "Tidak dikategorikan"
 
 #: logbooks/templates/logbooks/content_entry/logbook_entry.html:11
 msgid "By"

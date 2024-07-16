@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-23 10:36+0000\n"
+"POT-Creation-Date: 2024-07-16 11:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,12 +18,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: smartforests/models.py:34
+#: smartforests/models.py:39
 msgctxt "A tag name"
 msgid "name"
 msgstr "nama"
 
-#: smartforests/models.py:37
+#: smartforests/models.py:42
 msgctxt "A tag slug"
 msgid "slug"
 msgstr "siput"
@@ -82,7 +82,7 @@ msgid "Tag"
 msgstr "Tandai"
 
 #: smartforests/templates/base.html:78
-#: smartforests/templates/menus/header.html:212
+#: smartforests/templates/menus/header.html:216
 msgid "Loading"
 msgstr "Memuat"
 
@@ -106,16 +106,16 @@ msgstr "dokumen API"
 msgid "Toggle navigation"
 msgstr "Alihkan navigasi"
 
-#: smartforests/templates/menus/header.html:83
+#: smartforests/templates/menus/header.html:85
 msgid "Toggle search"
 msgstr "Alihkan pencarian"
 
-#: smartforests/templates/menus/header.html:84
-#: smartforests/templates/menus/header.html:187
+#: smartforests/templates/menus/header.html:86
+#: smartforests/templates/menus/header.html:191
 msgid "Search"
 msgstr "Cari"
 
-#: smartforests/templates/menus/header.html:112
+#: smartforests/templates/menus/header.html:114
 msgid "Menu"
 msgstr "Tidak bisa"
 

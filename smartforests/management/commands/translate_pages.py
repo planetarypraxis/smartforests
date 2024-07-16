@@ -7,6 +7,7 @@ from logbooks.models import (
     StoryPage,
     EpisodePage,
     ContributorPage,
+    PlaylistPage,
 )
 from requests.exceptions import JSONDecodeError
 from smartforests.models import User
@@ -91,6 +92,7 @@ class Command(BaseCommand):
                 StoryPage,
                 EpisodePage,
                 ContributorPage,
+                PlaylistPage,
             ]:
                 last_class = page_class
                 pages = page_class.objects.order_by("id").live().specific()

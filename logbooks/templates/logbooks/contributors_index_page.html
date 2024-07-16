@@ -1,3 +1,11 @@
 {% extends "logbooks/index_page_base.html" %}
+{% block index_content %}
+{% for tag_name, child_list_page in child_list_pages %}
+<h2 class="fw-bold mb-3">{{ tag_name|title }}</h2>
+<div class="mb-5">
+{% include "logbooks/include/masonry.html" with contents=child_list_page %}
+</div>
+{% endfor %}
+{% endblock %}
 {% block filter_mobile %}{% endblock %}
 {% block filter_desktop %}{% endblock %}

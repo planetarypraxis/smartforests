@@ -60,4 +60,4 @@ class LocalizedTaggableManager(ClusterTaggableManager):
         # The tag field updates tags by name, which means we get duplicate tags associated
         # with the instance (e.g. datafication (en) and datafication (fr)).
         # The below line deduplicates those tags.
-        instance.tags.set(tags)
+        getattr(instance, self.attname).set(tags)

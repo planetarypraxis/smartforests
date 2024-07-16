@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.db.models import Q
 from django.db.models.fields import CharField
 from django.db.models.fields.related import ForeignKey
 from django.template.loader import render_to_string
@@ -9,6 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from modelcluster.fields import ParentalKey
 from wagtail.models import Page
 from smartforests.models import Tag, User
+from smartforests.util import ensure_list
 from wagtail.admin.panels import FieldPanel, InlinePanel, MultipleChooserPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.fields import RichTextField
@@ -543,6 +545,7 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
     byline = CharField(max_length=1000, blank=True, null=True)
     avatar = ForeignKey(CmsImage, on_delete=models.SET_NULL, null=True, blank=True)
     bio = RichTextField(blank=True, null=True)
+    tags = LocalizedTaggableManager(through=AtlasTag, blank=True)
 
     content_panels = [
         FieldPanel("title", classname="full title"),
@@ -550,6 +553,7 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
         FieldPanel("avatar"),
         AutocompletePanel("user"),
         FieldPanel("bio"),
+        FieldPanel("tags"),
     ] + GeocodedMixin.content_panels
 
     seo_image_sources = ["og_image", "avatar", "default_seo_image"]
@@ -576,9 +580,9 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
             return []
 
         locale = Locale.get_active()
-        translation_keys = self.user.edited_tags.values_list(
-            "translation_key", flat=True
-        )
+        translation_keys = list(
+            self.user.edited_tags.values_list("translation_key", flat=True)
+        ) + list(self.tags.values_list("translation_key", flat=True))
         localized_tags = Tag.objects.filter(
             translation_key__in=translation_keys, locale=locale
         )
@@ -586,7 +590,10 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
 
     @classmethod
     def for_tag(cls, tag_or_tags, locale=None):
-        qs = cls.objects.live().filter(user__in=User.for_tag(tag_or_tags))
+        qs = cls.objects.live().filter(
+            Q(user__in=User.for_tag(tag_or_tags))
+            | Q(tagged_items__tag__in=ensure_list(tag_or_tags))
+        )
         if locale is not None:
             qs = qs.filter(locale=locale)
         return qs.distinct()
@@ -610,6 +617,10 @@ class ContributorsIndexPage(IndexPage):
     """
 
     show_in_menus_default = True
+    group_by_tags = LocalizedTaggableManager(through=AtlasTag, blank=True)
+    content_panels = IndexPage.content_panels + [
+        FieldPanel("group_by_tags", heading="Group contributors by tags")
+    ]
 
     class Meta:
         verbose_name = "Contributors index page"
@@ -639,3 +650,48 @@ class ContributorsIndexPage(IndexPage):
                 pass
 
         return filter
+
+    def get_child_list_section(self, request, tag=None, filter=None, sort=None):
+        qs: models.QuerySet = self.get_child_list_queryset(request).filter(
+            tagged_items__tag=tag
+        )
+        if request.user.is_anonymous:
+            qs = qs.public()
+
+        if filter:
+            if isinstance(filter, dict):
+                qs = qs.filter(**filter)
+            else:
+                qs = qs.filter(filter)
+            # Complex filters can introduce joins that create duplicate results
+            # Fix with distinct()
+            qs = qs.distinct()
+
+        if sort:
+            qs = qs.order_by(sort.ordering)
+
+        return qs
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        child_list_pages = []
+        seen_ids = set()
+        filter = self.get_filters(request)
+        sort = self.get_sort(request)
+        for tag in self.group_by_tags.all():
+            qs = self.get_child_list_section(request, tag, filter, sort)
+            if len(qs):
+                ids = qs.values_list("id", flat=True)
+                seen_ids = seen_ids.union(ids)
+                child_list_pages.append((tag.localized.name, qs))
+
+        remaining_qs = self.get_child_list_section(
+            request, tag=None, filter=filter, sort=sort
+        )
+        if len(remaining_qs):
+            child_list_pages.append((_("Uncategorized"), remaining_qs))
+
+        context["child_list_pages"] = child_list_pages
+        context["tag_filter"] = request.GET.get("filter", None)
+
+        return context
