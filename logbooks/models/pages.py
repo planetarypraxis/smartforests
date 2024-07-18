@@ -11,7 +11,7 @@ from modelcluster.fields import ParentalKey
 from wagtail.models import Page
 from smartforests.models import Tag, User
 from smartforests.util import ensure_list
-from wagtail.admin.panels import FieldPanel, InlinePanel, MultipleChooserPanel
+from wagtail.admin.panels import FieldPanel, InlinePanel, MultipleChooserPanel, TitleFieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.fields import RichTextField
 from wagtail.models import Locale, Orderable
@@ -374,7 +374,7 @@ class LogbookPage(
 
     content_panels = (
         [
-            FieldPanel("title", classname="full title"),
+            TitleFieldPanel("title", classname="full title"),
             FieldPanel("description"),
             TagFieldPanel("tags"),
         ]
