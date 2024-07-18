@@ -252,7 +252,9 @@ class RadioIndexPage(RadioIndexPageMixin, IndexPage):
         verbose_name = "Radio index page"
 
     def featured(self):
-        return EpisodePage.objects.live().filter(featured=True, locale=self.locale)
+        return EpisodePage.objects.live().filter(featured=True, locale=self.locale).order_by('-first_published_at')
+
+
 
     def playlists(self):
         return PlaylistPage.objects.live().filter(locale=self.locale)
