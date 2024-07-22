@@ -488,7 +488,8 @@
 
 .playlist-item {
   .playlist-item__overlay {
-    background: linear-gradient(180deg, #043003 0%, rgba(4, 48, 3, 0) 100%);
+    background: linear-gradient(180deg, #000000 0%, rgba(1, 20, 1, 0) 100%);
+
 
     h2 {
       &:hover, &:focus {
