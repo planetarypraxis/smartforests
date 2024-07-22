@@ -1,9 +1,10 @@
 {% load i18n wagtailcore_tags %}
-{% if self.endnotes %}
 <div class="endnotes">
+{% if self.endnotes %}
     <hr>
     {{ self.endnotes|richtext }}
-    {% if self.citation %}
+{% endif %}
+{% if self.citation %}
     <p>
         {% blocktranslate %}
         Smart Forests Atlas materials are free to use for non-commercial purposes (with attribution) under a 
@@ -12,6 +13,5 @@
         {{ self.citation_intro }}
         {{ self.citation }}
     </p>
-    {% endif %}
-</div>
 {% endif %}
+</div>
