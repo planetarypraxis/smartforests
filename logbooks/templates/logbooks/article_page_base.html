@@ -55,8 +55,12 @@
         </div>
     </main>
     {% block article_footer %}{% endblock %}
-    <!-- Turbo frame for this tag cloud -->
+
+    {% if self.slug != "common-knowledge" %}
+      <!-- Turbo frame for this tag cloud -->
     <turbo-frame id="tagcloud-turboframe" src="{% if LANGUAGE_CODE %}/{{LANGUAGE_CODE}}{% endif %}/_page_tagcloud/{{ self.id }}/" />
+{% endif %}
+  
 {% endblock %}
 {% block extra_js %}
 {% endblock %}

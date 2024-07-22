@@ -208,7 +208,11 @@ class User(AbstractUser):
     def get_edited_content_pages(self, locale=None):
         from logbooks.models.mixins import ContributorMixin
         from logbooks.views import content_list_types
-
+        from wagtail.models import Page
+       
+        if self.email == 'hello@commonknowledge.coop':
+           return Page.objects.none()
+        
         qs = (
             Page.objects.type(content_list_types)
             .filter(
