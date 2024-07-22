@@ -578,6 +578,9 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
 
     @property
     def all_localized_tags(self):
+        if self.slug == "common-knowledge":
+            return []
+        
         if not self.user:
             return []
 
