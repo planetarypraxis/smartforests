@@ -1,6 +1,9 @@
 {% extends "logbooks/article_page_base.html" %}
 {% load i18n ckdjango_tags ckbootstrap_tags ckwagtail_tags static wagtailcore_tags %}
+
+
 {% block filter_mobile %}
+{% if child_list_page|length > 1 %}
     <!-- Display on small screens -->
     <div class='dropdown dropdown-fixed-width bg-off-white d-lg-none logbooks-dropdown'>
         <a class="dropdown-toggle fw-normal filter-link text-dark-green text-decoration-none"
@@ -51,8 +54,10 @@
             </li>
         </ul>
     </div>
+    {% endif %}
 {% endblock %}
 {% block filter_desktop %}
+{% if child_list_page|length > 1 %}
     <!-- Display on large screens -->
     <div class='dropdown dropdown-fixed-width bg-off-white d-none d-lg-block logbooks-dropdown'>
         <a class="dropdown-toggle fw-normal filter-link text-dark-green text-decoration-none "
@@ -104,6 +109,7 @@
             </li>
         </ul>
     </div>
+{% endif %}
 {% endblock %}
 {% block article %}
     <div class="mb-6">
