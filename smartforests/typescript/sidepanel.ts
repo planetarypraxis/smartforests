@@ -35,5 +35,14 @@ function onClickSidepanelLink(e) {
   }
 }
 
+function closeAllSidepanels() {
+  const sidepanels = Array.from(document.querySelectorAll(".offcanvas"));
+  for (const sidepanel of sidepanels) {
+    const instance = bootstrap.Offcanvas.getInstance(sidepanel) || new bootstrap.Offcanvas(sidepanel);
+    instance.hide();
+  }
+}
+
+window.addEventListener("turbo:visit", closeAllSidepanels);
 window.addEventListener("turbo:load", init);
 window.addEventListener("turbo:frame-render", init)
