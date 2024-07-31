@@ -55,7 +55,7 @@
     </div>
 
     {% site_settings "map" as map_page %}
-    <div class="pt-4 mt-auto mb-6">
+    <div class="pt-4 mt-auto mb-3">
       <a href="{{ map_page.url }}?filter={{tag.slug}}" data-turbo-frame="_top" class="btn btn-light rounded-3 fw-bold p-2">
         <img src="{% static 'img/map.svg' %}" /> {% translate "View on Map" %} &rarr;
       </a>
