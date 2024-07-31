@@ -17,9 +17,8 @@
           {% endif %}
         </div>
         <div class="d-flex flex-column overflow-y-auto">
-          <div class="d-flex align-items-center mb-2">
-            {% include 'logbooks/include/episode_button.html' with episode=episode %}
-            <a class="link-reset ml-2" href="{{episode.url}}">
+          <div class="d-flex align-items-center mb-2 mx-2">
+            <a class="link-reset" href="{{episode.url}}">
               <span class="fs-6">{{ episode.title }}</span>
             </a>
           </div>
