@@ -387,7 +387,10 @@
   display: block;
   text-decoration: none;
 
-  &:hover,
+  &:hover{
+    background-color: $off-white;
+  }
+
   &:focus {
     background-color: $primary-hover-light;
   }
