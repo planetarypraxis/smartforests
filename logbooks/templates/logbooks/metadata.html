@@ -42,12 +42,12 @@
     {% if page.geographical_location %}
       <div>{{ page.geographical_location }}</div>
     {% endif %}
-    {% if page.map_image and show_map_thumbnail is not False %}
+    {% comment %} {% if page.map_image and show_map_thumbnail is not False %}
       {% site_settings "map" as map_page %}
       <a href="{{ map_page.localized.url }}" data-turbo-frame="_top">
         {% image page.map_image fill-300x200 class='img-fluid rounded rounded-3 my-2' %}
       </a>
-    {% endif %}
+    {% endif %} {% endcomment %}
   </section>
   {% endif %}
   {% with page.all_localized_tags as tags %}
