@@ -138,23 +138,26 @@ function FilterIcon({ className = "" }) {
 
 const FilterView: FC<{ onClose: () => void; open: boolean }> = ({ onClose, open }) => {
   const languageCode = getLanguageCode();
+  const [params, _] = useTurboURLParams();
   return (
     <div className={`mapboxgl-ctrl-filters-content top-0 fade-inout p-3 ${open ? "" : "hidden"}`}>
       <div className="position-sticky top-0 bg-white d-flex flex-row justify-content-start pb-4 align-items-baseline">
         <h2 className="heading-small fw-bold font-sans-serif">Filter by tag</h2>
 
-        <a
-          href={window.location.pathname}
-          className="ms-2 font-monospace text-uppercase px-2 cursor-pointer text-decoration-none d-flex align-items-center"
-        >
-          Clear
-          <svg className="ms-1" width="6" height="6" viewBox="0 0 6 6" fill="none">
-            <path
-              d="M6 0.604286L5.39571 0L3 2.39571L0.604286 0L0 0.604286L2.39571 3L0 5.39571L0.604286 6L3 3.60429L5.39571 6L6 5.39571L3.60429 3L6 0.604286Z"
-              fill="#026302"
-            />
-          </svg>
-        </a>
+        {!!params["filter"] && ( 
+          <a
+            href={window.location.pathname}
+            className="ms-2 font-monospace text-uppercase px-2 cursor-pointer text-decoration-none d-flex align-items-center"
+          >
+            Clear
+            <svg className="ms-1" width="6" height="6" viewBox="0 0 6 6" fill="none">
+              <path
+                d="M6 0.604286L5.39571 0L3 2.39571L0.604286 0L0 0.604286L2.39571 3L0 5.39571L0.604286 6L3 3.60429L5.39571 6L6 5.39571L3.60429 3L6 0.604286Z"
+                fill="#026302"
+              />
+            </svg>
+          </a>
+        )}
 
         <button
           onClick={onClose}
