@@ -161,9 +161,13 @@ a.card {
   @extend .font-serif;
 }
 
-.modal-backdrop {
-  mix-blend-mode: multiply;
+@media (min-width: 576px) {
+  .modal-dialog {
+    max-width: 700px;
+  }
 }
+
+
 
 @include media-breakpoint-down(lg) {
   .navbar-collapse {
