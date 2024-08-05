@@ -23,7 +23,7 @@
                     {% block filter_mobile %}{% endblock %}
                     {% block filter_desktop %}{% endblock %}
                 </div>
-                {% block article_title %}<h1 class="mb-3 mb-lg-5">{{ self.title }}</h1>{% endblock %}
+                {% block article_title %}<h1 class="mb-3 mb-lg-5 max-width-732">{{ self.title }}</h1>{% endblock %}
             </header>
             <section class="d-flex d-lg-none flex-row mb-3 flex-md-wrap overflow-auto">
                 {% for tag in self.all_localized_tags %}

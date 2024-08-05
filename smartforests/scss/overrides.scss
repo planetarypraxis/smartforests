@@ -37,7 +37,7 @@ body {
   font-size: 32px;
 
   @include media-breakpoint-up(md) {
-    font-size: 64px;
+    font-size: 54px;
   }
 }
 
@@ -277,4 +277,8 @@ a {
 
 .wagtail-userbar {
   bottom: 6em !important;
+}
+
+.max-width-732 {
+  max-width: 732.5px;
 }
