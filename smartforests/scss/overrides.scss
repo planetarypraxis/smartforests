@@ -80,6 +80,10 @@ h3 {
   @include heading-small;
 }
 
+h3 {
+  font-weight: normal;
+}
+
 .microcopy,
 h4 {
   @include microcopy;
