@@ -8,13 +8,13 @@
     {% with self.radio_parent_pages as parent_pages %}
     <ul class="d-flex list-unstyled">
       <li class="me-2">
-        <a href="{{ parent_pages.home.url }}">{% translate 'Featured' %}</a>
+        <a href="{{ parent_pages.home.url }}" class="link-reset {% if request.path == parent_pages.home.url %}text-decoration-underline{% endif %}">{% translate 'Featured' %}</a>
       </li>
       <li class="mx-2">
-        <a href="{{ parent_pages.playlists.url }}">{{ parent_pages.playlists.title }}</a>
+        <a href="{{ parent_pages.playlists.url }}" class="link-reset {% if request.path == parent_pages.playlists.url %}text-decoration-underline{% endif %}">{{ parent_pages.playlists.title }}</a>
       </li>
       <li class="ms-2">
-        <a href="{{ parent_pages.archive.url }}">{% translate 'Archive' %}</a>
+        <a href="{{ parent_pages.archive.url }}" class="link-reset {% if request.path == parent_pages.archive.url %}text-decoration-underline{% endif %}">{% translate 'Archive' %}</a>
       </li>
     </ul>
     {% endwith %}
