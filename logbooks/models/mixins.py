@@ -300,6 +300,7 @@ class GeocodedMixin(BaseLogbooksPage):
             style_id="ckziehr6u001e14ohgl2brzlu",
             width=300,
             height=200,
+            zoom=5
         )
 
     content_panels = [
