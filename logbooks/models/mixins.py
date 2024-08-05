@@ -278,7 +278,7 @@ class GeocodedMixin(BaseLogbooksPage):
             print(response.status_code, response.content)
             return
         image = ImageFile(
-            BytesIO(response.content), name=f"{urllib.parse.quote(url)}.png"
+           BytesIO(response.content), name=f"map-{self.pk}.png"
         )
 
         if self.map_image is not None:
