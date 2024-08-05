@@ -269,8 +269,9 @@
     color: $dark-green;
   }
 
-  &:hover,&:focus {
-    background-color: $soft-green !important;
+  &:hover,
+  &:focus {
+    background-color: rgba(4, 48, 3, .1) !important;
     box-shadow: 1px 1px 5px 0px #0430034D;
     color: $mid-green;
 
@@ -278,6 +279,7 @@
       color: $mid-green;
     }
   }
+
 }
 
 /** Tag cloud */
@@ -466,7 +468,6 @@
     margin-left: 25%;
     display: flex;
     flex-direction: row-reverse;
-    width: 75%;
     justify-content: space-between;
   }
 }
