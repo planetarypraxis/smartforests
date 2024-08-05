@@ -12,7 +12,7 @@ class SearchView(BasicSearchView, LocaleFromLanguageCode):
         locale = self.get_locale()
         self.request.LANGUAGE_CODE = locale.language_code
         localized_pages = list(
-            set([page.get_translation_or_none(locale).specific or page for page in results]))
+            set([page.get_translation_or_none(locale).specific if page.get_translation_or_none(locale) else page for page in results]))
         return localized_pages
 
     def get_context_data(self, **kwargs):
