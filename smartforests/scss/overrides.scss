@@ -283,6 +283,9 @@ a {
   bottom: 6em !important;
 }
 
-.max-width-732 {
-  max-width: 732.5px;
+@include media-breakpoint-up(lg) {
+ .col-lg-6 {
+    width: 45%;
+  }
 }
+
