@@ -18,9 +18,10 @@ import type { Cluster } from "superclusterd";
 export const ClusterMarker: React.FC<{
   feature: Feature<Point, Cluster>;
 }> = ({ feature }) => {
-  const size = Math.round(
-    Math.max(20, Math.min(Math.log(feature.properties.point_count), 75))
-  );
+  const size = feature.properties.point_count >= 100
+  ? Math.round(Math.max(30, Math.min(Math.log(feature.properties.point_count) * 5, 100)))
+  : Math.round(Math.max(20, Math.min(Math.log(feature.properties.point_count), 75)));
+  
   const [_, updateViewport] = useAtom(viewportAtom);
   const [longitude, latitude] = feature.geometry.coordinates;
   const [isFocusing, setIsFocusing] = useFocusContext(`cluster-${feature.properties.cluster_id}`, "cluster");
