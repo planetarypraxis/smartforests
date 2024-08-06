@@ -4,7 +4,7 @@
     {% block article_header %}{% endblock %}
     <main class="container-fluid mb-7">
         <div class="row gx-0 mt-3 mt-lg-7">
-            <header class="col-lg-6 offset-lg-3 logbook-filter">
+            <header class="logbook-filter">
                 <div class='d-flex mb-5 justify-content-between align-items-center'>
                     <div class="d-block d-lg-none text-reset text-decoration-none text-mid-green">
                         <svg width="14"
@@ -23,7 +23,7 @@
                     {% block filter_mobile %}{% endblock %}
                     {% block filter_desktop %}{% endblock %}
                 </div>
-                {% block article_title %}<h1 class="mb-3 mb-lg-5 max-width-732">{{ self.title }}</h1>{% endblock %}
+                {% block article_title %}<h1 class="mb-3 mb-lg-5">{{ self.title }}</h1>{% endblock %}
             </header>
             <section class="d-flex d-lg-none flex-row mb-3 flex-md-wrap overflow-auto">
                 {% for tag in self.all_localized_tags %}
