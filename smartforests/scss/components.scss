@@ -170,6 +170,7 @@
 
 
 #sidebar-show {
+  max-width: 100%;
 }
 
 
@@ -519,4 +520,12 @@
 
 .w-95 {
   width: 95%;
+}
+
+canvas {
+  background-image: url("./svg/texture.jpeg");
+  background-size: cover; /* Ensure the image covers the entire canvas */
+  background-repeat: no-repeat; /* Prevent the image from repeating */
+  background-position: center; /* Center the image */
+  mix-blend-mode: color-burn;
 }
