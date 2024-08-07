@@ -61,6 +61,7 @@ function calculateCanvasDimensions() {
 }
 
 function doTagCloud($container, width, height, data, tagOffcanvas) {
+  const margin = 50; 
   $container.innerHTML = "";
 
   let focusedNode = null;
@@ -91,7 +92,8 @@ function doTagCloud($container, width, height, data, tagOffcanvas) {
     )
     .force("charge", d3.forceManyBody().strength(-200))
     .force("center", d3.forceCenter(width / 2, height / 2))
-    .force("boundary", forceBoundary(10, 20, width - 10, height - 20))
+    .force("collide", d3.forceCollide().radius(30))
+    .force("boundary", forceBoundary(margin, margin, width - margin, height - margin))
     .on("tick", draw);
 
   // Create the canvas.
