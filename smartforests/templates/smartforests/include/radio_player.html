@@ -3,7 +3,7 @@
 <div id="radioPlayer" data-turbo-permanent class="{% firstof position 'position-sticky bottom-0 z-index-50 mt-auto' %} min-h-60px h-auto bg-dark-green border-0 drop-shadow-mid-green-glow {{ class }}" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" aria-labelledby="radioPlayerLabel">
   <div class="position-relative text-white ps-md-3 d-flex align-items-center justify-content-between">
     <progress id="radioPlayerSeeker" min="0" max="1" value="0" data-smartforests-radio-episode-seeker></progress>
-    <div class='w-100 d-flex align-items-center justify-content-between pe-3'>
+    <div class='width-80 d-flex align-items-center justify-content-between pe-3'>
       <div class='d-flex align-items-center flex-nowrap overflow-hidden'>
         <button id="radioPlayerPlayButton" class="btn btn-link align-baseline" title="Play episode: {{episode.title}}" type="button">
           <img class="play-button" style="width: 20px" src="{% static 'img/button-play-light.svg' %}" alt="Play episode"/>
@@ -14,14 +14,14 @@
           /
           <span id="radioPlayerDuration" data-smartforests-radio-episode-duration></span>
         </span>
-        <a href='' data-smartforests-radio-episode-page-url class='text-decoration-none text-reset text-nowrap ps-1 ps-md-2 align-middle d-inline-block text-truncate' style='max-width: max(100px, 66vw);'>
+        <a href='' data-smartforests-radio-episode-page-url class='text-decoration-none text-reset text-nowrap ps-1 ps-md-2 align-middle d-inline-block text-truncate width-70'>
           <span id="radioPlayerLabel" data-smartforests-radio-episode-title></span>
         </a>
         <span class="text-nowrap ps-1 ps-md-3 small font-monospace text-uppercase d-none d-md-inline-block" data-smartforests-radio-episode-owner></span>
         <span class="text-nowrap ps-1 ps-md-3 small font-monospace text-uppercase d-none d-md-inline-block" data-smartforests-radio-episode-last-published-at></span>
       </div>
       <div>
-        <span class="text-nowrap small font-monospace text-uppercase pe-2">{% translate "smart forests radio" %}</span>
+        <span class="text-nowrap small font-monospace text-uppercase pe-2 d-none d-md-block">{% translate "smart forests radio" %}</span>
         <img src="{% static 'img/radio.svg' %}">
       </div>
     </div>
