@@ -12,16 +12,22 @@
     <div class="row mb-5">
       {% for episode in self.featured %}
       <div class="col col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
-        <div class="d-flex flex-column">
-          <a class="d-block mb-3" href="{{episode.url}}">
+        <div class="d-flex flex-column ">
             {% if episode.thumbnail %}
             {% image episode.thumbnail fill-400x400 as tmp_thumbnail %}
-            <img src="{{ tmp_thumbnail.url }}" alt="{{ episode }}" class="w-100">
+            <div class="image-container">
+              <img src="{{ tmp_thumbnail.url }}" alt="{{ episode }}" class="w-100">
+              <div class="overlay">
+                <button class="text-white btn btn-link" title="Play episode: {{episode.title}}" type="button" aria-controls="radioPlayer" {% if preload %} data-smartforests-should-preload-episode {% endif %} data-smartforests-radio-play-button data-smartforests-audio="{{ episode.audio.file.url }}" data-smartforests-owner="{{ episode.real_contributors | join:' / ' }}" data-smartforests-last-published-at="{{ episode.last_published_at|date:'SHORT_DATE_FORMAT' }}" data-smartforests-title="{{ episode.title }}" data-smartforests-image="{{ episode.image.file.url }}">
+                <img class="play-button" alt="Play button" src="{% static 'img/button-play-light.svg' %}" />
+              </div>
+            </div>
             {% else %}
             <img src="{% static 'img/radio-icon.svg' %}" alt="{{ episode }}" class="w-100">
             {% endif %}
-          </a>
-          <div class="mb-3 font-monospace color-dark-grey small d-flex">
+     
+          <div class="pt-3 radio-episode-card">
+          <div class="mb-3 font-monospace color-dark-grey small d-flex px-3">
             <span class="me-auto">
               {{ episode.first_published_at|date:"d E Y" }}
             </span>
@@ -31,14 +37,15 @@
               {% endif %}
             </span>
           </div>
-          <div class="d-flex mb-3">
+          <div class="d-flex mb-3 px-3" >
           
             <a class="link-reset ml-2" href="{{episode.url}}">
-              <span class="fs-6">{{ episode.title }}</span>
+              <span class="fs-6 fw-bold">{{ episode.title }}</span>
             </a>
           </div>
         </div>
-        <div>
+      </div>
+        <div class='px-3'>
           {% for tag in episode.all_localized_tags %}
           {% include 'logbooks/include/tag_label.html' with tag=tag %}
           {% endfor %}
@@ -48,8 +55,15 @@
     </div>
     <h2 class="fw-bold mb-3">{% translate 'Playlists' %}</h2>
     <div class="row">
-      {% for playlist in self.playlists %}
+      {% for playlist in self.playlists %}  
       <div class="col col-12 col-sm-6 col-md-4 mb-3 position-relative playlist-item">
+        <div class="playlist-item-header">
+     <div class="d-flex justify-content-between align-items-center">
+        <h2 class="heading-medium mb-2">{{ playlist.title }}</h2>
+        <img src="{% static 'img/radio-icon.svg' %}" alt="{{ episode }}" style="width:20px;height:20px">
+        </div>
+        <p class="microcopy-small">{{ playlist.episode_count }} episodes</p>
+      </div>
         <a class="d-block position-relative" href="{{ playlist.url }}">
           <div>
             {% if playlist.thumbnail_image_resilient and playlist.thumbnail_image_resilient.url %}
@@ -59,11 +73,12 @@
             {% endif %}
           </div>
           <div class="position-absolute w-100 h-100 top-0 start-0">
-            <h2 class="playlist-item__overlay text-white p-2">{{ playlist.title }}</h2>
+ 
           </div>
         </a>
       </div>
       {% endfor %}
+
     </div>
   </main>
 </div>

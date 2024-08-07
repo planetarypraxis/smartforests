@@ -222,6 +222,10 @@ class PlaylistPage(ArticlePage):
             translation_key__in=all_tag_keys, locale=locale
         )
         return list(sorted(localized_tags, key=lambda tag: tag.name))
+    
+    @property
+    def episode_count(self):
+        return self.episodes.count()
 
 
 class PlaylistPageEpisode(Orderable):

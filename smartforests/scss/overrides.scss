@@ -296,3 +296,45 @@ a {
 .width-80 {
   width: 80%;
 }
+
+.radio-episode-card:hover {
+  background: rgba(4, 48, 3, 0.1);
+ }
+ 
+ .radio-episode-card a:hover {
+   text-decoration: underline;
+  }
+
+  .image-container .play-button {
+    width: 80px !important;
+    height: auto;
+  }
+
+  .image-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+  }
+
+  .image-container img {
+    display: block;
+    width: 100%;
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(4, 48, 3, 0.4);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .image-container:hover .overlay {
+    opacity: 1;
+  }
