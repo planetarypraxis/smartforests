@@ -296,13 +296,32 @@ a {
 .width-80 {
   width: 80%;
 }
+.story-page-card {
+  background-color: #f9f9f9;
 
-.radio-episode-card:hover {
+}
+
+.story-page-card .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.extract {
+  font-family: $font-family-serif;
+}
+
+.radio-episode-card:hover, .story-page-card:hover {
   background: rgba(4, 48, 3, 0.1);
  }
  
- .radio-episode-card a:hover {
+ .radio-episode-card a:hover{
    text-decoration: underline;
+  }
+
+  .story-page-title-link:hover{
+    text-decoration: underline !important;
+
   }
 
   .image-container .play-button {
@@ -338,3 +357,5 @@ a {
   .image-container:hover .overlay {
     opacity: 1;
   }
+
+

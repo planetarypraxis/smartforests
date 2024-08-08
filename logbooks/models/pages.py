@@ -19,6 +19,7 @@ from wagtailmedia.edit_handlers import MediaChooserPanel
 from commonknowledge.wagtail.helpers import get_children_of_type
 from commonknowledge.wagtail.models import ChildListMixin
 from commonknowledge.django.cache import django_cached_model
+from django.template.defaultfilters import slugify
 from wagtail.api import APIField
 from wagtail.images.api.fields import ImageRenditionField
 from smartforests.mixins import SeoMixin
@@ -48,7 +49,7 @@ from smartforests.mixins import SeoMetadataMixin
 from smartforests.tag_cloud import get_nodes_and_links
 
 
-class StoryPage(ArticlePage):
+class StoryPage(ArticlePage, ThumbnailMixin):
     """
     Stories are longer, self-contained articles.
     """
@@ -59,23 +60,22 @@ class StoryPage(ArticlePage):
 
     icon_class = "icon-stories"
 
-    @property
-    def map_marker(self):
-        if settings.DEBUG:
-            # Mapbox API requires an online resource to generate images against
-            return "https://imgur.com/6TwclOR.png"
-        else:
-            return static_file_absolute_url("img/mapicons/stories.png")
+    extract = RichTextField(blank=True)
+    image = ForeignKey(CmsImage, on_delete=models.SET_NULL, null=True, blank=True)
+    tags = LocalizedTaggableManager(through=AtlasTag, blank=True)
 
     show_in_menus_default = True
     parent_page_types = ["logbooks.StoryIndexPage"]
 
-    image = ForeignKey(CmsImage, on_delete=models.SET_NULL, null=True, blank=True)
-
-    content_panels = ArticlePage.content_panels + [FieldPanel("image")]
+    content_panels = ArticlePage.content_panels + [
+        FieldPanel("image"),
+        FieldPanel("extract"),
+        TagFieldPanel("tags"),
+    ]
 
     api_fields = ArticlePage.api_fields + [
         APIField("image"),
+        APIField("extract"),
     ]
 
     @property
@@ -101,7 +101,11 @@ class StoryPage(ArticlePage):
         else:
             return []
 
+    def get_tags(self):
+        return self.tags.all()
 
+    
+    
 class StoryIndexPage(IndexPage):
     """
     Collection of stories.
@@ -109,6 +113,11 @@ class StoryIndexPage(IndexPage):
 
     class Meta:
         verbose_name = "Stories index page"
+        
+    def get_context(self, request):
+        context = super().get_context(request)
+        context['is_stories_index_page'] = True
+        return context
 
 
 class EpisodePage(ArticlePage):

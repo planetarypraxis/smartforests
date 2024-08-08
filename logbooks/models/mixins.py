@@ -402,6 +402,7 @@ class ThumbnailMixin(BaseLogbooksPage):
         print(f"Regenerating thumbnail for {self.slug}: created {self.thumbnail_image}")
 
     card_content_html = "logbooks/thumbnails/basic_thumbnail.html"
+    alternate_card_content_html = "logbooks/thumbnails/story_page_thumbnail.html"
 
     def save(self, *args, regenerate_thumbnails=True, **kwargs):
         if regenerate_thumbnails:
@@ -414,7 +415,6 @@ class ThumbnailMixin(BaseLogbooksPage):
                     break
 
         return super().save(*args, **kwargs)
-
 
 class SidebarRenderableMixin(BaseLogbooksPage):
     class Meta:

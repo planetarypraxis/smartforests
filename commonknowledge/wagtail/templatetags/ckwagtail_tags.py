@@ -10,6 +10,7 @@ from django.utils.safestring import SafeText, mark_safe
 from commonknowledge.helpers import safe_to_int
 from django import template
 from smartforests.models import Tag
+from django.utils.html import format_html
 
 register = template.Library()
 
@@ -107,8 +108,8 @@ def highlight_tags(context, content: SafeText):
         words.add(word)
         words.add(word.lower())
 
-    logger.info(f"Wordlist to highlight: {words}")
-    logger.info(f"Already highlighted: {highlighted_tag_ids}")
+    # logger.info(f"Wordlist to highlight: {words}")
+    # logger.info(f"Already highlighted: {highlighted_tag_ids}")
 
     # Remove links and re-insert after highlighting tags
     # Matching tags inside <a> tags breaks them
@@ -154,3 +155,24 @@ def highlight_tags(context, content: SafeText):
         request.highlighted_tag_ids = highlighted_tag_ids
 
     return mark_safe(content)
+
+@register.simple_tag
+def log_fields(obj):
+    if obj:
+        fields = vars(obj)
+        print("Fields available in page.map_image:")
+        for field, value in fields.items():
+            print(f"{field}: {value}")
+        return fields
+    return {}
+
+
+
+@register.simple_tag
+def log_page_fields(page):
+    fields = vars(page).items()
+    html = "<ul>"
+    for field_name, value in fields:
+        html += f"<li><strong>{field_name}:</strong> {value}</li>"
+    html += "</ul>"
+    return format_html(html)

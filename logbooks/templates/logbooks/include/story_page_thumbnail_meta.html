@@ -1,0 +1,28 @@
+{% load ckdjango_tags wagtailimages_tags wagtailcore_tags %}
+
+<div class="d-flex align-items-start flex-row {{ class }}">
+  <div class="flex-grow-1">
+    <a class="text-decoration-none story-page-title-link heading-medium text-dark-green" style="word-break: break-word" href="{{self.url}}">
+      {{ self.title }}
+  </a>
+    {% if self.extract %}
+    <div class="mt-1 extract text-dark-green">{{ self.extract|richtext }}</div>
+    {% endif %} 
+    
+    {% if self.geographical_location %}
+    <div class="microcopy-small pt-1 mb-3">
+      {{ self.specific.geographical_location }}
+    </div>
+    {% endif %}{% if self.tags.all%}
+    <div class="tags mt-1">
+      {% for tag in self.tags.all %}
+      {% include "logbooks/include/tag_label.html" with tag=tag %}
+      {% endfor %}
+    </div>
+    {% endif %} 
+  </div>
+
+  <div class="ms-2">
+    <i class="icon-thumbnail {{ self.specific.icon_class }}"></i>
+  </div>
+</div>

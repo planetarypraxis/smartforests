@@ -1,0 +1,18 @@
+{% load ckdjango_tags wagtailimages_tags wagtailcore_tags %} 
+
+{% if self.thumbnail_image_resilient and self.thumbnail_image_resilient.url %}
+    <div class="card story-page-card">
+        <div class="image-container">
+            <img src="{{ self.thumbnail_image_resilient.url }}" class=""/>
+            <div class="overlay"></div>
+        </div>
+        {% include "logbooks/include/story_page_thumbnail_meta.html" with class="card-body link-reset text-dark-grey" %}
+    </div>
+{% else %}
+    <div class="card">
+        <div class="image-container">
+            <div class="overlay"></div>
+        </div>
+        {% include "logbooks/include/story_page_thumbnail_meta.html" with class="card-body link-reset text-dark-grey" %}
+    </div>
+{% endif %}

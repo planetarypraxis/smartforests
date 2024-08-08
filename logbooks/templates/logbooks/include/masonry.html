@@ -1,5 +1,4 @@
 {% load i18n ckwagtail_tags %}
-
 <div class="grid__wrapper">
   <main class="grid are-images-unloaded {{class}}">
     <div class="grid__col-sizer"></div>
@@ -7,13 +6,23 @@
     {% if not contents.has_next %}
     <div class="d-none" data-lastpage="1"></div>
     {% endif %}
+    {% if is_stories_index_page %}
     {% for child in contents %}
-      <a href="{{child.url}}" class="grid__item link-reset">
-        {% include child.card_content_html with self=child only %}
-      </a>
-      {% empty %}
-      <div>{% translate "Nothing found" %}</div>
-    {% endfor %}
+    <div class="grid__item">
+      {% include child.alternate_card_content_html with self=child only %}
+    </div>
+    {% empty %}
+    <div>{% translate "Nothing found" %}</div>
+  {% endfor %}
+    {% else %}
+    {% for child in contents %}
+    <a href="{{child.url}}" class="grid__item link-reset">
+      {% include child.card_content_html with self=child only %}
+    </a>
+    {% empty %}
+    <div>{% translate "Nothing found" %}</div>
+  {% endfor %}
+    {% endif %}
   </main>
 </div>
 
