@@ -358,4 +358,47 @@ a {
     opacity: 1;
   }
 
+.playlist-item a::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color 0.3s ease;
+}
 
+.playlist-item a:hover::after {
+  background-color: rgba(4, 48, 3, 0.4);
+}
+
+.playlist-item h2 {
+  display: inline-block;
+  transition: text-decoration 0.3s ease;
+}
+
+.playlist-item h2:hover {
+  text-decoration: underline;
+}
+
+.playlist-item-header {
+  position: relative;
+  z-index: 1;
+}
+
+.playlist-item-header::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0); 
+  transition: background-color 0.3s ease;
+  z-index: -1;
+}
+
+.playlist-item-header:hover::after {
+  background-color: rgba(4, 48, 3, 0.4);
+}
