@@ -56,7 +56,8 @@
     <h2 class="fw-bold mb-3">{% translate 'Playlists' %}</h2>
     <div class="row">
       {% for playlist in self.playlists %}  
-      <div class="col col-12 col-sm-6 col-md-4 mb-3 position-relative playlist-item">
+      <a class="d-block position-relative col col-12 col-sm-6 col-md-4 link-reset" href="{{ playlist.url }}">
+      <div class=" mb-3 position-relative playlist-item">
         <div class="playlist-item-header">
      <div class="d-flex justify-content-between align-items-center">
         <h2 class="heading-medium mb-2">{{ playlist.title }}</h2>
@@ -64,7 +65,7 @@
         </div>
         <p class="microcopy-small">{{ playlist.episode_count }} episodes</p>
       </div>
-        <a class="d-block position-relative" href="{{ playlist.url }}">
+      
           <div>
             {% if playlist.thumbnail_image_resilient and playlist.thumbnail_image_resilient.url %}
             <img src="{{ playlist.thumbnail_image_resilient.url }}" alt="{{ playlist }}" class="w-100">
@@ -75,8 +76,9 @@
           <div class="position-absolute w-100 h-100 top-0 start-0">
  
           </div>
-        </a>
+ 
       </div>
+    </a>
       {% endfor %}
 
     </div>
