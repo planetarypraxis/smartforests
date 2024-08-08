@@ -293,9 +293,16 @@ a {
   width: 70%;
 }
 
-.width-80 {
+.footer-width {
   width: 80%;
 }
+
+@include media-breakpoint-up(md) {
+  .footer-width {
+  width: 100%;
+}
+}
+
 .story-page-card {
   background-color: #f9f9f9;
 
