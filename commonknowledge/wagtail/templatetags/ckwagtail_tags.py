@@ -104,26 +104,36 @@ def highlight_tags(context, content: SafeText):
 
     words = set()
     splitter = r"[ !#()\-;:'\",./<>&]"
-    for word in re.split(splitter, content):
-        words.add(word)
-        words.add(word.lower())
+    raw_words = re.split(splitter, content)
 
+    # Consider potential multi-word tags by combining adjacent words
+    for i in range(len(raw_words)):
+        for j in range(i + 1, len(raw_words) + 1):
+            phrase = " ".join(raw_words[i:j])
+            words.add(phrase)
+            words.add(phrase.lower())
+            
+     
     # logger.info(f"Wordlist to highlight: {words}")
     # logger.info(f"Already highlighted: {highlighted_tag_ids}")
 
+ 
     # Remove links and re-insert after highlighting tags
-    # Matching tags inside <a> tags breaks them
+     # Matching tags inside <a> tags breaks them
     links = re.findall(r"<a[^<]*</a>", content, re.IGNORECASE)
     for i, link in enumerate(links):
         content = content.replace(link, f"[#~{i}~#]")
 
-    tags = Tag.objects.filter(locale=locale, name__in=words).exclude(
+    tags = Tag.objects.filter(locale=locale).exclude(
         id__in=highlighted_tag_ids
     )
 
     logger.info(f"Tags found: {list(tags)}")
 
-    for tag in tags:
+    # Sort tags by length to handle multi-word tags correctly
+    sorted_tags = sorted(tags, key=lambda tag: len(tag.name), reverse=True)
+
+    for tag in sorted_tags:
         replace = rf"""
         \1<span class="filter-tag filter-tag-inline">
             <a class="text-decoration-none" 
@@ -134,6 +144,7 @@ def highlight_tags(context, content: SafeText):
             </a>
         </span>\3
         """.strip()
+        
         prev_content = content
         content = re.sub(
             rf"({splitter})({re.escape(tag.name)})({splitter})",
@@ -142,6 +153,7 @@ def highlight_tags(context, content: SafeText):
             count=1,
             flags=re.IGNORECASE,
         )
+        
         if content != prev_content:
             # Only highlight a tag once per request
             highlighted_tag_ids.append(tag.id)
