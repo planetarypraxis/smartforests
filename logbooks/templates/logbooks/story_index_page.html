@@ -1,1 +1,50 @@
-{% extends "logbooks/index_page_base.html" %}
+{% extends "base.html" %}
+{% load i18n static ckdjango_tags ckbootstrap_tags %}
+
+{% block content_wrapper_class %}filter-page{% endblock %}
+
+{% block content %}
+    <!-- Filter sidepanel --> 
+    <!-- Your offcanvas and filter components are correctly implemented here -->
+
+    <div class="container-fluid mt-0 filter-page__content">
+        {% block pre_index_header %}
+        {% endblock %}
+
+        <div class="index-header mt-5 mb-5">
+            {% block sidebar %}
+            <!-- Sidebar content -->
+            {% endblock %}
+
+            <div class="col-md mb-5 mb-md-0 text-center">
+                <h1>{{ self.title }}</h1>
+                {% if tag_filter %}
+                    <div>
+                        <a href="{% qs_link 'filter' None %}" class="filter-tag active">
+                            {{ tag_filter }}
+                            <i aria-label="Close" className="icon icon-8 icon-close bg-white ms-1"></i>
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+
+            {% block filter_desktop %}
+            <!-- Filter dropdown for large screens -->
+            {% endblock %}
+        </div>
+
+        {% block index_content %}
+    
+            {% include "logbooks/thumbnails/story_page_thumbnail.html" with contents=child_list_page %}
+  
+        {% endblock %}
+    </div>
+{% endblock %}
+
+{% block spacer %}{% endblock %}
+
+{% block extra_js %}
+    <script defer src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4/dist/masonry.pkgd.min.js" crossorigin="anonymous"></script>
+    <script defer src="{% static 'js/masonry.js' %}"></script>
+{% endblock %}

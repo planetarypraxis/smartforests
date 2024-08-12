@@ -1,18 +1,23 @@
-{% load ckdjango_tags wagtailimages_tags wagtailcore_tags %} 
+{% load ckdjango_tags wagtailimages_tags wagtailcore_tags %}
+<div class="row mb-5">
+    {% for page in contents %}
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+        <div class="story-page-card d-flex flex-column">
+            {% if page.thumbnail_image_resilient and page.thumbnail_image_resilient.url %}
+            <div class="story-image-container d-flex align-items-center justify-content-center">
+                <img src="{{ page.thumbnail_image_resilient.url }}" class="card-img-top" alt="{{ page.title }}">
+                <div class="overlay"></div>
+            </div>
+            {% else %}
+            <div class="story-image-container">
+                <div class="overlay"></div>
+            </div>
+            {% endif %}
+            <div class="card-body link-reset text-dark-grey p-3">
+                {% include "logbooks/include/story_page_thumbnail_meta.html" %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
 
-{% if self.thumbnail_image_resilient and self.thumbnail_image_resilient.url %}
-    <div class="card story-page-card">
-        <div class="image-container">
-            <img src="{{ self.thumbnail_image_resilient.url }}" class=""/>
-            <div class="overlay"></div>
-        </div>
-        {% include "logbooks/include/story_page_thumbnail_meta.html" with class="card-body link-reset text-dark-grey" %}
-    </div>
-{% else %}
-    <div class="card">
-        <div class="image-container">
-            <div class="overlay"></div>
-        </div>
-        {% include "logbooks/include/story_page_thumbnail_meta.html" with class="card-body link-reset text-dark-grey" %}
-    </div>
-{% endif %}
+</div>

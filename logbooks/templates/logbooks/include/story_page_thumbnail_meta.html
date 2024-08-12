@@ -2,31 +2,31 @@
 
 <div class="d-flex align-items-start flex-row {{ class }}">
   <div class="flex-grow-1">
-    <a class="text-decoration-none story-page-title-link heading-medium text-dark-green" style="word-break: break-word" href="{{self.url}}">
-      {{ self.title }}
+    <a class="text-decoration-none story-page-title-link heading-medium text-dark-green" style="word-break: break-word" href="{{page.url}}">
+      {{ page.title }}
   </a>
-    {% if self.extract %}
-    <div class="mt-1 extract text-dark-green">{{ self.extract|richtext }}</div>
+    {% if page.extract %}
+    <div class="mt-1 extract text-dark-green">{{ page.extract|richtext }}</div>
     {% endif %} 
     
-    {% if self.geographical_location %}
+    {% if page.geographical_location %}
     <div class="microcopy-small pt-1 mb-3">
-      {{ self.specific.geographical_location }}
+      {{ page.specific.geographical_location }}
     </div>
     {% endif %} 
-    {% if self.tags.all %}
+    {% if page.tags.all %}
     <div class="tags mt-1">
-      {% for tag in self.tags.all|slice:":5" %}
+      {% for tag in page.tags.all|slice:":5" %}
       {% include "logbooks/include/tag_label.html" with tag=tag %}
       {% endfor %}
-      {% if self.tags.count > 5 %}
-      <span class="filter-tag"> + {{ self.tags.count|add:"-5" }} more tags</span>
+      {% if page.tags.count > 5 %}
+      <span class="tags-overflow"> + {{ page.tags.count|add:"-5" }} more tags</span>
       {% endif %}
     </div>
     {% endif %} 
   </div>
 
   <div class="ms-2">
-    <i class="icon-thumbnail {{ self.specific.icon_class }}"></i>
+    <i class="icon-thumbnail {{ page.specific.icon_class }}"></i>
   </div>
 </div>

@@ -106,20 +106,19 @@ class StoryPage(ArticlePage, ThumbnailMixin):
 
     
     
-class StoryIndexPage(IndexPage):
+class StoryIndexPage(Page):
     """
     Collection of stories.
     """
 
     class Meta:
-        verbose_name = "Stories index page"
-        
+        verbose_name = "Stories Index Page"
+
     def get_context(self, request):
         context = super().get_context(request)
-        context['is_stories_index_page'] = True
+        context['child_list_page'] = self.get_children().live().specific().order_by('-first_published_at')
         return context
-
-
+    
 class EpisodePage(ArticlePage):
     """
     Episodes are individual items for the radio.
