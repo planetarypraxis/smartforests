@@ -13,11 +13,15 @@
     <div class="microcopy-small pt-1 mb-3">
       {{ self.specific.geographical_location }}
     </div>
-    {% endif %}{% if self.tags.all%}
+    {% endif %} 
+    {% if self.tags.all %}
     <div class="tags mt-1">
-      {% for tag in self.tags.all %}
+      {% for tag in self.tags.all|slice:":5" %}
       {% include "logbooks/include/tag_label.html" with tag=tag %}
       {% endfor %}
+      {% if self.tags.count > 5 %}
+      <span class="filter-tag"> + {{ self.tags.count|add:"-5" }} more tags</span>
+      {% endif %}
     </div>
     {% endif %} 
   </div>
