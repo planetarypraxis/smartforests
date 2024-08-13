@@ -104,18 +104,7 @@ h3.microcopy-small {
   font-size: 12px !important;
 }
 
-a .card,
-a.card {
-  .card-overlay {
-    position: absolute;
-    width: 100%;
-    height: 100%;
 
-    &:hover {
-      background-color: transparentize($color: $dark-green, $amount: 0.9);
-    }
-  }
-}
 
 .card {
   overflow: hidden;
@@ -314,24 +303,6 @@ a {
   font-family: $font-family-serif;
 }
 
-.radio-episode-card:hover, .story-page-card:hover {
-  background: rgba(4, 48, 3, 0.1);
- }
- 
- .radio-episode-card a:hover{
-   text-decoration: underline;
-  }
-
-  .story-page-title-link:hover{
-    text-decoration: underline !important;
-
-  }
-
-  .image-container .play-button {
-    width: 80px !important;
-    height: auto;
-  }
-
   .image-container {
     position: relative;
     display: inline-block;
@@ -341,24 +312,6 @@ a {
   .image-container img {
     display: block;
     width: 100%;
-  }
-
-  .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(4, 48, 3, 0.4);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .image-container:hover .overlay {
-    opacity: 1;
   }
 
 .playlist-item a::after {
@@ -373,7 +326,7 @@ a {
 }
 
 .playlist-item a:hover::after {
-  background-color: rgba(4, 48, 3, 0.4);
+  background-color: rgba(4, 48, 3, 0.1);
 }
 
 .playlist-item h2 {
@@ -403,7 +356,7 @@ a {
 }
 
 .playlist-item-header:hover::after {
-  background-color: rgba(4, 48, 3, 0.4);
+  background-color: rgba(4, 48, 3, 0.1);
 }
 
 .story-page-card {
@@ -444,4 +397,83 @@ a {
     font-size: 12px;
     font-weight: normal;
     padding: 2.5px 10px;
+}
+
+.image-container .play-button {
+  width: 80px !important;
+  height: auto;
+  display: none;
+}
+
+.image-container:hover .play-button {
+  display: block;
+}
+
+.image-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.image-container img {
+  display: block;
+  width: 100%;
+}
+
+.card-hover {
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.3s ease;
+}
+
+.card-hover:hover {
+  background-color: rgba(4, 48, 3, 0.1);
+}
+
+.card-hover .card-overlay {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(4, 48, 3, 0.1); 
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.card-hover:hover .card-overlay {
+  opacity: 1;
+}
+
+.card-hover .card,
+.card-hover .d-flex {
+  position: relative;
+  z-index: 2;
+}
+
+.card-hover .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+.text-hover .card-title {
+  text-decoration: none;
+  transition: text-decoration 0.3s ease;
+}
+
+.text-hover:hover .card-title {
+  text-decoration: underline;
+}
+
+.radio-episode-card a:hover {
+  text-decoration: underline;
 }

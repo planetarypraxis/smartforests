@@ -1,14 +1,13 @@
 {% load wagtailimages_tags %}
 
 {% if self.thumbnail_image_resilient and self.thumbnail_image_resilient.url %}
-  <div class="card">
+  <div class="card card-hover">
     {% include "logbooks/include/thumbnail_meta.html" with class="card-body link-reset text-dark-grey" %}
-
     <img src="{{self.thumbnail_image_resilient.url}}" class="img-fluid card-img-bottom">
     <div class="card-overlay"></div>
   </div>
 {% else %}
-  <div class="card">
+  <div class="card card-hover">
     {% include "logbooks/include/thumbnail_meta.html" with class="card-body link-reset text-dark-grey" %}
     <div class="card-overlay"></div>
   </div>

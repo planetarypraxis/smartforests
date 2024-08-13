@@ -1,10 +1,10 @@
 {% load ckdjango_tags wagtailimages_tags wagtailcore_tags %}
 
-<div class="d-flex align-items-start flex-row {{ class }}">
+<div class="d-flex align-items-start flex-row {{ class }} text-hover">
   <div class="flex-grow-1">
-    <a class="text-decoration-none story-page-title-link heading-medium text-dark-green" style="word-break: break-word" href="{{page.url}}">
+    <a class=" story-page-title-link heading-medium text-dark-green card-title" style="word-break: break-word" href="{{page.url}}">
       {{ page.title }}
-  </a>
+    </a>
     {% if page.extract %}
     <div class="mt-1 extract text-dark-green">{{ page.extract|richtext }}</div>
     {% endif %} 

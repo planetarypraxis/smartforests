@@ -2,22 +2,17 @@
 <div class="row mb-5">
     {% for page in contents %}
     <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
-        <div class="story-page-card d-flex flex-column">
-            {% if page.thumbnail_image_resilient and page.thumbnail_image_resilient.url %}
+        <div class="story-page-card d-flex flex-column card-hover">
             <div class="story-image-container d-flex align-items-center justify-content-center">
-                <img src="{{ page.thumbnail_image_resilient.url }}" class="card-img-top" alt="{{ page.title }}">
-                <div class="overlay"></div>
+                {% if page.thumbnail_image_resilient and page.thumbnail_image_resilient.url %}
+                    <img src="{{ page.thumbnail_image_resilient.url }}" class="card-img-top" alt="{{ page.title }}">
+                {% endif %}
             </div>
-            {% else %}
-            <div class="story-image-container">
-                <div class="overlay"></div>
-            </div>
-            {% endif %}
             <div class="card-body link-reset text-dark-grey p-3">
                 {% include "logbooks/include/story_page_thumbnail_meta.html" %}
             </div>
+            <div class="card-overlay"></div>
         </div>
     </div>
     {% endfor %}
-
 </div>
