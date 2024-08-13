@@ -118,7 +118,7 @@ function doTagCloud($container, width, height, data, tagOffcanvas) {
 
   function drawBackground() {
     context.save();
-    context.fillStyle = "#1f6b1f";
+    context.fillStyle =  "rgba(31, 107, 31, 0.2)"
     context.fillRect(0, 0, canvas.width, canvas.height);
     context.restore();
 
@@ -146,7 +146,7 @@ function doTagCloud($container, width, height, data, tagOffcanvas) {
           return c;
         }, 0);
         if (count > 0) {
-          context.globalAlpha = 0.6;
+          context.globalAlpha = 0.1;
           context.fillStyle = color(1 - count / 5);
           context.fillRect(width, height, heatSquareSize, heatSquareSize);
         }

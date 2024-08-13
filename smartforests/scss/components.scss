@@ -530,3 +530,13 @@
 .logbook-entry-tags .filter-tag:hover {
   background-color: rgba(4, 48, 3, .1) !important;
 }
+
+// Background behind homepage tag cloud
+canvas {
+  background: linear-gradient(0deg, rgba(2, 99, 2, 1), rgba(2, 70, 2, 0)),
+  url('../static/img/noise.svg');
+  mix-blend-mode: darken;
+}
+
+
+
