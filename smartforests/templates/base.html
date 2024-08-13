@@ -24,6 +24,8 @@
         {% webpack_bundle 'main' %}
         {% block extra_js %}
         {% endblock %}
+        <title>{% block title %}{{ self.title }} — Smart Forests Atlas{% endblock %}</title>
+
         
         <!-- CSS -->
         {% webpack_bundle 'main' 'css' %}
