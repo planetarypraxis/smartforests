@@ -3,7 +3,7 @@
     {% for page in contents %}
     <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3 d-flex flex-column">
         <div class="d-flex flex-column h-100">
-            <div class="mb-3 position-relative card-hover" style="height: 200px;">
+            <div class="mb-3 position-relative" style="height: 200px;">
                 {% if page.thumbnail_image_resilient and page.thumbnail_image_resilient.url %}
                     <img src="{{ page.thumbnail_image_resilient.url }}" alt="{{ page.title }}" class=" card-hover position-absolute bottom-0 start-50 translate-middle-x" style="max-height: 100%; width: auto; object-fit: contain;">
                 {% endif %}
