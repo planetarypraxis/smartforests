@@ -15,7 +15,7 @@
     </div>
     {% endif %} 
     {% if page.tags.all %}
-    <div class="tags mt-1">
+    <div class="tags mt-1 tag-label-wrapper">
       {% for tag in page.tags.all|slice:":5" %}
       {% include "logbooks/include/tag_label.html" with tag=tag %}
       {% endfor %}
