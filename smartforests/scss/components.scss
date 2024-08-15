@@ -534,7 +534,10 @@
 // Background behind homepage tag cloud
 canvas {
   background: linear-gradient(0deg, rgba(2, 99, 2, 1), rgba(2, 70, 2, 0)),
-  url('../static/img/noise.svg');
+              url('../static/img/noise.svg');
+  background-repeat: no-repeat; 
+  background-size: cover; 
+  background-position: center;
   mix-blend-mode: darken;
 }
 
