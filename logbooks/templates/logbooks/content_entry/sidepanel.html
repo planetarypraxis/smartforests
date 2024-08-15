@@ -6,17 +6,16 @@
 </head>
 
 <turbo-frame id="sidepanel-turboframe">
-  <div class="container gx-2 py-2 bg-yellow opacity-8" style="mix-blend-mode: multiply">
+  <div class="container gx-2 py-2 bg-yellow opacity-8 d-flex justify-content-end" style="mix-blend-mode: multiply">
     <button
       type='button'
       data-bs-dismiss="offcanvas"
       class="btn btn-link text-reset text-decoration-none"
       aria-label="Close"
     >
-      <span class="pe-2">&larr;</span>
-      <span class="border-bottom border-1 pb-1 border-dark-green">
-        {% translate "Close" %}
-      </span>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 1.61143L14.3886 0L8 6.38857L1.61143 0L0 1.61143L6.38857 8L0 14.3886L1.61143 16L8 9.61143L14.3886 16L16 14.3886L9.61143 8L16 1.61143Z" fill="#043003"/>
+      </svg>
     </button>
   </div>
 
