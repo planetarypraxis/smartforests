@@ -101,17 +101,8 @@ def highlight_tags(context, content: SafeText):
     locale = Locale.get_active()
 
     content = str(content)
-
-    words = set()
-    splitter = r"[ !#()\-;:'\",./<>&]"
-    raw_words = re.split(splitter, content)
-
-    # Consider potential multi-word tags by combining adjacent words
-    for i in range(len(raw_words)):
-        for j in range(i + 1, len(raw_words) + 1):
-            phrase = " ".join(raw_words[i:j])
-            words.add(phrase)
-            words.add(phrase.lower())
+  
+    splitter = r"[ !#()\;:'\",./<>&]"
             
      
     # logger.info(f"Wordlist to highlight: {words}")
