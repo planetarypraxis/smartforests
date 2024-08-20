@@ -3,22 +3,25 @@ from django.conf import settings
 from django.db.models import Q
 from django.db.models.fields import CharField
 from django.db.models.fields.related import ForeignKey
-from django.template.loader import render_to_string
-from django.template.response import TemplateResponse
+from django.forms.widgets import SelectMultiple
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from modelcluster.fields import ParentalKey
+from wagtail.admin.forms.tags import TagField
 from wagtail.models import Page
 from smartforests.models import Tag, User
 from smartforests.util import ensure_list
-from wagtail.admin.panels import FieldPanel, InlinePanel, MultipleChooserPanel, TitleFieldPanel
+from wagtail.admin.panels import (
+    FieldPanel,
+    InlinePanel,
+    MultipleChooserPanel,
+    TitleFieldPanel,
+)
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.fields import RichTextField
 from wagtail.models import Locale, Orderable
 from wagtailmedia.edit_handlers import MediaChooserPanel
-from commonknowledge.wagtail.helpers import get_children_of_type
 from commonknowledge.wagtail.models import ChildListMixin
-from commonknowledge.django.cache import django_cached_model
 from django.template.defaultfilters import slugify
 from wagtail.api import APIField
 from wagtail.images.api.fields import ImageRenditionField
@@ -528,6 +531,41 @@ class LogbookIndexPage(IndexPage):
         return filter
 
 
+class ContributorTagField(TagField):
+    """
+    Override the TagField form field to be a <select> dropdown.
+    """
+
+    class ContributorTagSelect(SelectMultiple):
+        """
+        Replace the default tag widget with a <select> dropdown, restricting
+        contributor tags to one of a set, defined by the parent
+        ContributorsIndexPage in the group_by_tags field.
+        """
+
+        def __init__(self, *args, **kwargs) -> None:
+            locale = Locale.get_active()
+            parent_page = ContributorsIndexPage.objects.filter(locale=locale).first()
+            tags = (
+                parent_page.group_by_tags.all()
+                if parent_page
+                else Tag.objects.filter(
+                    name__in=["internal", "external"], locale__language_code="en"
+                )
+            )
+            choices = [(tag.name, tag.name) for tag in tags]
+            super().__init__(*args, **kwargs, choices=choices)
+
+    widget = ContributorTagSelect
+
+    def clean(self, value):
+        """
+        The value provided by the <select> dropdown does not need to be
+        parsed (unlike the default tag component, which uses comma-separated values).
+        """
+        return value
+
+
 class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
     allow_search = True
     page_size = 50
@@ -559,7 +597,12 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
     byline = CharField(max_length=1000, blank=True, null=True)
     avatar = ForeignKey(CmsImage, on_delete=models.SET_NULL, null=True, blank=True)
     bio = RichTextField(blank=True, null=True)
-    tags = LocalizedTaggableManager(through=AtlasTag, blank=True)
+
+    class ContributorTaggableManager(LocalizedTaggableManager):
+        def formfield(self, form_class=ContributorTagField, **kwargs):
+            return super().formfield(ContributorTagField, **kwargs)
+
+    tags = ContributorTaggableManager(through=AtlasTag, help_text="")
 
     content_panels = [
         FieldPanel("title", classname="full title"),
