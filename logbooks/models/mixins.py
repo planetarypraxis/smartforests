@@ -107,23 +107,27 @@ class BaseLogbooksPage(Page):
         Return the index page that is the top-level parent for
         the current page.
         """
-        parent = self.get_parent()
 
-        # Can't get a top level category if no parent is found
-        if not parent:
-            return self
+        # Start with the current page
+        category_page = self
 
-        # If the parent is a content page, keep going up the tree
-        parent = parent.specific
-        if isinstance(parent, BaseLogbooksPage):
-            return parent.top_level_category
+        # Go up the page tree, stopping when there is no parent
+        parent = category_page.get_parent()
+        while parent:
+            parent_is_home_or_root = parent.depth <= 2
 
-        # If the parent is the Home page, stop going up the tree
-        if parent.depth <= 2:
-            return self
+            # If the parent is the home page, stop going up the tree
+            # as the current page must be the top level category
+            if parent_is_home_or_root:
+                break
 
-        # Parent here should be an index page
-        return parent
+            # If the parent is not the home or root page, it could
+            # be the top level category page, so continue going up
+            # the tree
+            category_page = parent
+            parent = category_page.get_parent()
+
+        return category_page
 
 
 class ContributorMixin(BaseLogbooksPage):
