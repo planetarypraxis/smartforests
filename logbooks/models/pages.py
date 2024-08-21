@@ -107,8 +107,7 @@ class StoryPage(ArticlePage, ThumbnailMixin):
     def get_tags(self):
         return self.tags.all()
 
-    
-    
+
 class StoryIndexPage(Page):
     """
     Collection of stories.
@@ -119,9 +118,12 @@ class StoryIndexPage(Page):
 
     def get_context(self, request):
         context = super().get_context(request)
-        context['child_list_page'] = self.get_children().live().specific().order_by('-first_published_at')
+        context["child_list_page"] = (
+            self.get_children().live().specific().order_by("-first_published_at")
+        )
         return context
-    
+
+
 class EpisodePage(ArticlePage):
     """
     Episodes are individual items for the radio.
@@ -233,7 +235,7 @@ class PlaylistPage(ArticlePage):
             translation_key__in=all_tag_keys, locale=locale
         )
         return list(sorted(localized_tags, key=lambda tag: tag.name))
-    
+
     @property
     def episode_count(self):
         return self.episodes.count()
@@ -267,9 +269,11 @@ class RadioIndexPage(RadioIndexPageMixin, IndexPage):
         verbose_name = "Radio index page"
 
     def featured(self):
-        return EpisodePage.objects.live().filter(featured=True, locale=self.locale).order_by('-first_published_at')
-
-
+        return (
+            EpisodePage.objects.live()
+            .filter(featured=True, locale=self.locale)
+            .order_by("-first_published_at")
+        )
 
     def playlists(self):
         return PlaylistPage.objects.live().filter(locale=self.locale)
@@ -566,6 +570,16 @@ class ContributorTagField(TagField):
         return value
 
 
+class ContributorTaggableManager(LocalizedTaggableManager):
+    """
+    Tags field that uses a select dropdown instead of the default tag widget (see above).
+    Used for contributors, which have a restricted range of tags available.
+    """
+
+    def formfield(self, form_class=ContributorTagField, **kwargs):
+        return super().formfield(ContributorTagField, **kwargs)
+
+
 class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
     allow_search = True
     page_size = 50
@@ -598,11 +612,8 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
     avatar = ForeignKey(CmsImage, on_delete=models.SET_NULL, null=True, blank=True)
     bio = RichTextField(blank=True, null=True)
 
-    class ContributorTaggableManager(LocalizedTaggableManager):
-        def formfield(self, form_class=ContributorTagField, **kwargs):
-            return super().formfield(ContributorTagField, **kwargs)
-
     tags = ContributorTaggableManager(through=AtlasTag, help_text="")
+    past_contributor = models.BooleanField(blank=True, default=False)
 
     content_panels = [
         FieldPanel("title", classname="full title"),
@@ -611,6 +622,7 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
         AutocompletePanel("user"),
         FieldPanel("bio"),
         FieldPanel("tags"),
+        FieldPanel("past_contributor"),
     ] + GeocodedMixin.content_panels
 
     seo_image_sources = ["og_image", "avatar", "default_seo_image"]
@@ -635,7 +647,7 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
     def all_localized_tags(self):
         if self.slug == "common-knowledge":
             return []
-        
+
         if not self.user:
             return []
 
@@ -730,19 +742,16 @@ class ContributorsIndexPage(IndexPage):
         if sort:
             qs = qs.order_by(sort.ordering)
 
-        return qs
+        return sorted(qs, key=lambda contributor: contributor.past_contributor)
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         child_list_pages = []
-        seen_ids = set()
         filter = self.get_filters(request)
         sort = self.get_sort(request)
         for tag in self.group_by_tags.all():
             qs = self.get_child_list_section(request, tag, filter, sort)
             if len(qs):
-                ids = qs.values_list("id", flat=True)
-                seen_ids = seen_ids.union(ids)
                 child_list_pages.append((tag.localized.name, qs))
 
         remaining_qs = self.get_child_list_section(
