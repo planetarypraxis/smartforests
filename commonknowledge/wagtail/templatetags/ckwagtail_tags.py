@@ -16,6 +16,7 @@ register = template.Library()
 
 logger = logging.getLogger(__name__)
 
+
 @register.inclusion_tag("ckwagtail/include/menubar.html", takes_context=True)
 def menubar(context, **kwargs):
     request = context.get("request", None)
@@ -101,25 +102,21 @@ def highlight_tags(context, content: SafeText):
     locale = Locale.get_active()
 
     content = str(content)
-  
-    splitter = r"[ !#()\;:'\",./<>&]"
-            
-     
-    # logger.info(f"Wordlist to highlight: {words}")
-    # logger.info(f"Already highlighted: {highlighted_tag_ids}")
 
- 
+    splitter = r"[ !#()\;:'\",./<>&]"
+
+    logger.debug(f"Content to highlight: {content}")
+    logger.debug(f"Already highlighted: {highlighted_tag_ids}")
+
     # Remove links and re-insert after highlighting tags
-     # Matching tags inside <a> tags breaks them
+    # Matching tags inside <a> tags breaks them
     links = re.findall(r"<a[^<]*</a>", content, re.IGNORECASE)
     for i, link in enumerate(links):
         content = content.replace(link, f"[#~{i}~#]")
 
-    tags = Tag.objects.filter(locale=locale).exclude(
-        id__in=highlighted_tag_ids
-    )
+    tags = Tag.objects.filter(locale=locale).exclude(id__in=highlighted_tag_ids)
 
-    logger.info(f"Tags found: {list(tags)}")
+    logger.debug(f"Tags found: {list(tags)}")
 
     # Sort tags by length to handle multi-word tags correctly
     sorted_tags = sorted(tags, key=lambda tag: len(tag.name), reverse=True)
@@ -135,7 +132,7 @@ def highlight_tags(context, content: SafeText):
             </a>
         </span>\3
         """.strip()
-        
+
         prev_content = content
         content = re.sub(
             rf"({splitter})({re.escape(tag.name)})({splitter})",
@@ -144,12 +141,13 @@ def highlight_tags(context, content: SafeText):
             count=1,
             flags=re.IGNORECASE,
         )
-        
+
         if content != prev_content:
             # Only highlight a tag once per request
+            logger.info(f"Highlighted tag: {tag}")
             highlighted_tag_ids.append(tag.id)
         else:
-            logger.error(f"Failed to convert {tag.id}: {tag.name} to tag")
+            logger.debug(f"Did not find {tag.id}: {tag.name} in content")
 
     for i, link in enumerate(links):
         content = content.replace(f"[#~{i}~#]", link)
@@ -158,6 +156,7 @@ def highlight_tags(context, content: SafeText):
         request.highlighted_tag_ids = highlighted_tag_ids
 
     return mark_safe(content)
+
 
 @register.simple_tag
 def log_fields(obj):
@@ -168,7 +167,6 @@ def log_fields(obj):
             print(f"{field}: {value}")
         return fields
     return {}
-
 
 
 @register.simple_tag

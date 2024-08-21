@@ -125,7 +125,7 @@
         {% for entry in child_list_page %}
             <article class="logbook-entry {% if forloop.first %}mt-0{% endif %}"
                      id="{{ entry.id }}">
-                {% include entry.content_html with self=entry user=user only %}
+                {% include entry.content_html with self=entry user=user request=request only %}
             </article>
         {% endfor %}
     </div>
