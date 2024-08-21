@@ -103,11 +103,27 @@ class BaseLogbooksPage(Page):
 
     @property
     def top_level_category(self):
-        parent = self.get_parent().specific
-        if parent is not None and isinstance(parent, BaseLogbooksPage):
+        """
+        Return the index page that is the top-level parent for
+        the current page.
+        """
+        parent = self.get_parent()
+
+        # Can't get a top level category if no parent is found
+        if not parent:
+            return self
+
+        # If the parent is a content page, keep going up the tree
+        parent = parent.specific
+        if isinstance(parent, BaseLogbooksPage):
             return parent.top_level_category
 
-        return self
+        # If the parent is the Home page, stop going up the tree
+        if parent.depth <= 2:
+            return self
+
+        # Parent here should be an index page
+        return parent
 
 
 class ContributorMixin(BaseLogbooksPage):
@@ -277,9 +293,7 @@ class GeocodedMixin(BaseLogbooksPage):
             print("Map generator error:", url)
             print(response.status_code, response.content)
             return
-        image = ImageFile(
-           BytesIO(response.content), name=f"map-{self.pk}.png"
-        )
+        image = ImageFile(BytesIO(response.content), name=f"map-{self.pk}.png")
 
         if self.map_image is not None:
             self.map_image.delete()
@@ -300,7 +314,7 @@ class GeocodedMixin(BaseLogbooksPage):
             style_id="ckziehr6u001e14ohgl2brzlu",
             width=300,
             height=200,
-            zoom=5
+            zoom=5,
         )
 
     content_panels = [
@@ -415,6 +429,7 @@ class ThumbnailMixin(BaseLogbooksPage):
                     break
 
         return super().save(*args, **kwargs)
+
 
 class SidebarRenderableMixin(BaseLogbooksPage):
     class Meta:
