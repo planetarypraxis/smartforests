@@ -1,32 +1,48 @@
-import qs from 'query-string'
-import { getLanguageCode } from './pageContext';
+import qs from "query-string";
+import { getLanguageCode } from "./pageContext";
 
-const SEARCH_ID = "searchToggle"
-const SEARCH_BACKDROP_ID = 'search-backdrop'
+const SEARCH_ID = "searchToggle";
+const SEARCH_BACKDROP_ID = "search-backdrop";
 
 const init = () => {
   const search = document.getElementById("search-box");
+  const searchContainer = search?.parentElement;
+  const searchButton = searchContainer?.querySelector(".icon-search")?.parentElement;
+  const searchCloseButton = searchContainer?.querySelector(".icon-close")?.parentElement;
   const searchResults = document.getElementById("search-results");
   const searchResultsLoading = document.getElementById("search-results-loading");
   const searchToggle = document.getElementById(SEARCH_ID);
   const modal = new window.bootstrap.Modal(searchToggle);
-  const languageCode = getLanguageCode()
+  const languageCode = getLanguageCode();
 
   searchToggle.addEventListener("submit", (e) => e.preventDefault());
+
+  const doSearch = () => {
+    searchResults.innerHTML = `<div class="position-relative search-item p-3 border-bottom">${searchResultsLoading?.textContent}</div>`;
+    searchResults.src = qs.stringifyUrl({
+      url: "/search/",
+      query: {
+        query: search.value,
+        language_code: languageCode,
+      },
+    });
+  };
 
   search.addEventListener(
     "input",
     _.debounce(() => {
-      searchResults.innerHTML = `<div class="position-relative search-item p-3 border-bottom">${searchResultsLoading?.textContent}</div>`
-      searchResults.src = qs.stringifyUrl({
-        url: '/search/',
-        query: {
-          query: search.value,
-          language_code: languageCode
-        }
-      })
+      doSearch();
     }, 300)
   );
+
+  searchButton?.addEventListener("click", () => {
+    doSearch();
+  });
+
+  searchCloseButton?.addEventListener("click", () => {
+    // @ts-ignore
+    bootstrap.Modal.getInstance(document.getElementById(SEARCH_ID)).hide();
+  });
 
   document.addEventListener("keydown", (event) => {
     if (event.ctrlKey && event.key === "s") {
@@ -69,53 +85,53 @@ const init = () => {
   });
 
   function getBackdropElement() {
-    return document.getElementById(SEARCH_BACKDROP_ID)
+    return document.getElementById(SEARCH_BACKDROP_ID);
   }
 
   function getSearchElement() {
-    return document.getElementById(SEARCH_ID)
+    return document.getElementById(SEARCH_ID);
   }
 
   function closeBootstrapSearchOnOutsideClicks(event) {
-    const modalElement = getSearchElement().querySelector('.modal-dialog')
-    const isClickingOutside = !event.composedPath().includes(modalElement)
+    const modalElement = getSearchElement().querySelector(".modal-dialog");
+    const isClickingOutside = !event.composedPath().includes(modalElement);
     if (isClickingOutside) {
       // @ts-ignore
-      bootstrap.Modal.getInstance(document.getElementById(SEARCH_ID)).hide()
+      bootstrap.Modal.getInstance(document.getElementById(SEARCH_ID)).hide();
     }
   }
 
-  document.addEventListener("show.bs.modal", showBackdrop)
-  document.addEventListener("hidden.bs.modal", hideBackdrop)
-  document.addEventListener("turbo:before-cache", hideBackdrop)
+  document.addEventListener("show.bs.modal", showBackdrop);
+  document.addEventListener("hidden.bs.modal", hideBackdrop);
+  document.addEventListener("turbo:before-cache", hideBackdrop);
 
   function showBackdrop() {
-    document.body.classList.toggle('modal-open', true)
+    document.body.classList.toggle("modal-open", true);
     //
-    let backdrop = getBackdropElement()
+    let backdrop = getBackdropElement();
     if (!backdrop) {
-      backdrop = document.createElement('div')
-      backdrop.classList.add('modal-backdrop')
-      backdrop.classList.add('fade')
-      backdrop.classList.add('show')
-      backdrop.setAttribute('id', SEARCH_BACKDROP_ID)
-      backdrop.setAttribute('data-turbo-cache', 'false')
-      document.body.appendChild(backdrop)
+      backdrop = document.createElement("div");
+      backdrop.classList.add("modal-backdrop");
+      backdrop.classList.add("fade");
+      backdrop.classList.add("show");
+      backdrop.setAttribute("id", SEARCH_BACKDROP_ID);
+      backdrop.setAttribute("data-turbo-cache", "false");
+      document.body.appendChild(backdrop);
     }
-    document.addEventListener('click', closeBootstrapSearchOnOutsideClicks)
+    document.addEventListener("click", closeBootstrapSearchOnOutsideClicks);
   }
 
   function hideBackdrop() {
     // Kill the outside click listener
-    document.removeEventListener('click', closeBootstrapSearchOnOutsideClicks)
+    document.removeEventListener("click", closeBootstrapSearchOnOutsideClicks);
     //
-    document.body.classList.toggle('modal-open', false)
+    document.body.classList.toggle("modal-open", false);
     //
-    const backdrop = getBackdropElement()
-    if (!backdrop) return
-    backdrop.classList.remove('show')
-    backdrop.addEventListener('transitionend', () => {
-      backdrop.remove()
+    const backdrop = getBackdropElement();
+    if (!backdrop) return;
+    backdrop.classList.remove("show");
+    backdrop.addEventListener("transitionend", () => {
+      backdrop.remove();
     });
   }
 };
