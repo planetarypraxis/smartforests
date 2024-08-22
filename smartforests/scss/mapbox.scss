@@ -59,6 +59,11 @@
 }
 
 .mapboxgl-ctrl-geocoder {
+
+  @include media-breakpoint-down(sm) {
+    width: 80% !important;
+  }
+  
   &--icon {
     fill: $dark-green !important;
   }
@@ -123,7 +128,7 @@
 
   &:not(.mapboxgl-ctrl-filters--collapsed) {
     height: 500px;
-    width: 100%;
+    width: 80%;
     max-height: calc(100vh - 130px);
   }
 }
