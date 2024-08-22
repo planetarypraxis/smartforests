@@ -103,11 +103,31 @@ class BaseLogbooksPage(Page):
 
     @property
     def top_level_category(self):
-        parent = self.get_parent().specific
-        if parent is not None and isinstance(parent, BaseLogbooksPage):
-            return parent.top_level_category
+        """
+        Return the index page that is the top-level parent for
+        the current page.
+        """
 
-        return self
+        # Start with the current page
+        category_page = self
+
+        # Go up the page tree, stopping when there is no parent
+        parent = category_page.get_parent()
+        while parent:
+            parent_is_home_or_root = parent.depth <= 2
+
+            # If the parent is the home page, stop going up the tree
+            # as the current page must be the top level category
+            if parent_is_home_or_root:
+                break
+
+            # If the parent is not the home or root page, it could
+            # be the top level category page, so continue going up
+            # the tree
+            category_page = parent
+            parent = category_page.get_parent()
+
+        return category_page
 
 
 class ContributorMixin(BaseLogbooksPage):
@@ -277,9 +297,7 @@ class GeocodedMixin(BaseLogbooksPage):
             print("Map generator error:", url)
             print(response.status_code, response.content)
             return
-        image = ImageFile(
-           BytesIO(response.content), name=f"map-{self.pk}.png"
-        )
+        image = ImageFile(BytesIO(response.content), name=f"map-{self.pk}.png")
 
         if self.map_image is not None:
             self.map_image.delete()
@@ -300,7 +318,7 @@ class GeocodedMixin(BaseLogbooksPage):
             style_id="ckziehr6u001e14ohgl2brzlu",
             width=300,
             height=200,
-            zoom=5
+            zoom=5,
         )
 
     content_panels = [
@@ -415,6 +433,7 @@ class ThumbnailMixin(BaseLogbooksPage):
                     break
 
         return super().save(*args, **kwargs)
+
 
 class SidebarRenderableMixin(BaseLogbooksPage):
     class Meta:
