@@ -1,10 +1,19 @@
 {% extends "logbooks/index_page_base.html" %}
+{% load i18n %}
 {% block index_content %}
-{% for tag_name, child_list_page in child_list_pages %}
-<h2 class="fw-bold mb-3">{{ tag_name|title }}</h2>
+{% for section in sections %}
+<h2 class="fw-bold mb-3">{{ section.title|title }}</h2>
+{% if section.current %}
 <div class="mb-5">
-{% include "logbooks/include/masonry.html" with contents=child_list_page %}
+{% include "logbooks/include/masonry.html" with contents=section.current %}
 </div>
+{% endif %}
+{% if section.past %}
+<h3 class="fs-5 mb-2">{% translate "Past Contributors" %}</h3>
+<div class="mb-5">
+{% include "logbooks/include/masonry.html" with contents=section.past %}
+</div>
+{% endif %}
 {% endfor %}
 {% endblock %}
 {% block filter_mobile %}{% endblock %}

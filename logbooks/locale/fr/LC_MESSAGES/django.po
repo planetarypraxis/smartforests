@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-16 11:57+0000\n"
+"POT-Creation-Date: 2024-08-22 10:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,59 +22,59 @@ msgstr ""
 msgid "To cite this page: "
 msgstr "Pour citer cette page: "
 
-#: logbooks/models/pages.py:57
+#: logbooks/models/pages.py:61
 msgid "Story"
 msgstr "Histoire"
 
-#: logbooks/models/pages.py:58
+#: logbooks/models/pages.py:62
 msgid "Stories"
 msgstr "Histoires"
 
-#: logbooks/models/pages.py:87
+#: logbooks/models/pages.py:90
 msgid "To cite this story: "
 msgstr "Pour citer cette histoire: "
 
-#: logbooks/models/pages.py:120
+#: logbooks/models/pages.py:133
 msgid "Radio Episode"
 msgstr "Épisode radio"
 
-#: logbooks/models/pages.py:121
+#: logbooks/models/pages.py:134
 msgid "Radio Episodes"
 msgstr "Épisodes radio"
 
-#: logbooks/models/pages.py:178
+#: logbooks/models/pages.py:191
 msgid "To cite this radio episode: "
 msgstr "Pour citer cet épisode radio: "
 
-#: logbooks/models/pages.py:292
+#: logbooks/models/pages.py:313
 msgid "Logbook Entry"
 msgstr "Entrée du journal de bord"
 
-#: logbooks/models/pages.py:293
+#: logbooks/models/pages.py:314
 msgid "Logbook Entries"
 msgstr "Entrée du journal de bord"
 
-#: logbooks/models/pages.py:340
+#: logbooks/models/pages.py:361
 msgid "Logbook"
 msgstr "Journal de bord"
 
-#: logbooks/models/pages.py:341
+#: logbooks/models/pages.py:362
 msgid "Logbooks"
 msgstr "Journaux de bord"
 
-#: logbooks/models/pages.py:474
+#: logbooks/models/pages.py:495
 msgid "To cite this logbook: "
 msgstr "Pour citer ce journal de bord: "
 
-#: logbooks/models/pages.py:534
+#: logbooks/models/pages.py:600
 msgid "Contributor"
 msgstr "Contributeur"
 
-#: logbooks/models/pages.py:535 logbooks/templates/logbooks/metadata.html:14
+#: logbooks/models/pages.py:601 logbooks/templates/logbooks/metadata.html:14
 msgid "Contributors"
 msgstr "Contributeurs"
 
-#: logbooks/models/pages.py:690
+#: logbooks/models/pages.py:761
 msgid "Uncategorized"
 msgstr "Non classé"
 
@@ -86,12 +86,7 @@ msgstr "Par"
 msgid "Edit"
 msgstr "Editer"
 
-#: logbooks/templates/logbooks/content_entry/sidepanel.html:18
-#: logbooks/templates/logbooks/frames/tags.html:18
-msgid "Close"
-msgstr "Fermer"
-
-#: logbooks/templates/logbooks/content_entry/sidepanel.html:53
+#: logbooks/templates/logbooks/content_entry/sidepanel.html:52
 msgid "Read More"
 msgstr "Lire la suite"
 
@@ -108,6 +103,10 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
+#: logbooks/templates/logbooks/contributors_index_page.html:12
+msgid "Past Contributors"
+msgstr "Contributeurs passés"
+
 #: logbooks/templates/logbooks/frames/page_tagcloud.html:9
 msgid "Related Tags"
 msgstr "Tags associés"
@@ -116,11 +115,15 @@ msgstr "Tags associés"
 msgid "Tag"
 msgstr "Étiquette"
 
+#: logbooks/templates/logbooks/frames/tags.html:18
+msgid "Close"
+msgstr "Fermer"
+
 #: logbooks/templates/logbooks/frames/tags.html:60
 msgid "View on Map"
 msgstr "Voir sur la carte"
 
-#: logbooks/templates/logbooks/include/endnotes.html:8
+#: logbooks/templates/logbooks/include/endnotes.html:9
 msgid ""
 "\n"
 "        Smart Forests Atlas materials are free to use for non-commercial "
@@ -135,10 +138,11 @@ msgstr ""
 "\"https://creativecommons.org/licenses/by-nc-sa/4.0/\">CC BY-NC-SA 4.0</a>."
 
 #: logbooks/templates/logbooks/include/masonry.html:15
+#: logbooks/templates/logbooks/include/masonry.html:23
 msgid "Nothing found"
 msgstr "Rien n'a été trouvé"
 
-#: logbooks/templates/logbooks/include/masonry.html:24
+#: logbooks/templates/logbooks/include/masonry.html:33
 msgid "Loading"
 msgstr "Chargement"
 
@@ -156,10 +160,10 @@ msgstr "Tags"
 #: logbooks/templates/logbooks/index_page_base.html:88
 #: logbooks/templates/logbooks/index_page_base.html:135
 #: logbooks/templates/logbooks/index_page_base.html:152
-#: logbooks/templates/logbooks/logbook_page.html:14
-#: logbooks/templates/logbooks/logbook_page.html:31
-#: logbooks/templates/logbooks/logbook_page.html:67
-#: logbooks/templates/logbooks/logbook_page.html:84
+#: logbooks/templates/logbooks/logbook_page.html:17
+#: logbooks/templates/logbooks/logbook_page.html:34
+#: logbooks/templates/logbooks/logbook_page.html:72
+#: logbooks/templates/logbooks/logbook_page.html:89
 msgid "Title A—Z"
 msgstr "Titre A-Z"
 
@@ -167,10 +171,10 @@ msgstr "Titre A-Z"
 #: logbooks/templates/logbooks/index_page_base.html:94
 #: logbooks/templates/logbooks/index_page_base.html:137
 #: logbooks/templates/logbooks/index_page_base.html:158
-#: logbooks/templates/logbooks/logbook_page.html:16
-#: logbooks/templates/logbooks/logbook_page.html:37
-#: logbooks/templates/logbooks/logbook_page.html:69
-#: logbooks/templates/logbooks/logbook_page.html:90
+#: logbooks/templates/logbooks/logbook_page.html:19
+#: logbooks/templates/logbooks/logbook_page.html:40
+#: logbooks/templates/logbooks/logbook_page.html:74
+#: logbooks/templates/logbooks/logbook_page.html:95
 msgid "Title Z—A"
 msgstr "Titre Z—A"
 
@@ -180,12 +184,12 @@ msgstr "Titre Z—A"
 #: logbooks/templates/logbooks/index_page_base.html:139
 #: logbooks/templates/logbooks/index_page_base.html:143
 #: logbooks/templates/logbooks/index_page_base.html:170
-#: logbooks/templates/logbooks/logbook_page.html:18
-#: logbooks/templates/logbooks/logbook_page.html:22
-#: logbooks/templates/logbooks/logbook_page.html:49
-#: logbooks/templates/logbooks/logbook_page.html:71
-#: logbooks/templates/logbooks/logbook_page.html:75
-#: logbooks/templates/logbooks/logbook_page.html:102
+#: logbooks/templates/logbooks/logbook_page.html:21
+#: logbooks/templates/logbooks/logbook_page.html:25
+#: logbooks/templates/logbooks/logbook_page.html:52
+#: logbooks/templates/logbooks/logbook_page.html:76
+#: logbooks/templates/logbooks/logbook_page.html:80
+#: logbooks/templates/logbooks/logbook_page.html:107
 msgid "Newest First"
 msgstr "Le plus récent d'entre eux"
 
@@ -193,10 +197,10 @@ msgstr "Le plus récent d'entre eux"
 #: logbooks/templates/logbooks/index_page_base.html:100
 #: logbooks/templates/logbooks/index_page_base.html:141
 #: logbooks/templates/logbooks/index_page_base.html:164
-#: logbooks/templates/logbooks/logbook_page.html:20
-#: logbooks/templates/logbooks/logbook_page.html:43
-#: logbooks/templates/logbooks/logbook_page.html:73
-#: logbooks/templates/logbooks/logbook_page.html:96
+#: logbooks/templates/logbooks/logbook_page.html:23
+#: logbooks/templates/logbooks/logbook_page.html:46
+#: logbooks/templates/logbooks/logbook_page.html:78
+#: logbooks/templates/logbooks/logbook_page.html:101
 msgid "Oldest First"
 msgstr "Le plus âgé le premier"
 
@@ -242,7 +246,7 @@ msgstr "Retour au contenu"
 msgid "Featured episodes"
 msgstr "Épisodes en vedette"
 
-#: logbooks/templates/logbooks/radio_index_page.html:49
+#: logbooks/templates/logbooks/radio_index_page.html:58
 msgid "Playlists"
 msgstr "Listes de lecture"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-16 11:57+0000\n"
+"POT-Creation-Date: 2024-08-22 10:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -78,16 +78,16 @@ msgstr ""
 "Il se peut qu'il ait été supprimé, que son nom ait été modifié ou qu'il soit "
 "temporairement indisponible."
 
-#: smartforests/templates/base.html:74
+#: smartforests/templates/base.html:76
 msgid "Tag"
 msgstr "Étiquette"
 
-#: smartforests/templates/base.html:78
+#: smartforests/templates/base.html:80
 #: smartforests/templates/menus/header.html:216
 msgid "Loading"
 msgstr "Chargement"
 
-#: smartforests/templates/base.html:82
+#: smartforests/templates/base.html:84
 msgid "Close"
 msgstr "Fermer"
 

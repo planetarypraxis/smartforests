@@ -723,7 +723,7 @@ class ContributorsIndexPage(IndexPage):
 
         return filter
 
-    def get_child_list_section(self, request, tag=None, filter=None, sort=None):
+    def get_contributors_for_tag(self, request, tag=None, filter=None, sort=None):
         qs: models.QuerySet = self.get_child_list_queryset(request).filter(
             tagged_items__tag=tag
         )
@@ -742,25 +742,36 @@ class ContributorsIndexPage(IndexPage):
         if sort:
             qs = qs.order_by(sort.ordering)
 
-        return sorted(qs, key=lambda contributor: contributor.past_contributor)
+        return qs
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
-        child_list_pages = []
+        contributors_by_tag = {}
         filter = self.get_filters(request)
         sort = self.get_sort(request)
         for tag in self.group_by_tags.all():
-            qs = self.get_child_list_section(request, tag, filter, sort)
+            qs = self.get_contributors_for_tag(request, tag, filter, sort)
             if len(qs):
-                child_list_pages.append((tag.localized.name, qs))
+                contributors_by_tag[tag.localized.name] = qs
 
-        remaining_qs = self.get_child_list_section(
+        remaining_qs = self.get_contributors_for_tag(
             request, tag=None, filter=filter, sort=sort
         )
         if len(remaining_qs):
-            child_list_pages.append((_("Uncategorized"), remaining_qs))
+            contributors_by_tag[_("Uncategorized")] = remaining_qs
 
-        context["child_list_pages"] = child_list_pages
+        divided_sections = []
+        for title, contributors in contributors_by_tag.items():
+            current = []
+            past = []
+            for contributor in contributors:
+                if contributor.past_contributor:
+                    past.append(contributor)
+                else:
+                    current.append(contributor)
+            divided_sections.append({"title": title, "current": current, "past": past})
+
+        context["sections"] = divided_sections
         context["tag_filter"] = request.GET.get("filter", None)
 
         return context
