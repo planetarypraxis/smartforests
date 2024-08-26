@@ -112,6 +112,10 @@
 .search-item {
   display: block;
 
+  h3 {
+    font-size: 18px;
+  }
+
   &:hover {
     background-color: $soft-green;
   }
