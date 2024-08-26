@@ -1,7 +1,7 @@
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 
-import React, { FC } from "react";
+import React, { FC, useCallback } from "react";
 import MapGL, { MapContext, NavigationControl } from "@urbica/react-map-gl";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import mapboxgl, { Evented } from "mapbox-gl";
@@ -144,7 +144,7 @@ const FilterView: FC<{ onClose: () => void; open: boolean }> = ({ onClose, open 
       <div className="position-sticky top-0 bg-white d-flex flex-row justify-content-start pb-4 align-items-baseline">
         <h2 className="heading-small fw-bold font-sans-serif">Filter by tag</h2>
 
-        {!!params["filter"] && ( 
+        {!!params["filter"] && (
           <a
             href={window.location.pathname}
             className="ms-2 font-monospace text-uppercase px-2 cursor-pointer text-decoration-none d-flex align-items-center"
@@ -190,6 +190,51 @@ const FilterView: FC<{ onClose: () => void; open: boolean }> = ({ onClose, open 
 function FilterPopover() {
   const [open, setOpen] = useState(false);
   const [params, _] = useTurboURLParams();
+  const [debounce, setDebounce] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      const observer = new MutationObserver((mutationsList) => {
+        mutationsList.forEach((mutation) => {
+          if (mutation.type === "childList") {
+            const filterTags = document.querySelectorAll(".filter-tag");
+
+            if (filterTags.length > 0) {
+              filterTags.forEach((tag) => {
+                tag.addEventListener("click", handleClick);
+              });
+              observer.disconnect();
+            }
+          }
+        });
+      });
+
+      observer.observe(document.body, { childList: true, subtree: true });
+
+      const handleClick = () => {
+        setOpen(false);
+        setDebounce(true);
+        setTimeout(() => setDebounce(false), 300);
+      };
+
+      const existingTags = document.querySelectorAll(".filter-tag");
+      if (existingTags.length > 0) {
+        existingTags.forEach((tag) => {
+          tag.addEventListener("click", handleClick);
+        });
+      }
+
+      return () => {
+        observer.disconnect();
+      };
+    }
+  }, [open]);
+
+  const handleToggle = useCallback(() => {
+    if (!debounce) {
+      setOpen(!open);
+    }
+  }, [debounce, open]);
 
   return (
     <div
@@ -199,12 +244,14 @@ function FilterPopover() {
       className={`mapboxgl-ctrl mapboxgl-ctrl-filters fade-inout ${
         open ? "" : "mapboxgl-ctrl-filters--collapsed"
       }`}
-      onClick={open ? undefined : () => setOpen(true)}
+      onClick={open ? undefined : handleToggle}
     >
       <FilterView
         open={open}
         onClose={() => {
           setOpen(false);
+          setDebounce(true);
+          setTimeout(() => setDebounce(false), 300);
         }}
       />
       <FilterIcon className={open ? "hidden" : ""} />
@@ -212,7 +259,6 @@ function FilterPopover() {
     </div>
   );
 }
-
 export function FilterControl() {
   const [_, setViewport] = useAtom(viewportAtom);
   const map: mapboxgl.Map = useContext(MapContext);
