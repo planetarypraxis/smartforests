@@ -125,6 +125,7 @@ h3.microcopy-small {
 .navbar {
   padding-bottom: 0;
 
+
   @include media-breakpoint-up(lg) {
     padding-bottom: $spacer * 0.5;
   }
@@ -503,9 +504,17 @@ a {
     }
   }
   
-  .ticker {
-    display: inline-block;
-    animation: ticker 15s linear infinite; 
+    .ticker {
+      display: inline-block;
+      animation: ticker 15s linear infinite; 
+    }
   }
-  
-  }
+
+// Make mobile header larger on mobile 
+  @include media-breakpoint-down(md) {
+    .mobile-menu-wrapper {
+      height: 60px;
+      width: 100%;
+    }
+
+}
