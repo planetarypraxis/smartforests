@@ -105,13 +105,16 @@ h3.microcopy-small {
 }
 
 
-
 .card {
   overflow: hidden;
 }
 
 .turbo-progress-bar {
   background: $dark-green;
+}
+
+.dropdown-toggle::after {
+  margin-left: 5px;
 }
 
 .dropdown-toggle.show {

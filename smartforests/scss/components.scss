@@ -135,6 +135,13 @@
 
 .sidebar-sized {
   width: 320px;
+  @include media-breakpoint-down(md) {
+    a {
+      font-size: 16px;
+  
+    }
+  }
+
 }
 
 .sidebar {

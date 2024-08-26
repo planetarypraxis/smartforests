@@ -39,13 +39,15 @@
                  class="col-md-1 filters-reveal collapse-horizontal d-flex justify-content-between align-items-center">
                 <div class="sidebar-sized">
     
-                        <a class="btn btn-link p-0 text-decoration-none"
+                        <a class="btn btn-link p-0 text-decoration-none d-flex align-items-baseline"
                            href="#filters"
                            data-bs-toggle="offcanvas"
                            href="#filters"
                            role="button"
                            aria-controls="filters">
-                            <svg width="14"
+                            <svg 
+                            class="me-1"
+                            width="14"
                                  height="14"
                                  viewBox="0 0 14 14"
                                  fill="none"
@@ -59,7 +61,7 @@
                 {% block filter_mobile %}
                 <!-- Display on small screens -->
                 <div class='dropdown dropdown-fixed-width bg-off-white d-md-none logbooks-dropdown'>
-                    <a class="dropdown-toggle fw-normal filter-link text-dark-green text-decoration-none"
+                    <a class="dropdown-toggle fw-normal filter-link text-dark-green text-decoration-none  d-flex justify-content-end align-items-center"
                     href="#"
                     role="button"
                     id="logbooks"
