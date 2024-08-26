@@ -67,8 +67,8 @@ class BasicSearchView(TemplateView):
             highlighter = SearchHeadline(
                 self.search_highlight_field,
                 query=SearchQuery(self.get_search_query()),
-                min_words=60,
-                max_words=80,
+                min_words=25,
+                max_words=30,
                 start_sel='<cksearch:hl>',
                 stop_sel="</cksearch:hl>"
             )
