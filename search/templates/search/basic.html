@@ -31,9 +31,10 @@
             {% include "logbooks/include/tag_label.html" with tag=tag orientation="vertical" tag_background_class="bg-off-white" %}
           {% endfor %}
           {% if item.page.all_localized_tags|length > 5 %}
-          <span class="tags-overflow"> + {{ item.page.all_localized_tags|length|add:"-5" }} more tags</span>
+            {% with item.page.all_localized_tags|length|add:"-5" as extra_tags %}
+              <span class="tags-overflow"> + {{ extra_tags }} more {{ extra_tags|pluralize:"tag,tags" }}</span>
+            {% endwith %}
           {% endif %}
-
         </div>
       </div>
   {% endfor %}
