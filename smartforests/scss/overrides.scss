@@ -484,3 +484,28 @@ a {
 .mobile-tag-row {
   gap: 10px;
 }
+
+// Rotate radio episode titles on mobile
+
+@include media-breakpoint-down(md) {
+  @keyframes ticker {
+    0% {
+      transform: translateX(0%);
+    }
+    50% {
+      transform: translateX(-100%);
+    }
+    50.01% {
+      transform: translateX(100%); 
+    }
+    100% {
+      transform: translateX(0%); 
+    }
+  }
+  
+  .ticker {
+    display: inline-block;
+    animation: ticker 15s linear infinite; 
+  }
+  
+  }
