@@ -20,7 +20,9 @@
       {% include "logbooks/include/tag_label.html" with tag=tag %}
       {% endfor %}
       {% if page.tags.count > 5 %}
-      <span class="tags-overflow"> + {{ page.tags.count|add:"-5" }} more tags</span>
+        {% with page.tags.count|add:"-5" as extra_tags %}
+          <span class="tags-overflow"> + {{ extra_tags }} more {{ extra_tags|pluralize:"tag,tags" }}</span>
+        {% endwith %}
       {% endif %}
     </div>
     {% endif %} 
