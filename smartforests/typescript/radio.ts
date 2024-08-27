@@ -42,6 +42,23 @@ export function main() {
   const radioSeeker = document.getElementById("radioPlayerSeeker") as HTMLProgressElement;
   const radioOffCanvasElement = document.getElementById("radioPlayer") as HTMLElement;
   const radioOffCanvas = new window.bootstrap.Offcanvas(radioOffCanvasElement);
+  
+  /**
+   * Force ticker title animation to play on pageload 
+   */
+
+  const tickerElements = document.querySelectorAll('.ticker');
+
+  tickerElements.forEach(function(element) {
+    const htmlElement = element as HTMLElement;
+    // Trigger reflow
+    htmlElement.style.display = 'none';
+    htmlElement.offsetHeight; // Force a reflow
+    htmlElement.style.display = 'inline-block'; // Restore the original display
+
+    // Reapply the animation
+    htmlElement.style.animation = 'ticker 15s linear infinite';
+});
 
   /**
    * Update all play buttons in response to radioPlayerAudio status
