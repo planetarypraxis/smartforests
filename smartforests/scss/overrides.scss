@@ -489,26 +489,59 @@ a {
 // Rotate radio episode titles on mobile
 
 @include media-breakpoint-down(md) {
-  @keyframes ticker {
+  @-webkit-keyframes ticker {
     0% {
-      transform: translateX(0%);
+        -webkit-transform: translateX(0%);
     }
     50% {
-      transform: translateX(-100%);
+        -webkit-transform: translateX(-100%);
     }
     50.01% {
-      transform: translateX(100%); 
+        -webkit-transform: translateX(100%);
     }
     100% {
-      transform: translateX(0%); 
+        -webkit-transform: translateX(0%);
     }
-  }
+}
+
+@-moz-keyframes ticker {
+    0% {
+        -moz-transform: translateX(0%);
+    }
+    50% {
+        -moz-transform: translateX(-100%);
+    }
+    50.01% {
+        -moz-transform: translateX(100%);
+    }
+    100% {
+        -moz-transform: translateX(0%);
+    }
+}
+
+@keyframes ticker {
+    0% {
+        transform: translateX(0%);
+    }
+    50% {
+        transform: translateX(-100%);
+    }
+    50.01% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(0%);
+    }
+}
   
-    .ticker {
-      display: inline-block;
-      animation: ticker 15s linear infinite; 
-    }
-  }
+.ticker {
+   display: inline-block;
+  -webkit-animation: ticker 15s linear infinite;
+  -moz-animation: ticker 15s linear infinite;
+   animation: ticker 15s linear infinite;
+   }
+
+}
 
 // Make mobile header larger on mobile 
   @include media-breakpoint-down(md) {
