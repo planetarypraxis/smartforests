@@ -60,9 +60,7 @@
 
 .mapboxgl-ctrl-geocoder {
 
-  @include media-breakpoint-down(sm) {
-    width: 80% !important;
-  }
+
   
   &--icon {
     fill: $dark-green !important;
@@ -135,6 +133,10 @@
 
 .mapboxgl-ctrl-geocoder:not(.mapboxgl-ctrl-geocoder--collapsed),
 .mapboxgl-ctrl-filters:not(.mapboxgl-ctrl-filters--collapsed) {
+
+  @include media-breakpoint-down(sm) {
+    width: 80% !important;
+  }
   @include media-breakpoint-up(sm) {
     width: 400px !important;
   }
