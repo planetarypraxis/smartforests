@@ -83,25 +83,22 @@ function doTagCloud($container, width, height, data, tagOffcanvas) {
 
   const maxCount = data.max_count;
 
-    // Reduce force of simulation on small screens
-  const isSmallScreen = width <= 768;
-  const chargeStrength = isSmallScreen ? -3 : -200; 
-  const collideRadius = isSmallScreen ? 1 : 30;
-
   const simulation = d3.forceSimulation(nodes)
-    .force(
-      "link",
-      d3.forceLink(links).id((d) => d.id)
-    )
-    .force("charge", d3.forceManyBody().strength(chargeStrength))
-    .force("center", d3.forceCenter(width / 2, height / 2))
-    .force("collide", d3.forceCollide().radius(collideRadius));
-    // Apply boundary force only on medium screens up
-    if (width > 768) {
-      simulation.force("boundary", forceBoundary(margin, margin, width - margin, height - margin));
-    }
+  .force(
+    "link",
+    d3.forceLink(links).id((d) => d.id)
+  )
+  .force("charge", d3.forceManyBody().strength(-200))
+  .force("center", d3.forceCenter(width / 2, height / 2))
+  .force("collide", d3.forceCollide().radius(30));
 
-  simulation.on("tick", draw);
+  // Apply boundary force only on medium screens up
+  if (width > 768) {
+    simulation.force("boundary", forceBoundary(margin, margin, width - margin, height - margin));
+  }
+
+simulation.on("tick", draw);
+
 
   // Create the canvas.
   const dpi = devicePixelRatio; // _e.g._, 2 for retina screens
