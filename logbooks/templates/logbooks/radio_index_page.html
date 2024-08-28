@@ -7,11 +7,11 @@
 {% block index_content %}
 
 <div>
-  <main class="container-fluid">
+  <main class="container-fluid padding-sm-0">
     <h2 class="fw-bold mb-3">{% translate 'Featured episodes' %}</h2>
     <div class="row mb-5">
       {% for episode in self.featured %}
-      <div class="col col-12 col-sm-6 col-md-4 col-lg-3 mb-3 ">
+      <div class="col col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
         <div class="d-flex flex-column card-hover pb-3">
           {% if episode.thumbnail %}
           {% image episode.thumbnail fill-400x400 as tmp_thumbnail %}

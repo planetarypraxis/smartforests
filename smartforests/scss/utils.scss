@@ -117,6 +117,12 @@
   .border-sm-0 {
     border: none !important;
   }
+
+  .padding-sm-0 {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
 }
 
 @include media-breakpoint-up(md) {
@@ -277,3 +283,4 @@
 .microcopy-dark-grey {
   color: #9A9A9A;
 }
+
