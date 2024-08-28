@@ -51,13 +51,12 @@ export function main() {
 
   tickerElements.forEach(function(element) {
     const htmlElement = element as HTMLElement;
-    // Trigger reflow
-    htmlElement.style.display = 'none';
-    htmlElement.offsetHeight; // Force a reflow
-    htmlElement.style.display = 'inline-block'; // Restore the original display
 
-    // Reapply the animation
-    htmlElement.style.animation = 'ticker 15s linear infinite';
+    htmlElement.style.display = 'none';
+    htmlElement.offsetHeight;
+    htmlElement.style.display = 'inline-block'; 
+  
+    htmlElement.style.animation = 'ticker 30s linear infinite';
 });
 
   /**
