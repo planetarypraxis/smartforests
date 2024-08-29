@@ -82,29 +82,31 @@
                         {% endif %}
 
                     </a>
+                    <h5 id="sortOptionsLabel" class="sr-only">Sort Options</h5>
+
                     <ul class="dropdown-menu w-100 border-0 mt-0 bg-off-white shadow-sm fs-body-text"
-                        aria-labelledby="">
+                        aria-labelledby="sortOptionsLabel">
                         <li>
                             <a class="dropdown-item text-dark-green p-2"
-                            href="{{ request.path }}?sort=a-z">
+                               href="{{ request.path }}?sort=a-z">
                                 <span>{% translate "Title A—Z" %}</span>
                             </a>
                         </li>
                         <li>
                             <a class="dropdown-item text-dark-green p-2"
-                            href="{{ request.path }}?sort=z-a">
+                               href="{{ request.path }}?sort=z-a">
                                 <span>{% translate "Title Z—A" %}</span>
                             </a>
                         </li>
                         <li>
                             <a class="dropdown-item text-dark-green p-2"
-                            href="{{ request.path }}?sort=oldest">
+                               href="{{ request.path }}?sort=oldest">
                                 <span>{% translate "Oldest First" %}</span>
                             </a>
                         </li>
                         <li>
                             <a class="dropdown-item text-dark-green p-2"
-                            href="{{ request.path }}?sort=most_recent">
+                               href="{{ request.path }}?sort=most_recent">
                                 <span>{% translate "Newest First" %}</span>
                             </a>
                         </li>
@@ -146,29 +148,31 @@
                     {% endif %}
 
                 </a>
+                <h5 id="sortOptionsLabel" class="sr-only">Sort Options</h5>
+
                 <ul class="dropdown-menu w-100 border-0 mt-0 bg-off-white shadow-sm fs-body-text"
-                    aria-labelledby="">
+                    aria-labelledby="sortOptionsLabel">
                     <li>
                         <a class="dropdown-item text-dark-green p-2"
-                        href="{{ request.path }}?sort=a-z">
+                           href="{{ request.path }}?sort=a-z">
                             <span>{% translate "Title A—Z" %}</span>
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item text-dark-green p-2"
-                        href="{{ request.path }}?sort=z-a">
+                           href="{{ request.path }}?sort=z-a">
                             <span>{% translate "Title Z—A" %}</span>
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item text-dark-green p-2"
-                        href="{{ request.path }}?sort=oldest">
+                           href="{{ request.path }}?sort=oldest">
                             <span>{% translate "Oldest First" %}</span>
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item text-dark-green p-2"
-                        href="{{ request.path }}?sort=most_recent">
+                           href="{{ request.path }}?sort=most_recent">
                             <span>{% translate "Newest First" %}</span>
                         </a>
                     </li>

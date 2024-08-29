@@ -25,13 +25,16 @@
     </turbo-frame>
   </div>
   
+  <h5 id="offcanvasMapTitle" class="sr-only">
+    Map Side Panel
+  </h5>
+  
   {% if debug and not mapbox_token %}
     <script>
       console.warn('No mapbox token found. Ensure that you have the MAPBOX_API_PUBLIC_TOKEN setting defined in local.py settings')
     </script>
   {% endif %}
 {% endblock %}
-
 
 {% block extra_js %}
 {% endblock %}
