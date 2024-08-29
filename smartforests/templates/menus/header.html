@@ -199,28 +199,30 @@
       </div>
     </div>
 </nav>
-<form data-turbo-cache="false" data-bs-backdrop="false" data-autofocus-show="1" class="modal fade" id="searchToggle" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body bg-darkgrey red-shadow">
-                <div class="input-group input-group-focus">
-                    <input id="search-box" name="query" tabindex="1" autofocus class="form-control border-start-0 text-naturalcase heading-medium" autocapitalize="off" autocomplete="off" aria-label="Search">
-                    <button type="button" class="input-group-text bg-white d-flex align-items-center justify-content-center p3">
-                        <i class="icon icon-search icon-2 bg-dark-green"></i>
-                    </button>
-                    <button type="button" class="input-group-text bg-white d-flex align-items-center justify-content-center p3">
+<form data-turbo-cache="false" data-bs-backdrop="false" data-autofocus-show="1" class="modal fade" id="searchToggle" tabindex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-body bg-darkgrey red-shadow">
+              <h5 id="searchModalLabel" class="modal-title sr-only">
+                  Search
+              </h5>
+              <div class="input-group input-group-focus">
+                  <input id="search-box" name="query" tabindex="1" autofocus="" class="form-control border-start-0 text-naturalcase heading-medium" autocapitalize="off" autocomplete="off" aria-label="Search">
+                  <button type="button" class="input-group-text bg-white d-flex align-items-center justify-content-center p3">
+                      <i class="icon icon-search icon-2 bg-dark-green"></i>
+                  </button>
+                  <button type="button" class="input-group-text bg-white d-flex align-items-center justify-content-center p3">
                       <i class="icon icon-close icon-2 bg-dark-green"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="modal-body p-0">
-                <turbo-frame id="search-results" target="_top">
-                </turbo-frame>
-                <!-- "Loading" copy for search results box -->
-                <div id="search-results-loading" style="display:none">
-                  {% translate "Loading" %}...
-                </div>
-            </div>
-        </div>
-    </div>
+                  </button>
+              </div>
+          </div>
+          <div class="modal-body p-0">
+              <turbo-frame id="search-results" target="_top"></turbo-frame>
+              <!-- "Loading" copy for search results box-->
+              <div id="search-results-loading" style="display:none">
+                  Loading...
+              </div>
+          </div>
+      </div>
+  </div>
 </form>
