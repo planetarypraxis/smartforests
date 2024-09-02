@@ -124,6 +124,7 @@ class Command(BaseCommand):
                     did_translation = self.ensure_translations(page, target_locales)
                     if did_translation:
                         translated += 1
+                print(f"Completed class: {last_class}")
         except Exception as e:
             print(f"Last item: {last_class}: {last_id}")
             raise e

@@ -16,6 +16,17 @@
       "justMyCode": false
     },
     {
+      "name": "Python: Translate",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/manage.py",
+      "args": [
+        "translate_pages"
+      ],
+      "django": true,
+      "justMyCode": false
+    },
+    {
       "name": "Python: Regenerate search index",
       "type": "python",
       "request": "launch",
