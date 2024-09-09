@@ -33,7 +33,7 @@ if USE_DEBUG_TOOLBAR:
         "debug_toolbar.middleware.DebugToolbarMiddleware",
     ]
 
-WAGTAILADMIN_BASE_URL = f"{BASE_URL}/admin/"
+WAGTAILADMIN_BASE_URL = f"{BASE_URL}"
 
 WAGTAILLOCALIZE_MACHINE_TRANSLATOR = {
     "CLASS": "wagtail_localize.machine_translators.dummy.DummyTranslator",

@@ -213,7 +213,7 @@ MEDIA_URL = "/media/"
 # Wagtail settings
 
 WAGTAIL_SITE_NAME = "smartforests"
-WAGTAILADMIN_BASE_URL = f"{os.getenv('BASE_URL')}/admin/"
+WAGTAILADMIN_BASE_URL = f"{os.getenv('BASE_URL')}"
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 WAGTAILIMAGES_IMAGE_MODEL = "smartforests.CmsImage"
