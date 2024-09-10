@@ -30,7 +30,7 @@
           <div class="d-flex align-items-center mb-2">
             {% include 'logbooks/include/episode_button.html' with episode=episode %}
             <a class="link-reset ml-2" href="{{episode.url}}">
-              <span class="fs-6">{{ episode.title }}</span>
+              <span class="fs-6">{{ episode.localized.title }}</span>
             </a>
           </div>
           <div class="ps-2">
