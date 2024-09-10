@@ -1,4 +1,4 @@
-{% load i18n menu_tags static i18n wagtailcore_tags %}
+{% load i18n menu_tags static i18n wagtailcore_tags ckdjango_tags %}
 
 <nav class="navbar py-0 {% block header_position %}fixed-top{% endblock %} navbar-expand-lg navbar-light bg-faded-yellow">
     <div class="container-fluid">
@@ -73,7 +73,8 @@
                     {% if translation %}
                       {% get_language_info for translation.locale.language_code as lang %}
                       <li class='fs-body-text dropdown-item border-bottom border-soft-green px-3 py-2 w-100'>
-                        <a rel="alternate" hreflang="{{ language_code }}" href="{% pageurl translation %}" data-turbo="false">
+                        {% pageurl translation as translation_url %}
+                        <a rel="alternate" hreflang="{{ language_code }}" href="{% with_tag_filter translation_url translation.locale.language_code %}" data-turbo="false">
                           <span>{{ lang.name_local|title }} {% if lang.name_local != lang.name %}({{ lang.name|title }}){% endif %}</span>
                         </a>
                       </li>
@@ -179,7 +180,8 @@
                             {% if translation %}
                               {% get_language_info for translation.locale.language_code as lang %}
                               <li>
-                                <a rel="alternate" hreflang="{{ language_code }}" href="{% pageurl translation %}" class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" data-turbo="false">
+                                {% pageurl translation as translation_url %}
+                                <a rel="alternate" hreflang="{{ language_code }}" href="{% with_tag_filter translation_url translation.locale.language_code %}" class="dropdown-item text-dark-green d-flex justify-content-between align-items-center" data-turbo="false">
                                   <span>{{ lang.name_local|title }} {% if lang.name_local != lang.name %}({{ lang.name|title }}){% endif %}</span>
                                 </a>
                               </li>

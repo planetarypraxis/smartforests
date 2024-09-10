@@ -119,9 +119,11 @@
                 <h1>{{ self.title }}</h1>
                 {% if tag_filter %}
                     <div>
-                        <a href="{% qs_link 'filter' None %}" class="filter-tag active">
+                        <a href="{% qs_link 'filter' None %}" class="filter-tag active shadow-elevated">
                             {{ tag_filter }}
-                            <i aria-label="Close" className="icon icon-8 icon-close bg-white ms-1"></i>
+                            <button class="icon-btn" aria-label="Close">
+                                <i class="icon icon-8 bg-mid-green icon-close"></i>
+                            </button>
                         </a>
                     </div>
                 {% endif %}

@@ -8,7 +8,7 @@ from django.http.request import HttpRequest
 from django.utils.safestring import mark_safe
 from django.conf import settings
 from django import template
-
+from smartforests.models import Tag
 
 register = template.Library()
 
@@ -58,10 +58,37 @@ def qs_link(context, key, value, **kwargs):
     else:
         params[key] = value
 
-    return '?' + parse.urlencode(params)
+    return "?" + parse.urlencode(params)
+
+
+@register.simple_tag(takes_context=True)
+def with_tag_filter(context, url: str, language_code: str):
+    request: HttpRequest = context.get("request", None)
+    if request is None:
+        return url
+
+    current_tag_slug = request.GET.get("filter")
+    if not current_tag_slug:
+        return url
+
+    tag = Tag.objects.filter(slug=current_tag_slug).first()
+    if not tag:
+        return url
+
+    translated_tag = Tag.objects.filter(
+        translation_key=tag.translation_key, locale__language_code=language_code
+    ).first()
+    if not translated_tag:
+        return url
+
+    if parse.urlparse(url).query:
+        return f"{url}&filter={translated_tag.slug}"
+
+    return f"{url}?filter={translated_tag.slug}"
 
 
 # https://stackoverflow.com/questions/32795907/how-to-access-the-next-and-the-previous-elements-in-a-django-template-forloop
+
 
 @register.filter
 def next(some_list, current_index):
