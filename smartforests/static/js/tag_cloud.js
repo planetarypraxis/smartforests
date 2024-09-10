@@ -60,8 +60,38 @@ function calculateCanvasDimensions() {
   return { width, height };
 }
 
+// Get a charge force that makes the cloud look good at different widths
+// This should be ~15 for small screens and ~150 for large screens
+// This function does linear interpolation, where the input is between
+// 360 and 720, and the output is between 15 and 150.
+function calculateChargeForce(width) {
+  const minCharge = 15;
+  const maxCharge = 150;
+  const minWidth = 360;
+  const maxWidth = 720;
+  return linearInterpolate(width, minWidth, maxWidth, minCharge, maxCharge);
+}
+
+/**
+ * Get a value between yMin and yMax based on
+ * the position of x between xMin and xMax
+ */
+function linearInterpolate(x, xMin, xMax, yMin, yMax) {
+  // Restrict x to xMin <= x <= xMax
+  // This makes sure that the output is between yMin <= y <= yMax
+  if (x < xMin) {
+    x = xMin;
+  }
+  if (x > xMax) {
+    x = xMax;
+  }
+  const offset = x - xMin;
+  const scale = (yMax - yMin) / (xMax - xMin);
+  return yMin + offset * scale;
+}
+
 function doTagCloud($container, width, height, data, tagOffcanvas) {
-  const margin = 50; 
+  const margin = width / 20;
   $container.innerHTML = "";
 
   let focusedNode = null;
@@ -83,22 +113,23 @@ function doTagCloud($container, width, height, data, tagOffcanvas) {
 
   const maxCount = data.max_count;
 
-  const simulation = d3.forceSimulation(nodes)
-  .force(
-    "link",
-    d3.forceLink(links).id((d) => d.id)
-  )
-  .force("charge", d3.forceManyBody().strength(-200))
-  .force("center", d3.forceCenter(width / 2, height / 2))
-  .force("collide", d3.forceCollide().radius(30));
+  // Scale charge to control how expanded the cloud is
+  // Higher charge => more expanded
+  const charge = calculateChargeForce(width);
+  const simulation = d3
+    .forceSimulation(nodes)
+    .force(
+      "link",
+      d3.forceLink(links).id((d) => d.id)
+    )
+    .force("charge", d3.forceManyBody().strength(-1 * charge))
+    .force("center", d3.forceCenter(width / 2, height / 2))
+    .force(
+      "boundary",
+      forceBoundary(margin, margin, width - margin, height - margin)
+    );
 
-  // Apply boundary force only on medium screens up
-  if (width > 768) {
-    simulation.force("boundary", forceBoundary(margin, margin, width - margin, height - margin));
-  }
-
-simulation.on("tick", draw);
-
+  simulation.on("tick", draw);
 
   // Create the canvas.
   const dpi = devicePixelRatio; // _e.g._, 2 for retina screens
@@ -122,7 +153,7 @@ simulation.on("tick", draw);
 
   function drawBackground() {
     context.save();
-    context.fillStyle =  "rgba(31, 107, 31, 0.2)"
+    context.fillStyle = "rgba(31, 107, 31, 0.2)";
     context.fillRect(0, 0, canvas.width, canvas.height);
     context.restore();
 
