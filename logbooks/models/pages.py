@@ -113,6 +113,8 @@ class StoryIndexPage(Page):
     Collection of stories.
     """
 
+    parent_page_types = ["home.HomePage"]
+
     class Meta:
         verbose_name = "Stories Index Page"
 
