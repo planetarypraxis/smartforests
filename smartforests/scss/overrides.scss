@@ -104,7 +104,6 @@ h3.microcopy-small {
   font-size: 12px !important;
 }
 
-
 .card {
   overflow: hidden;
 }
@@ -124,7 +123,6 @@ h3.microcopy-small {
 
 .navbar {
   padding-bottom: 0;
-
 
   @include media-breakpoint-up(lg) {
     padding-bottom: $spacer * 0.5;
@@ -159,8 +157,6 @@ h3.microcopy-small {
     max-width: 700px;
   }
 }
-
-
 
 @include media-breakpoint-down(lg) {
   .navbar-collapse {
@@ -213,7 +209,7 @@ h3.microcopy-small {
   }
 }
 
-.content-copy>*+* {
+.content-copy > * + * {
   margin-top: map-get($map: $spacers, $key: 5);
 }
 
@@ -277,7 +273,7 @@ a {
 }
 
 @include media-breakpoint-up(lg) {
- .col-lg-6 {
+  .col-lg-6 {
     width: 45%;
   }
 }
@@ -292,10 +288,9 @@ a {
 
 @include media-breakpoint-up(md) {
   .footer-width {
-  width: 100%;
+    width: 100%;
+  }
 }
-}
-
 
 .story-page-card .tags {
   display: flex;
@@ -307,19 +302,19 @@ a {
   font-family: $font-family-serif;
 }
 
-  .image-container {
-    position: relative;
-    display: inline-block;
-    width: 100%;
-  }
+.image-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
 
-  .image-container img {
-    display: block;
-    width: 100%;
-  }
+.image-container img {
+  display: block;
+  width: 100%;
+}
 
 .playlist-item a::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -348,13 +343,13 @@ a {
 }
 
 .playlist-item-header::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0); 
+  background-color: rgba(0, 0, 0, 0);
   transition: background-color 0.3s ease;
   z-index: -1;
 }
@@ -368,7 +363,6 @@ a {
   display: flex;
   flex-direction: column;
   gap: 20px;
-
 
   @include media-breakpoint-up(lg) {
     height: 100%;
@@ -390,17 +384,16 @@ a {
 
   @include media-breakpoint-up(lg) {
     height: 100%;
-    
-    }
+  }
 }
 
 .tags-overflow {
-    color: #026302;
-    text-transform: uppercase;
-    font-family: var(--bs-font-monospace);
-    font-size: 12px;
-    font-weight: normal;
-    padding: 2.5px 10px;
+  color: #026302;
+  text-transform: uppercase;
+  font-family: var(--bs-font-monospace);
+  font-size: 12px;
+  font-weight: normal;
+  padding: 2.5px 10px;
 }
 
 .image-container .play-button {
@@ -435,13 +428,13 @@ a {
 }
 
 .card-hover .card-overlay {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(4, 48, 3, 0.1); 
+  background-color: rgba(4, 48, 3, 0.1);
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: 1;
@@ -469,6 +462,36 @@ a {
   z-index: 2;
 }
 
+.image-hover {
+  align-items: end;
+  height: 100%;
+  justify-content: center;
+  display: flex;
+}
+
+.image-hover__link {
+  position: relative;
+  img {
+    max-height: 240px;
+    max-width: 100%;
+  }
+  &:hover {
+    .image-hover__overlay {
+      display: block;
+    }
+  }
+}
+
+.image-hover__overlay {
+  height: 100%;
+  display: none;
+  left: 0;
+  background-color: rgba(4, 48, 3, 0.25);
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
 .text-hover .card-title {
   text-decoration: none;
   transition: text-decoration 0.3s ease;
@@ -490,28 +513,28 @@ a {
 @include media-breakpoint-down(md) {
   @-webkit-keyframes ticker {
     0% {
-        -webkit-transform: translateX(50%);
+      -webkit-transform: translateX(50%);
     }
     100% {
-        -webkit-transform: translateX(-100%);
+      -webkit-transform: translateX(-100%);
     }
   }
 
   @-moz-keyframes ticker {
     0% {
-        -moz-transform: translateX(50%); 
+      -moz-transform: translateX(50%);
     }
     100% {
-        -moz-transform: translateX(-100%);
+      -moz-transform: translateX(-100%);
     }
   }
 
   @keyframes ticker {
     0% {
-        transform: translateX(50%); 
+      transform: translateX(50%);
     }
     100% {
-        transform: translateX(-100%);
+      transform: translateX(-100%);
     }
   }
 
@@ -524,16 +547,15 @@ a {
   }
 }
 
-// Make mobile header larger on mobile 
-  @include media-breakpoint-down(md) {
-    .mobile-menu-wrapper {
-      height: 60px;
-      width: 100%;
-    }
-
+// Make mobile header larger on mobile
+@include media-breakpoint-down(md) {
+  .mobile-menu-wrapper {
+    height: 60px;
+    width: 100%;
+  }
 }
 @include media-breakpoint-down(md) {
-  .index-page-mobile-header h1{
+  .index-page-mobile-header h1 {
     font-weight: 500;
     font-size: 18px;
   }

@@ -46,16 +46,28 @@ class Command(BaseCommand):
             help="Translate pages to this locale",
             default="",
         )
+        parser.add_argument(
+            "-s",
+            "--slug",
+            dest="slug",
+            type=str,
+            help="Limit to this slug",
+            default="",
+        )
 
     def handle(self, *args, **options):
         locale = options.get("locale")
-        tags = Tag.objects.all()
+        slug = options.get("slug")
+        if slug:
+            tags = Tag.objects.filter(slug=slug)
+        else:
+            tags = Tag.objects.all()
         for tag in tags:
             if self.is_original(tag):
                 target_locales = Locale.objects.exclude(id=tag.locale.id)
                 if locale != "":
                     target_locales = target_locales.filter(language_code=locale)
-                print(f"{str(tag).title()}: ensuring translations")
+                print(f"{tag.id}: {tag}: ensuring translations")
                 self.ensure_translations(tag, target_locales)
 
     def is_original(self, tag):
@@ -80,7 +92,11 @@ class Command(BaseCommand):
                     translation_key=tag.translation_key, locale=locale
                 ).first()
 
-                if not translated_tag:
+                should_translate = not translated_tag or (
+                    locale.language_code == "hi" and translated_tag.name.isascii()
+                )
+
+                if should_translate:
                     print(f">>>> {locale}: translating")
 
                     # Create translated tag first, then update it (no other way)
