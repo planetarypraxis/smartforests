@@ -21,7 +21,8 @@
         <div class="flex-shrink-0 flex-grow-0">
           {% if episode.thumbnail %}
           {% image episode.thumbnail fill-100x100 as tmp_thumbnail %}
-          <img data-src="{{ tmp_thumbnail.url }}" alt="{{ episode }}" class="w-100">
+          {% image episode.thumbnail fill-10x10 as small_thumbnail %}
+          <img src="{{ small_thumbnail.url }}" data-src="{{ tmp_thumbnail.url }}" alt="{{ episode }}" style="width:100px;">
           {% else %}
           <img src="{% static 'img/radio-icon.svg' %}" alt="{{ episode }}" style="width:100px;height:100px">
           {% endif %}

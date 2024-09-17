@@ -15,8 +15,9 @@
         <div class="d-flex flex-column card-hover pb-3">
           {% if episode.thumbnail %}
           {% image episode.thumbnail fill-400x400 as tmp_thumbnail %}
+          {% image episode.thumbnail fill-10x10 as small_thumbnail %}
           <div class="image-container position-relative">
-            <img data-src="{{ tmp_thumbnail.url }}" alt="{{ episode }}" class="w-100">
+            <img src="{{ small_thumbnail.url }}" data-src="{{ tmp_thumbnail.url }}" alt="{{ episode }}" class="w-100">
             <div class="overlay d-flex justify-content-center align-items-center">
               <button class="text-white btn btn-link play-button" title="Play episode: {{episode.title}}" type="button" aria-controls="radioPlayer" {% if preload %} data-smartforests-should-preload-episode {% endif %} data-smartforests-radio-play-button data-smartforests-audio="{{ episode.audio.file.url }}" data-smartforests-owner="{{ episode.real_contributors | join:' / ' }}" data-smartforests-last-published-at="{{ episode.last_published_at|date:'SHORT_DATE_FORMAT' }}" data-smartforests-title="{{ episode.title }}" data-smartforests-image="{{ episode.image.file.url }}">
                 <img alt="Play button" src="{% static 'img/button-play-light.svg' %}" />
@@ -70,7 +71,7 @@
       
         <div class="position-relative">
           {% if playlist.thumbnail_image_resilient and playlist.thumbnail_image_resilient.url %}
-          <img src="{{self.thumbnail_image_placeholder.url}}" data-src="{{self.thumbnail_image_resilient.url}}" alt="{{ playlist }}" class="w-100">
+          <img src="{{playlist.thumbnail_image_placeholder.url}}" data-src="{{playlist.thumbnail_image_resilient.url}}" alt="{{ playlist }}" class="w-100">
           {% else %}
           <img src="{% static 'img/radio-icon.svg' %}" alt="{{ playlist }}" class="w-100">
           {% endif %}

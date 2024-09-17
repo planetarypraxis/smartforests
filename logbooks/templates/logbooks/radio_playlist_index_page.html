@@ -14,7 +14,7 @@
         <a class="d-block position-relative" href="{{ playlist.url }}">
           <div>
             {% if playlist.thumbnail_image_resilient and playlist.thumbnail_image_resilient.url %}
-            <img src="{{self.thumbnail_image_placeholder.url}}" data-src="{{self.thumbnail_image_resilient.url}}" alt="{{ playlist }}" class="w-100">
+            <img src="{{playlist.thumbnail_image_placeholder.url}}" data-src="{{playlist.thumbnail_image_resilient.url}}" alt="{{ playlist }}" class="w-100">
             {% else %}
             <img src="{% static 'img/radio-icon.svg' %}" alt="{{ playlist }}" class="w-100">
             {% endif %}
