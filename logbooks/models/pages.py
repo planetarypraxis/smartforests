@@ -232,6 +232,10 @@ class PlaylistPage(ArticlePage):
         return list(thumbnails)
 
     @property
+    def real_contributors(self):
+        return []
+
+    @property
     def image(self):
         first_child_episode = self.episodes.order_by("-id").first()
         if not first_child_episode:
