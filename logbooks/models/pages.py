@@ -760,6 +760,19 @@ class ContributorsIndexPage(IndexPage):
             qs = qs.distinct()
 
         if sort:
+            if "original_published_at" in sort.ordering:
+                # Subquery to get all the translations of each page, ordered by publish date
+                translations = ContributorPage.objects.filter(
+                    translation_key=OuterRef("translation_key")
+                ).order_by("first_published_at")
+
+                # Annotate with the earliest publish date in the subquery
+                # This will be the publish date of the original version of the page
+                qs = qs.annotate(
+                    original_published_at=Subquery(
+                        translations.values("first_published_at")[:1]
+                    )
+                )
             qs = qs.order_by(sort.ordering)
 
         return qs
