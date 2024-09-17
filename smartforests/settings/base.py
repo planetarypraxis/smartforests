@@ -76,10 +76,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "wagtailcache",
+    "wagtaillinkchecker",
 ]
 
 MIDDLEWARE = [
-    "wagtailcache.cache.UpdateCacheMiddleware", 
+    "wagtailcache.cache.UpdateCacheMiddleware",
     "smartforests.middleware.BlockAmazonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "turbo_response.middleware.TurboMiddleware",
@@ -357,7 +358,6 @@ LOCALE_PATHS = (
 )
 
 
-
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.db.DatabaseCache",
@@ -370,8 +370,10 @@ CACHES = {
 
 USE_PROFILING = os.getenv("USE_PROFILING", False)
 
+
 def custom_show_pyinstrument(request):
     return request.user.is_superuser
+
 
 if USE_PROFILING:
     print("Profiler active. Add ?profile to URLs to view profiling.")
@@ -379,3 +381,8 @@ if USE_PROFILING:
         "pyinstrument.middleware.ProfilerMiddleware",
     ]
     PYINSTRUMENT_SHOW_CALLBACK = "%s.custom_show_pyinstrument" % __name__
+
+# Celery task manager
+CELERY_BROKER_URL = f"sqlalchemy+sqlite:////{BASE_DIR}/celery_broker.sqlite3"
+CELERY_RESULT_BACKEND = f"db+sqlite:////{BASE_DIR}/celery_results.sqlite3"
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
