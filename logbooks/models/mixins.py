@@ -129,6 +129,16 @@ class BaseLogbooksPage(Page):
 
         return category_page
 
+    @cached_property
+    def original_published_at(self):
+        return type(self).objects.filter(
+            translation_key=self.translation_key
+        ).order_by(
+            "first_published_at"
+        ).values_list(
+            "first_published_at", flat=True
+        ).first()
+
 
 class ContributorMixin(BaseLogbooksPage):
     """

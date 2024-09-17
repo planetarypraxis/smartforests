@@ -20,8 +20,8 @@ class SortOption(NamedTuple):
 class ChildListMixin:
     allow_search = False
     sort_options = (
-        SortOption("Newest", "most_recent", "-published_at"),
-        SortOption("Oldest", "oldest", "published_at"),
+        SortOption("Newest", "most_recent", "-original_published_at"),
+        SortOption("Oldest", "oldest", "original_published_at"),
         SortOption("A-Z", "a-z", "title"),
         SortOption("Z-A", "z-a", "-title"),
     )
@@ -73,17 +73,20 @@ class ChildListMixin:
 
         if sort:
             # For publish date orderings, order by original page publish date, not translation date
-            if "published_at" in sort.ordering:
+            if "original_published_at" in sort.ordering:
                 ChildModel = get_result_class(self)
+
+                # Subquery to get all the translations of each page, ordered by publish date
                 translations = ChildModel.objects.filter(
                     translation_key=OuterRef("translation_key")
                 ).order_by("first_published_at")
 
+                # Annotate with the earliest publish date in the subquery
+                # This will be the publish date of the original version of the page
                 qs = qs.annotate(
-                    published_at=Subquery(translations.values("first_published_at")[:1])
+                    original_published_at=Subquery(translations.values("first_published_at")[:1])
                 )
             qs = qs.order_by(sort.ordering)
-            print(f"query {qs.query}")
 
         search = self.get_search_queryset(request, qs)
 

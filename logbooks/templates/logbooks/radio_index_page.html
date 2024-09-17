@@ -31,7 +31,7 @@
           <div class="pt-3 radio-episode-card">
             <div class="mb-3 font-monospace color-dark-grey small d-flex px-md-3">
               <span class="me-auto">
-                {{ episode.first_published_at|date:"d E Y" }}
+                {{ episode.original_published_at|date:"d E Y" }}
               </span>
               <span>
                 {% if episode.audio.duration > 0 %}

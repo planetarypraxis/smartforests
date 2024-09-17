@@ -2,8 +2,8 @@
 
 <div class="d-none d-lg-flex flex-column metadata">
   <section class="d-flex flex-column mb-3">
-    <time class="text-dark-grey" datetime="{{ page.first_published_at|date:'Y-m-d' }}">
-      {% translate "Added" %} {{ page.first_published_at|date:"d E Y" }}
+    <time class="text-dark-grey" datetime="{{ page.original_published_at|date:'Y-m-d' }}">
+      {% translate "Added" %} {{ page.original_published_at|date:"d E Y" }}
     </time>
     <time class="text-dark-grey" datetime="{{ page.last_published_at|date:'Y-m-d' }}">
       {% translate "Last edited" %} {{ page.last_published_at|date:"d E Y" }}

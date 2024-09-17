@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from django.db.models import Q
+from django.db.models import Q, Subquery, OuterRef
 from django.db.models.fields import CharField
 from django.db.models.fields.related import ForeignKey
 from django.forms.widgets import SelectMultiple
@@ -120,9 +120,23 @@ class StoryIndexPage(Page):
 
     def get_context(self, request):
         context = super().get_context(request)
-        context["child_list_page"] = (
-            self.get_children().live().specific().order_by("-first_published_at")
-        )
+
+        child_qs = self.get_children().live().specific()
+
+        # Subquery to get all the translations of each page, ordered by publish date
+        translations = StoryPage.objects.filter(
+            translation_key=OuterRef("translation_key")
+        ).order_by("first_published_at")
+
+        # Annotate with the earliest publish date in the subquery
+        # This will be the publish date of the original version of the page
+        child_qs = child_qs.annotate(
+            original_published_at=Subquery(
+                translations.values("first_published_at")[:1]
+            )
+        ).order_by("-original_published_at")
+
+        context["child_list_page"] = child_qs
         return context
 
 

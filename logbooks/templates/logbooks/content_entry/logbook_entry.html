@@ -17,8 +17,8 @@
             {% endfor %}
             </div>
             {% endif %}
-            <time class="opacity-8" datetime="{{ self.first_published_at|date:"Y-m-d" }}">
-              {{ self.first_published_at|date:"d E Y" }}
+            <time class="opacity-8" datetime="{{ self.original_published_at|date:"Y-m-d" }}">
+              {{ self.original_published_at|date:"d E Y" }}
             </time>
             {% if self.geographical_location %}
               <div>{{ self.geographical_location }}</div>

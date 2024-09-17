@@ -10,9 +10,9 @@
       </div>
     {% endif %}
     
-    {% if self.first_published_at %}
+    {% if self.original_published_at %}
       <div class="microcopy-small pt-1">
-        {{self.first_published_at|date:"j F Y"}}
+        {{self.original_published_at|date:"j F Y"}}
       </div>
     {% endif %}
   </div>
