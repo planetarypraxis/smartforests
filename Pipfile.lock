@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "96a0d34d78b0871eef8919c9814736ec100a05b525b40ef41bd5cbd483463e05"
+            "sha256": "77b044a636ed10a6085d40f06e8b21905c1c59ac1ef14e4e0cdc3c66d4b9ad33"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -1727,7 +1727,7 @@
         "wagtail-linkchecker": {
             "editable": true,
             "git": "https://github.com/commonknowledge/wagtail-linkchecker",
-            "ref": "12e7c2b69e7cebf5005171baeaca0ebe178cd763"
+            "ref": "8f0d81d1d8efcda165b6136b29df9daca3a9c5af"
         },
         "wagtail-localize": {
             "extras": [

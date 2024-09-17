@@ -16,10 +16,10 @@ class Command(BaseCommand):
         populate_site_cache(
             repeat=Task.HOURLY * interval / 3600
         )  # every cache TTL + 10 seconds
-        linkchecker(repeat=Task.DAILY)
+        do_linkcheck(repeat=Task.WEEKLY)
         call_command("process_tasks")
 
 
 @background(schedule=5, remove_existing_tasks=True)
-def linkchecker():
-    call_command("linkchecker")
+def do_linkcheck():
+    call_command("linkcheck")
