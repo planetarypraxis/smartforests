@@ -16,7 +16,7 @@
           {% if episode.thumbnail %}
           {% image episode.thumbnail fill-400x400 as tmp_thumbnail %}
           <div class="image-container position-relative">
-            <img src="{{ tmp_thumbnail.url }}" alt="{{ episode }}" class="w-100">
+            <img data-src="{{ tmp_thumbnail.url }}" alt="{{ episode }}" class="w-100">
             <div class="overlay d-flex justify-content-center align-items-center">
               <button class="text-white btn btn-link play-button" title="Play episode: {{episode.title}}" type="button" aria-controls="radioPlayer" {% if preload %} data-smartforests-should-preload-episode {% endif %} data-smartforests-radio-play-button data-smartforests-audio="{{ episode.audio.file.url }}" data-smartforests-owner="{{ episode.real_contributors | join:' / ' }}" data-smartforests-last-published-at="{{ episode.last_published_at|date:'SHORT_DATE_FORMAT' }}" data-smartforests-title="{{ episode.title }}" data-smartforests-image="{{ episode.image.file.url }}">
                 <img alt="Play button" src="{% static 'img/button-play-light.svg' %}" />
