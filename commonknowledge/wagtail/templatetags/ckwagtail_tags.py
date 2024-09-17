@@ -103,6 +103,9 @@ def highlight_tags(context, content: SafeText):
 
     content = str(content)
 
+    # note: if you add '%' to the splitter, you will need to change the
+    # wrapping around "\2", "%%%\2%%%" at the time of writing, in the
+    # regex replacement below
     splitter = r"[ !#()\;:'\",./<>&]"
 
     logger.debug(f"Content to highlight: {content}")
@@ -122,13 +125,15 @@ def highlight_tags(context, content: SafeText):
     sorted_tags = sorted(tags, key=lambda tag: len(tag.name), reverse=True)
 
     for tag in sorted_tags:
+        # Tag inner text is wrapped in "%%%" to prevent double matches,
+        # e.g. "carbon markets" and "carbon".
         replace = rf"""
         \1<span class="filter-tag filter-tag-inline">
             <a class="text-decoration-none" 
                data-smartforests-sidepanel-open="#tagpanel-offcanvas"
                data-turbo-frame="tagpanel-turboframe"
                href="/{locale.language_code}/_tags/{tag.slug}/">
-                \2
+                %%%\2%%%
             </a>
         </span>\3
         """.strip()
@@ -148,6 +153,9 @@ def highlight_tags(context, content: SafeText):
             highlighted_tag_ids.append(tag.id)
         else:
             logger.debug(f"Did not find {tag.id}: {tag.name} in content")
+
+    # Remove wrapping %%% from tag inner text
+    content = re.sub(r"%%%(.*)%%%", r"\1", content)
 
     for i, link in enumerate(links):
         content = content.replace(f"[#~{i}~#]", link)
