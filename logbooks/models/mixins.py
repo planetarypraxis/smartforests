@@ -29,6 +29,7 @@ from django.template.response import TemplateResponse
 from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
 from wagtail.api.conf import APIField
 from wagtail.models import Page, Revision, Locale
+from wagtail.images.models import Image
 from wagtail.fields import RichTextField
 from wagtail_localize.fields import SynchronizedField
 from django.contrib.gis.db import models as geo
@@ -131,13 +132,13 @@ class BaseLogbooksPage(Page):
 
     @cached_property
     def original_published_at(self):
-        return type(self).objects.filter(
-            translation_key=self.translation_key
-        ).order_by(
-            "first_published_at"
-        ).values_list(
-            "first_published_at", flat=True
-        ).first()
+        return (
+            type(self)
+            .objects.filter(translation_key=self.translation_key)
+            .order_by("first_published_at")
+            .values_list("first_published_at", flat=True)
+            .first()
+        )
 
 
 class ContributorMixin(BaseLogbooksPage):
@@ -373,6 +374,19 @@ class ThumbnailMixin(BaseLogbooksPage):
             return self.most_recent_image.get_rendition("width-400")
         else:
             return self.default_seo_image.get_rendition("width-400")
+
+    @property
+    def thumbnail_image_placeholder(self):
+        if self.thumbnail_image:
+            image = Image.objects.filter(file=self.thumbnail_image.name).first()
+            if image:
+                return image.get_rendition("width-10")
+            else:
+                return self.thumbnail_image
+        if self.most_recent_image:
+            return self.most_recent_image.get_rendition("width-10")
+        else:
+            return self.default_seo_image.get_rendition("width-10")
 
     def get_thumbnail_images(self):
         return []

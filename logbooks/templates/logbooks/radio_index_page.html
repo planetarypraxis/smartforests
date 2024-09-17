@@ -70,7 +70,7 @@
       
         <div class="position-relative">
           {% if playlist.thumbnail_image_resilient and playlist.thumbnail_image_resilient.url %}
-          <img src="{{ playlist.thumbnail_image_resilient.url }}" alt="{{ playlist }}" class="w-100">
+          <img src="{{self.thumbnail_image_placeholder.url}}" data-src="{{self.thumbnail_image_resilient.url}}" alt="{{ playlist }}" class="w-100">
           {% else %}
           <img src="{% static 'img/radio-icon.svg' %}" alt="{{ playlist }}" class="w-100">
           {% endif %}
