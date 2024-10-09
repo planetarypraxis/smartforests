@@ -65,7 +65,6 @@ class StoryPage(ArticlePage, ThumbnailMixin):
 
     extract = RichTextField(blank=True)
     image = ForeignKey(CmsImage, on_delete=models.SET_NULL, null=True, blank=True)
-    tags = LocalizedTaggableManager(through=AtlasTag, blank=True)
 
     show_in_menus_default = True
     parent_page_types = ["logbooks.StoryIndexPage"]
@@ -73,7 +72,6 @@ class StoryPage(ArticlePage, ThumbnailMixin):
     content_panels = ArticlePage.content_panels + [
         FieldPanel("image"),
         FieldPanel("extract"),
-        TagFieldPanel("tags"),
     ]
 
     api_fields = ArticlePage.api_fields + [
