@@ -77,6 +77,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "wagtailcache",
     "wagtaillinkchecker",
+    "commonknowledge.wagtail_overrides",
 ]
 
 MIDDLEWARE = [

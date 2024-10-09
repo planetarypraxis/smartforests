@@ -13,7 +13,6 @@ class SmartForestsConfig(AppConfig):
     name = 'smartforests'
 
     def ready(self):
-        import smartforests.signals.models
         import smartforests.signals.analytics
         import smartforests.wagtail_settings
 
