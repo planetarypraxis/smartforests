@@ -364,12 +364,12 @@ class ThumbnailMixin(BaseLogbooksPage):
         "default_seo_image",
     ]
 
-    thumbnail_image = models.ImageField(null=True, blank=True)
+    thumbnail_image = models.ForeignKey(CmsImage, on_delete=models.SET_NULL, null=True, blank=True, related_name='+')
 
     @property
     def thumbnail_image_resilient(self):
         if self.thumbnail_image:
-            return self.thumbnail_image
+            return self.thumbnail_image.get_rendition("width-400")
         if self.most_recent_image:
             return self.most_recent_image.get_rendition("width-400")
         else:
@@ -378,11 +378,7 @@ class ThumbnailMixin(BaseLogbooksPage):
     @property
     def thumbnail_image_placeholder(self):
         if self.thumbnail_image:
-            image = Image.objects.filter(file=self.thumbnail_image.name).first()
-            if image:
-                return image.get_rendition("width-10")
-            else:
-                return self.thumbnail_image
+            return self.thumbnail_image.get_rendition("width-10")
         if self.most_recent_image:
             return self.most_recent_image.get_rendition("width-10")
         else:
@@ -409,7 +405,6 @@ class ThumbnailMixin(BaseLogbooksPage):
             return
 
         if len(images) == 1:
-            self.thumbnail_image = images[0]
             return
 
         imagegrid_opts = get_thumbnail_opts(images)
@@ -439,7 +434,12 @@ class ThumbnailMixin(BaseLogbooksPage):
                     f"filename {filename} exists but regen is forced"
                 )
 
-        self.thumbnail_image = render_image_grid(filename=filename, **imagegrid_opts)
+        grid = render_image_grid(filename=filename, **imagegrid_opts)
+        self.thumbnail_image = CmsImage(
+            alt_text=f"{self.title} thumbnail",
+            title=f"{self.title} thumbnail",
+            file=grid
+        )
 
         print(f"Regenerating thumbnail for {self.slug}: created {self.thumbnail_image}")
 
