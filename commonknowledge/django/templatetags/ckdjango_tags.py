@@ -22,8 +22,7 @@ def webpack_bundle(name, type='js'):
             return mark_safe('')
 
     else:
-        return mark_safe('\n'.join(webpack_loader.utils.get_as_tags(name, type)))
-        # return webpack_loader.render_bundle(name, type)
+        return mark_safe('\n'.join(webpack_loader.utils.get_as_tags(name, type, attrs="defer")))
 
 
 @register.simple_tag(takes_context=True)
