@@ -440,7 +440,7 @@ class ThumbnailMixin(BaseLogbooksPage):
             title=f"{self.title} thumbnail",
             file=grid
         )
-
+        self.thumbnail_image.save()
         print(f"Regenerating thumbnail for {self.slug}: created {self.thumbnail_image}")
 
     card_content_html = "logbooks/thumbnails/basic_thumbnail.html"
