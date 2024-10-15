@@ -291,7 +291,7 @@ class CmsImageField(WagtailImageField):
 
             new_file = InMemoryUploadedFile(
                 file=image_bytes,
-                field_name=value.file.field_name,
+                field_name=self.name,
                 name=f"{value.file.name}-resized.png",
                 content_type="image/png",
                 size=image_bytes.getbuffer().nbytes,
