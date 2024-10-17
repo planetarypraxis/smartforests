@@ -1,5 +1,5 @@
 {% extends "logbooks/article_page_base.html" %}
-{% load ckdjango_tags wagtailimages_tags wagtailcore_tags static %}
+{% load ckdjango_tags ckwagtail_tags wagtailimages_tags wagtailcore_tags static %}
 
 {% block article_header %}
   {% if self.image %}
@@ -16,7 +16,7 @@
 
 {% block article %}
   <div class="mb-7">
-    {{self.body}}
+    {% render_streamfield self.body %}
     {% include 'logbooks/include/endnotes.html' %}
   </div>
 {% endblock %}

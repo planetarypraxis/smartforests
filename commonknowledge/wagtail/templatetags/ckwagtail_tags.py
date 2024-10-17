@@ -93,11 +93,14 @@ def safe_flat_menu(context, *args, **kwargs):
 
 @register.simple_tag(takes_context=True)
 def highlight_tags(context, content: SafeText):
+    highlighted_tag_ids = []
+
     request = context.get("request")
-    if request and hasattr(request, "highlighted_tag_ids"):
+    if not request:
+        logger.warning(f"Highlight tags called with no request object")
+    elif hasattr(request, "highlighted_tag_ids"):
         highlighted_tag_ids = request.highlighted_tag_ids
-    else:
-        highlighted_tag_ids = []
+
 
     locale = Locale.get_active()
 
