@@ -19,10 +19,11 @@ services:
       - ..:/workspace:cached
 
     environment:
-      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
-      - SENTRY_ENVIRONMENT=localhost
-      - DEBUG=True
-      - CACHE_MIDDLEWARE_SECONDS=601
+      DATABASE_URL: postgres://postgres:postgres@db:5432/postgres
+      SENTRY_ENVIRONMENT: localhost
+      DEBUG: True
+      CACHE_MIDDLEWARE_SECONDS: 601
+      CK_LOG_LEVEL: DEBUG
 
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity

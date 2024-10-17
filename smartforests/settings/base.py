@@ -254,6 +254,7 @@ SPECTACULAR_SETTINGS = {
 # Logging
 
 DJANGO_LOG_LEVEL = os.getenv("DJANGO_LOG_LEVEL", "INFO")
+CK_LOG_LEVEL = os.getenv("CK_LOG_LEVEL", "INFO")
 
 LOGGING = {
     "version": 1,
@@ -264,6 +265,18 @@ LOGGING = {
         },
     },
     "loggers": {
+        "commonknowledge": {
+            "handlers": ["console"],
+            "level": CK_LOG_LEVEL,
+        },
+        "logbooks": {
+            "handlers": ["console"],
+            "level": CK_LOG_LEVEL,
+        },
+        "smartforests": {
+            "handlers": ["console"],
+            "level": CK_LOG_LEVEL,
+        },
         "": {
             "handlers": ["console"],
             "level": DJANGO_LOG_LEVEL,
