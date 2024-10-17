@@ -119,8 +119,6 @@ def highlight_tags(context, content: SafeText):
 
     tags = Tag.objects.filter(locale=locale).exclude(id__in=highlighted_tag_ids)
 
-    logger.debug(f"Tags found: {list(tags)}")
-
     # Sort tags by length to handle multi-word tags correctly
     sorted_tags = sorted(tags, key=lambda tag: len(tag.name), reverse=True)
 
@@ -149,10 +147,8 @@ def highlight_tags(context, content: SafeText):
 
         if content != prev_content:
             # Only highlight a tag once per request
-            logger.info(f"Highlighted tag: {tag}")
+            logger.debug(f"Highlighted tag: {tag}")
             highlighted_tag_ids.append(tag.id)
-        else:
-            logger.debug(f"Did not find {tag.id}: {tag.name} in content")
 
     # Remove wrapping %%% from tag inner text
     content = re.sub(r"%%%(.*)%%%", r"\1", content)
