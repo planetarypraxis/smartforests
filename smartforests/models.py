@@ -300,6 +300,7 @@ class CmsImageField(WagtailImageField):
             )
             old_file = value.file
             value.file = new_file
+            value.save(new_file.name, image_bytes)
         finally:
             if close:
                 value.close()
