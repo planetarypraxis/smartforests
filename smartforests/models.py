@@ -256,63 +256,10 @@ class User(AbstractUser):
         )
 
 
-class CmsImageField(WagtailImageField):
-    """
-    Resize the uploaded image to have a maximum side width of 1024px.
-    """
-    def clean(self, value, model_instance: models.Model | None):
-        value = super().clean(value, model_instance)
-        close = value.closed
-        old_file = None
-        try:
-            value.open()
-            image = willow.Image.open(value)
-            size = image.get_size()
-            if not size:
-                raise ValidationError("Could not calculate image size")
-            (width, height) = size
-            image_size = width * height
 
-            max_width = 1024
-            max_size = max_width * max_width
-            if image_size < max_size:
-                return value
-
-            if width > height:
-                new_width = max_width
-                new_height = int(height * max_width / width)
-            else:
-                new_height = max_width
-                new_width = int(width * max_width / height)
-            image = image.resize((new_width, new_height))
-
-            image_bytes = BytesIO()
-            image.save_as_png(image_bytes)
-
-            new_file = InMemoryUploadedFile(
-                file=image_bytes,
-                field_name=self.name,
-                name=f"{value.file.name}-resized.png",
-                content_type="image/png",
-                size=image_bytes.getbuffer().nbytes,
-                charset=None,
-                content_type_extra={}
-            )
-            old_file = value.file
-            value.file = new_file
-            value.save(new_file.name, image_bytes)
-        finally:
-            if close:
-                value.close()
-            else:
-                value.seek(0)
-            if old_file:
-                old_file.close()
-        value._dimensions_cache = value.get_image_dimensions()
-        return value
 
 class CmsImage(AbstractImage):
-    file = CmsImageField(
+    file = WagtailImageField(
         verbose_name="file",
         upload_to=get_upload_to,
         width_field="width",
