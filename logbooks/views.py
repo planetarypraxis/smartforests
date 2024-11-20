@@ -107,12 +107,15 @@ def get_localized_title_for_page_type(page_type):
 
 def tag_panel(request, slug):
     locale = Locale.get_active()
-    tag = get_object_or_404(Tag, slug=slug, locale=locale)
+    tags = Tag.objects.filter(slug=slug, locale=locale)
 
-    pages = [
-        (page_type, get_localized_title_for_page_type(page_type), page_list)
-        for (page_type, page_list) in pages_for_tag(tag, tag_panel_types)
-    ]
+    pages = []
+
+    for tag in tags:
+        pages = pages + [
+            (page_type, get_localized_title_for_page_type(page_type), page_list)
+            for (page_type, page_list) in pages_for_tag(tag, tag_panel_types)
+        ]
 
     if "Turbo-Frame" in request.headers:
         return render(
