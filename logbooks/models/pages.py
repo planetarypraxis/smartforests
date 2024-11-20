@@ -406,6 +406,8 @@ class LogbookPage(
             "h2",
             "h3",
             "h4",
+            "image",
+            "embed"
         ]
     )
 
