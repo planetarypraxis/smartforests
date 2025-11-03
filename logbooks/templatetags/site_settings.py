@@ -1,5 +1,5 @@
 from django import template
-from logbooks.middleware.pages import ImportantPagesMiddleware
+from logbooks.context_processors import get_menu_items
 from wagtail.models import Locale
 
 register = template.Library()
@@ -8,4 +8,4 @@ register = template.Library()
 @register.simple_tag
 def site_settings(page):
     locale = Locale.get_active()
-    return ImportantPagesMiddleware.get_menu_items(locale).get(page, None)
+    return get_menu_items(locale).get(page, None)
