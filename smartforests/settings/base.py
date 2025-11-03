@@ -93,7 +93,6 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "smartforests.middleware.LocaleMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
-    "logbooks.middleware.pages.ImportantPagesMiddleware",
     "wagtailcache.cache.FetchFromCacheMiddleware",
 ]
 
@@ -116,6 +115,7 @@ TEMPLATES = [
                 "wagtail.contrib.settings.context_processors.settings",
                 "django_settings_export.settings_export",
                 "wagtailmenus.context_processors.wagtailmenus",
+                "logbooks.context_processors.important_pages"
             ],
         },
     },

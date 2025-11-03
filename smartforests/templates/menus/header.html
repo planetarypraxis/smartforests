@@ -175,7 +175,7 @@
                           {% get_language_info for page.locale.language_code as lang %}
                           {{ lang.name_local|title }}
                         </a>
-                        <ul class="dropdown-menu border-0 mt-0 bg-off-white shadow-sm" aria-labelledby="languageSelector">
+                        <ul class="dropdown-menu border-0 mt-0 bg-off-white shadow-sm" aria-labelledby="languageSelector" style="left:auto;right:0">
                           {% for translation in page.get_translations.live %}
                             {% if translation %}
                               {% get_language_info for translation.locale.language_code as lang %}
