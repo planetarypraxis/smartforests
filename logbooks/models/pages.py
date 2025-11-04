@@ -360,6 +360,9 @@ class LogbookEntryPage(ArticlePage):
 
         return f"{self.get_parent().url}#{self.slug}"
 
+    def serve_preview(self, request, mode_name):
+        return self.get_parent().specific.serve_preview(request, mode_name)
+
 
 class LogbookPage(
     RoutablePageMixin,
@@ -521,6 +524,11 @@ class LogbookPage(
         The path will be converted into a hash by frontend javascript.
         """
         return self.render(request, context_overrides={"hash": path})
+
+    def serve_preview(self, request, mode_name):
+        context = self.get_context(request)
+        context['child_list_page'] = self.get_children().specific()
+        return self.render(request, context_overrides=context, mode_name=mode_name)
 
 
 class LogbookIndexPage(IndexPage):
