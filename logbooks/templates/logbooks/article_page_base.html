@@ -2,7 +2,7 @@
 {% load i18n ckdjango_tags static ckbootstrap_tags wagtailcore_tags %}
 {% block content %}
     {% block article_header %}{% endblock %}
-    <main class="container-fluid mb-7">
+    <main class="container-fluid mb-3 mb-lg-7">
         <div class="row gx-0 mt-3 mt-lg-7">
             <header class="logbook-filter">
                 <div class='d-flex mb-5 justify-content-between align-items-center'>
@@ -53,6 +53,7 @@
                 {% block article %}{% endblock %}
             </section>
         </div>
+        <turbo-frame id="metadata-turboframe" src="{% if LANGUAGE_CODE %}/{{LANGUAGE_CODE}}{% endif %}/_metadata/{{ self.id }}/?mobile=true" />
     </main>
     {% block article_footer %}{% endblock %}
 

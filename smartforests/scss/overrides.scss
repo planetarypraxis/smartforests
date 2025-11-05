@@ -288,7 +288,7 @@ a {
 
 @include media-breakpoint-up(md) {
   .footer-width {
-    width: 100%;
+    width: calc(100% - 60px);
   }
 }
 

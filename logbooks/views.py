@@ -147,7 +147,7 @@ def metadata(request, page_id, **kwargs):
     return render(
         request,
         "logbooks/frames/metadata.html",
-        {"page": page, "interactive": request.user.is_authenticated},
+        {"page": page, "interactive": request.user.is_authenticated, "mobile": request.GET.get("mobile", False)},
     )
 
 
