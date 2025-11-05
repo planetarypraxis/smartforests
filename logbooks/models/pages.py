@@ -71,11 +71,13 @@ class StoryPage(ArticlePage, ThumbnailMixin):
 
     content_panels = ArticlePage.content_panels + [
         FieldPanel("image"),
+        FieldPanel("thumbnail_image"),
         FieldPanel("extract"),
     ]
 
     api_fields = ArticlePage.api_fields + [
         APIField("image"),
+        APIField("thumbnail_image"),
         APIField("extract"),
     ]
 
