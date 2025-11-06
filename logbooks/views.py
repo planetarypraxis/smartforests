@@ -144,10 +144,11 @@ def metadata(request, page_id, **kwargs):
             page.excluded_contributors.add(user)
         page.save()
 
+    mobile = request.GET.get("mobile") == "true"
     return render(
         request,
         "logbooks/frames/metadata.html",
-        {"page": page, "interactive": request.user.is_authenticated, "mobile": request.GET.get("mobile", False)},
+        {"page": page, "interactive": request.user.is_authenticated, "mobile": mobile},
     )
 
 

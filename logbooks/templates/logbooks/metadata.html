@@ -1,6 +1,6 @@
 {% load i18n ckdjango_tags wagtailimages_tags site_settings %}
 
-<div class="{% if mobile %}d-flex mt-4{% else %}d-none{% endif %} d-lg-flex flex-column metadata">
+<div class="d-flex flex-column metadata">
   <section class="d-flex flex-column mb-3">
     <time class="text-dark-grey" datetime="{{ page.original_published_at|date:'Y-m-d' }}">
       {% translate "Added" %} {{ page.original_published_at|date:"d E Y" }}

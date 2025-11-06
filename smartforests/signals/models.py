@@ -1,27 +1,9 @@
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
-from logbooks.models.mixins import ContributorMixin
 from logbooks.models.pages import LogbookEntryPage
-from wagtail.signals import page_published
 from wagtail.models import Page
 
 from logbooks.tasks import regenerate_page_thumbnails
-
-
-def contributor_edit_signal(sender, instance, **kwargs):
-    '''
-    Regenerate contributor lists for parent
-    when a child page is updated
-    '''
-    # Trickle this up to higher level ContributorMixin pages
-    # e.g. LogbookEntryPage -> LogbookPage
-    page = instance.get_parent().specific
-    while isinstance(page, ContributorMixin):
-        page.update_contributors(save=True)
-        page = page.get_parent().specific
-
-
-page_published.connect(contributor_edit_signal)
 
 
 @receiver(pre_delete, sender=LogbookEntryPage, dispatch_uid='logbookentrypage_delete_signal')

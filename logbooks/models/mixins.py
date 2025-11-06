@@ -163,6 +163,7 @@ class ContributorMixin(BaseLogbooksPage):
     )
 
     # Materialised list of contributors
+    # No longer used due to preview bugs
     contributors = ParentalManyToManyField(
         User, blank=True, related_name="+", help_text="Index list of contributors"
     )
@@ -191,9 +192,22 @@ class ContributorMixin(BaseLogbooksPage):
 
     @property
     def real_contributors(self):
-        return self.contributors.filter(
-            ~models.Q(username__in=["common-knowledge", "hello@commonknowledge.coop"])
-        )
+        contributors = set(self.get_page_contributors())
+
+        # Add page tree's contributors
+        for page in (
+            Page.objects.type(ContributorMixin)
+            .descendant_of(self, inclusive=False)
+            .live()
+            .specific()
+        ):
+            contributors.update(page.get_page_contributors())
+
+        for excluded in self.excluded_contributors.all():
+            if excluded in contributors:
+                contributors.remove(excluded)
+
+        return [c for c in contributors if c.username not in ["common-knowledge", "hello@commonknowledge.coop"]]
 
     def get_page_contributors(self):
         return list(
@@ -204,27 +218,6 @@ class ContributorMixin(BaseLogbooksPage):
             - set(self.excluded_contributors.all())
         )
 
-    def update_contributors(self, save=True):
-        """
-        Return all the people who have contributed to this page and its subpages
-        """
-        self.contributors.set(self.get_page_contributors())
-
-        # Add page tree's contributors
-        for page in (
-            Page.objects.type(ContributorMixin)
-            .descendant_of(self, inclusive=False)
-            .live()
-            .specific()
-        ):
-            self.contributors.add(*page.get_page_contributors())
-
-        # Re-assert top-level exclusions
-        self.contributors.remove(*self.excluded_contributors.all())
-
-        if save:
-            self.save()
-
     api_fields = [
         APIField("contributors", serializer=UserSerializer(many=True)),
     ]
@@ -233,13 +226,6 @@ class ContributorMixin(BaseLogbooksPage):
         AutocompletePanel("additional_contributors"),
         AutocompletePanel("excluded_contributors"),
     ]
-
-    def save(self, *args, **kwargs):
-        """
-        Rebuild the contributors list when the page is edited
-        """
-        self.update_contributors(save=False)
-        super().save(*args, **kwargs)
 
 
 class GeocodedMixin(BaseLogbooksPage):

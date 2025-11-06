@@ -47,13 +47,25 @@
                         {{ self.get_parent.title }}
                     </a>
                 </div>
-                <turbo-frame id="metadata-turboframe" src="{% if LANGUAGE_CODE %}/{{LANGUAGE_CODE}}{% endif %}/_metadata/{{ self.id }}/" />
+                <div class="d-none d-lg-block">
+                    {% if request.is_preview %}
+                        {% include "logbooks/metadata.html" with page=page interactive=interactive %}
+                    {% else %}
+                        <turbo-frame id="metadata-turboframe" src="{% if LANGUAGE_CODE %}/{{LANGUAGE_CODE}}{% endif %}/_metadata/{{ self.id }}/" />
+                    {% endif %}
+                </div>
             </aside>
             <section class="col-lg-6 offset-lg-1 gx-0 content-copy">
                 {% block article %}{% endblock %}
             </section>
         </div>
-        <turbo-frame id="metadata-turboframe" src="{% if LANGUAGE_CODE %}/{{LANGUAGE_CODE}}{% endif %}/_metadata/{{ self.id }}/?mobile=true" />
+        <div class="d-block mt-4 d-lg-none">
+            {% if request.is_preview %}
+            {% include "logbooks/metadata.html" with page=page interactive=interactive mobile=True %}
+            {% else %}
+            <turbo-frame id="metadata-turboframe" src="{% if LANGUAGE_CODE %}/{{LANGUAGE_CODE}}{% endif %}/_metadata/{{ self.id }}/?mobile=true" />
+            {% endif %}
+        </div>
     </main>
     {% block article_footer %}{% endblock %}
 
