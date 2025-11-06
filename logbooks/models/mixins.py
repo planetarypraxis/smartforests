@@ -370,6 +370,8 @@ class ThumbnailMixin(BaseLogbooksPage):
     def thumbnail_image_resilient(self):
         if self.thumbnail_image:
             return self.thumbnail_image.get_rendition("fill-400x240")
+        if hasattr(self, "image") and self.image:
+            return self.image.get_rendition("fill-400x240")
         if self.most_recent_image:
             return self.most_recent_image.get_rendition("fill-400x240")
         else:
@@ -379,6 +381,8 @@ class ThumbnailMixin(BaseLogbooksPage):
     def thumbnail_image_placeholder(self):
         if self.thumbnail_image:
             return self.thumbnail_image.get_rendition("fill-10x6")
+        if hasattr(self, "image") and self.image:
+            return self.image.get_rendition("fill-10x6")
         if self.most_recent_image:
             return self.most_recent_image.get_rendition("fill-10x6")
         else:

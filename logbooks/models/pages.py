@@ -70,7 +70,7 @@ class StoryPage(ArticlePage, ThumbnailMixin):
     parent_page_types = ["logbooks.StoryIndexPage"]
 
     content_panels = ArticlePage.content_panels + [
-        FieldPanel("image"),
+        FieldPanel("image", heading="Header image"),
         FieldPanel("thumbnail_image"),
         FieldPanel("extract"),
     ]
