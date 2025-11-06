@@ -369,20 +369,20 @@ class ThumbnailMixin(BaseLogbooksPage):
     @property
     def thumbnail_image_resilient(self):
         if self.thumbnail_image:
-            return self.thumbnail_image.get_rendition("width-400")
+            return self.thumbnail_image.get_rendition("fill-400x240")
         if self.most_recent_image:
-            return self.most_recent_image.get_rendition("width-400")
+            return self.most_recent_image.get_rendition("fill-400x240")
         else:
-            return self.default_seo_image.get_rendition("width-400")
+            return self.default_seo_image.get_rendition("fill-400x240")
 
     @property
     def thumbnail_image_placeholder(self):
         if self.thumbnail_image:
-            return self.thumbnail_image.get_rendition("width-10")
+            return self.thumbnail_image.get_rendition("fill-10x6")
         if self.most_recent_image:
-            return self.most_recent_image.get_rendition("width-10")
+            return self.most_recent_image.get_rendition("fill-10x6")
         else:
-            return self.default_seo_image.get_rendition("width-10")
+            return self.default_seo_image.get_rendition("fill-10x6")
 
     def get_thumbnail_images(self):
         return []
