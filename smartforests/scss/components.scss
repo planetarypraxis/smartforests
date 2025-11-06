@@ -492,13 +492,12 @@
 
 .endnotes {
   font-size: $small-font-size;
-}
 
-.endnotes h2, h3, h4 {
-  font-size: $small-font-size;
-  font-weight: 500;
+  h2, h3, h4 {
+    font-size: $small-font-size;
+    font-weight: 500;
+  }
 }
-
 
 .endnotes hr {
   background-color: $dark-green;
