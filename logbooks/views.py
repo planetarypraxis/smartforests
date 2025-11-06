@@ -108,6 +108,7 @@ def get_localized_title_for_page_type(page_type):
 def tag_panel(request, slug):
     locale = Locale.get_active()
     tags = Tag.objects.filter(slug=slug, locale=locale)
+    tag = tags.first()
 
     pages = []
 
