@@ -529,7 +529,10 @@ class LogbookPage(
 
     def serve_preview(self, request, mode_name):
         context = self.get_context(request)
-        context['child_list_page'] = self.get_children().specific()
+        context['child_list_page'] = [
+            child.get_latest_revision_as_object()
+            for child in self.get_children().specific()
+        ]
         return self.render(request, context_overrides=context, mode_name=mode_name)
 
 
