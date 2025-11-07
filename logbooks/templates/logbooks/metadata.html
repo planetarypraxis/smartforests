@@ -9,18 +9,34 @@
       {% translate "Last edited" %} {{ page.last_published_at|date:"d E Y" }}
     </time>
   </section>
-  {% if page.real_contributors|length %}
-  <section class="d-flex flex-column mb-3">
-    <h4 class="mb-0">{% translate "Contributors" %}</h4>
-    {% for user in page.real_contributors %}
-      <a class='d-block' href='{{ user.contributor_page.link_url }}' data-turbo-frame="_top">
-        {{ user }}
-      </a>
-      {% if interactive %}
-        <a href="/_metadata/{{page.id}}/toggle_user/{{user.id}}/" data-turbo-frame="_self">({% translate "Hide" %})</a>
-      {% endif %}
-    {% endfor %}
-  </section>
+  {% if request.is_preview %}
+    {% if page.draft_contributors|length %}
+    <section class="d-flex flex-column mb-3">
+      <h4 class="mb-0">{% translate "Contributors" %}</h4>
+      {% for user in page.draft_contributors %}
+        <a class='d-block' href='{{ user.contributor_page.link_url }}' data-turbo-frame="_top">
+          {{ user }}
+        </a>
+        {% if interactive %}
+          <a href="/_metadata/{{page.id}}/toggle_user/{{user.id}}/" data-turbo-frame="_self">({% translate "Hide" %})</a>
+        {% endif %}
+      {% endfor %}
+    </section>
+    {% endif %}
+  {% else %}
+    {% if page.real_contributors|length %}
+    <section class="d-flex flex-column mb-3">
+      <h4 class="mb-0">{% translate "Contributors" %}</h4>
+      {% for user in page.real_contributors %}
+        <a class='d-block' href='{{ user.contributor_page.link_url }}' data-turbo-frame="_top">
+          {{ user }}
+        </a>
+        {% if interactive %}
+          <a href="/_metadata/{{page.id}}/toggle_user/{{user.id}}/" data-turbo-frame="_self">({% translate "Hide" %})</a>
+        {% endif %}
+      {% endfor %}
+    </section>
+    {% endif %}
   {% endif %}
   {% if interactive and page.excluded_contributors.all|length %}
   <section class="d-flex flex-column mb-3">
@@ -52,17 +68,32 @@
     {% endif %}
   </section>
   {% endif %}
-  {% with page.all_localized_tags as tags %}
-  {% if tags|length %}
-  <section class="d-flex flex-column">
-    <h4>{% translate "Tags" %}</h4>
-    <div class="sidebar-tag-list d-flex flex-column align-items-start">
-    {% for tag in tags %}
-      {% include "logbooks/include/tag_label.html" with tag=tag orientation="vertical" tag_background_class=tag_background_class %}
-    {% endfor %}
-    </div>
-  </section>
+  {% if request.is_preview %}
+    {% with page.draft_localized_tags as tags %}
+    {% if tags|length %}
+    <section class="d-flex flex-column">
+      <h4>{% translate "Tags" %}</h4>
+      <div class="sidebar-tag-list d-flex flex-column align-items-start">
+      {% for tag in tags %}
+        {% include "logbooks/include/tag_label.html" with tag=tag orientation="vertical" tag_background_class=tag_background_class %}
+      {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+    {% endwith %}
+  {% else %}
+    {% with page.all_localized_tags as tags %}
+    {% if tags|length %}
+    <section class="d-flex flex-column">
+      <h4>{% translate "Tags" %}</h4>
+      <div class="sidebar-tag-list d-flex flex-column align-items-start">
+      {% for tag in tags %}
+        {% include "logbooks/include/tag_label.html" with tag=tag orientation="vertical" tag_background_class=tag_background_class %}
+      {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+    {% endwith %}
   {% endif %}
-  {% endwith %}
   {% endif %}
 </div>

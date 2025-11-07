@@ -257,6 +257,10 @@ class PlaylistPage(ArticlePage):
         return list(sorted(localized_tags, key=lambda tag: tag.name))
 
     @property
+    def draft_localized_tags(self):
+        return self.all_localized_tags()
+
+    @property
     def episode_count(self):
         return self.episodes.count()
 
@@ -487,20 +491,30 @@ class LogbookPage(
         images = self.get_thumbnail_images()
         return None if len(images) == 0 else images[0]
 
-    @property
-    def entry_tags(self):
+    def get_entry_tags(self, preview=False):
+        children = [
+            child.get_latest_revision_as_object()
+            for child in self.get_children().specific()
+        ] if preview else self.get_child_list_queryset()
         return list(
             set(
                 tag
-                for entry in self.get_child_list_queryset()
+                for entry in children
                 for tag in entry.tags.all()
             )
         )
 
     @property
     def all_localized_tags(self):
+        return self.get_all_localized_tags()
+
+    @property
+    def draft_localized_tags(self):
+        return self.get_all_localized_tags(preview=True)
+
+    def get_all_localized_tags(self, preview=False):
         locale = Locale.get_active()
-        tags_including_child_pages = list(self.tags.all()) + self.entry_tags
+        tags_including_child_pages = list(self.tags.all()) + self.get_entry_tags(preview)
         translation_keys = [tag.translation_key for tag in tags_including_child_pages]
         localized_tags = Tag.objects.filter(
             translation_key__in=translation_keys, locale=locale
@@ -692,6 +706,10 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
             translation_key__in=translation_keys, locale=locale
         )
         return list(sorted(localized_tags, key=lambda tag: tag.name))
+
+    @property
+    def draft_localized_tags(self):
+        return self.all_localized_tags()
 
     @classmethod
     def for_tag(cls, tag_or_tags, locale=None):

@@ -192,15 +192,23 @@ class ContributorMixin(BaseLogbooksPage):
 
     @property
     def real_contributors(self):
+        return self.get_real_contributors()
+
+    @property
+    def draft_contributors(self):
+        return self.get_real_contributors(preview=True)
+
+    def get_real_contributors(self, preview=False):
         contributors = set(self.get_page_contributors())
 
         # Add page tree's contributors
-        for page in (
-            Page.objects.type(ContributorMixin)
-            .descendant_of(self, inclusive=False)
-            .live()
-            .specific()
-        ):
+        descendents = Page.objects.type(ContributorMixin).descendant_of(self, inclusive=False).specific()
+        if not preview:
+            descendents = descendents.live()
+
+        for page in descendents:
+            if preview:
+                page = page.get_latest_revision_as_object()
             contributors.update(page.get_page_contributors())
 
         for excluded in self.excluded_contributors.all():
@@ -640,3 +648,7 @@ class ArticlePage(
         translation_keys = self.tags.all().values_list("translation_key", flat=True)
         tags = Tag.objects.filter(locale=locale, translation_key__in=translation_keys)
         return list(sorted(tags, key=lambda tag: tag.name))
+
+    @property
+    def draft_localized_tags(self):
+        return self.all_localized_tags()

@@ -26,9 +26,15 @@
                 {% block article_title %}<h1 class="mb-3 mb-lg-5">{{ self.title }}</h1>{% endblock %}
             </header>
             <section class="d-flex d-lg-none flex-row mb-3 flex-md-wrap overflow-auto mobile-tag-row">
-                {% for tag in self.all_localized_tags %}
-                    {% include "logbooks/include/tag_label.html" with tag=tag %}
-                {% endfor %}
+                {% if request.is_preview %}
+                    {% for tag in self.draft_localized_tags %}
+                        {% include "logbooks/include/tag_label.html" with tag=tag %}
+                    {% endfor %}
+                {% else %}
+                    {% for tag in self.all_localized_tags %}
+                        {% include "logbooks/include/tag_label.html" with tag=tag %}
+                    {% endfor %}
+                {% endif %}
             </section>
         </div>
         <div class="row gx-0">
@@ -61,9 +67,9 @@
         </div>
         <div class="d-block mt-4 d-lg-none">
             {% if request.is_preview %}
-            {% include "logbooks/metadata.html" with page=page interactive=interactive mobile=True %}
+                {% include "logbooks/metadata.html" with page=page interactive=interactive mobile=True %}
             {% else %}
-            <turbo-frame id="metadata-turboframe" src="{% if LANGUAGE_CODE %}/{{LANGUAGE_CODE}}{% endif %}/_metadata/{{ self.id }}/?mobile=true" />
+                <turbo-frame id="metadata-turboframe" src="{% if LANGUAGE_CODE %}/{{LANGUAGE_CODE}}{% endif %}/_metadata/{{ self.id }}/?mobile=true" />
             {% endif %}
         </div>
     </main>
