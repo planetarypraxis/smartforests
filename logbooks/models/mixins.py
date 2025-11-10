@@ -651,4 +651,4 @@ class ArticlePage(
 
     @property
     def draft_localized_tags(self):
-        return self.all_localized_tags()
+        return self.all_localized_tags

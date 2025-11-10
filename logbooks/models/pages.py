@@ -258,7 +258,7 @@ class PlaylistPage(ArticlePage):
 
     @property
     def draft_localized_tags(self):
-        return self.all_localized_tags()
+        return self.all_localized_tags
 
     @property
     def episode_count(self):
@@ -709,7 +709,7 @@ class ContributorPage(GeocodedMixin, ArticleSeoMixin, BaseLogbooksPage):
 
     @property
     def draft_localized_tags(self):
-        return self.all_localized_tags()
+        return self.all_localized_tags
 
     @classmethod
     def for_tag(cls, tag_or_tags, locale=None):
