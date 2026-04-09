@@ -1,6 +1,6 @@
-import * as d3 from "https://cdn.skypack.dev/d3@7.9.0";
-import "https://cdn.skypack.dev/d3-force@3.0.0";
-import forceBoundary from "https://cdn.skypack.dev/d3-force-boundary@0.0.1";
+import * as d3 from "d3";
+import "d3-force";
+import forceBoundary from "d3-force-boundary";
 
 let initialOffCanvasContent = "";
 document.addEventListener("turbo:load", () => {

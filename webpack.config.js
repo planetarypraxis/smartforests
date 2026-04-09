@@ -13,6 +13,7 @@ module.exports = {
       "./smartforests/scss/index.scss",
       "./smartforests/typescript/index.tsx"
     ],
+    tag_cloud: "./smartforests/static/js/tag_cloud.js",
   },
   devtool: isProduction ? "eval-source-map" : false,
   resolve: {

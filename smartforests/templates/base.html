@@ -19,7 +19,7 @@
         <script defer src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.19/lodash.min.js"></script>
         <script defer src="{% static 'js/filters.js' %}"></script>
         <script defer src="{% static 'js/sidebar.js' %}"></script>
-        <script defer type="module" src="{% static 'js/tag_cloud.js' %}"></script>
+        {% webpack_bundle 'tag_cloud' %}
         {% include "posthog/initialise.html" %}
         {% webpack_bundle 'main' %}
         {% block extra_js %}
