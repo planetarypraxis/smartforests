@@ -20,6 +20,9 @@ class SmartForestsConfig(AppConfig):
     name = 'smartforests'
 
     def ready(self):
+        from smartforests.outbound_log import install
+        install()
+
         if settings.POSTHOG_PUBLIC_TOKEN:
             posthog.api_key = settings.POSTHOG_PUBLIC_TOKEN
             posthog.host = settings.POSTHOG_URL
