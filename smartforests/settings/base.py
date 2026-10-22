@@ -176,6 +176,9 @@ USE_TZ = True
 USE_I18N = True
 WAGTAIL_I18N_ENABLED = True
 
+# FIXES YOUTUBE EMBED BLOCKPLAYBACK (ERROR 153)
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
