@@ -323,3 +323,45 @@ def pre_save_image_or_doc(sender, instance, *args, **kwargs):
 
 models.signals.pre_save.connect(pre_save_image_or_doc, sender=CmsImage)
 models.signals.pre_save.connect(pre_save_image_or_doc, sender=CmsDocument)
+
+
+class BlockedNetwork(models.Model):
+    """
+    An IP network rejected with 403 by BlockNetworksMiddleware.
+
+    Rows are created automatically by the rate limiter (see
+    smartforests/rate_limit.py) or by hand in the Django admin. Leave
+    expires_at empty for a permanent ban.
+    """
+
+    network = models.CharField(
+        max_length=64,
+        unique=True,
+        help_text="An IP address or CIDR range, e.g. 203.0.113.0/24",
+    )
+    reason = models.CharField(max_length=255, blank=True)
+    automatic = models.BooleanField(
+        default=False, help_text="Created by the rate limiter rather than by hand"
+    )
+    ban_count = models.PositiveIntegerField(
+        default=1, help_text="Times this network has been banned"
+    )
+    expires_at = models.DateTimeField(
+        null=True, blank=True, help_text="Leave empty to block permanently"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-updated_at"]
+
+    def __str__(self):
+        return self.network
+
+    def clean(self):
+        import ipaddress
+
+        try:
+            self.network = str(ipaddress.ip_network(self.network.strip(), strict=False))
+        except ValueError:
+            raise ValidationError({"network": "Enter a valid IP address or CIDR range."})

@@ -81,7 +81,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "smartforests.middleware.BlockIPRangesMiddleware",
+    "smartforests.middleware.BlockNetworksMiddleware",
     "smartforests.middleware.RejectJunkRequestsMiddleware",
     "wagtailcache.cache.UpdateCacheMiddleware",
     "smartforests.middleware.BlockAmazonMiddleware",
@@ -96,6 +96,8 @@ MIDDLEWARE = [
     "smartforests.middleware.LocaleMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
     "wagtailcache.cache.FetchFromCacheMiddleware",
+    # After FetchFromCache, so only cache misses (full renders) are counted.
+    "smartforests.middleware.RateLimitMiddleware",
 ]
 
 ROOT_URLCONF = "smartforests.urls"

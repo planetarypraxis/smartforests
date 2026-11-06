@@ -1,4 +1,4 @@
-import ipaddress
+import logging
 import os
 import re
 import threading
@@ -13,6 +13,10 @@ from django.http import (
 from django.shortcuts import redirect
 from django.middleware.locale import LocaleMiddleware as _LocaleMiddleware
 from django.utils import translation
+
+from smartforests import rate_limit
+
+logger = logging.getLogger(__name__)
 
 
 class LocaleMiddleware(_LocaleMiddleware):
@@ -43,53 +47,95 @@ class BlockAmazonMiddleware:
         return self.get_response(request)
 
 
-def _parse_networks(value):
-    networks = []
-    for cidr in value.split(","):
-        cidr = cidr.strip()
-        if cidr:
-            networks.append(ipaddress.ip_network(cidr, strict=False))
-    return networks
-
-
-# Proxy networks used by the Nov 2026 scraper flood that took the site down.
-DEFAULT_BLOCKED_IP_RANGES = "145.223.0.0/16,84.75.0.0/16,82.38.0.0/16"
-
-
-class BlockIPRangesMiddleware:
+class BlockNetworksMiddleware:
     """
-    Reject requests from blocked IP ranges before any other work is done.
+    Reject requests from networks in the BlockedNetwork table with 403, before
+    any other work is done. Rows are added by RateLimitMiddleware or by hand
+    in the Django admin (/django-admin/smartforests/blockednetwork/).
 
-    Override the list with the BLOCKED_IP_RANGES env var (comma-separated CIDRs,
-    empty string to disable). Every address in X-Forwarded-For is checked, so a
-    client can only spoof its way *into* the block, never out of it.
+    Automatic bans don't apply to the admin, so editors on a shared network
+    that got banned can still log in (and lift the ban).
+    """
+
+    ADMIN_PREFIXES = ("/admin/", "/django-admin/")
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        ip = rate_limit.get_client_ip(request)
+        match = ip and rate_limit.ban_list.match(ip)
+        if match:
+            _network, automatic = match
+            if not (automatic and request.path.startswith(self.ADMIN_PREFIXES)):
+                return HttpResponseForbidden()
+        return self.get_response(request)
+
+
+class RateLimitMiddleware:
+    """
+    Count requests that reach the view, i.e. miss the page cache, and return
+    429 for clients over the limit. Networks that keep going over the limit
+    are banned via BlockedNetwork. Logged-in users are never limited. Must sit
+    after wagtailcache's FetchFromCacheMiddleware. See smartforests/rate_limit.py.
     """
 
     def __init__(self, get_response):
         self.get_response = get_response
-        self.networks = _parse_networks(
-            os.getenv("BLOCKED_IP_RANGES", DEFAULT_BLOCKED_IP_RANGES)
-        )
-
-    def client_ips(self, request):
-        forwarded = request.META.get("HTTP_X_FORWARDED_FOR", "")
-        candidates = [ip.strip() for ip in forwarded.split(",")]
-        candidates.append(request.META.get("REMOTE_ADDR", ""))
-        for candidate in candidates:
-            try:
-                yield ipaddress.ip_address(candidate)
-            except ValueError:
-                continue
-
-    def is_blocked(self, request):
-        return any(
-            ip in network for ip in self.client_ips(request) for network in self.networks
-        )
+        self.limiter = rate_limit.RateLimiter()
 
     def __call__(self, request):
-        if self.networks and self.is_blocked(request):
-            return HttpResponseForbidden()
-        return self.get_response(request)
+        mode = rate_limit.get_mode()
+        if mode == "off":
+            return self.get_response(request)
+
+        ip = rate_limit.get_client_ip(request)
+        if ip is None or request.user.is_authenticated:
+            return self.get_response(request)
+
+        result = self.limiter.hit(ip)
+        if result is None:
+            return self.get_response(request)
+
+        label, network, should_ban = result
+        enforce = mode == "enforce"
+        prefix = "" if enforce else "would_"
+        if should_ban:
+            expires_at = None
+            if enforce:
+                try:
+                    expires_at = rate_limit.record_ban(
+                        network, f"Rate limit ({label}) exceeded repeatedly"
+                    )
+                except Exception:
+                    # e.g. both workers banning the same network at once.
+                    # Still return the 429 below; the ban is retried on the
+                    # next strike.
+                    logger.exception("auto_block_failed network=%s", network)
+            logger.warning(
+                "%sauto_blocked network=%s limit=%s expires_at=%s",
+                prefix,
+                network,
+                label,
+                expires_at,
+            )
+        logger.warning(
+            "%srate_limited ip=%s network=%s limit=%s path=%s xff=%r remote_addr=%s",
+            prefix,
+            ip,
+            network,
+            label,
+            request.path,
+            request.META.get("HTTP_X_FORWARDED_FOR", ""),
+            request.META.get("REMOTE_ADDR", ""),
+        )
+        if not enforce:
+            return self.get_response(request)
+
+        response = HttpResponse("Too many requests", status=429)
+        response["Retry-After"] = str(rate_limit.WINDOW_SECONDS)
+        response["Cache-Control"] = "private, no-store"
+        return response
 
 
 VALID_QUERY_VALUES = {
