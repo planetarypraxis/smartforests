@@ -81,6 +81,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "smartforests.middleware.BlockIPRangesMiddleware",
+    "smartforests.middleware.RejectJunkRequestsMiddleware",
     "wagtailcache.cache.UpdateCacheMiddleware",
     "smartforests.middleware.BlockAmazonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
